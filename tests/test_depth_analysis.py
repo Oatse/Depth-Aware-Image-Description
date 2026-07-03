@@ -30,5 +30,5 @@ def test_analyze_depth_regions_prioritizes_nearest_front_region() -> None:
 
     assert summary["nearest_region"] == "lower_center"
     assert summary["distance_category"] == "sangat_dekat"
-    assert summary["front_area_status"] == "terhalang"
+    assert summary["front_area_status"] == "potensi_halangan"
     assert summary["safe_direction"] == "kanan"

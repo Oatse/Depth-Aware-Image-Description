@@ -146,7 +146,7 @@ def _choose_safe_direction(region_stats: dict[str, RegionStats]) -> str:
 
 
 def _front_area_status(category: str) -> str:
-    return "terhalang" if category in {"sangat_dekat", "dekat"} else "aman"
+    return "potensi_halangan" if category in {"sangat_dekat", "dekat"} else "relatif_lapang"
 
 
 def _estimated_distance_text(category: str) -> str:
@@ -161,9 +161,9 @@ def _estimated_distance_text(category: str) -> str:
 def _warning_text(region_name: str, category: str) -> str:
     region_label = REGION_DISPLAY_NAMES.get(region_name, region_name)
     if category == "sangat_dekat":
-        return f"Terdapat hambatan sangat dekat di area {region_label}."
+        return f"Area {region_label} menunjukkan potensi halangan visual sangat dekat."
     if category == "dekat":
-        return f"Terdapat hambatan dekat di area {region_label}."
+        return f"Area {region_label} menunjukkan potensi halangan visual dekat."
     if category == "sedang":
         return f"Area {region_label} memiliki objek pada jarak sedang."
     if category == "jauh":

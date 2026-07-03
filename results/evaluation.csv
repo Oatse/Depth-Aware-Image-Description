@@ -1,1 +1,1 @@
-timestamp,total_images,mode,object_accuracy,position_accuracy,distance_category_accuracy,obstacle_warning_accuracy,average_latency_ms,notes
+mode,total_images,object_accuracy,position_accuracy,distance_category_accuracy,obstacle_warning_accuracy,description_quality,average_latency_ms
