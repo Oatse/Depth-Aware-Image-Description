@@ -87,9 +87,6 @@ let loadingIndex = 0;
 let dragDepth = 0;
 
 const ACCEPTED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
-let dragDepth = 0;
-
-const ACCEPTED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 
 refreshHealth();
 
