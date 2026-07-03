@@ -1,0 +1,1 @@
+timestamp,image_name,mode,description_gemma,nearest_region,distance_category,estimated_distance,final_description,gemma_latency_ms,depth_latency_ms,total_latency_ms,error

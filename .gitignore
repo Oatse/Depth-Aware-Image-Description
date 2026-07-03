@@ -1,0 +1,29 @@
+# Python cache
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+
+# Local environments and secrets
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+
+# Runtime output
+*.log
+.uvicorn.*.log
+results/depth_maps/*.png
+
+# Large local model files
+model_weights/
+
+# Local agent/tooling state
+.codex/
+.codegraph/
+.agents/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db

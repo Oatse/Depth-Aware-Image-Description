@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ app_name }}</title>
+    <meta
+      name="description"
+      content="Console eksperimen deskripsi gambar sadar kedalaman untuk inspeksi hasil Gemma, Depth Anything V2, dan fusi Gemma + Kedalaman pada citra dalam ruangan."
+    />
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#analysis-composer">Lewati ke input analisis</a>
+
+    <main class="page-shell">
+      <header class="minimal-header" aria-label="Status eksperimen">
+        <div class="brand-mark" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <p class="console-label">Depth-Aware Experiment Console</p>
+      </header>
+
+      <div class="system-status-widget">
+        <button
+          id="system-status-toggle"
+          class="system-status-pill"
+          type="button"
+          aria-expanded="false"
+          aria-controls="system-status-panel"
+        >
+          <span class="status-dot" aria-hidden="true"></span>
+          <span id="system-status-summary">Memeriksa sistem...</span>
+        </button>
+
+        <section id="system-status-panel" class="system-status-panel hidden" aria-label="Status sistem">
+          <div class="system-status-heading">
+            <h2>Status sistem</h2>
+            <span id="system-status-caption">MEMERIKSA</span>
+          </div>
+          <dl class="system-status-list">
+            <div>
+              <dt><span class="status-dot" aria-hidden="true"></span>Server</dt>
+              <dd id="backend-status-output">Memeriksa</dd>
+            </div>
+            <div>
+              <dt><span class="status-dot" aria-hidden="true"></span>Gemma</dt>
+              <dd id="gemma-status-output">Memeriksa</dd>
+            </div>
+            <div>
+              <dt><span class="status-dot" aria-hidden="true"></span>Kedalaman</dt>
+              <dd id="depth-runtime-status-output">Memeriksa</dd>
+            </div>
+          </dl>
+          <p class="system-status-note">
+            Status menunjukkan kesiapan server lokal dan model untuk eksperimen ini.
+          </p>
+        </section>
+      </div>
+
+      <section class="hero-section" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <h1 id="page-title">{{ app_name }}</h1>
+          <p class="lede">
+            Unggah gambar dalam ruangan untuk memeriksa deskripsi visual dan interpretasi sadar kedalaman dari alur inferensi.
+          </p>
+        </div>
+
+        <form id="analyze-form" class="composer-shell" aria-label="Form analisis gambar">
+          <div id="analysis-composer" class="analysis-composer">
+            <div class="composer-prompt">
+              <label for="image-input" class="upload-dropzone" id="upload-dropzone">
+                <span class="upload-icon" aria-hidden="true"></span>
+                <span class="upload-copy">
+                  <strong id="upload-label">Letakkan gambar dalam ruangan di sini</strong>
+                  <small>atau pilih file dari komputer</small>
+                  <em>JPG · PNG · WebP</em>
+                </span>
+              </label>
+              <input id="image-input" name="image" type="file" accept="image/jpeg,image/png,image/webp" />
+            </div>
+
+            <div id="selected-preview" class="selected-preview hidden">
+              <img id="image-preview" alt="Pratinjau gambar input" />
+              <div>
+                <span id="selected-file-name">Gambar terpilih</span>
+                <strong>Siap dianalisis</strong>
+              </div>
+              <button id="remove-image" type="button" class="text-button">Hapus</button>
+            </div>
+
+            <div class="control-panel" aria-label="Kontrol analisis">
+              <div class="control-grid">
+                <label class="mode-control" for="mode-select">
+                  <span>Mode analisis</span>
+                  <select id="mode-select" name="mode">
+                    <option value="gemma_depth">Gemma + Kedalaman</option>
+                    <option value="gemma_only">Gemma</option>
+                    <option value="depth_only">Kedalaman Saja</option>
+                  </select>
+                </label>
+                <button id="start-camera" type="button" class="icon-button" aria-label="Aktifkan kamera">
+                  <span aria-hidden="true">Kamera</span>
+                </button>
+                <button id="analyze-button" type="submit" class="send-button" disabled aria-label="Analisis gambar">
+                  <span aria-hidden="true">Analisis</span>
+                </button>
+              </div>
+
+              <div class="compare-row">
+                <p>Bandingkan Gemma dan Gemma + Kedalaman pada gambar yang sama.</p>
+                <button id="compare-button" type="button" class="secondary-button" disabled>
+                  Bandingkan mode
+                </button>
+              </div>
+            </div>
+
+            <video id="camera-preview" class="camera-preview hidden" autoplay playsinline></video>
+            <canvas id="capture-canvas" class="hidden"></canvas>
+            <div id="camera-actions" class="camera-actions hidden">
+              <button id="capture-image" type="button" class="secondary-button" disabled>Ambil frame</button>
+            </div>
+
+          </div>
+        </form>
+
+        <p class="safety-note">
+          Output ini hanya untuk eksperimen. Jangan gunakan hasil ini sebagai panduan navigasi nyata.
+        </p>
+
+        <div id="error-message" class="error-message hidden" role="alert"></div>
+
+        <section id="loading-state" class="loading-state hidden" aria-live="polite">
+          <div class="loading-track">
+            <span id="loading-indicator"></span>
+          </div>
+          <ol class="loading-steps">
+            <li class="is-active">Menganalisis adegan visual...</li>
+            <li>Mengestimasi struktur kedalaman...</li>
+            <li>Membuat output eksperimen...</li>
+            <li>Menyiapkan hasil...</li>
+          </ol>
+        </section>
+      </section>
+
+      <section id="result-shell" class="result-shell hidden" aria-label="Hasil eksperimen">
+        <article class="final-description-card">
+          <p class="label">Deskripsi Akhir</p>
+          <div id="final-description" class="final-section-list">
+            <p>-</p>
+          </div>
+          <span id="final-system-note">Hasil eksperimen dari mode inferensi yang dipilih.</span>
+        </article>
+
+        <div class="metric-grid" aria-label="Ringkasan metrik analisis">
+          <article class="metric-card">
+            <div>
+              <span>Mode</span>
+              <button
+                id="mode-help"
+                class="help-dot"
+                type="button"
+                aria-label="Mode analisis"
+                aria-haspopup="dialog"
+                aria-expanded="false"
+                data-help-title="Mode"
+                data-help-text="Mode inferensi yang sedang digunakan. Gemma memakai deskripsi visual, Kedalaman memakai estimasi jarak, dan Gemma + Kedalaman menggabungkan keduanya."
+              >?</button>
+            </div>
+            <strong id="mode-output">-</strong>
+            <small id="mode-helper" class="metric-helper">Mode menentukan kombinasi model yang dipakai.</small>
+          </article>
+          <article class="metric-card">
+            <div>
+              <span>Kategori Kedalaman</span>
+              <button
+                id="distance-category-help"
+                class="help-dot"
+                type="button"
+                aria-label="Kategori kedalaman"
+                aria-haspopup="dialog"
+                aria-expanded="false"
+                data-help-title="Kategori Kedalaman"
+                data-help-text="Nilai ini berasal dari estimasi peta kedalaman. Kategori seperti dekat, sedang, atau jauh membaca jarak relatif objek atau area pada gambar."
+              >?</button>
+            </div>
+            <strong id="distance-category-output">-</strong>
+            <small id="distance-category-helper" class="metric-helper">Kategori akan dihitung dari estimasi peta kedalaman.</small>
+          </article>
+          <article class="metric-card">
+            <div>
+              <span>Region Terdekat</span>
+              <button
+                id="nearest-region-help"
+                class="help-dot"
+                type="button"
+                aria-label="Region terdekat"
+                aria-haspopup="dialog"
+                aria-expanded="false"
+                data-help-title="Region Terdekat"
+                data-help-text="Region gambar yang diperkirakan memiliki objek atau area paling dekat dengan kamera, misalnya bawah-kanan atau tengah."
+              >?</button>
+            </div>
+            <strong id="nearest-region-output">-</strong>
+            <small id="nearest-region-helper" class="metric-helper">Region akan dipilih dari area grid depth yang paling dekat.</small>
+          </article>
+          <article class="metric-card">
+            <div>
+              <span>Latensi</span>
+              <button
+                id="latency-help"
+                class="help-dot"
+                type="button"
+                aria-label="Total latensi"
+                aria-haspopup="dialog"
+                aria-expanded="false"
+                data-help-title="Latensi"
+                data-help-text="Waktu proses alur model pada percobaan ini. Angka ini menjelaskan durasi komputasi, bukan kualitas atau kebenaran deskripsi."
+              >?</button>
+            </div>
+            <strong id="total-latency-output">-</strong>
+            <small id="latency-helper" class="metric-helper">Latensi menjumlahkan durasi proses alur model.</small>
+          </article>
+        </div>
+
+        <div class="analysis-grid">
+          <section class="analysis-panel">
+            <p class="label">Ringkasan Adegan</p>
+            <dl class="compact-list">
+              <div><dt>Objek utama</dt><dd id="main-object-output">-</dd></div>
+              <div><dt>Posisi</dt><dd id="object-position-output">-</dd></div>
+              <div><dt>Adegan</dt><dd id="scene-type-output">-</dd></div>
+            </dl>
+            <p id="gemma-description" class="text-output">-</p>
+          </section>
+
+          <section class="analysis-panel dark-panel">
+            <p class="label">Insight Kedalaman</p>
+            <p id="depth-status-output" class="text-output">-</p>
+            <p id="safe-direction-output" class="guidance-output">-</p>
+            <div id="depth-contribution" class="insight-box">
+              Kontribusi kedalaman belum tersedia.
+            </div>
+          </section>
+        </div>
+
+        <details class="detail-panel result-guide">
+          <summary>
+            <span>Cara membaca hasil ini</span>
+          </summary>
+          <div class="read-guide-grid">
+            <div>
+              <strong>Deskripsi Akhir</strong>
+              <p><b>Fungsi:</b> output utama eksperimen yang menggabungkan deskripsi visual dan ringkasan kedalaman.</p>
+              <p><b>Penentuan:</b> deskripsi Gemma dibersihkan, lalu fusion menambahkan region terdekat, kategori jarak relatif, potensi halangan, dan area relatif lapang dari depth summary.</p>
+              <p><b>Batasan:</b> ini deskripsi visual-spasial dari gambar 2D, bukan instruksi navigasi atau ukuran jarak presisi.</p>
+            </div>
+            <div>
+              <strong>Kategori Kedalaman</strong>
+              <p><b>Fungsi:</b> memberi konteks apakah area terdekat terbaca sebagai sangat dekat, dekat, sedang, atau jauh.</p>
+              <p><b>Input & metode:</b> sistem memakai peta kedalaman, membaginya ke region, lalu memberi kategori dari skor kedalaman region terdekat memakai threshold internal.</p>
+              <p><b>Batasan:</b> kategori bersifat relatif dan eksperimental; belum dikalibrasi sebagai meter absolut.</p>
+            </div>
+            <div>
+              <strong>Region Terdekat</strong>
+              <p><b>Fungsi:</b> menunjukkan area gambar yang paling memengaruhi informasi kedekatan pada hasil sadar kedalaman.</p>
+              <p><b>Input & metode:</b> peta kedalaman dibaca sebagai grid 3x3, lalu region dengan skor kedalaman terdekat dipilih sebagai region terdekat.</p>
+              <p><b>Batasan:</b> region tidak otomatis membuktikan nama objek; identitas objek tetap bergantung pada deskripsi visual.</p>
+            </div>
+            <div>
+              <strong>Ringkasan Adegan</strong>
+              <p><b>Fungsi:</b> memisahkan informasi semantik gambar seperti objek utama, posisi, dan tipe adegan.</p>
+              <p><b>Penentuan:</b> nilai berasal dari output terstruktur Gemma atau fallback deskripsi visual jika struktur tidak lengkap.</p>
+              <p><b>Batasan:</b> model dapat keliru membaca objek kecil, objek tertutup, atau konteks adegan yang ambigu.</p>
+            </div>
+            <div>
+              <strong>Insight Kedalaman</strong>
+              <p><b>Fungsi:</b> menjelaskan kontribusi peta kedalaman terhadap potensi halangan dan area relatif lapang.</p>
+              <p><b>Input & metode:</b> sistem membandingkan skor region depan/kiri/kanan/tengah, lalu menampilkan region terdekat, kategori jarak relatif, dan area dengan objek dekat lebih sedikit.</p>
+              <p><b>Batasan:</b> “relatif lapang” bukan “jalur aman”; hasil hanya indikasi visual dari estimasi kedalaman monocular.</p>
+            </div>
+            <div>
+              <strong>Perbandingan Mode</strong>
+              <p><b>Fungsi:</b> membandingkan output Gemma saja dengan Gemma + Kedalaman pada gambar yang sama.</p>
+              <p><b>Penentuan:</b> perbedaan dibaca dari tambahan kategori jarak, region terdekat, potensi halangan, dan area relatif lapang.</p>
+              <p><b>Batasan:</b> perbandingan membantu analisis skripsi, tetapi kualitas tetap perlu ditinjau dengan anotasi dan penilaian manual.</p>
+            </div>
+            <div>
+              <strong>Detail Teknis</strong>
+              <p><b>Fungsi:</b> membaca biaya komputasi tiap tahap inference.</p>
+              <p><b>Penentuan:</b> waktu Gemma, Kedalaman, Fusi, dan Total dicatat saat alur model berjalan.</p>
+              <p><b>Batasan:</b> latensi tidak menunjukkan kualitas deskripsi; angka dapat berubah karena perangkat, model, atau kondisi runtime.</p>
+            </div>
+            <div>
+              <strong>JSON Mentah</strong>
+              <p><b>Fungsi:</b> menyediakan data lengkap untuk audit teknis dan pelacakan eksperimen.</p>
+              <p><b>Penentuan:</b> isi berasal dari respons backend setelah analisis gambar selesai.</p>
+              <p><b>Batasan:</b> ini informasi lanjutan untuk pelacakan teknis; pembaca utama sebaiknya memakai deskripsi akhir, metrik, dan insight.</p>
+            </div>
+          </div>
+        </details>
+
+        <section class="comparison-panel" aria-label="Perbandingan mode analisis">
+          <div class="subsection-heading">
+            <div>
+              <p class="label">Perbandingan Mode</p>
+              <h2>Kontribusi kedalaman pada gambar yang sama</h2>
+            </div>
+            <span id="comparison-status" class="mini-status">Belum dijalankan</span>
+          </div>
+          <div id="comparison-output" class="comparison-output">
+            Jalankan perbandingan untuk memeriksa perbedaan antara Gemma dan Gemma + Kedalaman pada gambar yang dipilih.
+          </div>
+        </section>
+
+        <div class="accordion-stack">
+          <details class="detail-panel">
+            <summary>
+              <span>Lihat Peta Kedalaman</span>
+              <button
+                class="help-dot"
+                type="button"
+                aria-label="Peta kedalaman"
+                aria-haspopup="dialog"
+                aria-expanded="false"
+                data-help-title="Peta Kedalaman"
+                data-help-text="Visualisasi peta kedalaman dari gambar input. Area terang/gelap membantu membaca struktur jarak relatif sesuai keluaran model kedalaman."
+              >?</button>
+            </summary>
+            <div class="depth-map-frame">
+              <img id="depth-map-preview" class="hidden" alt="Visualisasi peta kedalaman" />
+              <p>Visualisasi peta kedalaman dibuat dari gambar yang diunggah.</p>
+            </div>
+          </details>
+
+          <details class="detail-panel">
+            <summary>
+              <span>Detail Teknis</span>
+              <button
+                class="help-dot"
+                type="button"
+                aria-label="Detail teknis"
+                aria-haspopup="dialog"
+                aria-expanded="false"
+                data-help-title="Detail Teknis"
+                data-help-text="Rincian durasi Gemma, Kedalaman, dan Fusi. Bagian ini untuk pelacakan teknis dan evaluasi performa, bukan indikator kualitas deskripsi."
+              >?</button>
+            </summary>
+            <div class="runtime-grid">
+              <div><span>Gemma</span><strong id="gemma-latency-output">-</strong></div>
+              <div><span>Kedalaman</span><strong id="depth-latency-output">-</strong></div>
+              <div><span>Fusi</span><strong id="fusion-latency-output">-</strong></div>
+            </div>
+            <p id="latency-output" class="technical-note">-</p>
+          </details>
+
+          <details class="detail-panel">
+            <summary>
+              <span>JSON Mentah</span>
+              <button
+                class="help-dot"
+                type="button"
+                aria-label="JSON mentah"
+                aria-haspopup="dialog"
+                aria-expanded="false"
+                data-help-title="JSON Mentah"
+                data-help-text="Data mentah dari alur model untuk audit teknis. Gunakan saat perlu mengecek kolom kedalaman, latensi, atau struktur respons."
+              >?</button>
+            </summary>
+            <pre id="depth-summary">{}</pre>
+          </details>
+        </div>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

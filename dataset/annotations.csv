@@ -1,0 +1,2 @@
+image_name,main_object,object_position,distance_meter,distance_category,has_obstacle,front_area_status,safer_direction,notes
+img_001.jpg,kursi,tengah,1.0,dekat,yes,terhalang,kanan,kursi berada di depan
