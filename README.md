@@ -153,11 +153,19 @@ Menjalankan evaluasi:
 python scripts\run_evaluation.py --annotations dataset\annotations.csv --predictions results\predictions.csv --output results\evaluation.csv
 ```
 
+Memeriksa kesiapan eksperimen sebelum inference final:
+
+```bash
+python scripts\run_batch_evaluation.py --preflight-only
+```
+
 Menjalankan batch inference dan evaluasi perbandingan:
 
 ```bash
 python scripts\run_batch_evaluation.py --images-dir dataset\images --annotations dataset\annotations.csv
 ```
+
+Gunakan `--allow-mock` hanya untuk dry run development. Hasil mock tidak boleh dipakai sebagai hasil eksperimen skripsi final.
 
 Smoke test dengan server sementara dan mock eksplisit:
 

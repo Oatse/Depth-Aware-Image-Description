@@ -96,8 +96,9 @@
                 <label class="mode-control" for="mode-select">
                   <span>Mode analisis</span>
                   <select id="mode-select" name="mode">
-                    <option value="gemma_depth">Gemma + Kedalaman</option>
-                    <option value="gemma_only">Gemma</option>
+                    <option value="gemma_depth_prompted">Depth-to-Spatial Prompting</option>
+                    <option value="gemma_depth">Gemma + Kedalaman Late Fusion</option>
+                    <option value="gemma_only">Gemma Baseline</option>
                     <option value="depth_only">Kedalaman Saja</option>
                   </select>
                 </label>
@@ -110,7 +111,7 @@
               </div>
 
               <div class="compare-row">
-                <p>Bandingkan Gemma dan Gemma + Kedalaman pada gambar yang sama.</p>
+                <p>Bandingkan Gemma Baseline, depth-only, late fusion kontrol, dan Depth-to-Spatial Prompting pada gambar yang sama.</p>
                 <button id="compare-button" type="button" class="secondary-button" disabled>
                   Bandingkan mode
                 </button>
@@ -166,7 +167,7 @@
                 aria-haspopup="dialog"
                 aria-expanded="false"
                 data-help-title="Mode"
-                data-help-text="Mode inferensi yang sedang digunakan. Gemma memakai deskripsi visual, Kedalaman memakai estimasi jarak, dan Gemma + Kedalaman menggabungkan keduanya."
+                data-help-text="Mode inferensi yang sedang digunakan. Gemma Baseline membaca visual dan relasi spasial kualitatif tanpa metadata depth, Kedalaman membaca struktur kedalaman relatif, late fusion menambahkan depth setelah deskripsi, dan prompted fusion memberi metadata depth ke prompt Gemma."
               >?</button>
             </div>
             <strong id="mode-output">-</strong>
@@ -183,7 +184,7 @@
                 aria-haspopup="dialog"
                 aria-expanded="false"
                 data-help-title="Kategori Kedalaman"
-                data-help-text="Nilai ini berasal dari estimasi peta kedalaman. Kategori seperti dekat, sedang, atau jauh membaca jarak relatif objek atau area pada gambar."
+                data-help-text="Nilai ini berasal dari estimasi peta kedalaman. Kategori seperti dekat, sedang, atau jauh membaca kedalaman relatif area pada gambar."
               >?</button>
             </div>
             <strong id="distance-category-output">-</strong>
@@ -191,20 +192,20 @@
           </article>
           <article class="metric-card">
             <div>
-              <span>Region Terdekat</span>
+              <span>Area Terdekat</span>
               <button
                 id="nearest-region-help"
                 class="help-dot"
                 type="button"
-                aria-label="Region terdekat"
+                aria-label="Area terdekat"
                 aria-haspopup="dialog"
                 aria-expanded="false"
-                data-help-title="Region Terdekat"
-                data-help-text="Region gambar yang diperkirakan memiliki objek atau area paling dekat dengan kamera, misalnya bawah-kanan atau tengah."
+                data-help-title="Area Terdekat"
+                data-help-text="Area tampilan yang diperkirakan paling dekat. Istilah teknis region tetap tersedia pada bagian detail dan JSON mentah."
               >?</button>
             </div>
             <strong id="nearest-region-output">-</strong>
-            <small id="nearest-region-helper" class="metric-helper">Region akan dipilih dari area grid depth yang paling dekat.</small>
+            <small id="nearest-region-helper" class="metric-helper">Area dengan skor depth terdekat.</small>
           </article>
           <article class="metric-card">
             <div>
@@ -238,7 +239,7 @@
 
           <section class="analysis-panel dark-panel">
             <p class="label">Insight Kedalaman</p>
-            <p id="depth-status-output" class="text-output">-</p>
+            <div id="depth-status-output" class="text-output">-</div>
             <p id="safe-direction-output" class="guidance-output">-</p>
             <div id="depth-contribution" class="insight-box">
               Kontribusi kedalaman belum tersedia.
@@ -253,8 +254,8 @@
           <div class="read-guide-grid">
             <div>
               <strong>Deskripsi Akhir</strong>
-              <p><b>Fungsi:</b> output utama eksperimen yang menggabungkan deskripsi visual dan ringkasan kedalaman.</p>
-              <p><b>Penentuan:</b> deskripsi Gemma dibersihkan, lalu fusion menambahkan region terdekat, kategori jarak relatif, potensi halangan, dan area relatif lapang dari depth summary.</p>
+              <p><b>Fungsi:</b> output utama eksperimen sesuai mode yang dipilih.</p>
+              <p><b>Penentuan:</b> Gemma Baseline memakai deskripsi visual-spasial dari gambar saja, late fusion menambahkan ringkasan depth setelah deskripsi, dan prompted fusion memasukkan metadata depth ke prompt Gemma sebelum deskripsi akhir dibuat.</p>
               <p><b>Batasan:</b> ini deskripsi visual-spasial dari gambar 2D, bukan instruksi navigasi atau ukuran jarak presisi.</p>
             </div>
             <div>
@@ -264,10 +265,10 @@
               <p><b>Batasan:</b> kategori bersifat relatif dan eksperimental; belum dikalibrasi sebagai meter absolut.</p>
             </div>
             <div>
-              <strong>Region Terdekat</strong>
+              <strong>Area Terdekat</strong>
               <p><b>Fungsi:</b> menunjukkan area gambar yang paling memengaruhi informasi kedekatan pada hasil sadar kedalaman.</p>
-              <p><b>Input & metode:</b> peta kedalaman dibaca sebagai grid 3x3, lalu region dengan skor kedalaman terdekat dipilih sebagai region terdekat.</p>
-              <p><b>Batasan:</b> region tidak otomatis membuktikan nama objek; identitas objek tetap bergantung pada deskripsi visual.</p>
+              <p><b>Input & metode:</b> peta kedalaman dibaca sebagai grid 3x3: atas, tengah, bawah dikombinasikan dengan kiri, tengah, kanan. Region teknis dengan skor kedalaman terdekat diterjemahkan menjadi label area untuk UI.</p>
+              <p><b>Batasan:</b> area terdekat tidak otomatis membuktikan nama objek; identitas objek tetap bergantung pada deskripsi visual.</p>
             </div>
             <div>
               <strong>Ringkasan Adegan</strong>
@@ -277,15 +278,15 @@
             </div>
             <div>
               <strong>Insight Kedalaman</strong>
-              <p><b>Fungsi:</b> menjelaskan kontribusi peta kedalaman terhadap potensi halangan dan area relatif lapang.</p>
-              <p><b>Input & metode:</b> sistem membandingkan skor region depan/kiri/kanan/tengah, lalu menampilkan region terdekat, kategori jarak relatif, dan area dengan objek dekat lebih sedikit.</p>
+              <p><b>Fungsi:</b> menjelaskan bukti teknis dari peta kedalaman terhadap potensi halangan dan area relatif lapang.</p>
+              <p><b>Input & metode:</b> sistem membandingkan skor region depan/kiri/kanan/tengah, lalu menampilkan area terdekat, region teknis, kategori jarak relatif, dan area dengan objek dekat lebih sedikit.</p>
               <p><b>Batasan:</b> “relatif lapang” bukan “jalur aman”; hasil hanya indikasi visual dari estimasi kedalaman monocular.</p>
             </div>
             <div>
               <strong>Perbandingan Mode</strong>
-              <p><b>Fungsi:</b> membandingkan output Gemma saja dengan Gemma + Kedalaman pada gambar yang sama.</p>
-              <p><b>Penentuan:</b> perbedaan dibaca dari tambahan kategori jarak, region terdekat, potensi halangan, dan area relatif lapang.</p>
-              <p><b>Batasan:</b> perbandingan membantu analisis skripsi, tetapi kualitas tetap perlu ditinjau dengan anotasi dan penilaian manual.</p>
+              <p><b>Fungsi:</b> membandingkan Gemma Baseline, depth-only, late fusion, dan Depth-to-Spatial Prompting pada gambar yang sama.</p>
+              <p><b>Penentuan:</b> tabel membaca deskripsi visual, metadata depth, strategi fusi, potensi halangan visual, area relatif lapang, dan latensi.</p>
+              <p><b>Batasan:</b> nilai kosong pada Gemma Baseline berarti metadata depth tidak diekstrak pada mode itu, bukan bukti bahwa Gemma tidak mampu memahami visual.</p>
             </div>
             <div>
               <strong>Detail Teknis</strong>
@@ -311,7 +312,7 @@
             <span id="comparison-status" class="mini-status">Belum dijalankan</span>
           </div>
           <div id="comparison-output" class="comparison-output">
-            Jalankan perbandingan untuk memeriksa perbedaan antara Gemma dan Gemma + Kedalaman pada gambar yang dipilih.
+              Jalankan perbandingan untuk memeriksa perbedaan antara Gemma Baseline, depth-only, late fusion kontrol, dan Depth-to-Spatial Prompting pada gambar yang dipilih.
           </div>
         </section>
 
@@ -326,12 +327,25 @@
                 aria-haspopup="dialog"
                 aria-expanded="false"
                 data-help-title="Peta Kedalaman"
-                data-help-text="Visualisasi peta kedalaman dari gambar input. Area terang/gelap membantu membaca struktur jarak relatif sesuai keluaran model kedalaman."
+                data-help-text="Visualisasi peta kedalaman dari gambar input. Overlay 3x3 menunjukkan area UI yang dipakai sistem: atas/tengah/bawah dan kiri/tengah/kanan."
               >?</button>
             </summary>
             <div class="depth-map-frame">
-              <img id="depth-map-preview" class="hidden" alt="Visualisasi peta kedalaman" />
-              <p>Visualisasi peta kedalaman dibuat dari gambar yang diunggah.</p>
+              <div id="depth-map-grid-wrap" class="depth-map-grid-wrap hidden">
+                <img id="depth-map-preview" alt="Visualisasi peta kedalaman dengan pembagian area 3x3" />
+                <div id="depth-region-grid" class="depth-region-grid" aria-hidden="true">
+                  <span data-region="upper_left">atas-kiri</span>
+                  <span data-region="upper_center">atas-tengah</span>
+                  <span data-region="upper_right">atas-kanan</span>
+                  <span data-region="middle_left">tengah-kiri</span>
+                  <span data-region="middle_center">tengah</span>
+                  <span data-region="middle_right">tengah-kanan</span>
+                  <span data-region="lower_left">bawah-kiri</span>
+                  <span data-region="lower_center">bawah-tengah</span>
+                  <span data-region="lower_right">bawah-kanan</span>
+                </div>
+              </div>
+              <p>Overlay 3x3 adalah skema analisis aplikasi: model menghasilkan peta kedalaman kontinu, lalu sistem membaginya menjadi sembilan area untuk ringkasan region.</p>
             </div>
           </details>
 

@@ -12,14 +12,16 @@ REQUIRED_ANNOTATION_COLUMNS = {
     "safer_direction",
 }
 
+DEPTH_EVALUATED_MODES = frozenset({"all", "depth_only", "gemma_depth", "gemma_depth_prompted"})
+
 
 @dataclass(frozen=True)
 class EvaluationSummary:
     total_images: int
     object_accuracy: float
     position_accuracy: float
-    distance_category_accuracy: float
-    obstacle_warning_accuracy: float
+    distance_category_accuracy: float | None
+    obstacle_warning_accuracy: float | None
     description_quality: float
     average_latency_ms: float
 
@@ -49,14 +51,14 @@ def evaluate_predictions(
         grouped_predictions = {"all": prediction_by_name}
 
     summaries = {
-        mode: _evaluate_matched_rows([
+        mode: _evaluate_matched_rows(mode, [
             (annotation, mode_predictions.get(annotation.get("image_name", ""), {}))
             for annotation in annotations
         ])
         for mode, mode_predictions in grouped_predictions.items()
     }
     _write_summary(output_path, summaries)
-    return summaries.get("gemma_depth") or summaries.get("all") or next(iter(summaries.values()))
+    return summaries.get("gemma_depth_prompted") or summaries.get("gemma_depth") or summaries.get("all") or next(iter(summaries.values()))
 
 
 def _read_csv_dicts(path: Path) -> list[dict[str, str]]:
@@ -85,7 +87,8 @@ def _group_predictions_by_mode(rows: list[dict[str, str]]) -> dict[str, dict[str
     return grouped
 
 
-def _evaluate_matched_rows(matched_rows: list[tuple[dict[str, str], dict[str, str]]]) -> EvaluationSummary:
+def _evaluate_matched_rows(mode: str, matched_rows: list[tuple[dict[str, str], dict[str, str]]]) -> EvaluationSummary:
+    depth_metrics_apply = mode in DEPTH_EVALUATED_MODES
     object_scores = [
         _object_matches(annotation, prediction)
         for annotation, prediction in matched_rows
@@ -103,7 +106,7 @@ def _evaluate_matched_rows(matched_rows: list[tuple[dict[str, str], dict[str, st
         for annotation, prediction in matched_rows
     ]
     quality_scores = [
-        _description_quality(annotation, prediction)
+        _description_quality(annotation, prediction, depth_metrics_apply)
         for annotation, prediction in matched_rows
     ]
     latencies = [
@@ -115,8 +118,8 @@ def _evaluate_matched_rows(matched_rows: list[tuple[dict[str, str], dict[str, st
         total_images=len(matched_rows),
         object_accuracy=_average_bool(object_scores),
         position_accuracy=_average_bool(position_scores),
-        distance_category_accuracy=_average_bool(distance_scores),
-        obstacle_warning_accuracy=_average_bool(obstacle_scores),
+        distance_category_accuracy=_average_bool(distance_scores) if depth_metrics_apply else None,
+        obstacle_warning_accuracy=_average_bool(obstacle_scores) if depth_metrics_apply else None,
         description_quality=sum(quality_scores) / len(quality_scores) if quality_scores else 0.0,
         average_latency_ms=sum(latencies) / len(latencies) if latencies else 0.0,
     )
@@ -155,19 +158,24 @@ def _obstacle_matches(annotation: dict[str, str], prediction: dict[str, str]) ->
     return False
 
 
-def _description_quality(annotation: dict[str, str], prediction: dict[str, str]) -> float:
+def _description_quality(annotation: dict[str, str], prediction: dict[str, str], depth_metrics_apply: bool) -> float:
     if not prediction:
         return 0.0
     score = 1.0
+    max_score = 3.0
     if _object_matches(annotation, prediction):
         score += 1.0
     if _position_matches(annotation, prediction):
         score += 1.0
-    if prediction.get("distance_category"):
+    if not depth_metrics_apply:
+        return min((score / max_score) * 5.0, 5.0)
+
+    max_score += 2.0
+    if prediction.get("distance_category") == annotation.get("distance_category", ""):
         score += 1.0
     if _obstacle_matches(annotation, prediction):
         score += 1.0
-    return min(score, 5.0)
+    return min((score / max_score) * 5.0, 5.0)
 
 
 def _average_bool(values: list[bool]) -> float:
@@ -188,4 +196,8 @@ def _write_summary(output_path: Path, summaries: dict[str, EvaluationSummary]) -
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
         for mode, summary in summaries.items():
-            writer.writerow({"mode": mode, **summary.__dict__})
+            row = {
+                field: "" if value is None else value
+                for field, value in summary.__dict__.items()
+            }
+            writer.writerow({"mode": mode, **row})

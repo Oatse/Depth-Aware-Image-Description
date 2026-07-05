@@ -15,7 +15,7 @@ settings = get_settings()
 gemma_client = GemmaClient(settings)
 depth_model = DepthAnything(settings)
 
-SUPPORTED_MODES = {"gemma_only", "depth_only", "gemma_depth", "full"}
+SUPPORTED_MODES = {"gemma_only", "depth_only", "gemma_depth", "gemma_depth_prompted", "full"}
 
 
 @router.post("/analyze", response_model=AnalyzeResponse)
@@ -26,7 +26,10 @@ async def analyze_image(
 ) -> JSONResponse:
     normalized_mode = "gemma_depth" if mode == "full" else mode
     if mode not in SUPPORTED_MODES:
-        return _error_response("Mode must be one of gemma_only, depth_only, or gemma_depth.", status.HTTP_400_BAD_REQUEST)
+        return _error_response(
+            "Mode must be one of gemma_only, depth_only, gemma_depth, or gemma_depth_prompted.",
+            status.HTTP_400_BAD_REQUEST,
+        )
 
     try:
         upload = await validate_upload_file(image, settings.max_image_size_mb)

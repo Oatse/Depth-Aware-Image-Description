@@ -52,7 +52,7 @@ def test_analyze_endpoint_rejects_text_file() -> None:
 
 def test_analyze_endpoint_returns_fused_result_with_mocks(monkeypatch) -> None:
     class FakeGemmaClient:
-        async def describe_image(self, base64_image: str) -> GemmaResult:
+        async def describe_image(self, base64_image: str, prompt: str | None = None) -> GemmaResult:
             return GemmaResult("Terlihat kursi di tengah ruangan.", "{}", 5, mock=True)
 
     class FakeDepthModel:
@@ -79,3 +79,38 @@ def test_analyze_endpoint_returns_fused_result_with_mocks(monkeypatch) -> None:
     assert data["depth_summary"]["nearest_region"] == "lower_center"
     assert isinstance(data["latency"]["fusion_ms"], int)
     assert data["latency"]["fusion_ms"] >= 0
+
+
+def test_analyze_endpoint_accepts_depth_to_spatial_prompted_mode(monkeypatch) -> None:
+    class FakeGemmaClient:
+        async def describe_image(self, base64_image: str, prompt: str | None = None) -> GemmaResult:
+            assert prompt is not None
+            assert "Depth-to-Spatial Prompting Schema" in prompt
+            return GemmaResult(
+                "Terlihat kursi di area tengah dengan konteks kedalaman relatif dari area bawah-tengah.",
+                "{}",
+                5,
+                mock=True,
+            )
+
+    class FakeDepthModel:
+        def estimate(self, image, source_name: str) -> DepthResult:
+            depth_map = np.full((9, 9), 2.0, dtype=np.float32)
+            depth_map[6:9, 3:6] = 0.7
+            return DepthResult(True, depth_map, None, 4, depth_map.shape, mock=True)
+
+    import app.routes.analyze as analyze_route
+
+    monkeypatch.setattr(analyze_route, "gemma_client", FakeGemmaClient())
+    monkeypatch.setattr(analyze_route, "depth_model", FakeDepthModel())
+
+    response = client.post(
+        "/analyze",
+        files={"image": ("sample.jpg", _sample_image_bytes(), "image/jpeg")},
+        data={"mode": "gemma_depth_prompted", "save_result": "false"},
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data["mode"] == "gemma_depth_prompted"
+    assert data["display"]["fusion_strategy"] == "depth_to_spatial_prompting"

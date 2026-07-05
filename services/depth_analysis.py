@@ -151,10 +151,10 @@ def _front_area_status(category: str) -> str:
 
 def _estimated_distance_text(category: str) -> str:
     return {
-        "sangat_dekat": "kurang dari 0.5 meter",
-        "dekat": "sekitar 0.5 sampai 1 meter",
-        "sedang": "sekitar 1 sampai 2 meter",
-        "jauh": "lebih dari 2 meter",
+        "sangat_dekat": "sangat dekat secara relatif",
+        "dekat": "dekat secara relatif",
+        "sedang": "sedang secara relatif",
+        "jauh": "jauh secara relatif",
     }.get(category, "tidak diketahui")
 
 

@@ -95,15 +95,33 @@ UI ini bukan aplikasi navigasi. Semua copy harus membingkai keluaran sebagai exp
 - **Surface**: white background, subtle border, soft shadow only for the floating layer.
 
 ### Final Description Card
-- **Structure**: label, final output text, experimental caption.
+- **Structure**: label, concise final summary, small experimental caption.
 - **Priority**: most dominant element after result appears.
 - **Surface**: dark panel for contrast.
+- **Rule**: summarises visual content, depth contribution, and guarded potential-obstacle information in 2-4 sentences; does not repeat the full comparison detail.
 
 ### Metric Card
 - **Structure**: label + help dot + mono value + helper sentence.
-- **Variants**: Mode, Depth Category, Nearest Region, Latency.
+- **Variants**: Mode, Depth Category, Area Terdekat, Latency.
 - **Default**: appears only after analysis.
-- **Helper rule**: helper sentence explains why the current value appears, using cautious experimental language and avoiding meter-precision or navigation-safety claims.
+- **Helper rule**: helper sentence stays short and scannable; detailed explanation belongs in the help popover.
+- **Terminology rule**: visible UI uses "area"; technical/debug surfaces may use "region".
+
+### Depth Insight Panel
+- **Structure**: technical facts list, area-relative-open note, obstacle interpretation.
+- **Purpose**: explains how depth contributes to the result.
+- **Rule**: UI-facing labels say "area"; raw region code appears only as technical evidence.
+
+### Depth Map Grid Overlay
+- **Structure**: depth map preview with a 3x3 overlay and highlighted nearest area.
+- **Purpose**: makes area labels such as tengah-kiri and bawah-tengah inspectable by users.
+- **Rule**: grid is explained as application post-processing over a continuous depth map, not the native output format of Depth Anything.
+
+### Mode Comparison Table
+- **Structure**: Aspek, Gemma Baseline, Depth-only, Late Fusion, Prompted, Kontribusi.
+- **Purpose**: makes depth contribution analyzable for Bab 4 without implying Gemma is weak when depth metadata is not extracted.
+- **Rule**: compare visual-spatial baseline, metadata depth availability, strategy, kategori kedalaman relatif, potensi halangan visual, area relatif lapang, and latency.
+- **Copy rule**: for Gemma Baseline depth-specific fields, say "tidak diekstrak sebagai metadata depth" instead of generic "tidak tersedia".
 
 ### Help Popover
 - **Structure**: small `?` button opens a compact contextual popover with a short title and one concise explanation.

@@ -1,28 +1,4 @@
-REGION_LABELS = {
-    "upper_left": "atas-kiri",
-    "upper_center": "atas-tengah",
-    "upper_right": "atas-kanan",
-    "middle_left": "tengah-kiri",
-    "middle_center": "tengah",
-    "middle_right": "tengah-kanan",
-    "lower_left": "bawah-kiri",
-    "lower_center": "bawah-tengah",
-    "lower_right": "bawah-kanan",
-    "tidak_diketahui": "tidak diketahui",
-}
-
-DISTANCE_LABELS = {
-    "sangat_dekat": "sangat dekat",
-    "dekat": "dekat",
-    "sedang": "sedang",
-    "jauh": "jauh",
-    "tidak_diketahui": "tidak diketahui",
-}
-
-DEPTH_LIMITATION_NOTE = (
-    "Hasil ini merupakan estimasi visual-spasial dari gambar 2D, "
-    "bukan pengukuran jarak presisi atau rekomendasi navigasi aman."
-)
+from models.fusion_terms import DEPTH_LIMITATION_NOTE, DISTANCE_LABELS, REGION_LABELS
 
 
 def fuse_description(
@@ -34,7 +10,6 @@ def fuse_description(
     warnings: list[str] = []
     cleaned_gemma = _clean_text(gemma_description)
     visual_summary = _visual_summary(cleaned_gemma, gemma_structured)
-
     if mode == "depth_only":
         final_description = _depth_only_description(depth_summary)
         warnings.extend(_warnings_from_depth(depth_summary))
@@ -43,27 +18,40 @@ def fuse_description(
             "gemma_description": visual_summary or cleaned_gemma or None,
             "depth_summary": depth_summary,
             "warnings": warnings,
-            "display": _display_payload(visual_summary, depth_summary),
+            "display": _display_payload(visual_summary, depth_summary, mode, final_description),
+        }
+
+    if mode == "gemma_depth_prompted" and visual_summary:
+        warnings.extend(_warnings_from_depth(depth_summary))
+        final_description = _prompted_depth_aware_description(visual_summary, depth_summary)
+        return {
+            "final_description": final_description,
+            "gemma_description": visual_summary,
+            "depth_summary": depth_summary,
+            "warnings": warnings,
+            "display": _display_payload(visual_summary, depth_summary, mode, final_description),
         }
 
     if not depth_summary:
+        final_description = visual_summary or cleaned_gemma or "Deskripsi visual tidak tersedia."
         return {
-            "final_description": visual_summary or cleaned_gemma or "Deskripsi visual tidak tersedia.",
+            "final_description": final_description,
             "gemma_description": visual_summary or cleaned_gemma or None,
             "depth_summary": None,
             "warnings": warnings,
-            "display": _display_payload(visual_summary or cleaned_gemma, None),
+            "display": _display_payload(visual_summary or cleaned_gemma, None, mode, final_description),
         }
 
     warnings.extend(_warnings_from_depth(depth_summary))
     final_description = _depth_aware_description(visual_summary, depth_summary)
+    final_description = _limit_sentences(_clean_text(final_description), 6, 1100)
 
     return {
-        "final_description": _limit_sentences(_clean_text(final_description), 6, 1100),
+        "final_description": final_description,
         "gemma_description": visual_summary or cleaned_gemma or None,
         "depth_summary": depth_summary,
         "warnings": warnings,
-        "display": _display_payload(visual_summary or cleaned_gemma, depth_summary),
+        "display": _display_payload(visual_summary or cleaned_gemma, depth_summary, mode, final_description),
     }
 
 
@@ -119,8 +107,29 @@ def _depth_aware_description(visual_summary: str, depth_summary: dict) -> str:
     return " ".join(part for part in parts if part)
 
 
-def _final_sections(visual_summary: str, depth_summary: dict | None) -> dict[str, str]:
+def _prompted_depth_aware_description(visual_summary: str, depth_summary: dict | None) -> str:
     if not depth_summary:
+        return _limit_sentences(_clean_text(visual_summary), 4, 900)
+
+    sections = _final_sections(visual_summary, depth_summary, "gemma_depth_prompted")
+    parts = [
+        sections["visual_description"],
+        sections["potential_obstacle"],
+        sections["open_area"],
+    ]
+    return _limit_sentences(_clean_text(" ".join(part for part in parts if part)), 4, 900)
+
+
+def _final_sections(visual_summary: str, depth_summary: dict | None, mode: str = "gemma_depth") -> dict[str, str]:
+    if not depth_summary:
+        if mode == "gemma_only":
+            return {
+                "visual_description": visual_summary,
+                "depth_insight": "Tidak diekstrak sebagai metadata depth pada mode Gemma Baseline.",
+                "potential_obstacle": "Gemma dapat menyebut potensi hambatan bila terlihat, tetapi bukan indikator depth terstruktur.",
+                "open_area": "Area relatif lapang tidak dihitung sebagai metadata depth pada mode ini.",
+                "system_note": DEPTH_LIMITATION_NOTE,
+            }
         return {
             "visual_description": visual_summary,
             "depth_insight": "Informasi kedalaman tidak tersedia.",
@@ -142,11 +151,11 @@ def _final_sections(visual_summary: str, depth_summary: dict | None) -> dict[str
 
 def _depth_sentence(nearest_region: str, distance_category: str) -> str:
     if nearest_region == "tidak diketahui" or distance_category == "tidak diketahui":
-        return "Berdasarkan estimasi kedalaman, region terdekat atau kategori jarak relatif belum cukup terbaca."
+        return "Berdasarkan estimasi kedalaman relatif, region terdekat atau kategori kedalaman relatif belum cukup terbaca."
     return (
-        "Berdasarkan estimasi kedalaman, "
+        "Berdasarkan estimasi kedalaman relatif, "
         f"bagian {nearest_region} merupakan area yang paling dekat dibanding area lain, "
-        f"meskipun masih berada pada kategori jarak {distance_category}."
+        f"dengan kategori kedalaman relatif {distance_category}."
     )
 
 
@@ -156,7 +165,7 @@ def _obstacle_sentence(nearest_region: str, distance_category: str) -> str:
     if distance_category == "jauh":
         return (
             f"Area {nearest_region} tidak menunjukkan potensi halangan visual yang kuat "
-            "karena masih berada pada kategori jarak jauh."
+            "karena masih berada pada kategori kedalaman relatif jauh."
         )
     return (
         f"Area {nearest_region} berpotensi menjadi halangan visual "
@@ -202,8 +211,47 @@ def _limit_sentences(text: str, max_sentences: int, max_chars: int) -> str:
     return limited[:max_chars].strip()
 
 
-def _display_payload(visual_summary: str, depth_summary: dict | None) -> dict:
-    final_sections = _final_sections(visual_summary, depth_summary)
+def _fusion_strategy(mode: str) -> str:
+    if mode == "gemma_depth_prompted":
+        return "depth_to_spatial_prompting"
+    if mode == "gemma_depth":
+        return "late_rule_based_fusion"
+    if mode == "depth_only":
+        return "depth_only_summary"
+    return "gemma_visual_spatial_baseline"
+
+
+def _provenance_segments(mode: str, visual_summary: str, depth_summary: dict | None, final_description: str) -> list[dict[str, str]]:
+    final_sections = _final_sections(visual_summary, depth_summary, mode)
+    if mode == "gemma_depth_prompted":
+        return [
+            {"source": "prompted_gemma", "text": visual_summary},
+            {"source": "inference", "text": final_sections["potential_obstacle"]},
+            {"source": "template", "text": final_sections["open_area"]},
+        ]
+    if mode == "gemma_depth":
+        return [
+            {"source": "gemma", "text": visual_summary},
+            {"source": "depth", "text": final_sections["depth_insight"]},
+            {"source": "inference", "text": final_sections["potential_obstacle"]},
+            {"source": "template", "text": final_sections["open_area"]},
+        ]
+    if mode == "depth_only":
+        return [
+            {"source": "depth", "text": final_sections["depth_insight"]},
+            {"source": "inference", "text": final_sections["potential_obstacle"]},
+            {"source": "template", "text": final_sections["open_area"]},
+        ]
+    return [{"source": "gemma", "text": final_description}]
+
+
+def _display_payload(visual_summary: str, depth_summary: dict | None, mode: str, final_description: str) -> dict:
+    final_sections = _final_sections(visual_summary, depth_summary, mode)
+    fusion_strategy = _fusion_strategy(mode)
+    provenance_segments = [
+        segment for segment in _provenance_segments(mode, visual_summary, depth_summary, final_description)
+        if segment["text"]
+    ]
     if not depth_summary:
         return {
             "visual_summary": visual_summary or "Tidak tersedia",
@@ -211,6 +259,8 @@ def _display_payload(visual_summary: str, depth_summary: dict | None) -> dict:
             "navigation_region": "tidak_diketahui",
             "safe_direction": "tidak_diketahui",
             "final_sections": final_sections,
+            "fusion_strategy": fusion_strategy,
+            "provenance_segments": provenance_segments,
             "system_note": final_sections["system_note"],
         }
     return {
@@ -220,5 +270,7 @@ def _display_payload(visual_summary: str, depth_summary: dict | None) -> dict:
         "distance_category": depth_summary.get("distance_category", "tidak_diketahui"),
         "safe_direction": depth_summary.get("safe_direction", "tidak_diketahui"),
         "final_sections": final_sections,
+        "fusion_strategy": fusion_strategy,
+        "provenance_segments": provenance_segments,
         "system_note": final_sections["system_note"],
     }

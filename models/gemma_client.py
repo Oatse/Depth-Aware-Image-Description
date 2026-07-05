@@ -11,8 +11,10 @@ from app.config import Settings
 
 DEFAULT_GEMMA_PROMPT = (
     "Anda adalah sistem image description berbahasa Indonesia. "
-    "Analisis gambar lingkungan indoor secara ringkas, jelas, dan praktis. "
-    "Fokus pada objek utama, posisi objek, area depan, dan potensi hambatan. "
+    "Analisis gambar lingkungan indoor secara ringkas, jelas, dan praktis sebagai baseline Gemma tanpa metadata depth. "
+    "Fokus pada objek utama, posisi objek, area depan, potensi hambatan yang tampak, dan relasi spasial visual yang dapat dibaca langsung dari gambar. "
+    "Boleh gunakan indikasi kualitatif seperti tampak dekat, tampak jauh, sisi kiri, sisi kanan, tengah, atau area depan jika terlihat jelas. "
+    "Jangan mengklaim pengukuran jarak, peta kedalaman, region depth, atau area aman karena mode ini tidak menerima metadata depth eksplisit. "
     "Jangan mengarang detail yang tidak terlihat. "
     "Gunakan bahasa hati-hati seperti 'terlihat', 'tampak', atau 'kemungkinan' jika tidak yakin. "
     "Balas hanya JSON valid tanpa markdown dengan skema: "
@@ -60,14 +62,22 @@ class GemmaClient:
             return "ready"
         return "ready" if self.settings.lm_studio_model in model_ids else "model_not_loaded"
 
-    async def describe_image(self, base64_image: str) -> GemmaResult:
+    async def describe_image(self, base64_image: str, prompt: str | None = None) -> GemmaResult:
         started_at = time.perf_counter()
+        prompt_text = prompt or DEFAULT_GEMMA_PROMPT
         if self.settings.gemma_mock:
-            return GemmaResult(
-                description=(
+            is_prompted = "Depth-to-Spatial Prompting Schema" in prompt_text
+            description = (
+                "Terlihat area dalam ruangan dengan beberapa objek dan konteks kedalaman relatif. "
+                "Deskripsi ini berasal dari mock eksplisit untuk mode depth-to-spatial prompting."
+                if is_prompted
+                else (
                     "Terlihat area dalam ruangan dengan beberapa objek di sekitar ruangan. "
-                    "Deskripsi ini berasal dari mock eksplisit untuk mode pengembangan."
-                ),
+                    "Objek dan area depan dijelaskan sebagai indikasi visual tanpa metadata depth eksplisit."
+                )
+            )
+            return GemmaResult(
+                description=description,
                 raw_response='{"mock": true}',
                 latency_ms=_elapsed_ms(started_at),
                 mock=True,
@@ -77,10 +87,7 @@ class GemmaClient:
                     "object_position": "tengah",
                     "objects": [],
                     "obstacle_candidate": "tidak_diketahui",
-                    "description": (
-                        "Terlihat area dalam ruangan dengan beberapa objek di sekitar ruangan. "
-                        "Deskripsi ini berasal dari mock eksplisit untuk mode pengembangan."
-                    ),
+                    "description": description,
                 },
             )
 
@@ -90,7 +97,7 @@ class GemmaClient:
                 {
                     "role": "user",
                     "content": [
-                        {"type": "text", "text": DEFAULT_GEMMA_PROMPT},
+                        {"type": "text", "text": prompt_text},
                         {
                             "type": "image_url",
                             "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"},
@@ -99,7 +106,7 @@ class GemmaClient:
                 }
             ],
             "temperature": 0.2,
-            "max_tokens": 220,
+            "max_tokens": self.settings.lm_studio_max_tokens,
         }
 
         endpoint = self.settings.lm_studio_openai_base_url + "/chat/completions"

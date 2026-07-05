@@ -4,11 +4,11 @@ Dokumen ini menjadi dokumentasi pusat untuk inisialisasi, arah akademik, dan kon
 
 Status dokumen: draft kerja untuk Bab 1, Bab 2, Bab 3, dan dokumentasi implementasi.
 
-Tanggal pembaruan: 2026-07-01.
+Tanggal pembaruan: 2026-07-05.
 
 ## 1. Deskripsi Proyek
 
-Proyek ini adalah prototype penelitian untuk membuat sistem **depth-aware image description** pada citra lingkungan indoor. Sistem menerima gambar ruangan, memproses gambar dengan vision-language model Gemma untuk menghasilkan deskripsi visual, memproses gambar yang sama dengan Depth Anything V2 Metric Indoor Small untuk memperkirakan informasi kedalaman, lalu menggabungkan keduanya melalui rule-based fusion agar deskripsi akhir tidak hanya menjawab "apa yang terlihat", tetapi juga "di mana posisi objek" dan "seberapa dekat area/objek tertentu".
+Proyek ini adalah prototype penelitian untuk membuat sistem **depth-aware image description** pada citra lingkungan indoor. Sistem menerima gambar ruangan, memproses gambar dengan Depth Anything V2 Metric Indoor Small untuk memperkirakan informasi kedalaman relatif, lalu memakai vision-language model Gemma untuk menghasilkan deskripsi visual atau deskripsi visual-spasial. Strategi fusi yang tersedia mencakup late/rule-based fusion dan Depth-to-Spatial Prompting agar kontribusi depth dapat dibandingkan secara lebih jelas.
 
 Fokus proyek bukan membuat aplikasi navigasi siap produksi, melainkan membangun dan mengevaluasi pipeline AI yang dapat memperkaya deskripsi gambar indoor dengan konteks spasial. Karena itu, klaim utama proyek adalah peningkatan kelengkapan informasi visual-spasial, bukan jaminan keselamatan navigasi.
 
@@ -16,8 +16,8 @@ Ringkasan posisi proyek:
 
 - Domain: computer vision, vision-language model, monocular depth estimation, assistive scene understanding.
 - Objek penelitian: citra lingkungan indoor.
-- Output utama: deskripsi Bahasa Indonesia yang menggabungkan deskripsi semantik dan ringkasan kedalaman.
-- Mode pembanding: `gemma_only`, `depth_only`, dan `gemma_depth`.
+- Output utama: deskripsi Bahasa Indonesia yang menggabungkan deskripsi semantik dan ringkasan kedalaman relatif.
+- Mode pembanding: `gemma_only` sebagai Gemma Baseline, `depth_only`, `gemma_depth`, dan `gemma_depth_prompted`.
 - Karakter penelitian: implementatif dan evaluatif.
 
 ## 2. Tujuan Proyek Baru
@@ -32,8 +32,8 @@ Secara praktis, sistem diharapkan mampu:
 2. Menghasilkan deskripsi visual menggunakan Gemma melalui LM Studio lokal.
 3. Menghasilkan depth map menggunakan Depth Anything V2 Metric Indoor Small.
 4. Menganalisis depth map ke dalam region sederhana, seperti area atas, tengah, bawah, kiri, kanan, dan sekitarnya.
-5. Menentukan kategori jarak, area terdekat, status area depan, serta arah yang relatif lebih lapang.
-6. Menggabungkan informasi visual dan depth menjadi final description Bahasa Indonesia.
+5. Menentukan kategori kedalaman relatif, area terdekat, status area depan, serta area yang relatif lebih lapang.
+6. Menghasilkan final description Bahasa Indonesia melalui Gemma-only, depth-only, late fusion, atau Depth-to-Spatial Prompting.
 7. Menyimpan hasil prediksi dan menjalankan evaluasi berbasis anotasi manual.
 
 ### 2.2 Tujuan Akademik
@@ -43,8 +43,8 @@ Tujuan akademik proyek adalah membuktikan secara terukur apakah penambahan infor
 Tujuan akademik dapat dirumuskan sebagai berikut:
 
 1. Mengimplementasikan pipeline depth-aware image description berbasis Gemma dan Depth Anything V2.
-2. Mengevaluasi perbedaan output antara mode `gemma_only` dan `gemma_depth`.
-3. Menganalisis kontribusi depth estimation terhadap informasi posisi, kategori jarak, potensi hambatan, dan kelengkapan deskripsi.
+2. Mengevaluasi perbedaan output antara mode `gemma_only`, `depth_only`, `gemma_depth`, dan `gemma_depth_prompted`.
+3. Menganalisis kontribusi depth estimation terhadap informasi posisi, kategori kedalaman relatif, potensi hambatan, dan kelengkapan deskripsi.
 4. Mengukur trade-off antara peningkatan informasi spasial dan waktu inferensi.
 5. Menyusun batasan sistem agar hasil penelitian tidak overclaim sebagai alat navigasi aman.
 
@@ -68,8 +68,8 @@ Judul yang paling kuat adalah judul utama karena memuat metode, objek, dan fokus
 Rumusan masalah yang disarankan:
 
 1. Bagaimana merancang pipeline depth-aware image description yang menggabungkan Gemma dan Depth Anything V2 pada citra lingkungan indoor?
-2. Bagaimana informasi depth map dapat diterjemahkan menjadi informasi spasial seperti kategori jarak, area terdekat, status area depan, dan arah yang relatif lebih lapang?
-3. Apakah mode `gemma_depth` menghasilkan deskripsi yang lebih informatif dibanding mode `gemma_only`?
+2. Bagaimana informasi depth map dapat diterjemahkan menjadi informasi spasial seperti kategori kedalaman relatif, area terdekat, status area depan, dan area yang relatif lebih lapang?
+3. Apakah mode `gemma_depth_prompted` menghasilkan deskripsi yang lebih informatif dibanding `gemma_only`, `depth_only`, dan `gemma_depth` late fusion?
 4. Bagaimana pengaruh penambahan depth estimation terhadap waktu pemrosesan sistem?
 5. Apa keterbatasan sistem dalam menghasilkan deskripsi visual-spasial pada citra indoor?
 
@@ -83,8 +83,8 @@ Batasan yang disarankan:
 2. Objek penelitian dibatasi pada citra lingkungan indoor.
 3. Model vision-language yang digunakan adalah Gemma yang berjalan secara lokal melalui LM Studio.
 4. Model kedalaman yang digunakan adalah Depth Anything V2 Metric Indoor Small dari folder `model_weights/`.
-5. Depth map digunakan untuk kategori jarak relatif/estimasi, bukan pengukuran jarak presisi centimeter.
-6. Fusion dilakukan dengan rule-based fusion, bukan training model baru.
+5. Depth map digunakan untuk kategori kedalaman relatif, bukan pengukuran jarak presisi centimeter.
+6. Fusion mencakup late/rule-based fusion dan Depth-to-Spatial Prompting, bukan training model baru.
 7. Evaluasi menggunakan anotasi manual pada dataset lokal.
 8. Prototype tidak diklaim sebagai sistem navigasi aman untuk pengguna tunanetra.
 9. Output sistem berupa deskripsi teks Bahasa Indonesia dan metadata analisis, bukan audio guidance sebagai fitur utama.
@@ -125,15 +125,15 @@ User / Web Browser
   -> FastAPI Backend
   -> Upload Validation
   -> Image Preprocessing
-  -> Gemma Client via LM Studio
   -> Depth Anything V2 ONNX
   -> 9-Region Depth Analysis
-  -> Rule-Based Fusion
+  -> Gemma Client via LM Studio
+  -> Late Fusion or Depth-to-Spatial Prompting
   -> Final Indonesian Description
   -> Prediction Log + Evaluation CSV + Depth Map
 ```
 
-Arsitektur ini sengaja dibuat modular agar setiap bagian bisa diuji dan dibahas dalam skripsi. Gemma bertanggung jawab pada pemahaman semantik gambar, sedangkan Depth Anything bertanggung jawab pada informasi kedalaman. Fusion layer menggabungkan keduanya menjadi output akhir.
+Arsitektur ini sengaja dibuat modular agar setiap bagian bisa diuji dan dibahas dalam skripsi. Gemma bertanggung jawab pada pemahaman semantik gambar, sedangkan Depth Anything bertanggung jawab pada informasi kedalaman relatif. Fusion layer menyediakan dua strategi: late fusion sebagai baseline ablation dan Depth-to-Spatial Prompting sebagai metode prompt-level. Ringkasan region depth memakai grid 3x3 aplikasi; grid ini adalah post-processing atas peta kedalaman kontinu, bukan keluaran asli Depth Anything.
 
 ### 7.2 Alur Utama
 
@@ -144,10 +144,11 @@ Alur utama sistem:
 3. Frontend mengirim gambar ke endpoint `POST /analyze`.
 4. Backend memvalidasi jenis file, ukuran file, dan mode analisis.
 5. Gambar diproses agar sesuai batas ukuran sistem.
-6. Jika mode menggunakan Gemma, gambar dikirim ke LM Studio untuk deskripsi visual.
-7. Jika mode menggunakan depth, gambar diproses oleh Depth Anything V2 ONNX.
-8. Output depth map dianalisis menjadi region dan kategori jarak.
-9. Output Gemma dan output depth digabung oleh fusion rule.
+6. Jika mode menggunakan depth, gambar diproses oleh Depth Anything V2 ONNX.
+7. Output depth map dianalisis menjadi region dan kategori kedalaman relatif.
+8. Jika mode menggunakan Gemma, gambar dikirim ke LM Studio untuk deskripsi visual.
+9. Pada `gemma_depth`, output Gemma dan output depth digabung oleh late/rule-based fusion; pada `gemma_depth_prompted`, metadata depth masuk ke prompt Gemma sebelum deskripsi akhir dibuat.
+10. Jika metadata depth menunjukkan potensi halangan visual, deskripsi akhir mode depth-aware harus menyebutnya dengan bahasa guarded seperti "berpotensi menjadi halangan visual".
 10. Sistem mengembalikan final description, metadata display, latency, depth map URL, dan debug output.
 11. Jika `save_result=true`, sistem menyimpan prediction row ke `results/predictions.csv`.
 12. Evaluasi dapat dijalankan dengan membandingkan prediction CSV dan annotation CSV.
@@ -163,9 +164,10 @@ Alur utama sistem:
 | `services/validation.py` | Validasi tipe file, ukuran file, dan mode analisis. |
 | `services/image_preprocess.py` | Membaca image bytes, konversi RGB, resize, dan encoding base64 untuk model. |
 | `models/gemma_client.py` | Client HTTP ke LM Studio, prompt Gemma, parsing JSON terstruktur, sanitasi deskripsi. |
+| `models/depth_prompting.py` | Menyusun Depth-to-Spatial Prompting Schema dari metadata depth relatif untuk prompt Gemma. |
 | `models/depth_anything.py` | Adapter ONNX Runtime untuk Depth Anything, preprocessing tensor, inference, dan simpan depth map. |
-| `services/depth_analysis.py` | Membagi depth map menjadi region, menentukan nearest region, kategori jarak, front status, warning, dan safe direction. |
-| `models/fusion.py` | Menggabungkan output Gemma dan depth menjadi final description dan display payload. |
+| `services/depth_analysis.py` | Membagi depth map menjadi region, menentukan nearest region, kategori kedalaman relatif, front status, warning, dan area relatif lapang. |
+| `models/fusion.py` | Mengelola final description, strategi fusi, display payload, dan provenance segments. |
 | `services/pipeline.py` | Orchestrator utama analisis gambar, menghubungkan preprocessing, Gemma, depth, fusion, dan prediction row. |
 | `services/result_logger.py` | Menulis hasil prediksi ke `results/predictions.csv`. |
 | `services/evaluator.py` | Membandingkan annotation dan prediction untuk menghasilkan metrik evaluasi. |
@@ -259,7 +261,7 @@ Maka posisi proyek adalah membangun prototype sederhana tetapi terukur untuk mel
 
 Evaluasi proyek diarahkan untuk membandingkan mode:
 
-- `gemma_only`: deskripsi visual dari Gemma.
+- `gemma_only`: Gemma Baseline, yaitu deskripsi visual dan relasi spasial kualitatif dari gambar saja tanpa metadata depth eksplisit.
 - `depth_only`: ringkasan informasi depth tanpa Gemma.
 - `gemma_depth`: fusion antara Gemma dan depth.
 
@@ -280,7 +282,8 @@ Metrik awal:
 
 Interpretasi hasil:
 
-- Jika `gemma_depth` meningkat pada distance category atau obstacle warning, maka depth memberi kontribusi pada informasi spasial.
+- Distance category dan obstacle warning berlaku untuk mode yang menghasilkan metadata depth. Pada `gemma_only`, metrik depth ditulis sebagai N/A agar absence metadata tidak dibaca sebagai kegagalan Gemma.
+- Jika `gemma_depth` atau `gemma_depth_prompted` meningkat pada distance category atau obstacle warning, maka depth memberi kontribusi pada informasi spasial eksplisit.
 - Jika object accuracy tidak meningkat, hal itu wajar karena depth module tidak bertugas mengenali objek.
 - Jika latency meningkat, pembahasan dapat diarahkan pada trade-off antara kelengkapan informasi dan waktu pemrosesan.
 
@@ -443,6 +446,14 @@ Untuk hasil eksperimen, pastikan semua tabel berasal dari:
 - `results/predictions.csv`
 - `results/evaluation.csv`
 
+Sebelum menjalankan inference final, jalankan preflight:
+
+```bash
+python scripts\run_batch_evaluation.py --preflight-only
+```
+
+Preflight digunakan untuk memastikan dataset, anotasi, konfigurasi mock, model depth, dan runtime Gemma siap sebelum hasil dipakai dalam Bab 4.
+
 Jika hasil kurang bagus, tetap tulis apa adanya. Nilai skripsi tetap kuat jika analisisnya jujur, batasannya jelas, dan rekomendasi pengembangannya matang.
 
 ## 19. Kontrak API dan Interface
@@ -462,7 +473,7 @@ Form data untuk `POST /analyze`:
 | Field | Type | Wajib | Keterangan |
 |---|---|---|---|
 | `image` | file | Ya | JPG, PNG, atau WebP. |
-| `mode` | string | Tidak | `gemma_depth`, `gemma_only`, atau `depth_only`. |
+| `mode` | string | Tidak | `gemma_depth_prompted`, `gemma_depth`, `gemma_only`, atau `depth_only`. |
 | `save_result` | boolean | Tidak | Menentukan apakah hasil ditulis ke CSV. |
 
 Response utama harus berisi:

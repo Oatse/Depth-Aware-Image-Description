@@ -4,10 +4,14 @@ from pathlib import Path
 
 from app.config import Settings
 from models.depth_anything import DepthAnything
+from models.depth_prompting import build_depth_spatial_prompt
 from models.fusion import fuse_description
 from models.gemma_client import GemmaClient, GemmaClientError
 from services.depth_analysis import analyze_depth_regions
 from services.image_preprocess import preprocess_image
+
+GEMMA_MODES = frozenset({"gemma_only", "gemma_depth", "gemma_depth_prompted"})
+DEPTH_MODES = frozenset({"depth_only", "gemma_depth", "gemma_depth_prompted"})
 
 
 @dataclass(frozen=True)
@@ -44,24 +48,13 @@ async def analyze_image_bytes(
     gemma_latency_ms = 0
     gemma_mock = False
     gemma_error: str | None = None
-    if mode in {"gemma_only", "gemma_depth"}:
-        try:
-            gemma_result = await gemma_client.describe_image(processed.base64_image)
-            gemma_description = gemma_result.description
-            gemma_structured = gemma_result.structured
-            gemma_latency_ms = gemma_result.latency_ms
-            gemma_mock = gemma_result.mock
-        except GemmaClientError as exc:
-            gemma_error = str(exc)
-            if mode == "gemma_only":
-                return _failed_result(filename, mode, started_at, gemma_error)
 
     depth_summary: dict | None = None
     depth_latency_ms = 0
     depth_map_url: str | None = None
     depth_mock = False
     depth_error: str | None = None
-    if mode in {"depth_only", "gemma_depth"}:
+    if mode in DEPTH_MODES:
         depth_result = depth_model.estimate(processed.image, filename)
         depth_latency_ms = depth_result.latency_ms
         depth_mock = depth_result.mock
@@ -72,6 +65,19 @@ async def analyze_image_bytes(
             depth_error = depth_result.error
             if mode == "depth_only":
                 return _failed_result(filename, mode, started_at, depth_error or "Depth inference failed.")
+
+    if mode in GEMMA_MODES:
+        try:
+            prompt = build_depth_spatial_prompt(depth_summary) if mode == "gemma_depth_prompted" else None
+            gemma_result = await gemma_client.describe_image(processed.base64_image, prompt)
+            gemma_description = gemma_result.description
+            gemma_structured = gemma_result.structured
+            gemma_latency_ms = gemma_result.latency_ms
+            gemma_mock = gemma_result.mock
+        except GemmaClientError as exc:
+            gemma_error = str(exc)
+            if mode in {"gemma_only", "gemma_depth_prompted"}:
+                return _failed_result(filename, mode, started_at, gemma_error)
 
     fusion_started_at = time.perf_counter()
     fusion = fuse_description(gemma_description, depth_summary, mode, gemma_structured)

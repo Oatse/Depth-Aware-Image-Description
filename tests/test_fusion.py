@@ -8,6 +8,15 @@ def test_fusion_returns_gemma_only_when_depth_missing() -> None:
     assert result["warnings"] == []
 
 
+def test_gemma_baseline_display_explains_depth_metadata_is_not_extracted() -> None:
+    result = fuse_description("Terlihat kursi di depan ruangan.", None, "gemma_only")
+
+    assert result["final_description"] == "Terlihat kursi di depan ruangan."
+    assert result["display"]["fusion_strategy"] == "gemma_visual_spatial_baseline"
+    assert "Tidak diekstrak sebagai metadata depth" in result["display"]["final_sections"]["depth_insight"]
+    assert "bukan indikator depth terstruktur" in result["display"]["final_sections"]["potential_obstacle"]
+
+
 def test_fusion_adds_warning_for_close_depth() -> None:
     summary = {
         "warning": "Area bawah-tengah menunjukkan potensi halangan visual dekat.",
@@ -20,7 +29,7 @@ def test_fusion_adds_warning_for_close_depth() -> None:
 
     assert "Berdasarkan estimasi kedalaman" in result["final_description"]
     assert "bagian bawah-tengah merupakan area yang paling dekat dibanding area lain" in result["final_description"]
-    assert "kategori jarak dekat" in result["final_description"]
+    assert "kategori kedalaman relatif dekat" in result["final_description"]
     assert "Area kanan tampak relatif lebih lapang" in result["final_description"]
     assert "bukan pengukuran jarak presisi" not in result["final_description"]
     assert "bukan pengukuran jarak presisi" in result["display"]["system_note"]
@@ -39,7 +48,7 @@ def test_fusion_keeps_depth_claims_regional_when_object_identity_is_unknown() ->
     result = fuse_description("Sebuah ruangan interior dengan tanaman pot di area depan.", summary, "gemma_depth")
 
     assert "bagian bawah-kanan merupakan area yang paling dekat dibanding area lain" in result["final_description"]
-    assert "meskipun masih berada pada kategori jarak sedang" in result["final_description"]
+    assert "dengan kategori kedalaman relatif sedang" in result["final_description"]
     assert "Area bawah-kanan berpotensi menjadi halangan visual" in result["final_description"]
     assert "Area tengah tampak relatif lebih lapang" in result["final_description"]
     assert result["display"]["final_sections"]["depth_insight"].startswith("Berdasarkan estimasi kedalaman")
@@ -75,3 +84,25 @@ def test_depth_only_description_does_not_require_gemma() -> None:
     result = fuse_description(None, summary, "depth_only")
 
     assert result["final_description"].startswith("Berdasarkan estimasi kedalaman")
+
+
+def test_prompted_fusion_includes_guarded_obstacle_in_final_description() -> None:
+    summary = {
+        "warning": "Area bawah-tengah menunjukkan potensi halangan visual dekat.",
+        "distance_category": "dekat",
+        "nearest_region": "lower_center",
+        "safe_direction": "kanan",
+    }
+
+    result = fuse_description(
+        "Terlihat kursi di depan area tengah, dengan area bawah-tengah tampak lebih dekat secara relatif.",
+        summary,
+        "gemma_depth_prompted",
+    )
+
+    assert result["final_description"].startswith("Terlihat kursi")
+    assert "Area bawah-tengah berpotensi menjadi halangan visual" in result["final_description"]
+    assert "Area kanan tampak relatif lebih lapang" in result["final_description"]
+    assert result["display"]["fusion_strategy"] == "depth_to_spatial_prompting"
+    assert result["display"]["provenance_segments"][0]["source"] == "prompted_gemma"
+    assert result["display"]["provenance_segments"][1]["source"] == "inference"

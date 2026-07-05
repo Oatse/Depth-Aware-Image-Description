@@ -12,9 +12,10 @@ class Settings(BaseSettings):
     app_port: int = Field(default=8000, validation_alias="APP_PORT")
 
     lm_studio_url: str = "http://localhost:1234"
-    lm_studio_model: str = "gemma-4-e4b-it"
-    lm_studio_timeout: int = 60
+    lm_studio_model: str = "google/gemma-4-e4b"
+    lm_studio_timeout: int = 240
     lm_studio_health_timeout: float = 2.0
+    lm_studio_max_tokens: int = 1200
     gemma_mock: bool = False
 
     enable_depth_estimation: bool = True
