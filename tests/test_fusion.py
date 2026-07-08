@@ -30,7 +30,8 @@ def test_fusion_adds_warning_for_close_depth() -> None:
     assert "Berdasarkan estimasi kedalaman" in result["final_description"]
     assert "bagian bawah-tengah merupakan area yang paling dekat dibanding area lain" in result["final_description"]
     assert "kategori kedalaman relatif dekat" in result["final_description"]
-    assert "Area kanan tampak relatif lebih lapang" in result["final_description"]
+    assert "Region kanan terbaca relatif lebih lapang" in result["final_description"]
+    assert "bukan berarti bebas objek" in result["final_description"]
     assert "bukan pengukuran jarak presisi" not in result["final_description"]
     assert "bukan pengukuran jarak presisi" in result["display"]["system_note"]
     assert "jalan aman" not in result["final_description"].lower()
@@ -49,8 +50,8 @@ def test_fusion_keeps_depth_claims_regional_when_object_identity_is_unknown() ->
 
     assert "bagian bawah-kanan merupakan area yang paling dekat dibanding area lain" in result["final_description"]
     assert "dengan kategori kedalaman relatif sedang" in result["final_description"]
-    assert "Area bawah-kanan berpotensi menjadi halangan visual" in result["final_description"]
-    assert "Area tengah tampak relatif lebih lapang" in result["final_description"]
+    assert "Area bawah-kanan terbaca pada jarak relatif sedang" in result["final_description"]
+    assert "Region tengah terbaca relatif lebih lapang" in result["final_description"]
     assert result["display"]["final_sections"]["depth_insight"].startswith("Berdasarkan estimasi kedalaman")
 
 
@@ -102,7 +103,51 @@ def test_prompted_fusion_includes_guarded_obstacle_in_final_description() -> Non
 
     assert result["final_description"].startswith("Terlihat kursi")
     assert "Area bawah-tengah berpotensi menjadi halangan visual" in result["final_description"]
-    assert "Area kanan tampak relatif lebih lapang" in result["final_description"]
+    assert "Region kanan terbaca relatif lebih lapang" in result["final_description"]
+    assert "bukan berarti bebas objek" in result["final_description"]
     assert result["display"]["fusion_strategy"] == "depth_to_spatial_prompting"
     assert result["display"]["provenance_segments"][0]["source"] == "prompted_gemma"
     assert result["display"]["provenance_segments"][1]["source"] == "inference"
+
+
+def test_prompted_fusion_keeps_specific_visual_objects_when_depth_marks_center_open() -> None:
+    summary = {
+        "warning": "Area bawah-kanan memiliki objek pada jarak sedang.",
+        "distance_category": "sedang",
+        "nearest_region": "lower_right",
+        "safe_direction": "tengah",
+    }
+
+    result = fuse_description(
+        "Terdapat meja panjang di tengah dengan lampu dan vas bunga, serta kursi-kursi di kedua sisi.",
+        summary,
+        "gemma_depth_prompted",
+    )
+
+    final_description = result["final_description"]
+    assert "meja panjang" in final_description
+    assert "lampu" in final_description
+    assert "vas bunga" in final_description
+    assert "kursi" in final_description
+    assert "Area depan tampak relatif lapang" not in final_description
+    assert "Area bawah-kanan berpotensi menjadi halangan visual" not in final_description
+    assert "Region tengah terbaca relatif lebih lapang" in final_description
+
+
+def test_prompted_fusion_does_not_over_warn_for_medium_depth() -> None:
+    summary = {
+        "warning": "Area bawah-kanan memiliki objek pada jarak sedang.",
+        "distance_category": "sedang",
+        "nearest_region": "lower_right",
+        "safe_direction": "tengah",
+    }
+
+    result = fuse_description(
+        "Tampak meja konsol di area tengah ruangan.",
+        summary,
+        "gemma_depth_prompted",
+    )
+
+    assert "berpotensi menjadi halangan visual" not in result["final_description"]
+    assert "jarak relatif sedang" in result["final_description"]
+    assert result["warnings"] == []

@@ -1,31 +1,31 @@
 image_name,main_object,object_position,distance_meter,distance_category,has_obstacle,front_area_status,safer_direction,notes
-indoor_001.webp,kipas angin,kanan,0.7,dekat,yes,terhalang,tengah,kipas angin dan barang berada di area depan kanan
-indoor_002.webp,lemari plastik,kiri,1.2,sedang,yes,terhalang,tengah,lemari dan barang di lantai membuat area depan cukup padat
-indoor_003.webp,meja kerja,tengah,0.8,dekat,yes,terhalang,kiri,meja kerja dan kursi memenuhi area depan
-indoor_004.webp,tumpukan barang,kanan,0.8,dekat,yes,terhalang,kiri,tumpukan barang berada di sisi kanan dekat jalur lorong
-indoor_005.webp,kulkas,kanan,1.2,sedang,no,relatif_lapang,tengah,lorong tengah terlihat cukup kosong meskipun ada kulkas di kanan
-indoor_006.webp,galon air,kiri,0.4,sangat_dekat,yes,terhalang,kanan,galon air berada sangat dekat pada area kiri bawah
-indoor_007.webp,kardus,kanan,0.6,dekat,yes,terhalang,tengah,kardus dan barang berada dekat di area bawah kanan pintu
-indoor_008.webp,ember,tengah,0.7,dekat,yes,terhalang,kiri,ember berada di area bawah tengah kamar mandi
-indoor_009.webp,ember,tengah,0.8,dekat,yes,terhalang,kiri,ember dan tempat sampah berada dekat di area depan
-indoor_010.webp,wastafel,kanan,0.7,dekat,yes,terhalang,kiri,wastafel dan rak piring memenuhi area kanan depan
-indoor_011.webp,galon air,tengah,0.8,dekat,yes,terhalang,kiri,galon air dan meja dapur berada dekat di area depan
-indoor_012.webp,magic com,kiri,0.5,dekat,yes,terhalang,kanan,magic com berada dekat di sisi kiri lorong
-indoor_013.webp,pintu,tengah,2.0,jauh,no,relatif_lapang,tengah,lantai depan menuju pintu terlihat kosong
-indoor_014.webp,kasur,kiri,1.5,sedang,yes,terhalang,tengah,kasur dan barang di lantai membuat sisi kiri lebih padat
-indoor_015.webp,koper,kiri,1.0,sedang,yes,terhalang,tengah,koper dan rak sepatu berada pada sisi kiri dan kanan ruangan
-indoor_016.webp,lemari plastik,tengah,1.0,sedang,yes,terhalang,kanan,lemari plastik dan kasur membuat area depan terbatas
-indoor_017.webp,meja kerja,kanan,0.5,dekat,yes,terhalang,kiri,meja kerja dan perangkat mikrofon berada dekat di kanan
-indoor_018.webp,kardus,kanan,0.5,dekat,yes,terhalang,tengah,kardus berada dekat di area bawah kanan pintu
-indoor_019.webp,kulkas,kanan,0.8,dekat,no,relatif_lapang,tengah,lorong tengah masih terlihat kosong meskipun kulkas dekat di kanan
-indoor_020.webp,kompor,tengah,0.8,dekat,yes,terhalang,kiri,kompor dan galon air membuat area dapur depan padat
-indoor_021.webp,wastafel,kiri,0.8,dekat,yes,terhalang,tengah,wastafel berada dekat di kiri sementara arah tengah menuju pintu masih terlihat
-indoor_022.webp,pintu,kanan,0.6,dekat,yes,terhalang,kiri,daun pintu terbuka dekat pada sisi kanan lorong
-indoor_023.webp,pintu,tengah,2.0,jauh,no,relatif_lapang,tengah,lantai depan menuju pintu terlihat lapang
-indoor_024.webp,pintu,kanan,0.8,dekat,yes,terhalang,kiri,pintu terbuka dan barang di bawah kiri membuat area depan perlu diperhatikan
-indoor_025.webp,kursi,kanan,0.8,dekat,yes,terhalang,tengah,kursi dan meja kerja berada dekat di sisi kanan
-indoor_026.webp,rak sepatu,kanan,0.6,dekat,yes,terhalang,kiri,rak sepatu dan koper berada dekat di area depan kanan
-indoor_027.webp,kipas angin,kanan,1.0,sedang,yes,terhalang,kiri,kipas angin dan meja kecil berada pada sisi kanan ruangan
-indoor_028.webp,meja komputer,tengah,0.5,dekat,yes,terhalang,kiri,meja komputer dan mikrofon berada dekat memenuhi area depan
-indoor_029.webp,kursi,tengah,0.4,sangat_dekat,yes,terhalang,kanan,kursi berada sangat dekat dan menutup area tengah
-indoor_030.webp,pintu,kanan,1.5,sedang,no,relatif_lapang,tengah,pintu berada di kanan sementara area tengah terlihat terbuka
+indoor_001.webp,kipas angin,kanan,0.7,dekat,yes,terhalang,tengah,kipas angin dekat di kanan depan; area tengah relatif lebih terbuka dibanding sisi kiri dan kanan
+indoor_002.webp,kipas angin,kanan,0.6,dekat,yes,terhalang,tengah,kipas angin sangat menonjol di kanan depan; label lama lemari plastik kurang tepat untuk halangan terdekat
+indoor_003.webp,meja kerja,tengah,0.6,dekat,yes,terhalang,kiri,meja kerja dan kursi memenuhi area depan-tengah sehingga menjadi objek dominan dekat
+indoor_004.webp,tumpukan barang,kanan,0.6,dekat,yes,terhalang,kiri,koper kardus dan pakaian menumpuk di kanan dekat lorong
+indoor_005.webp,kulkas,kanan,1.2,sedang,no,relatif_lapang,kiri,kulkas berada di kanan tetapi jalur kiri-tengah masih terlihat terbuka
+indoor_006.webp,galon air,kiri,0.4,sangat_dekat,yes,terhalang,kanan,galon air sangat dekat pada kiri bawah dan relevan sebagai potensi halangan
+indoor_007.webp,kantong belanja,kanan,0.5,dekat,yes,terhalang,tengah,kantong belanja berada dekat di kanan bawah dekat ambang pintu
+indoor_008.webp,ember,kiri,0.6,dekat,yes,terhalang,tidak_diketahui,ember besar dekat di kiri bawah kamar mandi; ruang kecil membuat arah relatif lapang tidak jelas
+indoor_009.webp,ember,kiri,0.6,dekat,yes,terhalang,kanan,ember besar dekat di kiri bawah dan tempat sampah berada di kanan sehingga area depan terbatas
+indoor_010.webp,wastafel,tengah,0.7,dekat,yes,terhalang,kiri,wastafel dan area rak piring dekat memenuhi bagian depan gambar
+indoor_011.webp,galon air,kanan,0.8,dekat,yes,terhalang,kiri,galon air dan area dapur kanan berada dekat sehingga perlu diperlakukan sebagai potensi halangan
+indoor_012.webp,magic com,kiri,0.6,dekat,yes,terhalang,kanan,magic com dekat di kiri depan lorong; sisi kanan-tengah terlihat lebih lapang
+indoor_013.webp,pintu,tengah,2.0,jauh,no,relatif_lapang,tengah,pintu berada jauh dan lantai depan terlihat kosong
+indoor_014.webp,bantal lantai,kiri,0.5,dekat,yes,terhalang,kanan,bantal dan kantong plastik dekat di lantai kiri lebih relevan sebagai halangan dibanding kasur
+indoor_015.webp,koper,kiri,1.0,sedang,no,relatif_lapang,tengah,koper dan rak sepatu berada di sisi kiri tetapi area tengah lantai masih lapang
+indoor_016.webp,lemari plastik,kanan,0.8,dekat,yes,terhalang,kiri,lemari plastik dekat di kanan dan kasur di kiri membuat ruang depan terbatas
+indoor_017.webp,meja kerja,kanan,0.5,dekat,yes,terhalang,kiri,meja kerja dan perangkat mikrofon sangat dekat di kanan depan
+indoor_018.webp,kantong belanja,kanan,0.5,dekat,yes,terhalang,tengah,kantong belanja dekat di kanan bawah sehingga relevan sebagai potensi halangan
+indoor_019.webp,kulkas,kanan,1.2,sedang,no,relatif_lapang,kiri,kulkas berada di kanan tetapi lorong kiri-tengah masih dapat dibaca sebagai area terbuka
+indoor_020.webp,kompor,tengah,0.8,dekat,yes,terhalang,tidak_diketahui,kompor dan barang dapur memenuhi area depan; ini scene close-up bukan jalur berjalan
+indoor_021.webp,wastafel,kiri,0.8,dekat,yes,terhalang,tengah,wastafel berada dekat di kiri dan pintu kamar mandi di kanan membuat ruang depan terbatas
+indoor_022.webp,pintu,kiri,0.8,dekat,yes,terhalang,kanan,pintu terbuka dekat di kiri dapat menjadi potensi halangan walau koridor kanan masih terlihat
+indoor_023.webp,pintu,tengah,2.0,jauh,no,relatif_lapang,tengah,pintu berada jauh dan koridor tengah terlihat kosong
+indoor_024.webp,pintu,kiri,0.8,dekat,yes,terhalang,kanan,pintu terbuka dekat di kiri dan objek kecil di lantai membuat area depan perlu diperhatikan
+indoor_025.webp,kursi,kanan,0.7,dekat,yes,terhalang,kiri,kursi putih dekat di kanan depan meja kerja
+indoor_026.webp,rak sepatu,kanan,1.0,sedang,no,relatif_lapang,kiri,rak sepatu dan koper berada di kanan; area kiri-tengah masih kosong
+indoor_027.webp,kipas angin,kanan,1.0,sedang,no,relatif_lapang,tengah,kipas angin berada di kanan tengah tetapi lantai depan masih cukup terbuka
+indoor_028.webp,meja komputer,tengah,0.5,dekat,yes,terhalang,kiri,meja komputer dan mikrofon sangat dekat memenuhi bagian depan
+indoor_029.webp,kursi,tengah,0.4,sangat_dekat,yes,terhalang,kanan,kursi sangat dekat dan menutup area tengah gambar
+indoor_030.webp,pintu,kiri,0.7,dekat,yes,terhalang,kanan,pintu terbuka sangat dominan di kiri depan dan menyisakan koridor di kanan

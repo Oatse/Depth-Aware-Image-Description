@@ -1,0 +1,3 @@
+timestamp,image_name,mode,description_gemma,main_object,object_position,scene_type,nearest_region,distance_category,estimated_distance,final_description,gemma_latency_ms,depth_latency_ms,total_latency_ms,error
+,1 (31).jpg,gemma_depth_prompted,,,,,,,,,0,0,243642,Gemma inference failed. Please ensure LM Studio is running and the model is loaded.
+,1 (31).jpg,gemma_depth_prompted,,,,,,,,,0,0,242867,Gemma inference failed. Please ensure LM Studio is running and the model is loaded.

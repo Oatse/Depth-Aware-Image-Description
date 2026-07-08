@@ -18,6 +18,7 @@ DEPTH_EVALUATED_MODES = frozenset({"all", "depth_only", "gemma_depth", "gemma_de
 @dataclass(frozen=True)
 class EvaluationSummary:
     total_images: int
+    prediction_coverage: float
     object_accuracy: float
     position_accuracy: float
     distance_category_accuracy: float | None
@@ -42,7 +43,7 @@ def evaluate_predictions(
     ]
 
     if not matched_rows:
-        summary = EvaluationSummary(0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        summary = EvaluationSummary(0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
         _write_summary(output_path, {"all": summary})
         return summary
 
@@ -58,7 +59,17 @@ def evaluate_predictions(
         for mode, mode_predictions in grouped_predictions.items()
     }
     _write_summary(output_path, summaries)
-    return summaries.get("gemma_depth_prompted") or summaries.get("gemma_depth") or summaries.get("all") or next(iter(summaries.values()))
+    complete_summaries = {
+        mode: summary
+        for mode, summary in summaries.items()
+        if summary.prediction_coverage == 1.0
+    }
+    return (
+        complete_summaries.get("gemma_depth_prompted")
+        or complete_summaries.get("gemma_depth")
+        or complete_summaries.get("all")
+        or next(iter(complete_summaries.values()), next(iter(summaries.values())))
+    )
 
 
 def _read_csv_dicts(path: Path) -> list[dict[str, str]]:
@@ -89,6 +100,11 @@ def _group_predictions_by_mode(rows: list[dict[str, str]]) -> dict[str, dict[str
 
 def _evaluate_matched_rows(mode: str, matched_rows: list[tuple[dict[str, str], dict[str, str]]]) -> EvaluationSummary:
     depth_metrics_apply = mode in DEPTH_EVALUATED_MODES
+    completed_predictions = [
+        prediction
+        for _, prediction in matched_rows
+        if prediction and not prediction.get("error")
+    ]
     object_scores = [
         _object_matches(annotation, prediction)
         for annotation, prediction in matched_rows
@@ -116,6 +132,7 @@ def _evaluate_matched_rows(mode: str, matched_rows: list[tuple[dict[str, str], d
     ]
     return EvaluationSummary(
         total_images=len(matched_rows),
+        prediction_coverage=len(completed_predictions) / len(matched_rows) if matched_rows else 0.0,
         object_accuracy=_average_bool(object_scores),
         position_accuracy=_average_bool(position_scores),
         distance_category_accuracy=_average_bool(distance_scores) if depth_metrics_apply else None,

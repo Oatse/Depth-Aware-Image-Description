@@ -21,6 +21,7 @@ class EvaluationMetric(BaseModel):
 
     mode: str
     total_images: int
+    prediction_coverage: float
     object_accuracy: float
     position_accuracy: float
     distance_category_accuracy: float
@@ -82,6 +83,7 @@ async def experiment_status() -> ExperimentStatusResponse:
         EvaluationMetric(
             mode=row.get("mode", "all") or "all",
             total_images=_to_int(row.get("total_images")),
+            prediction_coverage=_to_float(row.get("prediction_coverage")),
             object_accuracy=_to_float(row.get("object_accuracy")),
             position_accuracy=_to_float(row.get("position_accuracy")),
             distance_category_accuracy=_to_float(row.get("distance_category_accuracy")),

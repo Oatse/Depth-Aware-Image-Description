@@ -15,3 +15,7 @@ def test_build_depth_spatial_prompt_includes_relative_depth_metadata() -> None:
     assert "kanan" in prompt
     assert "potensi halangan visual" in prompt
     assert "bukan ukuran meter presisi" in prompt
+    assert "gambar sebagai sumber semantik utama" in prompt
+    assert "Metadata depth tidak berisi identitas objek" in prompt
+    assert "relatively_open_region" in prompt
+    assert "jangan menyebut region relatif lapang sebagai area kosong" in prompt

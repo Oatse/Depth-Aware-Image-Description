@@ -14,9 +14,9 @@ def test_split_regions_returns_nine_named_regions() -> None:
 
 
 def test_categorize_distance_thresholds() -> None:
-    assert categorize_distance(0.3) == "sangat_dekat"
-    assert categorize_distance(0.7) == "dekat"
-    assert categorize_distance(1.4) == "sedang"
+    assert categorize_distance(0.9) == "sangat_dekat"
+    assert categorize_distance(1.4) == "dekat"
+    assert categorize_distance(1.8) == "sedang"
     assert categorize_distance(2.4) == "jauh"
 
 

@@ -1,0 +1,2 @@
+mode,total_images,prediction_coverage,object_accuracy,position_accuracy,distance_category_accuracy,obstacle_warning_accuracy,description_quality,average_latency_ms
+gemma_depth_prompted,10,1.0,0.0,1.0,0.4,0.7,3.1,89394.3

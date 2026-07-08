@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Final
 
 import numpy as np
 
@@ -35,6 +36,10 @@ NAVIGATION_PRIORITY = (
     "middle_left",
     "middle_right",
 )
+
+VERY_CLOSE_THRESHOLD: Final = 1.0
+CLOSE_THRESHOLD: Final = 1.6
+FAR_THRESHOLD: Final = 2.4
 
 
 @dataclass(frozen=True)
@@ -102,11 +107,11 @@ def split_regions(depth_map: np.ndarray) -> dict[str, np.ndarray]:
 def categorize_distance(distance_meter: float) -> str:
     if not np.isfinite(distance_meter):
         return "tidak_diketahui"
-    if distance_meter < 0.5:
+    if distance_meter < VERY_CLOSE_THRESHOLD:
         return "sangat_dekat"
-    if distance_meter < 1.0:
+    if distance_meter < CLOSE_THRESHOLD:
         return "dekat"
-    if distance_meter < 2.0:
+    if distance_meter < FAR_THRESHOLD:
         return "sedang"
     return "jauh"
 

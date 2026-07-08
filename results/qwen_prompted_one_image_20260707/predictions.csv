@@ -1,0 +1,2 @@
+timestamp,image_name,mode,description_gemma,main_object,object_position,scene_type,nearest_region,distance_category,estimated_distance,final_description,gemma_latency_ms,depth_latency_ms,total_latency_ms,error
+,1 (7248).jpg,gemma_depth_prompted,,,,,,,,,0,0,51910,Gemma returned an empty description.

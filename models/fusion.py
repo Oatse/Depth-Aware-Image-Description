@@ -162,6 +162,11 @@ def _depth_sentence(nearest_region: str, distance_category: str) -> str:
 def _obstacle_sentence(nearest_region: str, distance_category: str) -> str:
     if nearest_region == "tidak diketahui" or distance_category == "tidak diketahui":
         return "Potensi halangan visual belum dapat ditentukan dari peta kedalaman."
+    if distance_category == "sedang":
+        return (
+            f"Area {nearest_region} terbaca pada jarak relatif sedang, "
+            "sehingga tidak otomatis diperlakukan sebagai halangan visual dekat."
+        )
     if distance_category == "jauh":
         return (
             f"Area {nearest_region} tidak menunjukkan potensi halangan visual yang kuat "
@@ -175,9 +180,15 @@ def _obstacle_sentence(nearest_region: str, distance_category: str) -> str:
 
 def _direction_text(direction: str | None) -> str:
     if direction in {"kiri", "kanan"}:
-        return f"Area {direction} tampak relatif lebih lapang."
+        return (
+            f"Region {direction} terbaca relatif lebih lapang menurut estimasi depth, "
+            "bukan berarti bebas objek."
+        )
     if direction == "tengah":
-        return "Area tengah tampak relatif lebih lapang."
+        return (
+            "Region tengah terbaca relatif lebih lapang menurut estimasi depth, "
+            "bukan berarti bebas objek."
+        )
     return "Arah yang lebih lapang belum dapat ditentukan."
 
 
