@@ -334,6 +334,144 @@ p {
   display: block;
 }
 
+.source-switcher {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  width: min(320px, 100%);
+  margin-bottom: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-soft);
+  padding: 4px;
+}
+
+.source-tab {
+  min-height: 38px;
+  border-radius: calc(var(--radius-sm) - 3px);
+  color: var(--ink-muted);
+  font-size: 0.78rem;
+  font-weight: 760;
+  transition:
+    transform 180ms var(--motion),
+    background 180ms var(--motion),
+    color 180ms var(--motion),
+    box-shadow 180ms var(--motion);
+}
+
+.source-tab:hover {
+  color: var(--ink);
+}
+
+.source-tab.is-active {
+  background: var(--surface);
+  color: var(--accent-dark);
+  box-shadow: 0 3px 10px rgba(31, 28, 36, 0.06);
+}
+
+.source-tab:active {
+  transform: scale(0.98);
+}
+
+.source-tab:focus-visible {
+  outline: 3px solid var(--accent-soft);
+  outline-offset: 2px;
+}
+
+.source-panel[hidden] {
+  display: none;
+}
+
+.camera-panel {
+  display: grid;
+  gap: 12px;
+}
+
+.camera-stage {
+  display: grid;
+  min-height: 294px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  background: var(--dropzone);
+}
+
+.camera-preview {
+  width: 100%;
+  max-width: none;
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+  display: block;
+  border-radius: 0;
+  background: var(--surface-soft);
+}
+
+.camera-empty-state {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 36px 20px;
+  text-align: center;
+}
+
+.camera-empty-state strong {
+  color: var(--ink);
+  font-size: clamp(1.25rem, 3vw, 1.7rem);
+  font-weight: 780;
+}
+
+.camera-empty-state small {
+  max-width: 34ch;
+  color: var(--ink-muted);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.camera-empty-icon {
+  width: 48px;
+  height: 38px;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  position: relative;
+}
+
+.camera-empty-icon::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 13px;
+  height: 13px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+}
+
+.camera-empty-icon::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: -7px;
+  width: 14px;
+  height: 7px;
+  border: 2px solid var(--ink);
+  border-bottom: 0;
+  border-radius: 4px 4px 0 0;
+}
+
+.camera-error {
+  border: 1px solid rgba(162, 58, 50, 0.18);
+  border-radius: var(--radius-sm);
+  background: #fff7f6;
+  color: var(--error);
+  padding: 10px 12px;
+  font-size: 0.82rem;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
 #image-input {
   position: absolute;
   width: 1px;
@@ -471,7 +609,7 @@ p {
 
 .control-grid {
   display: grid;
-  grid-template-columns: minmax(260px, 1fr) minmax(128px, auto) minmax(160px, auto);
+  grid-template-columns: minmax(260px, 1fr) minmax(160px, auto);
   gap: 12px;
   align-items: end;
 }
@@ -610,17 +748,11 @@ select {
   font-weight: 760;
 }
 
-.camera-preview {
-  width: 100%;
-  max-height: 320px;
-  object-fit: contain;
-  border-radius: var(--radius-md);
-  background: var(--surface-soft);
-}
-
 .camera-actions {
-  display: flex;
-  justify-content: flex-end;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, auto));
+  justify-content: end;
+  gap: 10px;
 }
 
 .mini-status {
@@ -1392,10 +1524,17 @@ pre {
     grid-template-columns: 1fr;
   }
 
-  .send-button,
-  .icon-button {
-    width: 100%;
-  }
+ .send-button,
+ .icon-button {
+  width: 100%;
+}
+ .camera-actions {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  justify-content: stretch;
+ }
+ .camera-actions .secondary-button {
+  width: 100%;
+ }
 
   .compare-row,
   .subsection-heading {
@@ -1452,9 +1591,15 @@ pre {
     height: 46px;
   }
 
-  .upload-dropzone strong {
-    font-size: 1.45rem;
-  }
+ .upload-dropzone strong {
+  font-size: 1.45rem;
+ }
+ .camera-stage {
+  min-height: 220px;
+ }
+ .camera-actions {
+  grid-template-columns: 1fr;
+ }
 
   .selected-preview {
     grid-template-columns: 52px minmax(0, 1fr);

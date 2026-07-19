@@ -16,6 +16,14 @@ const modeSelect = document.querySelector("#mode-select");
 const analyzeButton = document.querySelector("#analyze-button");
 const compareButton = document.querySelector("#compare-button");
 const imagePreview = document.querySelector("#image-preview");
+const sourceTabs = Array.from(document.querySelectorAll(".source-tab"));
+const sourceUploadTab = document.querySelector("#source-upload-tab");
+const sourceCameraTab = document.querySelector("#source-camera-tab");
+const uploadPanel = document.querySelector("#upload-panel");
+const cameraPanel = document.querySelector("#camera-panel");
+const cameraEmptyState = document.querySelector("#camera-empty-state");
+const cameraRetryButton = document.querySelector("#camera-retry");
+const cameraError = document.querySelector("#camera-error");
 const errorMessage = document.querySelector("#error-message");
 const loadingState = document.querySelector("#loading-state");
 const loadingSteps = Array.from(document.querySelectorAll(".loading-steps li"));
@@ -51,7 +59,6 @@ const comparisonOutput = document.querySelector("#comparison-output");
 const depthMapPreview = document.querySelector("#depth-map-preview");
 const depthMapGridWrap = document.querySelector("#depth-map-grid-wrap");
 const depthRegionGrid = document.querySelector("#depth-region-grid");
-const startCameraButton = document.querySelector("#start-camera");
 const captureImageButton = document.querySelector("#capture-image");
 const switchCameraButton = document.querySelector("#switch-camera");
 const cameraPreview = document.querySelector("#camera-preview");
@@ -95,11 +102,93 @@ let selectedBlob = null;
 let selectedCaptureMeta = null;
 let cameraStream = null;
 let cameraFacingMode = "environment";
+let activeSource = "upload";
 let loadingTimer = null;
 let loadingIndex = 0;
 let dragDepth = 0;
 
 const ACCEPTED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
+
+function stopCameraStream() {
+  cameraStream?.getTracks().forEach((track) => track.stop());
+  cameraStream = null;
+  cameraPreview.srcObject = null;
+  cameraPreview.classList.add("hidden");
+  cameraActions.classList.add("hidden");
+  captureImageButton.disabled = true;
+  switchCameraButton.disabled = true;
+  cameraEmptyState.classList.remove("hidden");
+}
+
+function hideCameraError() {
+  cameraError.textContent = "";
+  cameraError.classList.add("hidden");
+}
+
+function showCameraError(message) {
+  cameraError.textContent = message;
+  cameraError.classList.remove("hidden");
+}
+
+async function activateCamera() {
+  if (!navigator.mediaDevices?.getUserMedia) {
+    showCameraError("Peramban tidak mendukung akses kamera. Gunakan tab Upload sebagai alternatif.");
+    return;
+  }
+
+  try {
+    await openCamera(cameraFacingMode);
+    hideCameraError();
+  } catch (_error) {
+    showCameraError("Kamera tidak dapat diakses. Periksa izin kamera atau gunakan tab Upload.");
+  }
+}
+
+function setSourceTab(source, { focus = false } = {}) {
+  activeSource = source;
+  const cameraActive = source === "camera";
+
+  sourceTabs.forEach((tab) => {
+    const isActive = tab === (cameraActive ? sourceCameraTab : sourceUploadTab);
+    tab.classList.toggle("is-active", isActive);
+    tab.setAttribute("aria-selected", String(isActive));
+    tab.tabIndex = isActive ? 0 : -1;
+  });
+
+  uploadPanel.classList.toggle("hidden", cameraActive);
+  uploadPanel.hidden = cameraActive;
+  cameraPanel.classList.toggle("hidden", !cameraActive);
+  cameraPanel.hidden = !cameraActive;
+
+  if (focus) {
+    (cameraActive ? sourceCameraTab : sourceUploadTab)?.focus();
+  }
+
+  if (cameraActive) {
+    activateCamera();
+  } else {
+    stopCameraStream();
+    hideCameraError();
+  }
+}
+
+sourceTabs.forEach((tab, index) => {
+  tab.addEventListener("click", () => {
+    setSourceTab(tab === sourceCameraTab ? "camera" : "upload");
+  });
+
+  tab.addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") {
+      return;
+    }
+    event.preventDefault();
+    const nextIndex = event.key === "ArrowRight" ? (index + 1) % sourceTabs.length : (index - 1 + sourceTabs.length) % sourceTabs.length;
+    setSourceTab(nextIndex === 1 ? "camera" : "upload", { focus: true });
+  });
+});
+
+cameraRetryButton?.addEventListener("click", activateCamera);
+window.addEventListener("pagehide", stopCameraStream);
 
 refreshHealth();
 
@@ -362,6 +451,7 @@ async function openCamera(facingMode) {
   cameraPreview.srcObject = cameraStream;
   const actualFacingMode = cameraStream.getVideoTracks()[0]?.getSettings().facingMode;
   cameraFacingMode = actualFacingMode || facingMode;
+  cameraEmptyState.classList.add("hidden");
   cameraPreview.classList.remove("hidden");
   cameraActions.classList.remove("hidden");
   captureImageButton.disabled = false;
@@ -370,20 +460,6 @@ async function openCamera(facingMode) {
   switchCameraButton.textContent = usesRearCamera ? "Ganti ke kamera depan" : "Ganti ke kamera belakang";
   switchCameraButton.setAttribute("aria-label", switchCameraButton.textContent);
 }
-
-startCameraButton?.addEventListener("click", async () => {
-  if (!navigator.mediaDevices?.getUserMedia) {
-    showError("Peramban tidak mendukung akses kamera.");
-    return;
-  }
-
-  try {
-    await openCamera("environment");
-    hideError();
-  } catch (error) {
-    showError("Kamera tidak dapat diakses. Unggah gambar tetap dapat digunakan.");
-  }
-});
 
 switchCameraButton?.addEventListener("click", async () => {
   const previousFacingMode = cameraFacingMode;
@@ -397,10 +473,9 @@ switchCameraButton?.addEventListener("click", async () => {
     try {
       await openCamera(previousFacingMode);
     } catch (_restoreError) {
-      cameraPreview.classList.add("hidden");
-      cameraActions.classList.add("hidden");
+      stopCameraStream();
     }
-    showError("Kamera yang dipilih tidak tersedia pada perangkat ini.");
+    showCameraError("Kamera yang dipilih tidak tersedia pada perangkat ini.");
   }
 });
 
@@ -739,6 +814,9 @@ function setSelectedImage(file) {
 
   selectedBlob = file;
   selectedCaptureMeta = null;
+  if (activeSource === "upload") {
+    stopCameraStream();
+  }
   showPreview(file);
   setActionAvailability(true);
   hideError();
