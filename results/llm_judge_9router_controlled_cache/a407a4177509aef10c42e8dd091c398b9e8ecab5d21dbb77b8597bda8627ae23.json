@@ -1,0 +1,16 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Akurat: objek, posisi kanan, halangan depan/dekat, kiri lebih lapang sesuai citra+label.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 5,
+  "visual_evidence": [
+    "Pintu kayu terbuka di tengah-kiri.",
+    "Pakaian tergantung dekat pintu/dinding kanan.",
+    "Tumpukan barang: kardus, koper, tas di kanan-bawah/foreground.",
+    "Lantai kiri relatif kosong/lapang.",
+    "Objek kanan-bawah paling dekat → halangan visual."
+  ]
+}

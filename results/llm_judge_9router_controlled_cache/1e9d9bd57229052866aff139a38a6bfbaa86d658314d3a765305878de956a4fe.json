@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Tidak menyebut posisi utama kipas di kanan.",
+    "Klaim depth region tengah-kiri sedang kurang cocok; tampak foreground/lebih dekat."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: kipas berdiri, bangku kayu, barang/tas. Posisi kipas tidak disebut kanan; frasa “di dinding” kurang tepat tapi dekat dinding. Klaim depth tengah-kiri sedang lemah: area itu berisi bangku/barang lebih depan dibanding latar.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Kipas angin berdiri dekat dinding sisi kanan-tengah.",
+    "Bangku kayu di foreground kiri.",
+    "Tas/helm/barang berada di atas bangku.",
+    "Area lantai tengah-kanan relatif lapang."
+  ]
+}

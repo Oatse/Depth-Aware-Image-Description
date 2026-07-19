@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Depth 3x3 bawah-kiri diklaim jauh; visualnya dekat.",
+    "Arah kejauhan disebut di kedua sisi; visual dominan ke tengah/depan."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Koridor indoor, dinding terang, lantai reflektif benar. Klaim bawah-kiri jauh salah: area bawah-kiri = foreground/lantai dekat. Koridor memanjang ke depan/tengah, bukan 'ke kejauhan di kedua sisi'.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Lorong panjang terlihat menuju titik hilang tengah.",
+    "Lantai mengilap/reflektif.",
+    "Area bawah-kiri berada dekat kamera."
+  ]
+}

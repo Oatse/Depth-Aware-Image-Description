@@ -1,0 +1,18 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Kategori kedalaman ditulis dekat, label: sangat_dekat.",
+    "Area kanan disebut lapang tanpa menyebut kardus kanan."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Umum cocok. Galon kiri-bawah sangat dekat, halangan. Kompor/meja/wadah benar. Kanan relatif lebih lapang benar meski ada kardus kanan.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Galon besar di lantai kiri-bawah, paling dekat kamera.",
+    "Kompor di atas meja tengah.",
+    "Wadah/peralatan masak di meja dan rak bawah.",
+    "Ruang lantai kanan/kanan-tengah relatif terbuka dibanding kiri depan."
+  ]
+}

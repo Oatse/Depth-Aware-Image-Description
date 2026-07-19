@@ -1,0 +1,6 @@
+{
+  "image_name": "living_room_1p (151).jpg",
+  "condition": "baseline",
+  "content": "{\"objects\": [\"sofa\", \"meja kopi\", \"kursi makan\", \"lampu gantung\", \"jendela\", \"tanaman hias\", \"lukisan\"], \"description\": \"Ruangan interior modern dengan dinding putih, lantai kayu terang, dan karpet berwarna krem. Terdapat sofa putih di dekat jendela yang ditutupi tirai tipis, serta meja kopi kecil di depannya. Di sisi kiri terlihat set kursi makan putih. Sebuah lampu gantung besar bertekstur berada di tengah ruangan. Beberapa tanaman hias dan lukisan dekoratif juga tersebar di area tersebut.\"}",
+  "latency_ms": 38835
+}

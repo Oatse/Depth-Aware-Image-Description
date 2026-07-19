@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Mengabaikan kipas angin sebagai objek utama.",
+    "Deskripsi posisi/status halangan hampir tidak ada."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Benar: lantai keramik, lemari hijau, barang/kabel berserakan. Namun objek utama label/citra: kipas angin kanan depan tidak disebut. Spasial minim; tidak jelaskan kanan/dekat/halangan/arah aman tengah.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Lemari plastik hijau besar di kiri-tengah.",
+    "Kipas angin hitam besar di kanan depan, dekat kamera.",
+    "Kabel/barang berserakan di lantai area tengah-belakang.",
+    "Lantai keramik putih terlihat."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: meja kerja, monitor, mikrofon, kabel. Spasial minim; tidak sebut meja dominan kanan/area kiri lebih lapang/halangan depan. 'Beberapa monitor' agak longgar: tampak monitor besar + layar/tablet.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Meja kerja hitam dengan monitor besar di kanan-atas.",
+    "Mikrofon hitam di atas meja, satu di arm boom.",
+    "Kabel terlihat di sekitar perangkat.",
+    "Sisi kiri gambar lebih kosong dibanding area meja kanan."
+  ]
+}

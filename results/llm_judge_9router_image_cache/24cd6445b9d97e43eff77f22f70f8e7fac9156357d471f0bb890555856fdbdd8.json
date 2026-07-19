@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Status halangan bawah-kiri tidak kuat; label pembanding: has_obstacle=no.",
+    "Fokus kedalaman dekat bawah-kiri kurang sesuai dgn label distance_category=jauh."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Sebagian benar: tengah/lantai lorong tampak lapang. Bawah-kiri memang foreground/dekat, tetapi menyebutnya halangan visual agak lemah; label: tanpa halangan, objek utama lorong tengah, kedalaman jauh.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lorong/ruang terbuka berada di tengah.",
+    "Pintu/tepi pintu kiri berada sangat dekat foreground.",
+    "Tidak tampak objek jelas menghalangi jalur tengah."
+  ]
+}

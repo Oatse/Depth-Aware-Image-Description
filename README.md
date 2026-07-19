@@ -1,6 +1,6 @@
 # Depth-Aware Image Description
 
-Prototype penelitian untuk implementasi depth-aware image description pada citra lingkungan indoor. Sistem menggabungkan Gemma sebagai vision-language model dan Depth Anything V2 Metric Indoor Small sebagai model estimasi kedalaman, lalu menghasilkan deskripsi akhir Bahasa Indonesia melalui fusion berbasis aturan.
+Prototype penelitian untuk implementasi depth-aware image description pada citra lingkungan indoor. Sistem menggabungkan Gemma sebagai vision-language model dan Depth Anything V2 Metric Indoor Small sebagai model estimasi kedalaman, lalu menghasilkan deskripsi akhir Bahasa Indonesia melalui fusi regional berbatas bukti.
 
 Proyek ini adalah proof-of-concept implementasi model, bukan aplikasi navigasi production-ready.
 
@@ -10,7 +10,7 @@ Proyek ini adalah proof-of-concept implementasi model, bukan aplikasi navigasi p
 - Backend Python FastAPI untuk upload gambar dan pipeline analisis.
 - Integrasi Gemma melalui endpoint lokal LM Studio yang kompatibel OpenAI.
 - Integrasi Depth Anything V2 Metric Indoor Small dari folder `model_weights/`.
-- Rule-based fusion untuk menggabungkan deskripsi visual dan ringkasan depth.
+- Fusi regional berbasis aturan yang tidak mengikat estimasi depth suatu area ke objek tanpa bukti lokalisasi.
 - Logging hasil inferensi dan evaluasi berbasis CSV.
 
 ## Non-Scope
@@ -26,10 +26,11 @@ Proyek ini adalah proof-of-concept implementasi model, bukan aplikasi navigasi p
 Web Interface
   -> FastAPI Backend
   -> Image Validation + Preprocessing
+  -> Bounded In-Process Analysis Queue (polling API)
   -> Gemma Client
   -> Depth Anything V2 Metric Indoor Small
-  -> 9-Region Depth Analysis
-  -> Rule-Based Fusion
+  -> 9-Region Depth Analysis (grid-p10)
+  -> Evidence-Constrained Regional Fusion
   -> Prediction Log + Evaluation CSV
 ```
 
@@ -56,6 +57,8 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
+Gunakan `requirements-lock.txt` jika perlu mereplikasi versi environment verifikasi 14 Juli 2026 secara lebih ketat.
+
 Environment aktif saat verifikasi menggunakan Python 3.13.3 dan dependency berhasil terpasang, termasuk `onnxruntime`.
 
 ## Konfigurasi
@@ -72,6 +75,13 @@ Variabel penting:
 - `LM_STUDIO_MODEL=gemma-4-e4b-it`
 - `LM_STUDIO_HEALTH_TIMEOUT=2`
 - `DEPTH_MODEL_PATH=./model_weights/Depth-Anything-V2-Metric-Indoor-Small-hf`
+- `ANALYSIS_QUEUE_CAPACITY=8`
+- `ANALYSIS_RETAINED_JOBS=100`
+- `EXPERIMENT_ARTIFACT_PROFILE=final_44_gemma_e2b_20260708`
+- `EXPERIMENT_IMAGES_DIR=./dataset/final_images`
+- `EXPERIMENT_ANNOTATIONS_PATH=./dataset/final_annotations.csv`
+- `EXPERIMENT_PREDICTIONS_PATH=./results/final_predictions_active_20260714.csv`
+- `EXPERIMENT_EVALUATION_PATH=./results/final_evaluation_metrics_20260714.csv`
 - `GEMMA_MOCK=false`
 - `DEPTH_MOCK=false`
 
@@ -113,6 +123,10 @@ Kamera browser tersedia sebagai opsi tambahan. Upload gambar tetap menjadi fallb
 
 Mengembalikan status backend, Gemma, dan model depth.
 
+### `GET /experiment-status`
+
+Mengembalikan readiness snapshot beserta `artifact_profile` dan semua path sumber. Default menunjuk snapshot final 44 citra, bukan dataset development 30 citra. Path dapat dioverride melalui environment agar dashboard selalu menyatakan artefak yang sedang dibaca.
+
 ### `POST /analyze`
 
 Form data:
@@ -132,6 +146,14 @@ Response utama berisi:
 - `depth_map_url`
 - `mock`
 - `error`
+
+### `POST /analysis-jobs`
+
+Menerima form data yang sama dan mengembalikan HTTP 202 beserta `job_id` dan `poll_url`. UI memakai endpoint ini agar request browser tidak menunggu koneksi HTTP tunggal selama inferensi.
+
+### `GET /analysis-jobs/{job_id}`
+
+Mengembalikan status `queued`, `running`, `completed`, atau `failed`. Antrean ini bounded, hanya berlaku pada satu process, tidak persisten, dan kehilangan job saat server restart. Untuk deployment multi-worker/production, gunakan queue eksternal; implementasi saat ini sengaja dibatasi pada kebutuhan prototype lokal.
 
 ## CLI
 
@@ -165,6 +187,24 @@ Menjalankan batch inference dan evaluasi perbandingan:
 python scripts\run_batch_evaluation.py --images-dir dataset\images --annotations dataset\annotations.csv
 ```
 
+Menjalankan LLM judge image-aware secara blinded dan tiga kali pengulangan melalui 9router lokal:
+
+```powershell
+$env:NINEROUTER_API_KEY="<secret>"
+python scripts\run_llm_judge.py `
+  --predictions results\final_predictions_active_20260714.csv `
+  --images-dir dataset\final_images `
+  --modes gemma_only depth_only gemma_depth `
+  --model cx/gpt-5.5 `
+  --base-url http://127.0.0.1:20128/v1 `
+  --api-key-env NINEROUTER_API_KEY `
+  --repeats 3
+```
+
+Judge menerima citra sumber yang dinormalisasi ke JPEG dan dibatasi maksimal 768 piksel sebagai bukti utama, serta anotasi terstruktur sebagai pembanding sekunder. Perintah membutuhkan 9router lokal aktif serta `NINEROUTER_API_KEY`; script berhenti sebelum request bila variabel tersebut tidak tersedia. Jangan menyimpan API key di repo.
+
+Endpoint 9router berada di localhost, tetapi hal itu tidak membuktikan inferensi berlangsung lokal: citra dapat diteruskan ke provider upstream sesuai konfigurasi router. Jalankan hanya pada citra yang izin pemrosesannya mencakup provider tersebut. `cx/gpt-5.5` juga dicatat sebagai label rute/model yang dipakai saat run, bukan otomatis dianggap snapshot provider yang immutable.
+
 Gunakan `--allow-mock` hanya untuk dry run development. Hasil mock tidak boleh dipakai sebagai hasil eksperimen skripsi final.
 
 Smoke test dengan server sementara dan mock eksplisit:
@@ -190,17 +230,21 @@ Coverage test saat ini:
 
 ## Evaluasi
 
-`dataset/annotations.csv` adalah ground truth manual. `results/predictions.csv` berisi output pipeline. `scripts/run_evaluation.py` membandingkan keduanya dan menulis `results/evaluation.csv`.
+`dataset/annotations.csv` berisi label manual visual-relatif, bukan ground truth jarak fisik. `results/predictions.csv` berisi output pipeline. `scripts/run_evaluation.py` membandingkan keduanya dan menulis `results/evaluation.csv`.
 
 Protokol detail tersedia di [docs/evaluation_protocol.md](docs/evaluation_protocol.md).
+Hash dan jumlah baris artefak aktif tersedia di [docs/evaluation_artifact_manifest_20260714.md](docs/evaluation_artifact_manifest_20260714.md).
+Dasar arsitektur, koreksi evaluator, kontrol pasangan, dan trade-off lengkap tersedia di [docs/evidence_constrained_fusion_upgrade_20260714.md](docs/evidence_constrained_fusion_upgrade_20260714.md).
 
 Metrik awal:
 
 - object mention accuracy;
 - position accuracy;
+- object-position joint accuracy;
 - distance category accuracy;
 - obstacle warning accuracy;
-- description quality heuristic 1-5;
+- obstacle precision, recall, F1, dan TP/FP/TN/FN;
+- LLM judge berulang sebagai evaluasi tambahan, bukan ground truth tunggal;
 - average latency.
 
 Jika prediction belum cocok dengan `image_name` di annotation, skor dapat bernilai 0. Itu berarti dataset/prediction belum selaras, bukan hasil eksperimen final.
@@ -217,6 +261,9 @@ Jika prediction belum cocok dengan `image_name` di annotation, skor dapat bernil
 ## Keterbatasan
 
 - Depth digunakan sebagai estimasi kategori, bukan pengukuran centimeter presisi.
-- Output fusion bersifat rule-based dan perlu evaluasi dataset yang lebih besar.
+- Model checkpoint bertipe metric-indoor, sedangkan label evaluasi adalah visual-relative; keluaran tidak diperlakukan sebagai sensor terkalibrasi.
+- Post-processing depth sengaja dibatasi pada grid 3x3 dengan statistik p10; kandidat adaptive bands dihapus setelah eksperimen internal menurunkan obstacle recall dan F1 serta menambah parameter yang harus dipertanggungjawabkan.
+- Output fusion bersifat rule-based, membatasi klaim depth pada level area, dan belum mempunyai object box/mask untuk object-depth grounding.
+- Judge image-aware menambah biaya, latensi, risiko bias visual/rubric, serta risiko privasi bila router meneruskan citra ke provider eksternal.
 - Prototype belum divalidasi untuk penggunaan navigasi nyata.
 - Tidak ada database atau sistem multi-user.

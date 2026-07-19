@@ -1,0 +1,14 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Akurat. Objek utama pintu kiri, dinding/stopkontak kanan, barang lantai kanan terlihat. Sedikit kurang: tidak sebut area kanan relatif lapang/halangan depan detail.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Pintu kayu besar di sisi kiri, terbuka sebagian.",
+    "Dinding putih kanan dengan stopkontak/sakelar.",
+    "Barang di lantai kanan bawah: kotak/alat/kabel/buku."
+  ]
+}

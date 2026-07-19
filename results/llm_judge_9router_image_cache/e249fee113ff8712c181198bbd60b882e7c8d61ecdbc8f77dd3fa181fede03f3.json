@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut lemari kayu membentang sepanjang dinding; visual menunjukkan perabot abu-abu, bukan kayu.",
+    "Tidak menangkap posisi utama kiri + area kanan lebih aman/lapang."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Umum benar: koridor, lantai terang, barang di depan. Salah/kurang: lemari kayu sepanjang dinding tidak tampak; objek utama magic com kiri, jalur kanan lapang tidak disebut.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Koridor sempit berlantai keramik terang.",
+    "Magic com putih-biru di kiri depan, di atas bangku.",
+    "Perabot/appliance abu-abu memanjang di sisi kiri.",
+    "Sisi kanan relatif kosong/lapang.",
+    "Pintu kayu di ujung koridor."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Tidak menyebut wastafel di kiri.",
+    "Tidak menyebut area depan terhalang."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: wastafel/bak cuci, ubin berpola, pintu/akses area lain. Spasial minim; posisi kiri/halangan/arah aman tidak disebut. 'kamar mandi' ambigu tapi ada ruang mandi/toilet terlihat lewat pintu.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Wastafel/bak cuci di kiri bawah.",
+    "Ubin dinding berpola kotak terlihat jelas.",
+    "Pintu terbuka kanan menuju ruang berubin putih dengan ember.",
+    "Area depan wastafel terhalang rak/panci/peralatan."
+  ]
+}

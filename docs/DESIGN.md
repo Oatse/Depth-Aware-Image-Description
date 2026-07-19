@@ -98,7 +98,7 @@ UI ini bukan aplikasi navigasi. Semua copy harus membingkai keluaran sebagai exp
 - **Structure**: label, concise final summary, small experimental caption.
 - **Priority**: most dominant element after result appears.
 - **Surface**: dark panel for contrast.
-- **Rule**: summarises visual content, depth contribution, and guarded potential-obstacle information in 2-4 sentences; does not repeat the full comparison detail.
+- **Rule**: merangkum konten visual dan satu klaim depth regional dalam maksimal 3 kalimat; tidak mengikat region depth ke objek tertentu tanpa bukti lokalisasi dan tidak mengulang detail perbandingan.
 
 ### Metric Card
 - **Structure**: label + help dot + mono value + helper sentence.
@@ -118,9 +118,9 @@ UI ini bukan aplikasi navigasi. Semua copy harus membingkai keluaran sebagai exp
 - **Rule**: grid is explained as application post-processing over a continuous depth map, not the native output format of Depth Anything.
 
 ### Mode Comparison Table
-- **Structure**: Aspek, Gemma Baseline, Depth-only, Late Fusion, Prompted, Kontribusi.
+- **Structure**: Aspek, Gemma Baseline, Depth-only, Fusi Regional Berbatas Bukti, Kontribusi.
 - **Purpose**: makes depth contribution analyzable for Bab 4 without implying Gemma is weak when depth metadata is not extracted.
-- **Rule**: compare visual-spatial baseline, metadata depth availability, strategy, kategori kedalaman relatif, potensi halangan visual, area relatif lapang, and latency.
+- **Rule**: compare visual-spatial baseline, metadata depth availability, strategy, kategori kedalaman relatif, potensi halangan visual, area relatif lapang, and latency. Copy harus menegaskan bahwa depth berlaku untuk area grid, bukan otomatis untuk objek yang disebut Gemma.
 - **Copy rule**: for Gemma Baseline depth-specific fields, say "tidak diekstrak sebagai metadata depth" instead of generic "tidak tersedia".
 
 ### Help Popover

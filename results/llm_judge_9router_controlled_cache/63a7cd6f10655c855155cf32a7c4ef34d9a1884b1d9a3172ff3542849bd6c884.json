@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Salah identifikasi objek utama: 'lemari penyimpanan panjang' vs kulkas kecil.",
+    "Klaim 'berisi beberapa botol' tidak tampak pada objek kanan."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Lorong sempit+lantai ubin benar. Objek kanan lebih cocok kulkas kecil, bukan lemari panjang berisi botol. Halangan kanan/dekat benar; kiri relatif lebih lapang implisit.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Koridor indoor sempit, lantai keramik.",
+    "Objek besar abu-abu di kanan depan-tengah = kulkas/lemari kecil; menghalangi jalur.",
+    "Galon/botol terlihat di kiri-belakang, bukan di dalam objek kanan.",
+    "Area kiri objek masih ada jalur lewat."
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Menyebut beberapa koper → citra hanya 1 koper.",
+    "Menyebut sepasang sepatu → citra menunjukkan banyak pasang."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek utama benar parsial. Jumlah koper salah. Sepatu direduksi jadi sepasang, padahal banyak. Posisi dekat dinding, tirai kanan benar.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "1 koper besar di kiri dekat sudut/dinding.",
+    "Banyak sepatu di rak/lantai kanan koper.",
+    "Tirai hijau menggantung di sisi kanan atas."
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut area tengah relatif lapang; bukti menunjukkan kiri lebih lapang."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas benar: halangan dekat di tengah-kanan/kanan. Namun area lapang salah: citra/label → kiri lebih lapang, bukan tengah.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Kulkas/lemari es gelap di kanan-tengah foreground, dekat kamera.",
+    "Jalur lantai kiri lebih terbuka menuju dapur.",
+    "Bagian tengah sebagian terhalang kulkas."
+  ]
+}

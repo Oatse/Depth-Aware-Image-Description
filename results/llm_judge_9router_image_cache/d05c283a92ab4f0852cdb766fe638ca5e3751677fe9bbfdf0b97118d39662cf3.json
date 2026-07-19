@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Klaim pintu di kedua sisi tidak didukung citra.",
+    "Area lapang disebut tengah; bukti/label → kanan lebih lapang."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Umum benar: lorong, lantai putih, pintu kayu, halangan dekat kiri. Spasial kurang: 'kedua sisi' tak tampak; area lapang lebih kanan, bukan tengah.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Pintu kayu sangat dekat di kiri foreground.",
+    "Pintu kayu lain di ujung lorong depan.",
+    "Lantai keramik putih terlihat.",
+    "Sisi kanan dinding kosong/lapang relatif."
+  ]
+}

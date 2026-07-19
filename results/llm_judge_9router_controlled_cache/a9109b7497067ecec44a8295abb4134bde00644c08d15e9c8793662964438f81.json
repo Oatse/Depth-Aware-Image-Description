@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Tidak menyebut area kiri relatif lapang/arah lebih aman kiri.",
+    "Halangan dilokalkan ke bawah-kiri; bukti/anotasi lebih umum depan terhalang."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: meja kerja, kursi, elektronik. Posisi meja indoor sesuai. Klaim kabel agak berlebih tapi tampak ada kabel. Klaim grid depth bawah-kiri dekat masuk akal krn laptop/meja dekat, namun 'halangan visual region bawah-kiri' kurang selaras: halangan depan lebih dominan bawah/tengah; anotasi sebut kiri relatif lapang.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Meja kerja memenuhi area bawah-tengah.",
+    "Kursi kantor di belakang meja.",
+    "Dua laptop/perangkat elektronik di atas meja.",
+    "Kabel terlihat di meja, tidak sangat banyak.",
+    "Objek dekat di bawah: tepi meja, laptop kiri, kipas bagian bawah."
+  ]
+}

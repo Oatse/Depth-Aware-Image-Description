@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Main object mislabeled: lemari vs kulkas.",
+    "Open area wrong: tengah vs kiri."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas cocok: lorong sempit, lantai ubin, objek gelap kanan-depan, galon/barang. Salah/kurang: objek disebut lemari bukan kulkas; area lapang disebut tengah, padahal kiri lebih lapang; posisi utama lebih kanan daripada tengah.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Kulkas/objek gelap besar di kanan-depan → halangan dekat.",
+    "Jalur kiri terlihat lebih kosong/lapang.",
+    "Galon air, botol/barang terlihat dekat dinding/bawah.",
+    "Ruang berupa lorong indoor berubin menuju area dapur."
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "conditions": [
+    {
+      "condition": "baseline",
+      "requested_images": 1,
+      "structured_output_valid_images": 0,
+      "mark_protocol_valid_images": 0,
+      "expected_targets": 3,
+      "returned_targets": 0,
+      "matched_targets": 0,
+      "hallucinated_mark_ids": 0,
+      "structured_output_compliance": 0.0,
+      "mark_protocol_compliance": null,
+      "target_coverage": 0.0,
+      "end_to_end_accuracy": 0.0,
+      "accuracy_when_returned": null,
+      "mean_latency_ms": 0.0,
+      "gate_passed": null
+    },
+    {
+      "condition": "som_control",
+      "requested_images": 1,
+      "structured_output_valid_images": 0,
+      "mark_protocol_valid_images": 0,
+      "expected_targets": 3,
+      "returned_targets": 0,
+      "matched_targets": 0,
+      "hallucinated_mark_ids": 0,
+      "structured_output_compliance": 0.0,
+      "mark_protocol_compliance": 0.0,
+      "target_coverage": 0.0,
+      "end_to_end_accuracy": 0.0,
+      "accuracy_when_returned": 0.0,
+      "mean_latency_ms": 0.0,
+      "gate_passed": false
+    },
+    {
+      "condition": "depth_guided",
+      "requested_images": 1,
+      "structured_output_valid_images": 0,
+      "mark_protocol_valid_images": 0,
+      "expected_targets": 3,
+      "returned_targets": 0,
+      "matched_targets": 0,
+      "hallucinated_mark_ids": 0,
+      "structured_output_compliance": 0.0,
+      "mark_protocol_compliance": 0.0,
+      "target_coverage": 0.0,
+      "end_to_end_accuracy": 0.0,
+      "accuracy_when_returned": 0.0,
+      "mean_latency_ms": 0.0,
+      "gate_passed": false
+    }
+  ],
+  "verdict": {
+    "mark_grounding_gate_passed": false,
+    "depth_selection_benefit_proven": false,
+    "detector_training_allowed": false,
+    "reason": "Mark grounding failed under oracle boxes; detector training is blocked."
+  },
+  "metric_scope": {
+    "baseline": "recall of classes selected by the depth-guided oracle-box condition",
+    "marked_conditions": "region identity accuracy against HomeObjects-3K object labels",
+    "depth": "model-estimated relative ordering only; no physical depth ground truth"
+  }
+}

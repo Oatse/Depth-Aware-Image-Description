@@ -1,0 +1,18 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Posisi rak penyimpanan disebut di atas wastafel; visualnya lebih ke kiri wastafel."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas cocok: wastafel indoor, ubin kotak, wadah logam terlihat. Rak penyimpanan tidak tepat posisinya; rak piring di kiri, bukan di atas wastafel. Klaim bawah-kanan dekat/terhalang cukup didukung area meja/benda bawah.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Wastafel berada tengah-bawah, condong kanan.",
+    "Ubin dinding pola kotak terlihat jelas.",
+    "Panci/saringan logam tergantung di atas/kanan wastafel.",
+    "Rak piring plastik berada kiri wastafel, bukan tepat di atas.",
+    "Area bawah-kanan berisi meja tepi depan, botol, boks/ruang bawah → dekat/berpotensi halangan."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Tidak menyebut kulkas sebagai halangan utama.",
+    "Deskripsi terlalu umum; grid depth tidak diverifikasi eksplisit."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Cukup benar. Objek kecil benar; objek utama kulkas kanan tidak disebut. Spasial kanan/tengah-kanan dekat+terhalang sesuai.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Lantai ubin, dinding kiri terlihat.",
+    "Galon/botol, wadah, tas merah terlihat.",
+    "Kulkas/lemari abu-abu besar di kanan depan; menghalangi area kanan.",
+    "Area kiri relatif lapang."
+  ]
+}

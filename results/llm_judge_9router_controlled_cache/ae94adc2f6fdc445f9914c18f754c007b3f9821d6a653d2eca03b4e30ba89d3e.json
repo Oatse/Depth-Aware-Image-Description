@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "'di dinding' ambigu: kipas bukan menempel dinding.",
+    "Klaim depth region tengah-kiri sedang meragukan."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: kipas berdiri, bangku kayu, barang/tas/helm terlihat. Spasial sebagian: kipas dekat dinding sisi kanan-tengah, bangku kiri-depan. Klaim grid tengah-kiri kedalaman sedang kurang jelas/kurang kuat; area itu cenderung ditempati bangku/barang lebih dekat. Tidak sebut area tengah lapang.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Kipas angin berdiri dekat dinding, posisi kanan-tengah.",
+    "Bangku kayu di kiri-depan.",
+    "Tas/helm/barang di atas bangku.",
+    "Lantai tengah-kanan relatif kosong."
+  ]
+}

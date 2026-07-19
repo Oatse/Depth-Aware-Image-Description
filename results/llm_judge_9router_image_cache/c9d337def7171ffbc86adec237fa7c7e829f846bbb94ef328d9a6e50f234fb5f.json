@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Main_object mislabeled: kulkas → lemari penyimpanan.",
+    "Open_area salah: tengah → kiri."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Obj utama keliru: lemari vs kulkas. Pos kanan/dekat/halangan benar. Area lapang salah: kiri, bukan tengah.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Koridor sempit berubin.",
+    "Kulkas gelap di kanan tengah-depan.",
+    "Galon/barang di kiri-belakang.",
+    "Jalur kiri relatif terbuka.",
+    "Bagian kanan depan terhalang kulkas."
+  ]
+}

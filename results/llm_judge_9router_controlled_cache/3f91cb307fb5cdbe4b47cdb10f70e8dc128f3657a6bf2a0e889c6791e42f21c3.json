@@ -1,0 +1,15 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Mayoritas tepat. Dapur, kompor, wadah, galon/botol air terlihat. Bawah-kiri sangat dekat + menghalangi sesuai citra/label. Detail grid singkat namun valid.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 5,
+  "visual_evidence": [
+    "Kompor di meja tengah.",
+    "Dinding ubin, lantai keramik.",
+    "Galon air besar di bawah-kiri, sangat dekat kamera.",
+    "Area kanan relatif lebih kosong meski ada kardus."
+  ]
+}

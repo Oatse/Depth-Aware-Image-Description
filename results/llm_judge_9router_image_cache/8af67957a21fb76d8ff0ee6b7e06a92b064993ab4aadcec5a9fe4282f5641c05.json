@@ -1,0 +1,14 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Objek benar. Mesin cuci berderet di sisi/dinding kanan. Lantai ubin biru benar. Tidak ada klaim salah.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Deretan mesin cuci front/top-load terlihat sepanjang dinding.",
+    "Ubin lantai dominan biru.",
+    "Area depan/kiri relatif lapang."
+  ]
+}

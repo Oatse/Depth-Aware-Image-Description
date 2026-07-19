@@ -96,8 +96,7 @@
                 <label class="mode-control" for="mode-select">
                   <span>Mode analisis</span>
                   <select id="mode-select" name="mode">
-                    <option value="gemma_depth_prompted">Depth-to-Spatial Prompting</option>
-                    <option value="gemma_depth">Gemma + Kedalaman Late Fusion</option>
+                    <option value="gemma_depth">Fusi Regional Berbatas Bukti</option>
                     <option value="gemma_only">Gemma Baseline</option>
                     <option value="depth_only">Kedalaman Saja</option>
                   </select>
@@ -111,7 +110,7 @@
               </div>
 
               <div class="compare-row">
-                <p>Bandingkan Gemma Baseline, depth-only, late fusion kontrol, dan Depth-to-Spatial Prompting pada gambar yang sama.</p>
+                <p>Bandingkan Gemma Baseline, depth-only, dan fusi regional pada gambar yang sama.</p>
                 <button id="compare-button" type="button" class="secondary-button" disabled>
                   Bandingkan mode
                 </button>
@@ -122,6 +121,7 @@
             <canvas id="capture-canvas" class="hidden"></canvas>
             <div id="camera-actions" class="camera-actions hidden">
               <button id="capture-image" type="button" class="secondary-button" disabled>Ambil frame</button>
+              <button id="switch-camera" type="button" class="secondary-button" disabled>Ganti ke kamera depan</button>
             </div>
 
           </div>
@@ -167,7 +167,7 @@
                 aria-haspopup="dialog"
                 aria-expanded="false"
                 data-help-title="Mode"
-                data-help-text="Mode inferensi yang sedang digunakan. Gemma Baseline membaca visual dan relasi spasial kualitatif tanpa metadata depth, Kedalaman membaca struktur kedalaman relatif, late fusion menambahkan depth setelah deskripsi, dan prompted fusion memberi metadata depth ke prompt Gemma."
+                data-help-text="Mode inferensi yang sedang digunakan. Gemma Baseline membaca visual tanpa metadata depth, Kedalaman membaca struktur kedalaman relatif, dan fusi berbatas bukti menambahkan klaim depth hanya pada level area tanpa mengikatnya ke objek tertentu."
               >?</button>
             </div>
             <strong id="mode-output">-</strong>
@@ -255,7 +255,7 @@
             <div>
               <strong>Deskripsi Akhir</strong>
               <p><b>Fungsi:</b> output utama eksperimen sesuai mode yang dipilih.</p>
-              <p><b>Penentuan:</b> Gemma Baseline memakai deskripsi visual-spasial dari gambar saja, late fusion menambahkan ringkasan depth setelah deskripsi, dan prompted fusion memasukkan metadata depth ke prompt Gemma sebelum deskripsi akhir dibuat.</p>
+              <p><b>Penentuan:</b> Gemma Baseline memakai deskripsi visual-spasial dari gambar saja, sedangkan late fusion menambahkan ringkasan depth setelah deskripsi.</p>
               <p><b>Batasan:</b> ini deskripsi visual-spasial dari gambar 2D, bukan instruksi navigasi atau ukuran jarak presisi.</p>
             </div>
             <div>
@@ -284,7 +284,7 @@
             </div>
             <div>
               <strong>Perbandingan Mode</strong>
-              <p><b>Fungsi:</b> membandingkan Gemma Baseline, depth-only, late fusion, dan Depth-to-Spatial Prompting pada gambar yang sama.</p>
+              <p><b>Fungsi:</b> membandingkan Gemma Baseline, depth-only, dan late fusion pada gambar yang sama.</p>
               <p><b>Penentuan:</b> tabel membaca deskripsi visual, metadata depth, strategi fusi, potensi halangan visual, area relatif lapang, dan latensi.</p>
               <p><b>Batasan:</b> nilai kosong pada Gemma Baseline berarti metadata depth tidak diekstrak pada mode itu, bukan bukti bahwa Gemma tidak mampu memahami visual.</p>
             </div>
@@ -312,7 +312,7 @@
             <span id="comparison-status" class="mini-status">Belum dijalankan</span>
           </div>
           <div id="comparison-output" class="comparison-output">
-              Jalankan perbandingan untuk memeriksa perbedaan antara Gemma Baseline, depth-only, late fusion kontrol, dan Depth-to-Spatial Prompting pada gambar yang dipilih.
+              Jalankan perbandingan untuk memeriksa perbedaan antara Gemma Baseline, depth-only, dan late fusion kontrol pada gambar yang dipilih.
           </div>
         </section>
 
@@ -389,6 +389,7 @@
       </section>
     </main>
 
+    <script src="/static/analysis-job-client.js"></script>
     <script src="/static/app.js"></script>
   </body>
 </html>

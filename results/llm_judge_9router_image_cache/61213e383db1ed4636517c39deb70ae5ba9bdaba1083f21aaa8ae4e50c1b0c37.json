@@ -1,0 +1,14 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek kursi benar; posisi tengah benar; sangat dekat/halangan depan tersirat benar. Kanan relatif lebih lapang cukup sesuai. Bahasa agak repetitif/vague: 'potensi'.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kursi kantor dominan di tengah frame.",
+    "Dudukan/roda kursi dekat bawah-tengah, menghalangi area depan.",
+    "Area kanan bawah tampak lantai/karpet lebih terbuka dibanding depan kursi."
+  ]
+}

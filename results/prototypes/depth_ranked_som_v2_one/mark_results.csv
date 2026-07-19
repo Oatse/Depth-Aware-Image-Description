@@ -1,0 +1,4 @@
+image_name,mark_id,expected_class,predicted_object,object_match,median_depth,p10_depth,gemma_latency_ms,audit_status
+living_room_814.jpg,1,chair,Kursi berlengan,True,3.1393,2.6884,221035,parsed
+living_room_814.jpg,2,sofa,Sofa,True,3.4859,3.0677,221035,parsed
+living_room_814.jpg,3,table,Kabinet TV,False,3.5243,3.2481,221035,parsed

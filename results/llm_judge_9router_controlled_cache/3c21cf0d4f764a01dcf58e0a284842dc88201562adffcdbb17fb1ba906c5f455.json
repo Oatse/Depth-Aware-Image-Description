@@ -1,0 +1,16 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Akurat: kursi tengah, kamar tidur, kasur kiri/belakang, lemari biru kanan/belakang, karpet kanan-bawah. Area bawah-tengah sangat dekat/terhalang oleh kursi sesuai label.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 5,
+  "visual_evidence": [
+    "Kursi kantor dominan di tengah-depan.",
+    "Kasur terlihat kiri/belakang kursi.",
+    "Lemari biru di kanan belakang.",
+    "Karpet bermotif di kanan bawah.",
+    "Dudukan kursi mengisi bawah-tengah → dekat/halangan."
+  ]
+}

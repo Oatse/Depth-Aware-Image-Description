@@ -1,5 +1,7 @@
 # Project Notes
 
+> Catatan kronologis. Keputusan aktif terbaru mengikuti `methodological_upgrade_20260714.md`; Depth-to-Spatial Prompting tidak lagi menjadi fitur sistem.
+
 ## Implementation Direction
 
 Proyek ini adalah prototype implementasi dan evaluasi model, bukan aplikasi mobile production-ready. Fokus utama adalah pipeline:

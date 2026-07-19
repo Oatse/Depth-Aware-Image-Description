@@ -1,0 +1,18 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Tidak menjelaskan relasi posisi penting dari label.",
+    "'Beberapa monitor komputer' berpotensi overclaim."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama cocok: meja kerja, monitor/display, mikrofon, kabel. 'Beberapa monitor komputer' agak longgar: tampak 1 monitor utama + display/tablet. Spasial minim; tidak sebut meja di kanan, area kiri lebih lapang, depan terhalang.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Meja hitam berisi monitor besar kanan-belakang.",
+    "Mikrofon besar depan-kanan; mikrofon kecil kiri-tengah.",
+    "Kabel terlihat di meja/sekitar perangkat.",
+    "Area kiri meja/ruang lebih kosong relatif; depan meja tertutup benda/perangkat."
+  ]
+}

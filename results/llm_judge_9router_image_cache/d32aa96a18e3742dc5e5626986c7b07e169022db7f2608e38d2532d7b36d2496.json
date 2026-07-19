@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Mengabaikan halangan utama kiri-depan.",
+    "Klaim area kiri lebih lapang tidak didukung."
+  ],
+  "groundedness": 3,
+  "overall": 2,
+  "rationale": "Sebagian cocok: kanan/tengah-kanan ada ember hitam/pintu dekat → halangan. Namun objek utama jelas ember besar kiri-depan; klaim kiri lebih lapang lemah/salah.",
+  "semantic_correctness": 2,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Ember besar abu-abu di kiri-depan, dekat kamera.",
+    "Ember hitam di kanan-depan/tengah-kanan, dekat.",
+    "Pintu kanan sangat dekat.",
+    "Area kiri terisi ember besar, bukan lapang."
+  ]
+}

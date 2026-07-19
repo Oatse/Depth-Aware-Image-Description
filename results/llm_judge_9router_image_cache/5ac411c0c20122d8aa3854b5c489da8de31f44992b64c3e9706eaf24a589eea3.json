@@ -1,0 +1,17 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Kedalaman galon kurang kuat: seharusnya sangat_dekat."
+  ],
+  "groundedness": 5,
+  "overall": 4,
+  "rationale": "Objek utama benar. Galon kiri-bawah dekat/halangan benar. Arah kanan relatif lebih aman/lapang benar. Minus: kategori hanya 'dekat', label/citra menunjukkan sangat_dekat; area kanan ada kardus, tidak sepenuhnya lapang.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kompor di meja tengah.",
+    "Galon besar di lantai kiri-bawah, paling dekat kamera.",
+    "Banyak wadah/peralatan masak di meja/lantai.",
+    "Lantai kanan depan relatif lebih terbuka dibanding kiri-bawah."
+  ]
+}

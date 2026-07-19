@@ -1,0 +1,20 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Tidak menyebut posisi kanan tumpukan barang.",
+    "Tidak menyebut jalur depan terhalang.",
+    "'Beberapa kotak' tidak kuat; hanya satu kardus jelas."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas benar. Pintu kayu, dinding kuning, pakaian tergantung, barang di lantai terlihat. Spasial kurang spesifik: tumpukan dominan kanan, area kiri lebih lapang, depan terhalang. 'Beberapa kotak' agak berlebih; tampak 1 kotak jelas + koper/tas.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Pintu kayu terbuka di tengah-kiri.",
+    "Dinding kuning/krem.",
+    "Pakaian menggantung dekat pintu/sisi kanan.",
+    "Tumpukan tas/koper/kardus di lantai sisi kanan.",
+    "Area kiri lantai relatif kosong."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Akurat: koridor panjang, lantai mengkilap, lemari kaca kanan. Klaim depth tengah-kanan jauh cukup selaras perspektif, meski area terdalam lebih tengah.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Koridor indoor memanjang ke belakang.",
+    "Lantai reflektif/mengkilap.",
+    "Deretan lemari/pajangan kaca di sisi kanan.",
+    "Ruang tengah relatif lapang tanpa halangan besar."
+  ]
+}

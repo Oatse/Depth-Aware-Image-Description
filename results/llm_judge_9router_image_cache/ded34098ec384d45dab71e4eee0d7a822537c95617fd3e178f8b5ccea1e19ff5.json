@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "'pintu kayu di kedua sisi' tidak didukung kuat; kanan tidak ada pintu.",
+    "Open area tidak diarahkan ke kanan sesuai citra/anotasi."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: lorong, lantai keramik putih, pintu kayu. Hambatan kiri-dekat benar: pintu/ kusen kiri menonjol. Namun menyebut pintu di kedua sisi kurang tepat; terlihat kiri dan depan, kanan dinding kosong. Area lapang seharusnya kanan, kandidat bilang tengah relatif lapang → kurang spesifik.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lorong sempit interior, lantai keramik putih.",
+    "Pintu kayu besar dekat di sisi kiri; pintu kayu lain di ujung depan.",
+    "Sisi kanan berupa dinding kosong, jalur kanan relatif terbuka.",
+    "Halangan visual/dekat terutama kiri-depan dari pintu/kusen."
+  ]
+}

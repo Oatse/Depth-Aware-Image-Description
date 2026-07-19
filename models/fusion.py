@@ -1,4 +1,6 @@
+from models.fusion_display import build_display_payload
 from models.fusion_terms import DEPTH_LIMITATION_NOTE, DISTANCE_LABELS, REGION_LABELS
+from models.fusion_types import DisplayPayload, FinalSections, FusionPolicy, FusionResult
 
 
 def fuse_description(
@@ -6,7 +8,9 @@ def fuse_description(
     depth_summary: dict | None,
     mode: str = "gemma_depth",
     gemma_structured: dict | None = None,
-) -> dict:
+    *,
+    policy: FusionPolicy = FusionPolicy.EVIDENCE_CONSTRAINED,
+) -> FusionResult:
     warnings: list[str] = []
     cleaned_gemma = _clean_text(gemma_description)
     visual_summary = _visual_summary(cleaned_gemma, gemma_structured)
@@ -18,18 +22,7 @@ def fuse_description(
             "gemma_description": visual_summary or cleaned_gemma or None,
             "depth_summary": depth_summary,
             "warnings": warnings,
-            "display": _display_payload(visual_summary, depth_summary, mode, final_description),
-        }
-
-    if mode == "gemma_depth_prompted" and visual_summary:
-        warnings.extend(_warnings_from_depth(depth_summary))
-        final_description = _prompted_depth_aware_description(visual_summary, depth_summary)
-        return {
-            "final_description": final_description,
-            "gemma_description": visual_summary,
-            "depth_summary": depth_summary,
-            "warnings": warnings,
-            "display": _display_payload(visual_summary, depth_summary, mode, final_description),
+            "display": _display_payload(visual_summary, depth_summary, mode, final_description, policy),
         }
 
     if not depth_summary:
@@ -39,19 +32,29 @@ def fuse_description(
             "gemma_description": visual_summary or cleaned_gemma or None,
             "depth_summary": None,
             "warnings": warnings,
-            "display": _display_payload(visual_summary or cleaned_gemma, None, mode, final_description),
+            "display": _display_payload(visual_summary or cleaned_gemma, None, mode, final_description, policy),
         }
 
     warnings.extend(_warnings_from_depth(depth_summary))
-    final_description = _depth_aware_description(visual_summary, depth_summary)
-    final_description = _limit_sentences(_clean_text(final_description), 6, 1100)
+    if policy is FusionPolicy.EVIDENCE_CONSTRAINED:
+        final_description = _evidence_constrained_description(visual_summary, depth_summary)
+        final_description = _limit_sentences(_clean_text(final_description), 3, 700)
+    else:
+        final_description = _depth_aware_description(visual_summary, depth_summary)
+        final_description = _limit_sentences(_clean_text(final_description), 6, 1100)
 
     return {
         "final_description": final_description,
         "gemma_description": visual_summary or cleaned_gemma or None,
         "depth_summary": depth_summary,
         "warnings": warnings,
-        "display": _display_payload(visual_summary or cleaned_gemma, depth_summary, mode, final_description),
+        "display": _display_payload(
+            visual_summary or cleaned_gemma,
+            depth_summary,
+            mode,
+            final_description,
+            policy,
+        ),
     }
 
 
@@ -107,20 +110,26 @@ def _depth_aware_description(visual_summary: str, depth_summary: dict) -> str:
     return " ".join(part for part in parts if part)
 
 
-def _prompted_depth_aware_description(visual_summary: str, depth_summary: dict | None) -> str:
-    if not depth_summary:
-        return _limit_sentences(_clean_text(visual_summary), 4, 900)
-
-    sections = _final_sections(visual_summary, depth_summary, "gemma_depth_prompted")
-    parts = [
-        sections["visual_description"],
-        sections["potential_obstacle"],
-        sections["open_area"],
-    ]
-    return _limit_sentences(_clean_text(" ".join(part for part in parts if part)), 4, 900)
+def _evidence_constrained_description(visual_summary: str, depth_summary: dict) -> str:
+    nearest_region = _region_label(depth_summary.get("nearest_region"))
+    distance_category = _distance_label(depth_summary.get("distance_category"))
+    depth_sentence = _evidence_constrained_depth_sentence(nearest_region, distance_category)
+    return " ".join(part for part in (visual_summary, depth_sentence) if part)
 
 
-def _final_sections(visual_summary: str, depth_summary: dict | None, mode: str = "gemma_depth") -> dict[str, str]:
+def _evidence_constrained_depth_sentence(nearest_region: str, distance_category: str) -> str:
+    if nearest_region == "tidak diketahui" or distance_category == "tidak diketahui":
+        return "Estimasi depth belum cukup untuk menyatakan region terdekat dan kategori kedalaman relatif."
+    base = (
+        f"Berdasarkan grid depth 3x3, region {nearest_region} memiliki "
+        f"kategori kedalaman relatif {distance_category} dibanding region lain dalam citra"
+    )
+    if distance_category in {"sangat dekat", "dekat"}:
+        return f"{base} dan menunjukkan potensi halangan visual pada region tersebut."
+    return f"{base}."
+
+
+def _final_sections(visual_summary: str, depth_summary: dict | None, mode: str = "gemma_depth") -> FinalSections:
     if not depth_summary:
         if mode == "gemma_only":
             return {
@@ -222,66 +231,19 @@ def _limit_sentences(text: str, max_sentences: int, max_chars: int) -> str:
     return limited[:max_chars].strip()
 
 
-def _fusion_strategy(mode: str) -> str:
-    if mode == "gemma_depth_prompted":
-        return "depth_to_spatial_prompting"
-    if mode == "gemma_depth":
-        return "late_rule_based_fusion"
-    if mode == "depth_only":
-        return "depth_only_summary"
-    return "gemma_visual_spatial_baseline"
-
-
-def _provenance_segments(mode: str, visual_summary: str, depth_summary: dict | None, final_description: str) -> list[dict[str, str]]:
+def _display_payload(
+    visual_summary: str,
+    depth_summary: dict | None,
+    mode: str,
+    final_description: str,
+    policy: FusionPolicy,
+) -> DisplayPayload:
     final_sections = _final_sections(visual_summary, depth_summary, mode)
-    if mode == "gemma_depth_prompted":
-        return [
-            {"source": "prompted_gemma", "text": visual_summary},
-            {"source": "inference", "text": final_sections["potential_obstacle"]},
-            {"source": "template", "text": final_sections["open_area"]},
-        ]
-    if mode == "gemma_depth":
-        return [
-            {"source": "gemma", "text": visual_summary},
-            {"source": "depth", "text": final_sections["depth_insight"]},
-            {"source": "inference", "text": final_sections["potential_obstacle"]},
-            {"source": "template", "text": final_sections["open_area"]},
-        ]
-    if mode == "depth_only":
-        return [
-            {"source": "depth", "text": final_sections["depth_insight"]},
-            {"source": "inference", "text": final_sections["potential_obstacle"]},
-            {"source": "template", "text": final_sections["open_area"]},
-        ]
-    return [{"source": "gemma", "text": final_description}]
-
-
-def _display_payload(visual_summary: str, depth_summary: dict | None, mode: str, final_description: str) -> dict:
-    final_sections = _final_sections(visual_summary, depth_summary, mode)
-    fusion_strategy = _fusion_strategy(mode)
-    provenance_segments = [
-        segment for segment in _provenance_segments(mode, visual_summary, depth_summary, final_description)
-        if segment["text"]
-    ]
-    if not depth_summary:
-        return {
-            "visual_summary": visual_summary or "Tidak tersedia",
-            "depth_status": "Informasi kedalaman tidak tersedia",
-            "navigation_region": "tidak_diketahui",
-            "safe_direction": "tidak_diketahui",
-            "final_sections": final_sections,
-            "fusion_strategy": fusion_strategy,
-            "provenance_segments": provenance_segments,
-            "system_note": final_sections["system_note"],
-        }
-    return {
-        "visual_summary": visual_summary or "Tidak tersedia",
-        "depth_status": depth_summary.get("warning", "Informasi kedalaman tidak tersedia."),
-        "navigation_region": depth_summary.get("nearest_region", "tidak_diketahui"),
-        "distance_category": depth_summary.get("distance_category", "tidak_diketahui"),
-        "safe_direction": depth_summary.get("safe_direction", "tidak_diketahui"),
-        "final_sections": final_sections,
-        "fusion_strategy": fusion_strategy,
-        "provenance_segments": provenance_segments,
-        "system_note": final_sections["system_note"],
-    }
+    return build_display_payload(
+        visual_summary,
+        depth_summary,
+        mode,
+        final_description,
+        final_sections,
+        policy,
+    )

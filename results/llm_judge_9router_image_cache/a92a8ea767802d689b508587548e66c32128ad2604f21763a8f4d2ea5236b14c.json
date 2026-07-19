@@ -1,0 +1,20 @@
+{
+  "clarity": 3,
+  "critical_errors": [
+    "Menyebut bawah-kanan kategori jauh padahal dekat.",
+    "Menyebut tidak ada halangan kuat padahal ada ember kanan-bawah.",
+    "Mengabaikan halangan utama ember kiri/depan.",
+    "Kontradiksi: paling dekat tapi kategori jauh."
+  ],
+  "groundedness": 2,
+  "overall": 2,
+  "rationale": "Klaim kedalaman/halangan banyak salah. Bawah-kanan berisi ember hitam dekat → halangan, bukan jauh/bebas. Objek utama dekat kiri juga diabaikan. Tengah agak kosong benar sebagian.",
+  "semantic_correctness": 2,
+  "spatial_accuracy": 1,
+  "visual_evidence": [
+    "Ember besar kiri-bawah dekat kamera.",
+    "Ember hitam kanan-bawah dekat kamera.",
+    "Area depan lantai terisi ember → terhalang.",
+    "Tengah dinding/lantai relatif kosong."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menganggap bawah-kiri potensi halangan visual tanpa bukti.",
+    "Kategori kedalaman sedang vs label jauh."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Koridor, dinding terang, lantai cokelat muda, ruang/dinding merah ujung benar. Tengah lapang benar. Salah: bawah-kiri disebut potensi halangan; citra/label: tidak ada obstacle, area depan relatif lapang. Kategori kedalaman 'sedang' kurang cocok; label: jauh.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lorong panjang tengah gambar.",
+    "Ujung lorong: dinding merah/ruang merah.",
+    "Lantai depan kosong, tanpa benda penghalang.",
+    "Area tengah terbuka sebagai jalur aman."
+  ]
+}

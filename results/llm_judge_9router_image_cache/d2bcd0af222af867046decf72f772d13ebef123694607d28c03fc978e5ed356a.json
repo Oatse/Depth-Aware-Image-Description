@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Teko tidak tampak; objek utama magic com.",
+    "Meja tidak tepat/ambigu; lebih tampak kulkas/lemari + bangku."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Obj utama salah: disebut meja+teko, visual/label magic com kiri. Spasial umum benar: lorong, pintu tengah, halangan dekat kiri/depan, kanan lebih lapang.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Magic com putih-biru di kiri depan, dekat kamera.",
+    "Benda besar gelap/kulkas/lemari kiri mempersempit lorong.",
+    "Pintu kayu di ujung tengah.",
+    "Sisi kanan lantai lorong relatif kosong/lapang."
+  ]
+}

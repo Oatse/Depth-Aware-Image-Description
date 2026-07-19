@@ -1,4 +1,6 @@
-from fastapi import APIRouter, File, Form, UploadFile, status
+import time
+
+from fastapi import APIRouter, File, Form, Request, UploadFile, status
 from fastapi.responses import JSONResponse
 
 from app.config import get_settings
@@ -15,19 +17,23 @@ settings = get_settings()
 gemma_client = GemmaClient(settings)
 depth_model = DepthAnything(settings)
 
-SUPPORTED_MODES = {"gemma_only", "depth_only", "gemma_depth", "gemma_depth_prompted", "full"}
+SUPPORTED_MODES = {"gemma_only", "depth_only", "gemma_depth", "full"}
 
 
 @router.post("/analyze", response_model=AnalyzeResponse)
 async def analyze_image(
+    request: Request,
     image: UploadFile = File(...),
     mode: str = Form(default="gemma_depth"),
     save_result: bool = Form(default=True),
+    capture_id: str | None = Form(default=None),
+    capture_time_ms: int | None = Form(default=None),
+    camera_facing_mode: str | None = Form(default=None),
 ) -> JSONResponse:
     normalized_mode = "gemma_depth" if mode == "full" else mode
     if mode not in SUPPORTED_MODES:
         return _error_response(
-            "Mode must be one of gemma_only, depth_only, gemma_depth, or gemma_depth_prompted.",
+            "Mode must be one of gemma_only, depth_only, or gemma_depth.",
             status.HTTP_400_BAD_REQUEST,
         )
 
@@ -72,6 +78,27 @@ async def analyze_image(
         depth_map_url=pipeline_result.depth_map_url,
         mock=pipeline_result.mock,
         error=pipeline_result.error,
+        sensor_evidence=(
+            {
+                **(
+                    {
+                        "enabled": False,
+                        "status": "camera_sensor_direction_mismatch",
+                        "samples": {},
+                    }
+                    if camera_facing_mode == "user"
+                    else request.app.state.sensor_bridge.snapshot(
+                        int(time.time() * 1000),
+                        settings.sensor_match_window_ms,
+                    )
+                ),
+                "capture_id": capture_id,
+                "client_capture_time_ms": capture_time_ms,
+                "camera_facing_mode": camera_facing_mode,
+            }
+            if capture_time_ms is not None
+            else None
+        ),
     )
 
     if save_result and settings.save_results:

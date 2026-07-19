@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Tidak menyebut kipas sebagai objek/halangan utama.",
+    "Kategori kedalaman 'sedang' kurang tepat; objek depan kanan tampak dekat."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek umum benar: rak hijau kiri, meja/komputer kanan, lantai keramik, berantakan. Namun main obstacle kipas kanan-depan tidak disebut. Kedalaman disebut sedang, padahal dekat. Bawah-kanan dekat masuk akal, tapi halangan utama lebih kipas kanan-depan.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Rak hijau di kiri.",
+    "Meja kerja/monitor/laptop di kanan.",
+    "Kipas angin berdiri di kanan-depan, dekat kamera.",
+    "Area tengah lantai relatif kosong/lapang.",
+    "Ruangan tampak berantakan dengan kabel/barang."
+  ]
+}

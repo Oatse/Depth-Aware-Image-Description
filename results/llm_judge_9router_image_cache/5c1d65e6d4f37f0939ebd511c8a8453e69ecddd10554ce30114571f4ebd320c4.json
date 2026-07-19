@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Posisi pintu terlalu digeser ke kanan.",
+    "Bawah-kanan disebut kedalaman jauh, padahal foreground dekat."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar. Lantai/pintu benar. Posisi pintu disebut kanan, citra/anotasi lebih tengah-kanan/tengah. Area lapang benar. Klaim bawah-kanan jauh agak lemah: area itu dekat foreground, meski tanpa halangan.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Pintu kayu gelap di tengah-kanan.",
+    "Lantai keramik putih kosong dominan.",
+    "Area tengah/depan relatif lapang.",
+    "Tidak tampak halangan kuat di lantai."
+  ]
+}

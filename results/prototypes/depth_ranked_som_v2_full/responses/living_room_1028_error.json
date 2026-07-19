@@ -1,0 +1,4 @@
+{
+  "image": "living_room_1028.jpg",
+  "error": "1 validation error for MarkResponse\n  Input should be a valid dictionary or instance of MarkResponse [type=model_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.12/v/model_type"
+}

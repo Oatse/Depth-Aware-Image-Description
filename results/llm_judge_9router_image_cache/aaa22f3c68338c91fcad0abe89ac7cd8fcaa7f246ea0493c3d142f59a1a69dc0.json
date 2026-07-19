@@ -1,0 +1,21 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Klaim bawah-kiri paling dekat lemah; kanan-bawah tampak sangat dekat.",
+    "Halangan utama tidak menyebut kantong belanja kanan sesuai label."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama banyak benar. Spatial dekat/halangan bawah-kiri kurang tepat; halangan jelas juga kanan-bawah kantong belanja. Tengah lapang benar.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Wastafel kiri.",
+    "Pintu kanan.",
+    "Tempat sampah belakang/kanan ruang kecil.",
+    "Karpet merah tengah-bawah.",
+    "Kantong belanja kanan-bawah dekat kamera.",
+    "Kardus/objek besar kiri-bawah dekat kabinet.",
+    "Area tengah relatif kosong."
+  ]
+}

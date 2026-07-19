@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Kontradiksi: paling dekat tetapi kedalaman jauh.",
+    "Kategori jarak jauh ≠ label sedang/visual dekat-sedang.",
+    "Objek utama tangga hilang."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Sebagian sesuai: tanpa halangan kuat, area tengah relatif lapang. Salah/aneh: bawah-kanan disebut paling dekat tetapi kategori jauh; label: jarak sedang. Objek utama tangga tidak disebut.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Tangga dominan di tengah-kanan.",
+    "Bawah-kanan berisi anak tangga/railing dekat kamera.",
+    "Area lantai tengah-kiri relatif kosong.",
+    "Tidak tampak halangan jalur besar."
+  ]
+}

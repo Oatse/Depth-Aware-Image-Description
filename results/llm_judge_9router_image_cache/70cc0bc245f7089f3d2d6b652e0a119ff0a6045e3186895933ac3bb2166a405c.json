@@ -1,0 +1,18 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "'Beberapa monitor' berlebihan; citra menunjukkan 1 monitor utama + tablet/display."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: meja komputer/setup kerja, monitor, keyboard, tablet. Posisi tengah benar. Dekat/terhalang cukup tepat: meja/periferal mengisi foreground. Kiri relatif lebih lapang sesuai label, meski mikrofon ada di kiri depan. Klaim beberapa monitor agak kurang tepat: hanya 1 monitor eksternal + tablet/display.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Monitor besar di tengah-belakang meja.",
+    "Tablet/display kecil di depan monitor, belakang keyboard.",
+    "Keyboard di tengah depan; mouse kanan; mikrofon kiri.",
+    "Foreground meja/perangkat dekat kamera → area depan terhalang.",
+    "Area kiri meja relatif lebih kosong dibanding kanan/tengah, meski ada mikrofon."
+  ]
+}

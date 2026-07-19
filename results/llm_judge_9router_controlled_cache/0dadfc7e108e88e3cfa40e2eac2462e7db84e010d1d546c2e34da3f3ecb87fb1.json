@@ -1,0 +1,15 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama dapur, kompor, wadah, galon/botol air sesuai. Spasial kiri-bawah dekat/halangan sesuai citra+label, meski kurang tegas: harusnya sangat_dekat, galon kiri utama. Kanan relatif lapang cukup sesuai, walau ada kardus/rak.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Galon besar di lantai kiri-depan, paling dekat kamera.",
+    "Kompor di meja tengah-belakang.",
+    "Wadah/peralatan di meja/kolong.",
+    "Area kanan lantai lebih kosong relatif, namun ada kardus/rak."
+  ]
+}

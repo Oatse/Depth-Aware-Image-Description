@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut lantai kayu.",
+    "Tidak mengidentifikasi bangku sebagai objek utama.",
+    "Halangan dinyatakan potensial, tidak selaras penuh dengan label has_obstacle=no."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Sebagian sesuai: ruang sempit terang, area tengah/kiri relatif lapang, kanan-bawah dekat. Salah/kurang: lantai bukan kayu; objek utama bangku kanan tidak disebut eksplisit; klaim halangan agak berlebih vs label no-obstacle, meski bangku kanan terlihat dekat.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Ruang indoor sempit, dinding terang.",
+    "Bangku/papan kayu panjang di kanan-bawah/foreground.",
+    "Area kiri/tengah lantai kosong relatif lapang.",
+    "Lantai tampak ubin/karpet beige, bukan kayu."
+  ]
+}

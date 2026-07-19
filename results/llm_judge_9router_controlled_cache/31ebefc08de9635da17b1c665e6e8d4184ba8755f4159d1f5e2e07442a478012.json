@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut kanan relatif lebih lapang; citra+label: area kiri relatif lapang/arah aman kiri.",
+    "Halangan difokuskan bawah-kiri; label: objek utama kursi kanan, front terhalang."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek meja/monitor/laptop/kursi benar. Namun kursi utama di kanan; area kiri justru padat meja/perangkat, bukan kanan lapang. Klaim bawah-kiri paling dekat masuk akal visual, tapi tidak selaras label: obstacle utama kursi kanan, safer/open kiri. 'Region kanan lapang' keliru: ada kursi/ring light/kabel.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Monitor+laptop di meja hitam kiri.",
+    "Kursi kantor putih berada kanan-tengah/depan meja.",
+    "Lantai kanan bawah terlihat sebagian, tapi terisi kaki kursi+kabel.",
+    "Area kiri didominasi meja besar/perangkat dekat kamera."
+  ]
+}

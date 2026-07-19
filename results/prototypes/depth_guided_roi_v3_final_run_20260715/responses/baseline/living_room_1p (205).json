@@ -1,0 +1,6 @@
+{
+  "image_name": "living_room_1p (205).jpg",
+  "condition": "baseline",
+  "content": "{\"objects\": [\"sofa\", \"meja kopi\", \"rak buku\", \"lukisan\", \"perapian\", \"tirai\", \"jendela\"], \"description\": \"Ruangan interior modern dengan sofa besar berwarna gelap, meja kopi di tengah, dan rak buku tinggi. Dinding dihiasi lukisan abstrak yang cerah di atas perapian. Jendela besar memberikan pemandangan luar ruangan melalui tirai biru keabu-abuan.\"}",
+  "latency_ms": 32893
+}

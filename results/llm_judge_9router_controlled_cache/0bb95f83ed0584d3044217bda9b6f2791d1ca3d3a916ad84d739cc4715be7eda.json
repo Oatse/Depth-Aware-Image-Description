@@ -1,0 +1,20 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut dua pintu kayu",
+    "Menyebut tirai sisi kanan",
+    "Safer/open direction digeser ke kiri/bawah-kanan, bukan tengah"
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek utama benar: pintu kayu tengah, lantai keramik, tirai kiri, karpet kecil. Salah: dua pintu, tirai kanan. Spasial campur: area depan relatif lapang/no obstacle ok; arah aman anotasi tengah, bukan kiri/bawah-kanan. Klaim bawah-kanan terdekat tapi kategori jauh ambigu/kontradiktif.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "1 pintu kayu cokelat di tengah-kanan",
+    "Tirai hijau hanya di sisi kiri",
+    "Karpet kecil di lantai kiri-depan dekat tirai",
+    "Lantai tengah/depan relatif kosong",
+    "Dinding kanan kosong, tanpa tirai/pintu"
+  ]
+}

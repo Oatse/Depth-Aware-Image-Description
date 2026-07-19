@@ -1,0 +1,15 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Akurat: barang menumpuk kanan/depan, dekat, menghalangi; kiri lebih lapang. Objek utama sedikit bergeser: kandidat fokus pintu, citra/anotasi fokus tumpukan barang.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 5,
+  "visual_evidence": [
+    "Pintu kayu terbuka tengah-belakang.",
+    "Pakaian tergantung di pintu/dinding kanan.",
+    "Kotak, koper, tas menumpuk kanan-bawah/foreground.",
+    "Lantai kiri relatif kosong."
+  ]
+}

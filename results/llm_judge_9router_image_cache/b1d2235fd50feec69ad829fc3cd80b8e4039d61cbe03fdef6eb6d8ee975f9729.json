@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut bawah-kiri sebagai halangan utama, bukan kursi kanan.",
+    "Menyebut kanan lebih lapang; bertentangan dgn anotasi open_area kiri/safer_direction kiri."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek meja/laptop/keyboard/kursi benar. Spasial utama keliru: halangan utama tampak kursi kanan/depan; anotasi: kursi kanan, area kiri lapang, arah aman kiri. Kandidat → bawah-kiri halangan, kanan lapang.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Meja gelap + laptop/keyboard di kiri.",
+    "Kursi putih jelas di kanan/depan.",
+    "Area kanan tidak sepenuhnya lapang karena kursi/kabel."
+  ]
+}

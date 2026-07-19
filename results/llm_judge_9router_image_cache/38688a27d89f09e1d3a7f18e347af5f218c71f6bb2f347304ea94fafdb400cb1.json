@@ -1,0 +1,20 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut bawah-kanan paling dekat spesifik; citra lebih menunjukkan seluruh tepi depan/bawah dekat.",
+    "Klaim area kiri lebih lapang lemah; kiri bawah terisi rak piring."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: wastafel, ubin, wadah logam, handuk. Spasial sebagian: halangan/dekat ada di area depan-bawah, bukan khusus bawah-kanan. Kiri tidak jelas lapang; kiri bawah penuh rak piring.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Wastafel logam di tengah-bawah.",
+    "Ubin berpola di dinding belakang.",
+    "Panci/saringan logam tergantung kanan-atas.",
+    "Handuk merah tergantung kanan-atas.",
+    "Rak piring di kiri-bawah; botol/mangkuk di kanan-bawah.",
+    "Area depan meja/bawah wastafel paling dekat/terhalang."
+  ]
+}

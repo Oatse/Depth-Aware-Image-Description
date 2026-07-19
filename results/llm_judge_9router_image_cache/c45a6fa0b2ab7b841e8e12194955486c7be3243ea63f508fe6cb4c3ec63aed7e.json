@@ -1,0 +1,14 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 4,
+  "rationale": "Objek utama benar. Posisi pintu kanan/kanan-tengah benar. Cermin kiri benar. Barang gantung dekat/atas cermin benar. Kurang: pintu terbuka, area depan relatif lapang tak disebut.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Pintu kayu besar terbuka di kanan/kanan-tengah.",
+    "Cermin berbingkai kayu berdiri di kiri bawah.",
+    "Gantungan baju/tali tergantung di dinding atas cermin."
+  ]
+}

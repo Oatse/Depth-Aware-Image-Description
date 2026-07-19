@@ -1,0 +1,15 @@
+{
+  "clarity": 3,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 4,
+  "rationale": "Cukup akurat. Objek utama kanan: tumpukan barang/koper/kardus/pakaian. Kiri lebih lapang. Depan/kanan-bawah terhalang. Bahasa terlalu umum/vague.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Pintu kayu terbuka di tengah-kiri.",
+    "Tumpukan barang dominan di kanan: kardus, koper, pakaian, tas.",
+    "Lantai kiri relatif kosong → jalur lebih lapang.",
+    "Objek kanan-bawah tampak paling dekat kamera → halangan dekat."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Objek utama tepat: kursi kantor. Latar kamar tidur benar. Bed, lemari biru, karpet terlihat. Spasial umum benar, kurang detail arah/halangan.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kursi kantor hitam di tengah/depan.",
+    "Tempat tidur di kiri/belakang kursi.",
+    "Lemari kayu biru di kanan/belakang.",
+    "Karpet bermotif di kanan bawah/depan."
+  ]
+}

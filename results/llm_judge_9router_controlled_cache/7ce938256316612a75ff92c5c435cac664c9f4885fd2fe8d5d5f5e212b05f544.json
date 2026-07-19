@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Arah lapang disebut kanan; bukti+label lebih mendukung tengah."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: wastafel kiri, ubin, pintu. Kedalaman/halangan kiri-depan masuk akal. Namun area lapang lebih tepat tengah/lorong pintu, bukan kanan; kanan ada daun pintu.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Wastafel/meja di kiri foreground.",
+    "Pintu terbuka di kanan menuju ruang tiled.",
+    "Kiri-bawah berisi meja, rak, wajan/alat → dekat/terhalang.",
+    "Area tengah dekat ambang pintu relatif kosong.",
+    "Kanan ditempati daun pintu."
+  ]
+}

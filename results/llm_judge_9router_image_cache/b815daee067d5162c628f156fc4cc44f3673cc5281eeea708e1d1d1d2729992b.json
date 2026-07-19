@@ -1,0 +1,19 @@
+{
+  "clarity": 3,
+  "critical_errors": [
+    "Klaim bawah-kiri dekat tetapi berkategori jauh.",
+    "Mengabaikan potensi halangan bawah-kiri.",
+    "Tidak menyebut pintu utama."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Sebagian cocok: kanan lebih lapang. Namun bawah-kiri disebut paling dekat sekaligus kategori jauh → kontradiktif. Bawah-kiri ada objek/tas/cermin dekat → potensi halangan, bukan bebas kuat. Objek utama pintu tengah-kanan terlewat.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Pintu kayu terbuka di tengah-kanan.",
+    "Area kanan/ambang pintu tampak lebih lapang.",
+    "Bawah-kiri berisi tas hitam/cermin, dekat kamera.",
+    "Lantai tengah relatif kosong."
+  ]
+}

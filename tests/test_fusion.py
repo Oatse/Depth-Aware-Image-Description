@@ -1,4 +1,5 @@
 from models.fusion import fuse_description
+from models.fusion_types import FusionPolicy
 
 
 def test_fusion_returns_gemma_only_when_depth_missing() -> None:
@@ -27,11 +28,10 @@ def test_fusion_adds_warning_for_close_depth() -> None:
 
     result = fuse_description("Terlihat meja di tengah ruangan.", summary, "gemma_depth")
 
-    assert "Berdasarkan estimasi kedalaman" in result["final_description"]
-    assert "bagian bawah-tengah merupakan area yang paling dekat dibanding area lain" in result["final_description"]
+    assert "Berdasarkan grid depth 3x3" in result["final_description"]
+    assert "region bawah-tengah" in result["final_description"]
     assert "kategori kedalaman relatif dekat" in result["final_description"]
-    assert "Region kanan terbaca relatif lebih lapang" in result["final_description"]
-    assert "bukan berarti bebas objek" in result["final_description"]
+    assert "Region kanan terbaca relatif lebih lapang" not in result["final_description"]
     assert "bukan pengukuran jarak presisi" not in result["final_description"]
     assert "bukan pengukuran jarak presisi" in result["display"]["system_note"]
     assert "jalan aman" not in result["final_description"].lower()
@@ -48,10 +48,10 @@ def test_fusion_keeps_depth_claims_regional_when_object_identity_is_unknown() ->
 
     result = fuse_description("Sebuah ruangan interior dengan tanaman pot di area depan.", summary, "gemma_depth")
 
-    assert "bagian bawah-kanan merupakan area yang paling dekat dibanding area lain" in result["final_description"]
-    assert "dengan kategori kedalaman relatif sedang" in result["final_description"]
-    assert "Area bawah-kanan terbaca pada jarak relatif sedang" in result["final_description"]
-    assert "Region tengah terbaca relatif lebih lapang" in result["final_description"]
+    assert "region bawah-kanan" in result["final_description"]
+    assert "kategori kedalaman relatif sedang" in result["final_description"]
+    assert "tanaman" not in result["display"]["final_sections"]["depth_insight"]
+    assert "Region tengah terbaca relatif lebih lapang" not in result["final_description"]
     assert result["display"]["final_sections"]["depth_insight"].startswith("Berdasarkan estimasi kedalaman")
 
 
@@ -87,67 +87,50 @@ def test_depth_only_description_does_not_require_gemma() -> None:
     assert result["final_description"].startswith("Berdasarkan estimasi kedalaman")
 
 
-def test_prompted_fusion_includes_guarded_obstacle_in_final_description() -> None:
+def test_evidence_constrained_fusion_keeps_depth_claim_regional_and_concise() -> None:
+    # Given
     summary = {
-        "warning": "Area bawah-tengah menunjukkan potensi halangan visual dekat.",
+        "warning": "Area bawah-kanan menunjukkan potensi halangan visual dekat.",
         "distance_category": "dekat",
-        "nearest_region": "lower_center",
-        "safe_direction": "kanan",
-    }
-
-    result = fuse_description(
-        "Terlihat kursi di depan area tengah, dengan area bawah-tengah tampak lebih dekat secara relatif.",
-        summary,
-        "gemma_depth_prompted",
-    )
-
-    assert result["final_description"].startswith("Terlihat kursi")
-    assert "Area bawah-tengah berpotensi menjadi halangan visual" in result["final_description"]
-    assert "Region kanan terbaca relatif lebih lapang" in result["final_description"]
-    assert "bukan berarti bebas objek" in result["final_description"]
-    assert result["display"]["fusion_strategy"] == "depth_to_spatial_prompting"
-    assert result["display"]["provenance_segments"][0]["source"] == "prompted_gemma"
-    assert result["display"]["provenance_segments"][1]["source"] == "inference"
-
-
-def test_prompted_fusion_keeps_specific_visual_objects_when_depth_marks_center_open() -> None:
-    summary = {
-        "warning": "Area bawah-kanan memiliki objek pada jarak sedang.",
-        "distance_category": "sedang",
         "nearest_region": "lower_right",
-        "safe_direction": "tengah",
+        "safe_direction": "kiri",
     }
 
+    # When
     result = fuse_description(
-        "Terdapat meja panjang di tengah dengan lampu dan vas bunga, serta kursi-kursi di kedua sisi.",
+        "Terlihat sebuah kursi di sisi kiri ruangan.",
         summary,
-        "gemma_depth_prompted",
+        "gemma_depth",
+        {"main_object": "kursi", "object_position": "kiri"},
+        policy=FusionPolicy.EVIDENCE_CONSTRAINED,
     )
 
-    final_description = result["final_description"]
-    assert "meja panjang" in final_description
-    assert "lampu" in final_description
-    assert "vas bunga" in final_description
-    assert "kursi" in final_description
-    assert "Area depan tampak relatif lapang" not in final_description
-    assert "Area bawah-kanan berpotensi menjadi halangan visual" not in final_description
-    assert "Region tengah terbaca relatif lebih lapang" in final_description
+    # Then
+    description = result["final_description"]
+    assert "region bawah-kanan" in description
+    assert "kategori kedalaman relatif dekat" in description
+    assert "kursi" not in result["display"]["final_sections"]["depth_insight"]
+    assert "Region kiri terbaca relatif lebih lapang" not in description
+    assert description.count(".") <= 3
+    assert result["display"]["fusion_strategy"] == "evidence_constrained_regional_late_fusion"
 
 
-def test_prompted_fusion_does_not_over_warn_for_medium_depth() -> None:
+def test_legacy_policy_remains_available_only_for_controlled_comparison() -> None:
+    # Given
     summary = {
-        "warning": "Area bawah-kanan memiliki objek pada jarak sedang.",
-        "distance_category": "sedang",
+        "warning": "Area bawah-kanan menunjukkan potensi halangan visual dekat.",
+        "distance_category": "dekat",
         "nearest_region": "lower_right",
-        "safe_direction": "tengah",
+        "safe_direction": "kiri",
     }
 
+    # When
     result = fuse_description(
-        "Tampak meja konsol di area tengah ruangan.",
+        "Terlihat sebuah kursi di sisi kiri ruangan.",
         summary,
-        "gemma_depth_prompted",
+        "gemma_depth",
+        policy=FusionPolicy.LEGACY_VERBOSE,
     )
 
-    assert "berpotensi menjadi halangan visual" not in result["final_description"]
-    assert "jarak relatif sedang" in result["final_description"]
-    assert result["warnings"] == []
+    # Then
+    assert "Region kiri terbaca relatif lebih lapang" in result["final_description"]

@@ -45,7 +45,7 @@ Strategi fusi yang membuat deskripsi visual Gemma dan ringkasan kedalaman secara
 _Avoid_: menyebutnya sebagai depth-to-spatial prompting
 
 **Depth-to-Spatial Prompting**:
-Strategi fusi yang menjalankan estimasi kedalaman lebih dulu, lalu memasukkan metadata region dan kategori kedalaman relatif ke prompt Gemma sebelum deskripsi akhir dibuat.
+Strategi eksperimen lama yang menjalankan estimasi kedalaman lebih dulu, lalu memasukkan metadata region dan kategori kedalaman relatif ke prompt Gemma sebelum deskripsi akhir dibuat. Metode ini telah dipensiunkan dari runtime aktif setelah evaluasi 44 citra tidak menunjukkan keuntungan yang menutup tambahan latensi dan kompleksitas.
 _Avoid_: mengklaim depth sebagai sensor jarak atau pengganti pemahaman visual Gemma
 
 **Provenance highlighting**:
@@ -59,7 +59,7 @@ _Avoid_: menyebutnya tokenisasi model jika warna tidak berasal dari tokenizer as
 - **Estimasi kedalaman** menghasilkan **Kategori jarak relatif**, **Region terdekat**, **Potensi halangan visual**, dan **Area relatif lapang**.
 - **Grid area 3x3** adalah cara UI dan evaluator menjelaskan region depth kepada manusia; model depth tetap menghasilkan peta kedalaman kontinu.
 - **Region terdekat** dapat menunjukkan area/objek terdekat, tetapi tidak membuktikan identitas objek tanpa dukungan **Deskripsi visual**.
-- **Late fusion berbasis aturan** dan **Depth-to-Spatial Prompting** adalah strategi fusi berbeda yang boleh dibandingkan, bukan istilah yang saling menggantikan.
+- **Late fusion berbasis aturan** adalah strategi aktif; **Depth-to-Spatial Prompting** hanya artefak eksperimen negatif dan bukan mode pembanding final.
 - **Provenance highlighting** menjelaskan sumber teks pada UI, bukan jumlah token atau segmentasi tokenizer.
 
 ## Example dialogue
@@ -71,5 +71,5 @@ _Avoid_: menyebutnya tokenisasi model jika warna tidak berasal dari tokenizer as
 
 - "Objek terdekat" dapat disalahartikan sebagai identitas objek yang pasti. Resolusi: gunakan **Region terdekat** atau "area/objek pada region terdekat" kecuali ada bukti semantik yang jelas dari deskripsi visual.
 - "Arah aman" terlalu kuat untuk prototype ini. Resolusi: gunakan **Area relatif lapang**.
-- "Fusion" terlalu umum. Resolusi: tulis **Late fusion berbasis aturan** untuk metode post-processing dan **Depth-to-Spatial Prompting** untuk metode prompt-level.
+- "Fusion" terlalu umum. Resolusi: tulis **Late fusion berbasis aturan** untuk metode aktif; sebut **Depth-to-Spatial Prompting** hanya ketika membahas eksperimen lama yang dipensiunkan.
 - "Tidak tersedia" pada kolom Gemma dapat dibaca sebagai kelemahan model. Resolusi: gunakan "tidak diekstrak sebagai metadata depth" untuk field depth yang bukan output mode Gemma Baseline.

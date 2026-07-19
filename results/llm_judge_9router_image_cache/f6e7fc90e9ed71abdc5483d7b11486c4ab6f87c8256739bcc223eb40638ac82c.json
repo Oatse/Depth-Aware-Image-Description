@@ -1,0 +1,15 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Akurat: lorong indoor panjang, lantai kuning mengkilap, tengah lapang, tanpa halangan jelas. Minor: klaim bawah-kiri 'kedalaman jauh' agak spesifik/kurang perlu, tetapi tidak fatal.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Koridor memanjang ke tengah/depan.",
+    "Lantai kuning/cokelat mengkilap reflektif.",
+    "Area tengah jalur kosong hingga ujung lorong.",
+    "Tidak tampak objek penghalang signifikan di jalur depan."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas sesuai: dapur, kompor tengah, wadah bawah, galon bawah-kiri dekat/halangan. 'tersusun rapi' agak subjektif; fokus grid bawah-kiri, bukan kompor tengah sesuai label, tapi visual mendukung.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kompor gas di meja tengah.",
+    "Panci/wajan di atas kompor.",
+    "Galon air besar bawah-kiri, dekat kamera.",
+    "Area bawah meja penuh barang: tabung gas, wadah, kardus → terhalang."
+  ]
+}

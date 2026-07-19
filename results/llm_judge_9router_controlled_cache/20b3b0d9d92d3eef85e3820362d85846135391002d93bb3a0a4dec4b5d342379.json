@@ -1,0 +1,15 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 5,
+  "rationale": "Mayoritas cocok: ruang indoor ubin, pintu terbuka, objek kanan-depan dekat/halangan, tengah relatif lapang. Minor: 'kotak kardus' agak umum; objek utama lebih tepat kantong belanja.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 5,
+  "visual_evidence": [
+    "Pintu terbuka ke ruang lain di tengah-kanan.",
+    "Kantong belanja/kardus di kanan-bawah, paling dekat kamera.",
+    "Area tengah menuju pintu relatif kosong/lapang.",
+    "Sapu tergantung di kanan; barang/kardus di kiri-bawah."
+  ]
+}

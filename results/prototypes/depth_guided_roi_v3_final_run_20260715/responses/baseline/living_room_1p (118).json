@@ -1,0 +1,6 @@
+{
+  "image_name": "living_room_1p (118).jpg",
+  "condition": "baseline",
+  "content": "{\"objects\": [\"lampu gantung\", \"sofa\", \"meja kopi\", \"kursi berlengan\", \"vas bunga\", \"lukisan dinding/dekorasi geometris\", \"lampu meja\"], \"description\": \"Interior ruangan modern dengan sofa berwarna abu-abu, di depannya terdapat meja kopi putih. Di sebelah kiri terlihat kursi berlengan oranye dan lampu gantung besar. Dinding belakang menampilkan dekorasi geometris heksagonal. Terdapat juga lampu meja hijau di atas nakas.\"}",
+  "latency_ms": 32973
+}

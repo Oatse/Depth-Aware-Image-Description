@@ -1,0 +1,14 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Akurat: lorong panjang, lantai mengkilap, kedalaman jauh, depan/tengah lapang, tanpa halangan jelas. Selaras anotasi.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 5,
+  "visual_evidence": [
+    "Koridor lurus panjang → titik hilang jauh.",
+    "Lantai kosong mengkilap → area depan/tengah lapang.",
+    "Tidak tampak objek menghalangi jalur tengah/kanan."
+  ]
+}

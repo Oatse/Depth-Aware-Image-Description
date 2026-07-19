@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Posisi halangan utama salah: menekankan bawah-kiri, bukan galon/area kanan-depan.",
+    "Open area salah: menyebut tengah lapang, anotasi/citra lebih mendukung kiri."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Objek kanan benar: galon, botol/peralatan dapur. Namun klaim bawah-kiri paling dekat/halangan lemah: area dekat kiri hanya sebagian kursi/sapu tepi, bukan halangan utama; anotasi: galon kanan, front terhalang, open kiri. Kandidat keliru menyebut tengah lebih lapang; citra/anotasi lebih mendukung kiri lapang.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Galon air besar di kanan bawah/dekat meja.",
+    "Kompor/peralatan masak di kanan atas.",
+    "Lantai tengah-kiri relatif kosong.",
+    "Tepi kiri bawah ada kursi/sapu sebagian, bukan objek utama."
+  ]
+}

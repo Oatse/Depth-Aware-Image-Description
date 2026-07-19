@@ -1,0 +1,11 @@
+mode,metric,paired_mean_diff_vs_gemma_only,bootstrap_95ci_low,bootstrap_95ci_high,image_count,bootstrap_resamples,seed
+depth_only,semantic_correctness_mean,-0.6970,-1.0000,-0.3864,44,10000,20260714
+depth_only,spatial_accuracy_mean,-0.2879,-0.6742,0.1136,44,10000,20260714
+depth_only,groundedness_mean,-0.2803,-0.5833,0.0303,44,10000,20260714
+depth_only,clarity_mean,-0.6288,-0.7652,-0.4848,44,10000,20260714
+depth_only,overall_mean,-0.5076,-0.8333,-0.1742,44,10000,20260714
+gemma_depth,semantic_correctness_mean,-0.0227,-0.2273,0.1894,44,10000,20260714
+gemma_depth,spatial_accuracy_mean,-0.2500,-0.5530,0.0682,44,10000,20260714
+gemma_depth,groundedness_mean,-0.2273,-0.4773,0.0379,44,10000,20260714
+gemma_depth,clarity_mean,-0.4091,-0.5682,-0.2500,44,10000,20260714
+gemma_depth,overall_mean,-0.1288,-0.3712,0.1212,44,10000,20260714

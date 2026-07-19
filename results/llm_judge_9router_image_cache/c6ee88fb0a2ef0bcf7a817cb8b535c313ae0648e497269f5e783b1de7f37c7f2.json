@@ -1,0 +1,15 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: wastafel, ubin, wadah logam, handuk. Spasial cukup: kanan/bawah-depan memang dekat/terisi, tapi 'bawah-kanan paling dekat' kurang pasti; foreground meja merata dekat. Area kiri 'lebih lapang' relatif benar di dinding, namun kiri bawah ada rak piring.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Wastafel di bawah tengah-kanan.",
+    "Panci/saringan logam tergantung di atas kanan wastafel.",
+    "Handuk merah tergantung kanan atas.",
+    "Tepi meja bawah tampak paling dekat; kanan bawah ada botol/mangkuk."
+  ]
+}

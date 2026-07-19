@@ -1,0 +1,6 @@
+{
+  "image_name": "living_room_1p (118).jpg",
+  "condition": "depth_guided",
+  "content": "{\"marks\": [{\"id\": 1, \"object\": \"sofa\"}, {\"id\": 2, \"object\": \"wall decoration\"}, {\"id\": 3, \"object\": \"coffee table\"}]\n, \"priority_mark_id\": 1\n, \"description\": \"Identifikasi objek di dalam kotak MARK 1, 2, dan 3. Urutan prioritas didasarkan pada estimasi kedalaman monokular (MARK 1 adalah yang terdekat).\"\n}",
+  "latency_ms": 24171
+}

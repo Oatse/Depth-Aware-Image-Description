@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Kontradiksi: paling dekat tetapi kategori kedalaman jauh.",
+    "Kategori jarak jauh tidak cocok; label sedang."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek utama benar: tangga tengah, pagar putih, lantai kayu. Salah/kontradiktif: bawah-kanan disebut paling dekat tetapi kategori jauh; label=sedang. Klaim lapang tengah cukup sesuai label, citra tangga dominan.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Tangga kayu dominan di tengah-kanan.",
+    "Pagar/railing putih sepanjang tangga.",
+    "Lantai kayu terlihat bawah.",
+    "Area bawah-kanan berisi anak tangga/railing foreground."
+  ]
+}

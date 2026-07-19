@@ -1,5 +1,7 @@
 # Calibration Evaluation Review
 
+> Arsip historis. Status metode aktif mengikuti `methodological_upgrade_20260714.md`; mode Depth-to-Spatial Prompting telah dipensiunkan setelah evaluasi image-aware 44 citra.
+
 Tanggal: 2026-07-06
 
 ## Perubahan Yang Dilakukan

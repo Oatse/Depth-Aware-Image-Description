@@ -1,0 +1,16 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Open area salah: kandidat bilang tengah, bukti/label: kiri."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Benar: kanan/tengah-kanan dekat, berpotensi halangan. Kurang: area lapang bukan tengah, melainkan kiri. Tidak menyebut kulkas.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Kulkas besar di kanan depan/tengah → jalur terhalang.",
+    "Lantai kiri relatif kosong → area aman/lapang.",
+    "Koridor sempit; tengah tidak sepenuhnya lapang karena kulkas menjorok."
+  ]
+}

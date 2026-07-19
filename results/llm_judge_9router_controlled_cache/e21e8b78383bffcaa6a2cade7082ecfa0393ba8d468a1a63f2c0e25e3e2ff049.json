@@ -1,0 +1,16 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas sesuai: ruang indoor, ubin, pintu terbuka, kardus/kantong kanan-depan, alat pembersih kanan. Depth/halangan bawah-kanan cocok. Minor: objek utama lebih kantong belanja/kardus, bukan jelas 'beberapa kotak'; 'latar depan' alat pembersih agak kanan-samping.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Dinding/lantai berubin terlihat.",
+    "Pintu terbuka menuju ruang/toilet belakang.",
+    "Kantong/kardus cokelat di kanan-bawah dekat kamera.",
+    "Sapu tergantung di dinding kanan.",
+    "Area tengah relatif lapang; kanan-bawah terhalang objek dekat."
+  ]
+}

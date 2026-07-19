@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Objek utama kulkas → disebut lemari penyimpanan.",
+    "Open area: kiri relatif lapang → kandidat bilang tengah lapang."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas cocok. Objek utama salah: kulkas disebut lemari. Posisi halangan kanan/tengah-kanan benar. Area lapang keliru: lebih ke kiri, bukan tengah.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lorong sempit berubin.",
+    "Kulkas gelap di kanan/tengah-kanan dekat kamera.",
+    "Galon/botol di kiri belakang.",
+    "Jalur kiri relatif kosong."
+  ]
+}

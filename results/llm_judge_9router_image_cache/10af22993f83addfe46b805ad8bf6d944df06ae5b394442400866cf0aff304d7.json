@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Arah lapang: kandidat bilang kanan; bukti/label → tengah."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: wastafel/meja kiri, pintu terbuka. Halangan dekat bawah-kiri benar. Namun area lebih lapang lebih tepat tengah/ambang pintu, bukan kanan; kanan terisi daun pintu.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Wastafel+meja di kiri.",
+    "Panci/rak/piring dekat bawah-kiri → halangan foreground.",
+    "Pintu kanan terbuka ke ruang lain.",
+    "Area tengah dekat pintu relatif kosong.",
+    "Sisi kanan banyak tertutup daun pintu."
+  ]
+}

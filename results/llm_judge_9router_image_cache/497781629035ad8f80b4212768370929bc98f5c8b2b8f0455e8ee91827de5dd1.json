@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Tidak menyebut wastafel sebagai objek utama.",
+    "Klaim kiri lebih lapang lemah/meragukan.",
+    "Lokasi halangan terlalu difokuskan ke bawah-kanan."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Umum, sebagian cocok: area bawah/kanan memang dekat, ada benda. Namun objek utama wastafel tidak disebut; area kiri tidak jelas lebih lapang karena ada rak piring. Halangan utama lebih berupa wastafel/meja depan, bukan spesifik bawah-kanan.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Wastafel besar di bagian bawah-tengah/kanan.",
+    "Botol, mangkuk biru di kanan meja; dekat kamera.",
+    "Rak piring memenuhi kiri meja.",
+    "Bagian depan meja/wastafel paling dekat secara visual."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Klaim barang tersusun rapi agak berlebihan.",
+    "Klaim area kanan lapang kurang didukung."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama kompor benar. Wadah/botol bawah benar. Bawah-kiri dekat/halangan sesuai galon foreground. Klaim kanan lapang lemah: kanan berisi kardus/keranjang.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kompor 2 tungku di meja tengah.",
+    "Galon besar foreground bawah-kiri paling dekat.",
+    "Area bawah meja penuh wadah, tabung, barang.",
+    "Kanan bawah ada kardus besar, bukan lapang jelas."
+  ]
+}

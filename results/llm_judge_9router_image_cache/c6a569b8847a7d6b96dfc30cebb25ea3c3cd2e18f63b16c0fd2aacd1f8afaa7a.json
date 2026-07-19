@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut kayu/pajangan/bingkai foto; citra menunjukkan lemari plastik/laci bergambar."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Obj utama salah bahan/fungsi: bukan lemari pajangan kayu/bingkai foto, lebih lemari plastik/laci. Kasur kiri bawah benar. Posisi kanan/dekat/halangan benar. Area kiri relatif lapang benar.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Lemari plastik biru di kanan, panel bergambar karakter.",
+    "Kasur bermotif hitam-putih di kiri bawah.",
+    "Ruang dinding/lantai kiri lebih kosong.",
+    "Lemari dekat kamera, menghalangi area depan/kanan."
+  ]
+}

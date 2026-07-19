@@ -1,0 +1,18 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Menyebut objek utama kanan sebagai lemari penyimpanan panjang.",
+    "Mengklaim lemari berisi botol/barang; tidak terlihat demikian."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Lorong sempit+ubin benar. Objek kanan salah: tampak kulkas/lemari es, bukan lemari penyimpanan panjang berisi botol. Botol/barang ada, tetapi bukan di dalam objek kanan.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lorong indoor sempit, lantai ubin putih.",
+    "Objek besar abu-abu di kanan = kulkas, dekat, menghalangi jalur.",
+    "Galon/botol terlihat di kiri-belakang/area dapur, bukan di dalam lemari kanan.",
+    "Area kiri relatif lebih lapang."
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut pagar kayu di kedua sisi.",
+    "Mengabaikan bangku ruang ganti.",
+    "Depth bawah-kanan disebut jauh."
+  ],
+  "groundedness": 2,
+  "overall": 2,
+  "rationale": "Objek utama salah: ruang ganti/bangku, bukan koridor berpagar. Posisi jendela kanan benar. Klaim depth bawah-kanan jauh keliru; area itu foreground/dekat.",
+  "semantic_correctness": 2,
+  "spatial_accuracy": 1,
+  "visual_evidence": [
+    "Bangku panjang di kanan dan belakang.",
+    "Kait dinding, jendela kanan/atas.",
+    "Lantai tengah lapang.",
+    "Bawah-kanan = dekat kamera."
+  ]
+}

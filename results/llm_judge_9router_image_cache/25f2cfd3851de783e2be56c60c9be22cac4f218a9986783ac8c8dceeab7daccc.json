@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Spasial kurang spesifik.",
+    "Tidak menyebut objek utama/posisi kiri sesuai anotasi."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Umum benar: kamar mandi, ubin, bak/ember besar, wadah/rak. Spasial minim; tidak sebut objek utama kiri/dekat, ember kanan, halangan depan. 'Bak mandi' ambigu tapi cocok wadah mandi, bukan bathtub.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Dinding+lantai berubin.",
+    "Bak/ember besar di kiri bawah.",
+    "Ember hitam bertutup di kanan bawah.",
+    "Rak sudut kiri berisi perlengkapan mandi."
+  ]
+}

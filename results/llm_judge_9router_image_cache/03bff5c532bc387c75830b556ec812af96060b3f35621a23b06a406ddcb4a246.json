@@ -1,0 +1,16 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Kedalaman disebut sedang, padahal objek kanan-bawah tampak dekat."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas cocok: kanan-bawah dekat, menghalangi; tengah relatif lapang. Minus: kategori 'sedang' kurang tepat; citra/label → dekat.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kipas berdiri di kanan-bawah/depan.",
+    "Area tengah lantai lebih kosong sebagai jalur.",
+    "Meja/kursi/kipas sisi kanan membatasi ruang depan."
+  ]
+}

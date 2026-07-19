@@ -1,0 +1,17 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Klaim tata letak simetris terlalu kuat."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas cocok. Sofa/kursi, meja, jendela besar benar. Fokus area duduk benar. Simetris agak berlebih. Bawah-kanan dekat/berhalang didukung citra, meski anotasi bilang no obstacle.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Jendela besar di belakang area duduk.",
+    "Meja ruang tamu di tengah-depan.",
+    "Kursi/meja foreground kanan-bawah paling dekat kamera.",
+    "Area kiri lantai relatif lapang."
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Salah posisi kursi.",
+    "Arah lapang/aman: kandidat kanan; label kiri."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Meja kerja+komputer benar. Kursi “di atasnya” salah; kursi di belakang meja. Halangan depan/bawah-kiri masuk akal parsial. Klaim kanan lebih lapang bertentangan label; citra kanan ada laptop/meja, kiri juga clutter.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Meja kerja dominan tengah-depan.",
+    "Laptop kiri depan, laptop kanan atas meja.",
+    "Kursi hitam di belakang meja, bukan di atas meja.",
+    "Area depan terhalang meja/kipas/laptop.",
+    "Kanan tidak jelas lebih lapang."
+  ]
+}

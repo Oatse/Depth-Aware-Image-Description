@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut koridor/lorong.",
+    "Menyebut pagar kayu di kedua sisi."
+  ],
+  "groundedness": 2,
+  "overall": 2,
+  "rationale": "Objek utama salah: ruang ganti/bangku, bukan koridor. 'pagar kayu' keliru; terlihat bangku+gantungan. Jendela kanan benar. Area tengah lapang sesuai sebagian.",
+  "semantic_correctness": 2,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Bangku panjang menempel dinding kanan+belakang.",
+    "Gantungan baju di dinding.",
+    "Jendela di dinding kanan/atas.",
+    "Lantai tengah kosong/lapang."
+  ]
+}

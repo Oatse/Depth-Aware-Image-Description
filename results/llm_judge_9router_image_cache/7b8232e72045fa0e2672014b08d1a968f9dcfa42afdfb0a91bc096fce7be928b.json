@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Mangkuk logam disebut bawah-kanan; visualnya atas-kanan.",
+    "Area kiri disebut relatif terbuka/lapang meski ada rak piring besar."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: wastafel, ubin kotak, mangkuk/panci logam tergantung. Salah posisi: gantungan logam bukan bawah-kanan, tapi atas-kanan. Kiri tidak sepenuhnya lapang: ada rak piring. Halangan bawah/depan cukup masuk akal.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Wastafel logam di area tengah-bawah/kanan.",
+    "Ubin motif kotak-kotak memenuhi dinding belakang.",
+    "Panci/saringan logam tergantung di kanan-atas.",
+    "Rak piring menempati sisi kiri meja.",
+    "Area bawah/depan berisi kabinet/objek tersimpan, sebagian terhalang meja."
+  ]
+}

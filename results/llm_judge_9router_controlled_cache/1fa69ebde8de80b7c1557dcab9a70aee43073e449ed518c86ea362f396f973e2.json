@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Kursi tersirat tersusun di atas meja.",
+    "Open/safer area dibalik: kandidat kanan, label kiri.",
+    "Halangan utama tidak menyebut kursi kanan."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek utama cukup: monitor/laptop/meja/kursi. Salah/ambigu: kursi seolah di atas meja. Spasial konflik label: anotasi kursi kanan, depan terhalang, area kiri relatif lapang/arah aman kiri; kandidat klaim kanan lebih lapang, halangan bawah-kiri. Citra: meja kiri dekat, kursi kanan juga halangan.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Meja hitam + monitor/laptop di kiri.",
+    "Kursi kantor putih di kanan/tengah-depan.",
+    "Area kanan tidak sepenuhnya lapang: kursi, kabel.",
+    "Bawah-kiri dekat kamera: tepi meja."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Sesuai citra: objek besar kanan/depan dekat menghalangi; kiri lebih lapang. Tidak menyebut kulkas, tapi klaim valid.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 5,
+  "visual_evidence": [
+    "Kulkas/objek besar di kanan-depan, sangat dekat kamera.",
+    "Jalur lantai kiri relatif kosong/lapang.",
+    "Area depan-kanan menyempit/terhalang."
+  ]
+}

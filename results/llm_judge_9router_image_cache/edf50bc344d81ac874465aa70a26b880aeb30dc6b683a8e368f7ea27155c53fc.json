@@ -1,0 +1,18 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Menyebut area tengah relatif lapang meski terisi furnitur.",
+    "Status halangan bawah-kanan tidak sepenuhnya selaras anotasi no obstacle."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: area duduk, sofa/kursi, meja, jendela besar. Spasial: bawah-kanan memang foreground/terdekat, tetapi klaim halangan agak berlebih; area tengah tidak lapang karena banyak meja/kursi. Anotasi: meja tengah, jarak sedang, depan relatif lapang, aman kiri.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Jendela besar di belakang.",
+    "Kursi/sofa mengelilingi meja tengah.",
+    "Furnitur foreground kanan paling dekat.",
+    "Area tengah terisi meja/kursi, bukan kosong."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyiratkan halangan depan/bawah-kiri tanpa bukti kuat.",
+    "Tidak menyebut lorong/arah aman tengah secara eksplisit."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek utama lantai kayu+pintu sesuai. Tengah lapang sesuai. Namun klaim potensi halangan depan/bawah-kiri kurang kuat; anotasi: no obstacle, front relatif lapang.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lantai kayu terlihat jelas.",
+    "Beberapa pintu/ambang di kiri, kanan, tengah-belakang.",
+    "Area tengah lantai kosong/lapang.",
+    "Tepi pintu dekat kiri/kanan membingkai pandangan, bukan halangan utama."
+  ]
+}

@@ -4,6 +4,7 @@ import time
 from dataclasses import dataclass
 from typing import Any
 
+import anyio
 import httpx
 
 from app.config import Settings
@@ -27,7 +28,7 @@ DEFAULT_GEMMA_PROMPT = (
 )
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class GemmaResult:
     description: str
     raw_response: str
@@ -66,15 +67,9 @@ class GemmaClient:
         started_at = time.perf_counter()
         prompt_text = prompt or DEFAULT_GEMMA_PROMPT
         if self.settings.gemma_mock:
-            is_prompted = "Depth-to-Spatial Prompting Schema" in prompt_text
             description = (
-                "Terlihat area dalam ruangan dengan beberapa objek dan konteks kedalaman relatif. "
-                "Deskripsi ini berasal dari mock eksplisit untuk mode depth-to-spatial prompting."
-                if is_prompted
-                else (
-                    "Terlihat area dalam ruangan dengan beberapa objek di sekitar ruangan. "
-                    "Objek dan area depan dijelaskan sebagai indikasi visual tanpa metadata depth eksplisit."
-                )
+                "Terlihat area dalam ruangan dengan beberapa objek di sekitar ruangan. "
+                "Objek dan area depan dijelaskan sebagai indikasi visual tanpa metadata depth eksplisit."
             )
             return GemmaResult(
                 description=description,
@@ -105,16 +100,19 @@ class GemmaClient:
                     ],
                 }
             ],
-            "temperature": 0.2,
+            "temperature": 0.1,
             "max_tokens": self.settings.lm_studio_max_tokens,
         }
 
         endpoint = self.settings.lm_studio_openai_base_url + "/chat/completions"
         try:
-            async with httpx.AsyncClient(timeout=self.settings.lm_studio_timeout) as client:
-                response = await client.post(endpoint, json=payload)
-                response.raise_for_status()
-                data = response.json()
+            with anyio.fail_after(self.settings.lm_studio_timeout):
+                async with httpx.AsyncClient(timeout=self.settings.lm_studio_timeout) as client:
+                    response = await client.post(endpoint, json=payload)
+                    response.raise_for_status()
+                    data = response.json()
+        except TimeoutError as exc:
+            raise GemmaClientError("Gemma inference timed out before returning a description.") from exc
         except httpx.HTTPError as exc:
             raise GemmaClientError(
                 "Gemma inference failed. Please ensure LM Studio is running and the model is loaded."
@@ -174,6 +172,9 @@ def _parse_structured_response(text: str) -> dict[str, Any] | None:
     for key in ["scene_type", "main_object", "object_position", "obstacle_candidate", "description"]:
         value = parsed.get(key)
         parsed[key] = str(value).strip() if value else "tidak_diketahui"
+    allowed_positions = {"kiri", "kanan", "tengah", "depan", "bawah", "tidak_diketahui"}
+    if parsed["object_position"] not in allowed_positions:
+        parsed["object_position"] = "tidak_diketahui"
     return parsed
 
 

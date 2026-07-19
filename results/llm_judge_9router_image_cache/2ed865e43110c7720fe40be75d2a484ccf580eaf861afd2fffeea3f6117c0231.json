@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Kedalaman tengah-kanan disebut relatif jauh; label sedang, citra menunjukkan bangku kanan cukup dekat.",
+    "Kiri lebih lapang tidak kuat karena ada bangku kiri."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek bangku/ruang ganti benar. Area depan/tengah relatif lapang benar. Klaim tengah-kanan jauh kurang tepat: bangku kanan tampak sedang/dekat, bukan jauh. Kiri lebih lapang lemah: kiri juga ada bangku.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Bangku panjang kuning di sisi kanan dan kiri ruangan.",
+    "Area lantai tengah/depan terbuka.",
+    "Tidak tampak halangan besar di jalur tengah."
+  ]
+}

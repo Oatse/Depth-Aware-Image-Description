@@ -1,0 +1,15 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas tepat. Wastafel kiri, pintu kanan, halangan dekat kanan-bawah, tengah relatif lapang. Kurang spesifik: kantong belanja tidak disebut; status halangan dibuat 'potensi'.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Wastafel/counter terlihat kiri.",
+    "Pintu kayu terbuka di kanan.",
+    "Kantong belanja cokelat dekat kanan-bawah/depan pintu.",
+    "Area tengah/karpet relatif kosong."
+  ]
+}

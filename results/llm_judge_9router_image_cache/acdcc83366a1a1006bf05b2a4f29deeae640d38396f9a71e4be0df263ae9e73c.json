@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Objek utama kabinet kiri tidak disebut.",
+    "Status halangan dilebihkan vs label no obstacle."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Sebagian besar sesuai: kanan-bawah memang foreground/terdekat; tengah relatif lapang. Kurang sebut kabinet dapur kiri. Klaim halangan hanya potensial; agak konflik label no obstacle, tetapi ada meja/counter kanan-bawah terlihat dekat.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Counter/meja kanan-bawah berada di foreground terdekat.",
+    "Area tengah/lintasan ke pintu tampak terbuka.",
+    "Kabinet dapur dominan di sisi kiri."
+  ]
+}

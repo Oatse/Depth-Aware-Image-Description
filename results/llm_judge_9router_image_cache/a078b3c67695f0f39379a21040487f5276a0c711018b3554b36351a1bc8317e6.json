@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Open area salah arah: kandidat menyebut tengah, label/citra lebih kanan.",
+    "Kedalaman 'tengah-kiri paling dekat' kurang tepat; objek terdekat jelas sisi kiri foreground."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: koridor, lantai putih, dinding terang, pintu kayu. Spasial sebagian benar: sisi kiri dekat/halangan cocok. Namun area lapang lebih kanan, bukan tengah; 'beberapa pintu' ok terlihat 2.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Pintu kayu besar sangat dekat di kiri foreground.",
+    "Pintu kayu lain di ujung koridor.",
+    "Lantai keramik putih, dinding krem/terang.",
+    "Ruang jalan lebih kosong di kanan/tengah-kanan."
+  ]
+}

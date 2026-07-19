@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Posisi halangan digeser ke tengah-kanan.",
+    "Area lapang disebut tengah, bukan kanan.",
+    "Arah aman kanan tidak tersirat."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Obj utama benar. Spasial salah: pintu/halangan dominan kiri-tengah, area kanan lebih lapang/aman; kandidat sebut tengah-kanan halangan, tengah lapang.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Pintu kayu besar dominan kiri-tengah/depan.",
+    "Bukaan/lorong terlihat di kanan, lantai putih berlanjut.",
+    "Dinding krem/putih sesuai.",
+    "Daun pintu dekat kamera → halangan depan."
+  ]
+}

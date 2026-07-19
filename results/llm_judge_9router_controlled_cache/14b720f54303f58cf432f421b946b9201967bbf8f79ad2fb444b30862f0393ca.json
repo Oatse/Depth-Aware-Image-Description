@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Depth bawah-kanan diklaim jauh padahal dekat."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Semantik umum benar: kamar mandi, ubin, bak, wadah. Klaim depth bawah-kanan jauh salah: area bawah-kanan berisi ember/tempat sampah dekat foreground. Posisi/objek utama kurang selaras label: ember dekat/kiri, area depan terhalang.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Dinding+lantai berubin terlihat.",
+    "Bak mandi besar di kiri-bawah.",
+    "Wadah/ember hitam di kanan-bawah, dekat kamera.",
+    "Rak penyimpanan kiri-atas.",
+    "Region bawah-kanan bukan jauh; berada di foreground."
+  ]
+}

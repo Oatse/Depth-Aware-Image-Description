@@ -1,0 +1,17 @@
+{
+  "clarity": 3,
+  "critical_errors": [
+    "Menyatakan bawah-kanan berpotensi halangan; label: has_obstacle=no, front_area_status=relatif_lapang.",
+    "Mengabaikan arah aman/open area kiri."
+  ],
+  "groundedness": 3,
+  "overall": 2,
+  "rationale": "Objek duduk benar; meja utama tengah/kanan-depan terlihat. Klaim bawah-kanan paling dekat benar visual, tapi menyebut potensi halangan berulang bertentangan dg label no obstacle/front relatif lapang. Area tengah tidak jelas lebih lapang; kiri tampak lebih kosong.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Kursi/sofa mengelilingi meja di tengah.",
+    "Furnitur kursi/meja besar tampak di bawah-kanan dekat kamera.",
+    "Area kiri-bawah lantai relatif kosong."
+  ]
+}

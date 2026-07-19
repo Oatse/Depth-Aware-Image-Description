@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut beberapa barang 'di sekitar bangku' cukup umum; koper berada jauh kanan, bukan tepat sekitar bangku.",
+    "Area terdekat bukan tengah-kiri melainkan kiri-bawah/depan."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Umumnya sesuai: lantai putih, bangku kayu, bantal/selimut/tas/koper terlihat. Kiri/depan lebih penuh/terhalang; kanan relatif lapang. Sedikit masalah: 'tengah-kiri paling dekat' kurang tepat; objek terdekat lebih kiri-bawah/depan. Klaim depth estimasi agak abstrak tapi tidak bertentangan besar.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Bangku kayu di kiri-tengah dengan bantal/selimut/tas di atasnya.",
+    "Bantal lantai abu-abu di depan-tengah, kantong plastik/hitam di kiri-bawah.",
+    "Koper hitam di kanan dekat dinding; area lantai kanan relatif kosong.",
+    "Lantai keramik putih, ruangan indoor sempit."
+  ]
+}

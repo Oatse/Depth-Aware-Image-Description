@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Kanan-bawah disebut jauh, padahal dekat.",
+    "Kanan-bawah disebut tidak berhalangan kuat, padahal ada tong/ember besar."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek umum benar. Klaim kedalaman/halangan salah: kanan-bawah dekat, ada ember/tong besar → halangan. 'kategori jauh' kontradiksi visual+label.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Kamar mandi berubin.",
+    "Bak/ember besar kiri-bawah.",
+    "Tong/ember hitam kanan-bawah dekat kamera.",
+    "Rak/wadah di kiri.",
+    "Area tengah lantai relatif kosong namun sisi depan terhalang objek."
+  ]
+}

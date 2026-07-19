@@ -1,0 +1,15 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Akurat. Pintu kiri, dinding/stopkontak kanan, barang lantai kanan-bawah terlihat. Klaim dekat/halangan kanan-bawah sesuai visual+label. Minor: area kanan relatif lapang tidak dibahas.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Pintu kayu besar terbuka di kiri.",
+    "Stopkontak/sakelar di dinding kanan.",
+    "Tumpukan barang dekat lantai kanan-bawah.",
+    "Objek kanan-bawah paling dekat kamera, berpotensi menghalangi."
+  ]
+}

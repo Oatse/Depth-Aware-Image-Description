@@ -1,0 +1,17 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 4,
+  "rationale": "Objek utama tepat. Susunan umum benar. Spasial minim: tidak sebut meja di tengah, depan terhalang, kiri relatif lapang.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Monitor besar di belakang/tengah.",
+    "Tablet di depan monitor.",
+    "Keyboard di depan tablet.",
+    "Mouse kanan.",
+    "Mikrofon kiri.",
+    "Meja indoor terlihat penuh/terhalang objek."
+  ]
+}

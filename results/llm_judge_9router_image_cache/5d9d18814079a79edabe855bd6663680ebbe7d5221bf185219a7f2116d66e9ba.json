@@ -1,0 +1,15 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 4,
+  "rationale": "Umum benar. Indoor berubin, pintu terbuka, kardus, alat pembersih terlihat. Kurang spesifik: objek utama anotasi kantong belanja kanan/dekat, area depan terhalang tidak disebut jelas.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Dinding/lantai ubin jelas.",
+    "Pintu terbuka ke ruang kecil/toilet.",
+    "Kardus/kantong belanja di depan kanan; kardus bawah meja kiri.",
+    "Sapu tergantung kanan."
+  ]
+}

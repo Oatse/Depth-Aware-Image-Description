@@ -1,0 +1,6 @@
+{
+  "image_name": "living_room_1p (169).jpg",
+  "condition": "som_control",
+  "content": "{\"1\":\"coffee table\",\"2\":\"armchair\",\"3\":\"painting\",\"priority_mark_id\":1}",
+  "latency_ms": 2033
+}

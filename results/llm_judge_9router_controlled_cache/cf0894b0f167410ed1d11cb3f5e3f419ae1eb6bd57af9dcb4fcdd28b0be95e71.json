@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Arah 'ke kejauhan di kedua sisi' kurang sesuai; kedalaman utama ke depan.",
+    "Bawah-kiri 'paling dekat' sekaligus 'kategori jauh' ambigu."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama lorong benar. Lantai reflektif, dinding terang benar. Area tengah tampak lapang/no obstacle cocok. Kekeliruan: 'membentang ke kejauhan di kedua sisi' tidak tepat; koridor terutama memanjang ke depan. Klaim bawah-kiri paling dekat masuk akal secara perspektif, tapi menyebut kategori 'jauh' utk area dekat membingungkan/kontradiktif.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Koridor indoor panjang, titik hilang di tengah/depan.",
+    "Lantai mengilap/reflektif.",
+    "Area tengah/depan relatif kosong tanpa halangan jelas.",
+    "Dinding/pintu di sisi kiri-kanan."
+  ]
+}

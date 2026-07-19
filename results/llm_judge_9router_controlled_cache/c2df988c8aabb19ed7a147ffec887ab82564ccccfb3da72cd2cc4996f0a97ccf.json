@@ -1,0 +1,15 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas cocok: koridor, lantai putih, dinding terang, pintu kayu. Posisi kiri dekat/halangan sesuai. Sedikit kurang: 'beberapa pintu membentang sepanjang lorong' agak berlebih; arah kanan lapang/aman tidak disebut.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Pintu kayu besar dekat di sisi kiri foreground.",
+    "Pintu kayu lain di ujung lorong.",
+    "Area kanan berupa dinding/lantai relatif kosong.",
+    "Lantai keramik putih, dinding terang terlihat jelas."
+  ]
+}

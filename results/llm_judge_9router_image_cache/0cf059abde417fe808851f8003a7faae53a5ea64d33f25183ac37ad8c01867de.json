@@ -1,0 +1,16 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 4,
+  "rationale": "Objek/scene tepat. Spasial umumnya benar: wastafel kiri/depan, pintu terbuka kanan-tengah, bawah-kiri sangat dekat/halangan. Minor: area lapang lebih tengah/arah pintu, bukan kanan murni.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Wastafel/counter di kiri depan.",
+    "Dinding ubin kotak-kotak terlihat jelas.",
+    "Pintu terbuka ke ruang/toilet di kanan-tengah.",
+    "Objek dekat bawah-kiri: rak/panci/counter → halangan foreground.",
+    "Lantai/tengah menuju pintu relatif lebih terbuka."
+  ]
+}

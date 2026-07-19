@@ -1,0 +1,14 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Cocok umum: kanan/tengah-kanan dekat berisi meja/perangkat → halangan. Kiri lebih lapang relatif benar. Kurang spesifik: objek utama meja kerja tidak disebut jelas; 'paling dekat' agak kuat karena tepi meja bawah juga dekat.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Meja kerja besar memenuhi tengah-kanan/bawah.",
+    "Monitor, mic arm, keyboard di kanan → area terhalang.",
+    "Kiri atas dominan dinding kosong; kiri bawah ada rak kecil tapi lebih terbuka daripada kanan."
+  ]
+}

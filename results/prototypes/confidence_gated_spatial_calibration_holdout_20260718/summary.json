@@ -1,0 +1,48 @@
+{
+  "run_id": "cgsp-calibration-holdout-20260718-v1",
+  "decision": "PROCEED_TO_FINAL_PROTOCOL_DESIGN",
+  "protocol_sha256": "966a03b3544828edb5a691d53779b259d45a77b960fb70f463876d044b4b9159",
+  "model_sha256": "2a29bdf0f7c41776d83b17411deaf5ea3b4ee15ff3553298677828d4af02bd48",
+  "successful_depth_calls": 200,
+  "expected_depth_calls": 200,
+  "total_inference_seconds": 156.292,
+  "total_wall_seconds": 346.225174,
+  "calibration": {
+    "sample_count": 20,
+    "candidate_count": 27,
+    "selected_config": {
+      "minimum_nearest_region_agreement": 1.0,
+      "minimum_distance_category_agreement": 0.6,
+      "maximum_relative_mad": 0.05
+    },
+    "coverage": 0.6,
+    "selective_risk": 0.41666666666666663
+  },
+  "heldout": {
+    "sample_count": 20,
+    "always_fuse_joint_accuracy": 0.25,
+    "always_fuse_risk": 0.75,
+    "gated_coverage": 0.6,
+    "gated_joint_accuracy_at_coverage": 0.33333333333333326,
+    "gated_risk": 0.6666666666666667,
+    "risk_difference": -0.08333333333333326,
+    "risk_difference_bootstrap_interval": [
+      -0.25,
+      0.06666666666666665
+    ],
+    "always_fuse_errors": 15,
+    "captured_errors": 7,
+    "error_capture_rate": 0.4666666666666667,
+    "always_fuse_correct": 5,
+    "false_rejections": 1,
+    "false_rejection_rate": 0.2
+  },
+  "feasibility_gate_results": {
+    "all_depth_calls_succeeded": true,
+    "heldout_coverage_is_non_degenerate": true,
+    "heldout_gated_risk_not_worse_than_always_fuse": true,
+    "captured_at_least_one_always_fuse_error": true,
+    "false_rejection_rate_within_limit": true,
+    "inference_time_within_budget": true
+  }
+}

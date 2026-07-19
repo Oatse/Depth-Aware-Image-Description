@@ -1,0 +1,18 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Open_area bertentangan dgn label: kandidat kiri lapang, label kanan lapang/arah aman kanan."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Obj utama benar: pintu kiri, dinding kanan, lantai putih, stopkontak/kabel/kotak merah kanan. Kedalaman/halangan bawah-kanan cukup tepat. Klaim kiri lebih lapang lemah: kiri banyak pintu; area terbuka lebih tengah/kanan menurut label.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Pintu kayu besar di sisi kiri.",
+    "Dinding putih kanan dengan stopkontak/kabel.",
+    "Kotak merah + barang di bawah-kanan, dekat kamera.",
+    "Lantai keramik putih terlihat.",
+    "Area kiri terisi daun pintu; bukan jelas paling lapang."
+  ]
+}

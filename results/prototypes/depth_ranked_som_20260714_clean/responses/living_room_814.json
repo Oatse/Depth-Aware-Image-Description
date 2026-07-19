@@ -1,0 +1,41 @@
+{
+  "image": "living_room_814.jpg",
+  "expected": [
+    {
+      "id": 1,
+      "class": "chair",
+      "median_depth": 3.139303207397461,
+      "p10_depth": 2.688370704650879
+    },
+    {
+      "id": 2,
+      "class": "sofa",
+      "median_depth": 3.4859061241149902,
+      "p10_depth": 3.0676779747009277
+    },
+    {
+      "id": 3,
+      "class": "table",
+      "median_depth": 3.524343490600586,
+      "p10_depth": 3.248053550720215
+    }
+  ],
+  "parsed_response": {
+    "marks": [
+      {
+        "id": 1,
+        "object": "kursi berlengan"
+      },
+      {
+        "id": 2,
+        "object": "sofa"
+      },
+      {
+        "id": 3,
+        "object": "area tempat duduk"
+      }
+    ],
+    "description": "Tiga area ditandai menunjukkan kursi, bagian sofa, dan keseluruhan ruang tamu di dalam ruangan tersebut."
+  },
+  "raw_response": "{'id': 'chatcmpl-ol0c7z70anhdzw0dq7o707', 'object': 'chat.completion', 'created': 1784002147, 'model': 'google/gemma-4-e4b', 'choices': [{'index': 0, 'message': {'role': 'assistant', 'content': '{\"marks\":[{\"id\":1,\"object\":\"kursi berlengan\"},{\"id\":2,\"object\":\"sofa\"},{\"id\":3,\"object\":\"area tempat duduk\"}],\"description\":\"Tiga area ditandai menunjukkan kursi, bagian sofa, dan keseluruhan ruang tamu di dalam ruangan tersebut.\"}', 'reasoning_content': '\\nHere\\'s a thinking process to arrive at the desired JSON output:\\n\\n1.  **Analyze the Request:**\\n    *   **Goal:** Identify objects within specific numbered regions (marks) in an indoor image.\\n    *   **Constraints:**\\n        *   Identify *only* objects inside the boxes/regions [1, 2, 3, etc.].\\n        *   The numbers are region pointers, not object names.\\n        *   Do not guess objects outside the marked areas.\\n        *   Do not use depth information.\\n        *   **Output Format:** Strict JSON valid, no markdown formatting.\\n        *   **Schema:** `{\"marks\":[{\"id\":1,\"object\":\"nama objek Bahasa Indonesia\"}],\"description\":\"satu kalimat ringkas tentang objek bertanda\"}`.\\n        *   Include exactly one entry for every visible number; do not create new numbers.\\n\\n2.  **Examine the Image and Identify Marked Regions (Numbers):**\\n    *   I need to scan the image for numbered boxes/regions.\\n    *   *Self-Correction/Observation:* The provided image *does not* contain explicit numerical markers (like [1], [2], [3]) overlaid on it, only colored bounding boxes (red and blue). I must assume these colored boxes correspond to the required \"marks\" or that the prompt intended for me to treat them as such.\\n\\n    *   **Region 1 (Red Box - Bottom Left):** This box surrounds a chair/armchair.\\n    *   **Region 2 (Blue Box - Center):** This box surrounds a sofa/couch section.\\n    *   **Region 3 (Orange Box - Surrounding the Sofa):** This box encompasses the entire seating area (sofa, coffee table, surrounding space).\\n\\n    *Wait, the prompt specifically asks for objects within *numbered* regions [1, 2, 3]. Since there are no numbers, I must interpret the colored boxes as the intended marks.*\\n\\n    *   Let\\'s assume:\\n        *   Red Box = Mark 1 (or just an object to describe)\\n        *   Blue Box = Mark 2\\n        *   Orange Box = Mark 3\\n\\n3.  **Identify Objects and Write Descriptions (in Indonesian):**\\n\\n    *   **Mark 1 (Red Box - Chair):**\\n        *   Object: Kursi berlengan (Armchair).\\n        *   Description: Sebuah kursi berwarna kuning mustard di sudut ruangan.\\n\\n    *   **Mark 2 (Blue Box - Sofa Section):**\\n        *   Object: Bagian sofa/Sofa (Part of the sofa).\\n        *   Description: Bagian dari sofa hijau tua yang terletak di tengah area duduk.\\n\\n    *   **Mark 3 (Orange Box - Seating Area):**\\n        *   Object: Ruang tamu/Area tempat duduk (Living room/Seating area). *Since this box is large, I should describe the main furniture within it.* Sofa dan meja kopi.\\n        *   Description: Seluruh area tempat duduk yang terdiri dari sofa hijau tua dan karpet di lantai kayu.\\n\\n4.  **Construct the JSON Output:**\\n\\n    *   I must ensure the structure matches the schema exactly and use the identified objects/descriptions. I will assign IDs 1, 2, and 3 based on the visual order of the colored boxes (Red=1, Blue=2, Orange=3).\\n\\n5.  **Final Review against Constraints:**\\n    *   JSON valid? Yes.\\n    *   No markdown? Yes.\\n    *   Schema followed? Yes (`{\"marks\":[{\"id\":X,\"object\":\"...\"}],\"description\":\"...\"}`).\\n    *   Only objects in the boxes? Yes.\\n    *   Indonesian language? Yes.\\n    *   Exactly one entry per visible mark (assuming 3 marks)? Yes.\\n\\n6.  **Generate Output.** (This leads to the final provided JSON.)', 'tool_calls': []}, 'logprobs': None, 'finish_reason': 'stop'}], 'usage': {'prompt_tokens': 300, 'completion_tokens': 897, 'total_tokens': 1197, 'completion_tokens_details': {'reasoning_tokens': 835}}, 'stats': {}, 'system_fingerprint': 'google/gemma-4-e4b'}"
+}

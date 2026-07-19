@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Tidak mengidentifikasi objek utama: wastafel.",
+    "Klaim kiri lapang lemah/bertentangan sebagian."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Cukup umum; tidak sebut wastafel. Dekat/halangan sesuai sebagian. Bawah-kanan paling dekat kurang tepat; area depan bawah/wastafel lebih dominan. Kiri lebih lapang meragukan: ada rak piring.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Wastafel/counter di area bawah-tengah/kanan, dekat kamera.",
+    "Bawah-kanan berisi botol, mangkuk; dekat tapi bukan satu-satunya area terdekat.",
+    "Kiri bawah ada rak piring penuh; tidak jelas lebih lapang."
+  ]
+}

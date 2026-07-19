@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Bawah-kiri disebut jauh/tanpa halangan kuat, padahal ada objek dekat."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar. Detail cermin/gantungan benar. Klaim bawah-kiri jauh/kurang halangan lemah: terlihat tas/objek hitam+cermin dekat lantai. Kanan relatif lapang cukup benar.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Pintu kayu besar tengah-kanan.",
+    "Lantai keramik putih.",
+    "Cermin bersandar bawah-kiri.",
+    "Gantungan/benda di dinding kiri.",
+    "Objek hitam di pojok bawah-kiri dekat kamera.",
+    "Area kanan melalui pintu tampak kosong/lapang."
+  ]
+}

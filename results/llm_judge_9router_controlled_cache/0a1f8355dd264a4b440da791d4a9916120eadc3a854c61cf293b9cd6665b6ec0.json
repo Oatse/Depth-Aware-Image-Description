@@ -1,0 +1,15 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas cocok: dapur, kabinet kayu, meja/konter depan-kanan, pintu/ruang belakang. Spasial cukup akurat: bawah-kanan tampak paling dekat; tengah relatif lapang. Sedikit beda label: anotasi jarak sedang, obstacle=no; kandidat menyebut dekat+potensi halangan, namun didukung citra.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kabinet kayu dominan di sisi kiri/dinding.",
+    "Bukaan pintu ke ruang lain di latar tengah-kanan.",
+    "Konter/meja putih-kayu muncul di bawah-kanan, paling dekat ke kamera.",
+    "Lantai tengah menuju pintu relatif kosong/lapang."
+  ]
+}

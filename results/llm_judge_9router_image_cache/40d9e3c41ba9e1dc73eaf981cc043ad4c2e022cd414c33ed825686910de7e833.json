@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Objek utama kipas tidak disebut.",
+    "Istilah 'bawah-kanan' agak kabur; halangan utama tampak kanan-depan/kanan-tengah."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Generik, tapi selaras: lantai ubin, barang banyak, kanan/bawah dekat berpotensi halangan, tengah relatif lapang. Tidak menyebut kipas utama → semantik kurang spesifik.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kipas angin berdiri di kanan-depan/dekat.",
+    "Area tengah berupa jalur ubin relatif kosong.",
+    "Banyak barang/perabot di kiri, kanan, bawah.",
+    "Bagian kanan/bawah berisi kipas, meja, sofa/barang → halangan."
+  ]
+}

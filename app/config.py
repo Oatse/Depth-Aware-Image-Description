@@ -15,19 +15,33 @@ class Settings(BaseSettings):
     lm_studio_model: str = "google/gemma-4-e4b"
     lm_studio_timeout: int = 240
     lm_studio_health_timeout: float = 2.0
-    lm_studio_max_tokens: int = 1200
+    lm_studio_max_tokens: int = 900
     gemma_mock: bool = False
 
     enable_depth_estimation: bool = True
     depth_model_path: Path = Path("./model_weights/Depth-Anything-V2-Metric-Indoor-Small-hf")
     depth_input_size: int = 518
     depth_mock: bool = False
+    analysis_queue_capacity: int = Field(default=8, ge=1, le=64)
+    analysis_retained_jobs: int = Field(default=100, ge=65, le=1000)
 
     max_image_size_mb: int = 5
     image_max_dimension: int = 768
     save_results: bool = True
     save_depth_map: bool = True
     results_dir: Path = Path("./results")
+    sensor_serial_port: str = Field(default="", validation_alias="SENSOR_SERIAL_PORT")
+    sensor_serial_baud: int = Field(default=115200, validation_alias="SENSOR_SERIAL_BAUD")
+    sensor_match_window_ms: int = Field(default=250, ge=1, le=5000, validation_alias="SENSOR_MATCH_WINDOW_MS")
+    sensor_serial_port: str = Field(default="", validation_alias="SENSOR_SERIAL_PORT")
+    sensor_serial_baud: int = Field(default=115200, validation_alias="SENSOR_SERIAL_BAUD")
+    sensor_match_window_ms: int = Field(default=250, ge=1, le=5000, validation_alias="SENSOR_MATCH_WINDOW_MS")
+
+    experiment_artifact_profile: str = "final_44_gemma_e2b_20260708"
+    experiment_images_dir: Path = Path("./dataset/final_images")
+    experiment_annotations_path: Path = Path("./dataset/final_annotations.csv")
+    experiment_predictions_path: Path = Path("./results/final_predictions_active_20260714.csv")
+    experiment_evaluation_path: Path = Path("./results/final_evaluation_metrics_20260714.csv")
 
     model_config = SettingsConfigDict(
         env_file=".env",

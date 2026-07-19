@@ -1,5 +1,7 @@
 # Final Experiment Report - Gemma e2b Isolated
 
+> Arsip eksperimen 8 Juli 2026. Kesimpulan metodologis aktif mengikuti `methodological_upgrade_20260714.md`; Depth-to-Spatial Prompting telah dipensiunkan.
+
 Tanggal eksekusi: 2026-07-08
 
 > Catatan pembaruan: anotasi final telah divalidasi ulang per batch 5 gambar pada `docs/final_annotation_revalidation_20260708.md`. Untuk metrik setelah koreksi anotasi, gunakan `results/final_evaluation_gemma_e2b_revalidated_annotations_20260708.csv`.
@@ -49,14 +51,14 @@ Prioritas pemilihan objek:
 2. bila tidak ada halangan dekat, objek/struktur dominan yang menjelaskan ruang, misalnya pintu, lorong, meja, bangku, atau area terbuka;
 3. bila scene berupa ruang/lantai kosong, label dapat memakai struktur dominan jauh seperti pintu/lorong.
 
-Kategori anotasi final:
+Kategori anotasi final menggunakan label kedekatan visual relatif, bukan pengukuran meter aktual:
 
-- `sangat_dekat`: estimasi visual objek relevan kurang dari 0.5 m;
-- `dekat`: 0.5 sampai kurang dari 1.0 m;
-- `sedang`: 1.0 sampai kurang dari 2.0 m;
-- `jauh`: 2.0 m atau lebih.
+- `sangat_dekat`: objek relevan sangat dominan pada foreground atau bagian bawah-depan citra;
+- `dekat`: objek relevan berada di area depan dan berpotensi menjadi halangan visual;
+- `sedang`: objek relevan terlihat jelas, tetapi tidak mendominasi foreground;
+- `jauh`: objek atau struktur dominan berada di latar atau tidak menjadi potensi halangan dekat.
 
-Penting: nilai di atas adalah definisi anotasi visual, bukan output meter presisi dari depth model.
+Penting: anotasi final tidak menggunakan ground truth meter aktual. Evaluasi hanya membaca `distance_category` sebagai label ordinal relatif.
 
 ## Threshold Depth Final
 
@@ -243,7 +245,7 @@ Artefak utama:
 2. Kelas `sedang` masih mudah tertukar ke `dekat` atau `jauh`, terutama pada ruangan terbuka dan objek samping.
 3. Object accuracy Gemma e2b masih rendah; late fusion tidak memperbaiki semantik objek karena depth tidak mengenali objek.
 4. Beberapa anotasi tetap mengandung ambiguitas konseptual: pintu terbuka sebagai halangan, close-up dapur/kamar mandi, dan area yang bukan jalur berjalan.
-5. Distance ground truth masih estimasi visual, bukan pengukuran meter manual.
+5. Distance ground truth berupa kategori visual relatif, bukan pengukuran meter manual atau sensor jarak.
 6. Threshold depth dikembangkan dari dataset lokal yang berdekatan; klaim generalisasi indoor harus tetap dibatasi.
 7. Evaluasi kualitas deskripsi masih heuristik otomatis; untuk skripsi sebaiknya ditambah penilaian manual minimal dua penilai.
 

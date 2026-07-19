@@ -1,0 +1,15 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama cocok: meja konsol tengah, lampu, vas, kursi kiri/kanan, lantai kayu. Spasial mostly cocok dgn label: tengah relatif lapang, tanpa halangan dekat. Klaim 'meja panjang' ok. 'kursi-kursi di kedua sisi' benar. Risiko: menyebut area bawah-kanan paling dekat/kedalaman sedang; citra menunjukkan kursi kanan dekat bawah-kanan, tapi label fokus area depan relatif lapang, jadi tidak fatal.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Meja konsol berada di tengah depan jendela.",
+    "Lampu meja di atas konsol, vas bunga kanan atas meja.",
+    "Kursi kayu terlihat kiri-bawah dan kanan-bawah.",
+    "Area tengah bawah lantai tampak terbuka/relatif lapang."
+  ]
+}

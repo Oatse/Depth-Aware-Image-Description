@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Distance bawah-kanan disebut sedang; visual+label menunjukkan dekat.",
+    "Status halangan bawah-kanan direduksi; kipas/barang jelas menghalangi depan/kanan."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Objek umum benar: lantai keramik, lemari hijau, peralatan/kabel. Namun objek utama visual/label: kipas kanan-depan dekat, area depan terhalang. Kandidat menyebut bawah-kanan jarak sedang, bukan halangan dekat → salah spasial penting. Kiri tidak sepenuhnya lapang; ada barang.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Kipas angin besar di kanan-bawah/depan, sangat dekat kamera.",
+    "Kabel/barang tersebar di lantai kanan/tengah.",
+    "Lemari hijau besar di kiri-tengah.",
+    "Area tengah relatif lebih kosong dibanding kanan-depan/kiri-bawah."
+  ]
+}

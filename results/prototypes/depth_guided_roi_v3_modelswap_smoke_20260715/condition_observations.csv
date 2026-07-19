@@ -1,0 +1,43 @@
+image_name,condition,structured_output_valid,mark_protocol_valid,expected_targets,returned_targets,matched_targets,hallucinated_mark_ids,latency_ms,error
+living_room_1p (213).jpg,baseline,False,False,3,0,0,0,0,"4 validation errors for BaselineResponse
+objects
+  Field required [type=missing, input_value={'objek_terlihat': ['sofa...ndela bernuansa gelap.'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+description
+  Field required [type=missing, input_value={'objek_terlihat': ['sofa...ndela bernuansa gelap.'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+objek_terlihat
+  Extra inputs are not permitted [type=extra_forbidden, input_value=['sofa merah', 'meja kerj...plafon', 'tanaman hias'], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden
+deskripsi_visual
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Ruang indoor bergaya mod...endela bernuansa gelap.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+living_room_1p (213).jpg,som_control,False,False,3,0,0,0,0,"6 validation errors for MarkedResponse
+marks
+  Field required [type=missing, input_value={'MARK 1': 'coffee table'...rity_mark_id': 'MARK 2'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+priority_mark_id
+  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='MARK 2', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/int_parsing
+description
+  Field required [type=missing, input_value={'MARK 1': 'coffee table'...rity_mark_id': 'MARK 2'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+MARK 1
+  Extra inputs are not permitted [type=extra_forbidden, input_value='coffee table', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden
+MARK 2
+  Extra inputs are not permitted [type=extra_forbidden, input_value='door', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden
+MARK 3
+  Extra inputs are not permitted [type=extra_forbidden, input_value='window', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+living_room_1p (213).jpg,depth_guided,False,False,3,0,0,0,0,"3 validation errors for MarkedResponse
+marks
+  Field required [type=missing, input_value={'priority_mark_id': 1, '... '3': 'drawer cabinet'}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+description
+  Field required [type=missing, input_value={'priority_mark_id': 1, '... '3': 'drawer cabinet'}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+objects
+  Extra inputs are not permitted [type=extra_forbidden, input_value={'1': 'coffee table', '2'..., '3': 'drawer cabinet'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"

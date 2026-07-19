@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Kontradiksi: bawah-kanan paling dekat ↔ kategori jauh.",
+    "Area kiri tidak paling lapang; ada tirai/keset, tengah lebih kosong."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: pintu tengah/kanan, tirai hijau kiri, keset lantai. Area depan relatif lapang. Salah/kurang: bawah-kanan disebut paling dekat tetapi kategori jauh; arah lapang lebih tepat tengah, bukan kiri.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Pintu kayu cokelat dominan di tengah-kanan.",
+    "Tirai hijau di kiri.",
+    "Keset kecil di lantai kiri-depan.",
+    "Lantai putih depan pintu kosong/relatif lapang.",
+    "Area bawah-kanan memang foreground terdekat."
+  ]
+}

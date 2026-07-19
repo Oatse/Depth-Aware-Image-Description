@@ -1,0 +1,14 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 4,
+  "rationale": "Objek dapur/kabinet benar. Tengah relatif lapang benar. Bawah-kanan memang ada meja/peninsula dekat, bisa dianggap halangan visual; anotasi bilang no obstacle tapi citra mendukung potensi. Vague: “area terdekat” kurang spesifik.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kabinet kayu + meja dapur di kiri.",
+    "Ruang tengah/lantai menuju pintu tampak terbuka.",
+    "Meja/peninsula bawah-kanan dekat kamera menutup sebagian area."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Open area/safe direction keliru: kandidat menyebut kiri lebih lapang, label kanan."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas sesuai: pintu kiri, dinding kanan, lantai putih, stopkontak/kabel/kotak merah kanan-bawah. Kedalaman dekat/halangan kanan-bawah tepat. Salah utama: area kiri disebut lebih lapang; citra/label lebih mendukung kanan/area tengah-kanan lapang/aman.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Pintu kayu besar di kiri.",
+    "Dinding putih kanan dengan stopkontak/kabel.",
+    "Kotak merah + barang menumpuk kanan-bawah dekat kamera.",
+    "Lantai keramik putih terlihat.",
+    "Kiri terisi daun pintu; bukan area paling lapang."
+  ]
+}

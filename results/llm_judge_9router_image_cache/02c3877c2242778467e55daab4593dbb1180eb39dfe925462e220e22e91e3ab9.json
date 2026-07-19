@@ -1,0 +1,15 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Objek utama tepat: meja kerja, monitor, mikrofon. Posisi kanan/dekat/terhalang sesuai citra+label. Kiri relatif lebih lapang cukup benar meski ada rak/objek kecil.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Meja hitam dominan sisi kanan-bawah.",
+    "Monitor besar belakang kanan.",
+    "Mikrofon+arm di tengah-kanan/foreground → halangan dekat.",
+    "Area kiri lebih kosong dibanding kanan, walau ada rak kecil."
+  ]
+}

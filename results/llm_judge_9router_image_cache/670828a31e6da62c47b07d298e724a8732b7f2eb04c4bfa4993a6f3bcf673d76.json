@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Posisi halangan utama digeser dari kanan ke bawah-kiri.",
+    "Tidak menyebut kantong belanja sebagai objek utama."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Sebagian benar: tengah relatif lapang. Salah/kurang tepat: halangan utama dekat tampak kantong belanja kanan-bawah, bukan bawah-kiri. Klaim bawah-kiri paling dekat hanya sebagian didukung oleh meja/objek kiri, tetapi mengabaikan kantong kanan.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Kantong belanja cokelat di kanan-bawah dekat kamera.",
+    "Area tengah lantai putih relatif kosong/lapang.",
+    "Sisi kiri-bawah berisi meja/kardus/tas, tetapi bukan halangan utama menurut citra+label."
+  ]
+}

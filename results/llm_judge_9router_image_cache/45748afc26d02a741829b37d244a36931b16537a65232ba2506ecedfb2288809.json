@@ -1,0 +1,15 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 4,
+  "rationale": "Objek/ruang utama cocok. Posisi dekat kanan-bawah cocok dgn kantong belanja. Tengah relatif lapang cocok. Kurang spesifik: halangan utama tidak disebut sebagai kantong belanja.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Wastafel kiri.",
+    "Pintu/bukaan tengah menuju ruang toilet.",
+    "Kantong belanja cokelat kanan-bawah dekat kamera.",
+    "Karpet merah depan; area tengah jalur relatif kosong."
+  ]
+}

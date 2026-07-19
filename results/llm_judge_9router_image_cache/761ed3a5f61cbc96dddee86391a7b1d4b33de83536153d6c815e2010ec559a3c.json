@@ -1,0 +1,17 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Klaim barang di lantai kurang presisi; sebagian di atas wadah/meja rendah."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas sesuai: pintu kayu besar kiri, dinding putih kanan, stopkontak kanan, barang area bawah kanan. Sedikit kurang: pintu tampak terbuka sebagian; barang banyak di atas wadah/meja rendah, bukan jelas di lantai.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Pintu kayu cokelat besar di sisi kiri.",
+    "Dinding putih kanan dengan stopkontak/sakelar.",
+    "Barang kecil, kabel, kotak/wadah di area bawah kanan.",
+    "Bukaan pintu mengarah ke ruang/area berlantai putih."
+  ]
+}

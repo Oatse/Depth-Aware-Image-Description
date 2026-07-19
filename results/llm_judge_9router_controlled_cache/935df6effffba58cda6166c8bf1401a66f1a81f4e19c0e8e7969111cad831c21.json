@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Safer/open area disebut kanan, bukan tengah."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: wastafel kiri, ubin, pintu kanan. Kedalaman bawah-kiri dekat/terhalang sesuai. Klaim kanan lebih lapang agak meleset; area aman/lapang lebih tengah, kanan ada daun pintu.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Wastafel/meja di kiri depan.",
+    "Pintu terbuka di kanan menuju ruang ubin.",
+    "Bawah-kiri berisi rak/panci/tepi meja dekat kamera.",
+    "Area tengah depan pintu relatif kosong.",
+    "Kanan sebagian terhalang daun pintu."
+  ]
+}

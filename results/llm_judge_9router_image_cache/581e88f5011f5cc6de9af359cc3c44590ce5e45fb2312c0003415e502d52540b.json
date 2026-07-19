@@ -1,0 +1,15 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Objek utama kursi kantor benar. Kamar tidur, tempat tidur, lemari biru, karpet bermotif terlihat. Spasial umum benar namun kurang rinci: kursi di tengah/depan, bed kiri-belakang, lemari kanan-belakang, karpet kanan-depan.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kursi kantor hitam dominan tengah foreground.",
+    "Tempat tidur terlihat kiri/belakang kursi.",
+    "Lemari/kabinet biru terlihat kanan-belakang.",
+    "Karpet bermotif terlihat kanan-depan."
+  ]
+}

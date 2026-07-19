@@ -1,0 +1,17 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Material lantai disebut kayu; citra tidak jelas mendukung."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas cocok. Bangku kanan, area depan/lapang, tanpa halangan dekat. Klaim lantai kayu kurang didukung; visual tampak lantai tan/karpet, kayu hanya bangku.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 5,
+  "visual_evidence": [
+    "Bangku panjang kayu di kanan bawah/foreground.",
+    "Koridor sempit berdinding putih.",
+    "Area kiri/tengah lantai relatif kosong.",
+    "Objek terdekat: bangku kanan bawah."
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "protocol": {
+    "image_limit": 1,
+    "marks_per_image": 3,
+    "dataset_audit": {
+      "scanned_images": 403,
+      "eligible_images": 242,
+      "rejected_clipped": 0,
+      "rejected_border_touching": 746,
+      "rejected_small_area": 527,
+      "rejected_small_side": 756
+    }
+  },
+  "depth_ranked_marks": [
+    {
+      "image": "living_room_1059.jpg",
+      "mark_id": 1,
+      "class_id": 1,
+      "median_depth": 3.6589622497558594,
+      "p10_depth": 3.3149170875549316
+    },
+    {
+      "image": "living_room_1059.jpg",
+      "mark_id": 2,
+      "class_id": 3,
+      "median_depth": 3.9043946266174316,
+      "p10_depth": 3.192756414413452
+    },
+    {
+      "image": "living_room_1059.jpg",
+      "mark_id": 3,
+      "class_id": 4,
+      "median_depth": 3.9580492973327637,
+      "p10_depth": 3.9132118225097656
+    }
+  ]
+}

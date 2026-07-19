@@ -1,0 +1,17 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Depth grid bawah-kanan diklaim relatif jauh → tidak sesuai citra."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek/scene tepat. Klaim depth bawah-kanan jauh keliru: area itu berisi tangga/railing dekat-foreground; anotasi jarak sedang, posisi tengah.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Tangga kayu interior dominan tengah-kanan.",
+    "Railing putih/kayu sepanjang tangga terlihat jelas.",
+    "Lantai kayu, pencahayaan hangat/terang.",
+    "Bawah-kanan: anak tangga/tiang railing dekat kamera, bukan jauh."
+  ]
+}

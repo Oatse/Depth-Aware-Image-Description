@@ -1,0 +1,16 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Frasa 'objek-objek ... di atas meja' dapat mencakup kursi → salah spasial."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Obj utama benar: monitor, laptop, kursi, meja hitam. Kursi di kanan, bukan di atas meja. Deskripsi kurang arah/halangan/area kiri.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Monitor+laptop di atas meja hitam kiri.",
+    "Kursi putih/hitam di kanan dekat meja.",
+    "Area depan kursi sebagian terhalang meja/kabel/barang."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut kulkas sebagai lemari penyimpanan panjang.",
+    "Klaim 'berisi beberapa botol' tidak tampak; isi dalam objek tidak terlihat."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Benar: lorong sempit, lantai ubin, objek besar di kanan. Salah: objek tampak kulkas, bukan lemari penyimpanan panjang; tidak terlihat berisi botol/barang di dalam.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Lorong indoor sempit berdinding tinggi.",
+    "Lantai ubin putih.",
+    "Kulkas abu-abu di sisi kanan, dekat, menghalangi jalur.",
+    "Barang merah di atas kulkas; galon/botol besar terlihat kiri-belakang."
+  ]
+}

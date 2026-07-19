@@ -1,0 +1,14 @@
+{
+  "clarity": 3,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Umum/vague. Cocok: ruang indoor, lantai ubin, barang, tengah lebih lapang, kanan/bawah-kanan dekat berpotensi halangan. Kurang: objek utama kipas tidak disebut.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kipas angin berdiri di kanan-depan dekat kamera.",
+    "Area tengah lantai relatif kosong memanjang.",
+    "Banyak barang/peralatan di kiri, kanan, belakang."
+  ]
+}

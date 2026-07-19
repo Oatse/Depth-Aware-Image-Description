@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut bawah-kiri berpotensi halangan visual.",
+    "Kategori kedalaman sedang vs anotasi jauh.",
+    "Fokus area terdekat bawah-kiri kurang relevan utk navigasi lorong."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Citra: lorong tengah, area depan/tengah lapang, tanpa halangan dekat. Kandidat benar soal tengah relatif lapang, tetapi klaim bawah-kiri paling dekat/halangan visual tidak didukung; sisi bawah-kiri hanya lantai/dinding dekat, bukan obstacle relevan. Kedalaman 'sedang' bertentangan label jauh.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Lorong memanjang di tengah.",
+    "Lantai depan kosong; jalur tengah terbuka.",
+    "Tidak tampak objek penghalang di bawah-kiri.",
+    "Objek jauh di ujung lorong."
+  ]
+}

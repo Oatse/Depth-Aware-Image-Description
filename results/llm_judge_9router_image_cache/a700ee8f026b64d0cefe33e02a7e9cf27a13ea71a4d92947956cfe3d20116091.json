@@ -1,0 +1,15 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Umum benar: dapur indoor, kompor tengah, wadah/galon/peralatan bawah. 'Tersusun rapi' agak subjektif; area bawah cukup berantakan. Tidak sebut halangan depan spesifik.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kompor gas di meja tengah.",
+    "Panci/wajan di atas kompor.",
+    "Galon besar kiri bawah/depan.",
+    "Wadah, tabung gas, kardus, barang lain di bawah meja → area terhalang."
+  ]
+}

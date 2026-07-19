@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut kanan lebih lapang; label: open_area kiri, safer_direction kiri.",
+    "Menggeser fokus halangan ke bawah-kiri, bukan meja depan/tengah."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Sebagian benar: foreground/meja dekat → halangan. Salah/kurang: halangan utama bukan spesifik bawah-kiri; meja melintang depan/tengah. Klaim kanan lebih lapang bertentangan label; citra kanan ada laptop/meja, anotasi lapang/aman kiri.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Meja kerja dominan di foreground bawah-tengah → dekat, menghalangi depan.",
+    "Laptop kiri dekat di bawah-kiri; laptop kanan juga di atas meja kanan.",
+    "Area kiri tampak relatif lebih terbuka dibanding kanan menurut label."
+  ]
+}

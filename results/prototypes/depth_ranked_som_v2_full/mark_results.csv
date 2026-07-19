@@ -1,0 +1,28 @@
+image_name,mark_id,expected_class,predicted_object,object_match,median_depth,p10_depth,gemma_latency_ms,audit_status
+living_room_814.jpg,1,chair,Kursi berlengan,True,3.1393,2.6884,158154,parsed
+living_room_814.jpg,2,sofa,Sofa,True,3.4859,3.0677,158154,parsed
+living_room_814.jpg,3,table,Kabinet media,False,3.5243,3.2481,158154,parsed
+living_room_1020.jpg,1,photo frame,Jam dinding kecil,False,2.4042,2.3077,170855,parsed
+living_room_1020.jpg,2,laptop,Ponsel,False,2.6063,2.5429,170855,parsed
+living_room_1020.jpg,3,sofa,Tempat duduk merah,False,3.4184,3.1837,170855,parsed
+living_room_168.jpg,1,sofa,Bangku kayu dengan bantal,False,2.808,2.5296,168661,parsed
+living_room_168.jpg,2,bed,Tempat tidur,True,4.0527,2.9651,168661,parsed
+living_room_168.jpg,3,lamp,Lemari penyimpanan,False,4.5578,4.5188,168661,parsed
+living_room_10.jpg,1,sofa,Sofa tempat tidur dengan selimut,True,2.2971,2.2094,160941,parsed
+living_room_10.jpg,2,potted plant,Pot tanaman hias di atas meja samping,True,3.3944,3.2626,160941,parsed
+living_room_10.jpg,3,potted plant,Tanaman tropis berdaun hijau dalam pot,True,3.4841,3.2654,160941,parsed
+living_room_1000.jpg,1,wardrobe,Lemari kayu gelap tinggi,True,2.573,2.4403,169506,parsed
+living_room_1000.jpg,2,table,Kursi berlengan dan meja samping,True,3.5615,3.1772,169506,parsed
+living_room_1000.jpg,3,table,Lampu meja di atas meja bundar,True,3.6315,3.2074,169506,parsed
+living_room_1008.jpg,1,potted plant,tanaman sukulen dalam pot,True,1.0785,1.0526,147436,parsed
+living_room_1008.jpg,2,table,bantal sofa bermotif,False,1.2192,1.0617,147436,parsed
+living_room_1008.jpg,3,sofa,lukisan abstrak dinding,False,2.5358,1.4642,147436,parsed
+living_room_1012.jpg,1,table,Bagian dari perapian atau meja marmer yang gelap,True,3.2347,2.7092,164334,parsed
+living_room_1012.jpg,2,photo frame,tidak_dikembalikan,False,4.5768,4.064,164334,missing_mark
+living_room_1012.jpg,3,table,tidak_dikembalikan,False,6.2706,5.8987,164334,missing_mark
+living_room_1024.jpg,1,potted plant,Buku dan dekorasi di rak,False,4.4168,4.2762,162226,parsed
+living_room_1024.jpg,2,potted plant,Permadani kulit hewan,False,4.5078,4.389,162226,parsed
+living_room_1024.jpg,3,wardrobe,Unit rak buku kayu,False,5.192,4.2287,162226,parsed
+living_room_103.jpg,1,chair,Kursi berlengan kulit,True,4.0828,3.6122,156301,parsed
+living_room_103.jpg,2,table,Meja samping,True,4.5467,3.6523,156301,parsed
+living_room_103.jpg,3,table,Kursi berlengan kulit,False,4.7031,4.3699,156301,parsed

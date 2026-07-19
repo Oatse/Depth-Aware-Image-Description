@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut bawah-kiri paling dekat/halangan utama → tidak sesuai citra/label.",
+    "Tidak menonjolkan galon kanan sebagai objek/halangan utama."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek umum benar; spasial utama keliru. Halangan dekat tampak galon kanan/depan, bukan bawah-kiri. Area kiri lebih lapang; tengah juga cukup kosong.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Galon air besar di kanan bawah/depan.",
+    "Meja dapur/kompor di kanan.",
+    "Lantai putih; dinding terang.",
+    "Area kiri/tengah relatif kosong.",
+    "Tepi kursi/benda kecil kiri, bukan halangan utama."
+  ]
+}

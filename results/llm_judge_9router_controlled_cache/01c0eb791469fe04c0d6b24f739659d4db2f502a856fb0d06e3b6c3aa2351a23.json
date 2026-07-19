@@ -1,0 +1,17 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Menyebut 'tumpukan koper' padahal terlihat 1 koper."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas tepat. Ada koper + sepatu/rak di kanan bawah/dekat dinding. Area kiri lapang. Klaim grid depth agak generik tapi selaras: objek dekat, jadi halangan. Minor: 'tumpukan koper' kurang tepat; hanya 1 koper.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Koper besar hitam di kanan dekat dinding.",
+    "Banyak sepatu di rak/menumpuk kanan bawah.",
+    "Lantai kiri kosong/lapang.",
+    "Objek dekat kamera, menghalangi sisi kanan/front-right."
+  ]
+}

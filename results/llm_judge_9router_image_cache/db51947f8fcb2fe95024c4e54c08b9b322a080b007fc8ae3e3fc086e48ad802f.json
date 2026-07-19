@@ -1,0 +1,18 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Kedalaman disebut sedang, bukti/label: dekat.",
+    "Area kanan disebut lapang, padahal ada rak/sepatu; tengah lebih lapang."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar. Posisi koper kiri benar. Sepatu/tirai benar. Kedalaman/status ruang kurang: kategori 'sedang' vs dekat; area aman/lapang lebih ke tengah, bukan kanan.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Koper besar di kiri dekat dinding.",
+    "Rak/sepatu di tengah-kanan.",
+    "Tirai hijau di kanan.",
+    "Lantai tengah depan relatif kosong."
+  ]
+}

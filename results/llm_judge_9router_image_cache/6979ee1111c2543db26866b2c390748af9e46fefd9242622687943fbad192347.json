@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Tidak menyebut tangga sebagai objek utama.",
+    "Menyatakan bawah-kanan berpotensi halangan, bertentangan dgn label no obstacle/citra jalur terbuka."
+  ],
+  "groundedness": 3,
+  "overall": 2,
+  "rationale": "Sebagian benar: tengah lapang. Namun objek utama tangga di tengah tidak disebut. Klaim halangan bawah-kanan lemah/keliru; citra+label: no obstacle, arah aman tengah.",
+  "semantic_correctness": 2,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Tangga terlihat di tengah-belakang.",
+    "Area tengah/lantai depan relatif terbuka.",
+    "Bawah-kanan berisi kusen/pintu kaca dekat, bukan halangan utama jalur."
+  ]
+}

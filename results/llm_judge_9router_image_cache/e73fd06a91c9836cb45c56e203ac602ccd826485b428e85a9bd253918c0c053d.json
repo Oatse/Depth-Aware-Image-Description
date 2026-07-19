@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut kanan-bawah tidak ada halangan kuat padahal ada ember hitam dekat.",
+    "Menyebut kategori kedalaman jauh padahal objek kanan-bawah dekat.",
+    "Klaim area tengah lapang berlebihan."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek utama benar: wadah/ember plastik, lantai ubin, dinding keramik. Spasial lemah: kanan-bawah jelas ada ember hitam dekat → halangan, bukan jauh/aman. Area tengah tidak sepenuhnya lapang; banyak objek dekat lantai.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Ember besar abu-abu di kiri-bawah/depan.",
+    "Ember hitam bertutup di kanan-bawah/depan.",
+    "Lantai ubin terlihat, tapi area depan terhalang dua wadah.",
+    "Dinding keramik/panel vertikal terlihat."
+  ]
+}

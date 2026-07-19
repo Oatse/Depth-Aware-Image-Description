@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut area kiri relatif lebih lapang padahal terhalang ember besar.",
+    "Tidak mengidentifikasi ember kiri sebagai halangan utama sesuai citra/anotasi."
+  ],
+  "groundedness": 3,
+  "overall": 2,
+  "rationale": "Sebagian benar: kanan/tengah-kanan ada objek dekat/halangan. Salah/kurang: objek utama ember besar di kiri dekat; kiri tidak lapang. Klaim estimasi umum tanpa objek spesifik.",
+  "semantic_correctness": 2,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Ember/bak besar di kiri bawah dekat kamera.",
+    "Tempat sampah hitam di kanan bawah juga dekat.",
+    "Pintu kanan sangat dekat.",
+    "Area kiri terisi rak + ember, bukan lapang."
+  ]
+}

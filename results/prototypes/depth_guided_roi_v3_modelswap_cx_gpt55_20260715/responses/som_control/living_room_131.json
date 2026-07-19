@@ -1,0 +1,6 @@
+{
+  "image_name": "living_room_131.jpg",
+  "condition": "som_control",
+  "content": "{\"objects\":{\"1\":\"kursi berlengan hijau\",\"2\":\"meja samping\",\"3\":\"kursi berlengan hijau\"},\"priority_mark_id\":1}",
+  "latency_ms": 5036
+}

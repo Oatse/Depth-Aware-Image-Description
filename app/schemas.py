@@ -1,3 +1,4 @@
+from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel
@@ -32,4 +33,28 @@ class AnalyzeResponse(BaseModel):
     latency: dict[str, int] | None = None
     depth_map_url: str | None = None
     mock: dict[str, bool] | None = None
+    error: str | None = None
+    sensor_evidence: dict[str, Any] | None = None
+
+
+class AnalysisJobState(StrEnum):
+    QUEUED = "queued"
+    RUNNING = "running"
+    COMPLETED = "completed"
+    FAILED = "failed"
+
+
+class AnalysisJobAcceptedResponse(BaseModel):
+    job_id: str
+    status: AnalysisJobState
+    poll_url: str
+    queue_scope: str
+
+
+class AnalysisJobStatusResponse(BaseModel):
+    job_id: str
+    status: AnalysisJobState
+    created_at: str
+    updated_at: str
+    result: AnalyzeResponse | None = None
     error: str | None = None

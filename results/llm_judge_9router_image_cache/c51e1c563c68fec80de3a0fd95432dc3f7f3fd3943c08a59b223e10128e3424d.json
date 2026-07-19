@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Klaim kanan lebih lapang lemah/kurang sesuai citra.",
+    "Mengabaikan objek utama: kompor tengah."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Sebagian benar: bawah-kiri dekat/halangan. Namun kanan tidak jelas lebih lapang; banyak objek/kardus. Objek utama kompor tengah tidak disebut.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Galon besar foreground bawah-kiri paling dekat.",
+    "Kompor berada tengah meja.",
+    "Area kanan berisi panci, kardus, keranjang, tabung/objek lain."
+  ]
+}

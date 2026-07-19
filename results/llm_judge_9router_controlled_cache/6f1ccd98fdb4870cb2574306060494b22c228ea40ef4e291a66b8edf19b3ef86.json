@@ -1,0 +1,16 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas sesuai: meja kerja, monitor, mikrofon, kabel. Tengah-kanan memang dekat/terhalang oleh arm/mikrofon/meja. Sedikit lemah: 'beberapa monitor komputer' agak berlebih; tampak 1 monitor utama + layar/tablet kecil.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Meja hitam dominan kanan/tengah.",
+    "Monitor besar di kanan atas.",
+    "Mikrofon/boom arm di tengah-kanan depan.",
+    "Kabel terlihat di meja/kanan.",
+    "Area kiri lebih kosong dibanding kanan."
+  ]
+}

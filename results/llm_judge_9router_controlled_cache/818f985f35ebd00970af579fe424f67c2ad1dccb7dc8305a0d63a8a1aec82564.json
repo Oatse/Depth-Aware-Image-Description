@@ -1,0 +1,18 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Menyebut tumpukan koper padahal tampak satu koper.",
+    "Menyebut sepatu diletakkan di lantai; sebagian besar di rak."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Umumnya tepat. Koper + banyak sepatu/rak di kanan bawah dekat dinding; area kanan bawah dekat/terhalang. Minor: 'tumpukan koper' kurang tepat, hanya 1 koper; sepatu tampak di rak, bukan sekadar lantai.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 5,
+  "visual_evidence": [
+    "Koper hitam besar di kanan dekat dinding.",
+    "Beberapa sepatu tersusun pada rak di kanan bawah.",
+    "Area kiri lantai kosong/lapang.",
+    "Objek kanan bawah dekat kamera → halangan."
+  ]
+}

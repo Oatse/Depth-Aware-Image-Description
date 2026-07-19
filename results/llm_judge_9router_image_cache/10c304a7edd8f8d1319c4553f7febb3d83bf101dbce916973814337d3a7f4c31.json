@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Klaim bawah-kiri tidak menunjukkan halangan kuat bertentangan dg tas+cermin terlihat.",
+    "Fokus arah aman/open area bergeser ke kanan/bawah-kiri, bukan tengah sesuai anotasi."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Sebagian cocok: jarak umum jauh, kanan/akses pintu relatif lapang. Salah/kurang: objek utama pintu tengah-kanan tidak disebut; bawah-kiri justru ada tas/cermin → halangan visual, bukan bebas halangan.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Pintu kayu terbuka di tengah-kanan.",
+    "Area kanan melalui pintu tampak lebih kosong/lapang.",
+    "Bawah-kiri berisi tas hitam, cermin berdiri, benda lantai.",
+    "Lantai depan terlihat, tanpa halangan besar di tengah."
+  ]
+}

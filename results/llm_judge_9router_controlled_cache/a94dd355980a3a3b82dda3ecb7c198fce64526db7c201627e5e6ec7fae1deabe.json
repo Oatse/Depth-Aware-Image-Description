@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut selimut kurang pasti dari citra.",
+    "Tidak menyebut arah kanan lebih aman/lapang."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayor sesuai: lantai putih, bangku kayu, barang berserakan, koper kanan. Objek utama anotasi bantal lantai kiri/dekat kurang spesifik. Klaim grid tengah-kiri dekat/halangan cukup cocok, meski halangan paling jelas kiri-bawah/depan.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Bangku kayu di kiri-tengah.",
+    "Bantal/kain/tas di atas bangku.",
+    "Bantal lantai/karpet kecil dekat bawah-tengah.",
+    "Kantong hitam/plastik kiri-bawah → halangan depan-kiri.",
+    "Koper hitam di kanan; area kanan relatif lapang."
+  ]
+}

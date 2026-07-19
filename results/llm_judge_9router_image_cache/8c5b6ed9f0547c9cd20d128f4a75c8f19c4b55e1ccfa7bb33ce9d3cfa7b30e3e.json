@@ -1,0 +1,16 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas tepat: meja konsol tengah, lantai/perabot kayu, lampu, vas bunga, kursi kiri-kanan. Sedikit kurang: disebut meja panjang; ok namun lebih tepat meja konsol. 'Kursi-kursi di kedua sisi' benar visual, meski hanya 2 tampak.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Meja konsol kayu berada tengah depan jendela.",
+    "Lampu meja hitam di atas meja.",
+    "Vas bunga di sisi kanan atas meja.",
+    "Kursi kayu terlihat kiri-kanan meja.",
+    "Lantai kayu terlihat jelas."
+  ]
+}

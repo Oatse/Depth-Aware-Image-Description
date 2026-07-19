@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Status halangan bawah-kiri dilebihkan",
+    "Kategori kedalaman dekat vs label jauh"
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama lorong/ruang, lantai kayu, dinding krem, pintu kayu sesuai. Posisi pintu kiri/kanan/tengah cukup benar. Klaim bawah-kiri paling dekat masuk akal dari perspektif pintu kiri dekat, tetapi menyebut potensi halangan kurang tepat: label no obstacle, citra area tengah lapang. Depth kategori dekat bertentangan sebagian dengan label jauh.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lantai kayu terlihat jelas",
+    "Dinding krem/cokelat muda",
+    "Pintu kayu kiri foreground, kanan foreground, pintu tengah-belakang",
+    "Area tengah lantai relatif kosong/lapang"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Menyebut beberapa koper padahal citra menunjukkan 1 koper jelas."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas cocok: koper kiri dekat dinding, sepatu di lantai/rak, tirai hijau kanan. Error: 'beberapa koper' tidak tampak; hanya 1 koper jelas. Klaim depth 3x3 cukup plausibel tapi tidak kuat.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Koper besar biru di kiri bawah dekat sudut dinding.",
+    "Banyak sepatu/sandal di lantai/rak area bawah tengah-kanan.",
+    "Tirai hijau menggantung di sisi kanan atas.",
+    "Area depan sebagian terhalang objek."
+  ]
+}

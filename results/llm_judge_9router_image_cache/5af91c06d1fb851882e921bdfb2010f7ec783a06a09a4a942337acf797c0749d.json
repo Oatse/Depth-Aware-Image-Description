@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut koridor indoor.",
+    "Menyebut pagar kayu di sisi-sisi.",
+    "Menilai bawah-kanan relatif jauh padahal bangku kanan foreground/medium."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Salah semantik utama: bukan koridor/pagar kayu; terlihat ruang ganti dgn bangku. Area tengah lapang benar. Klaim bawah-kanan jauh lemah: bangku kanan cukup dekat/menonjol, meski anotasi no obstacle.",
+  "semantic_correctness": 2,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Bangku panjang sepanjang dinding kanan/belakang.",
+    "Area lantai tengah kosong/lapang.",
+    "Objek utama di kanan, jarak sedang.",
+    "Tidak tampak pagar koridor; tampak bangku+gantungan."
+  ]
+}

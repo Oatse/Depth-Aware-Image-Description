@@ -1,0 +1,19 @@
+{
+  "clarity": 3,
+  "critical_errors": [
+    "Menyebut kanan relatif lapang, padahal ada kursi/kabel.",
+    "Tidak menyebut kursi sebagai halangan utama kanan.",
+    "Arah aman/open area bertentangan dg label: kiri."
+  ],
+  "groundedness": 3,
+  "overall": 2,
+  "rationale": "Meja kerja benar. Objek utama kursi kanan terlewat. Klaim bawah-kiri terdekat/halangan kurang tepat; halangan utama kursi kanan/depan. Area kanan tidak jelas lapang karena kursi+kabel.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Meja+monitor+laptop di kiri.",
+    "Kursi putih di kanan/depan.",
+    "Kabel di lantai kanan bawah.",
+    "Area kiri bawah terisi meja besar."
+  ]
+}

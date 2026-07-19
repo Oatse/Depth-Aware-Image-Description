@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut bawah-kiri berpotensi halangan visual"
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Koridor indoor, lantai krem, tengah lapang, arah jauh benar. Klaim bawah-kiri berpotensi halangan tidak didukung; citra/label: no obstacle.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lorong memanjang tengah→jauh",
+    "Lantai krem kosong",
+    "Area tengah bebas/lapang",
+    "Bawah-kiri hanya tepi lantai/dinding, bukan halangan"
+  ]
+}

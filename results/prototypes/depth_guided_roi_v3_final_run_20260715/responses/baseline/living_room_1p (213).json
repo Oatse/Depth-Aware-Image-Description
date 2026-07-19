@@ -1,0 +1,6 @@
+{
+  "image_name": "living_room_1p (213).jpg",
+  "condition": "baseline",
+  "content": "{\"objects\": [\"sofa\", \"meja kopi\", \"televisi\", \"rak buku\", \"kursi\", \"jendela\"], \"description\": \"Interior ruangan modern dengan sofa merah di tengah dan meja kopi di depannya. Terdapat dinding aksen kayu yang menampung televisi dan rak buku, serta jendela besar di sisi kiri.\"}",
+  "latency_ms": 26287
+}

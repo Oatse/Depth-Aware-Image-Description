@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Open area disebut tengah, label/citra lebih mendukung kanan.",
+    "Posisi terdekat disebut tengah-kiri; paling dekat jelas kiri foreground."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: koridor, lantai putih, dinding terang, pintu kayu. Spasial sebagian benar: sisi kiri dekat/terhalang, namun area lapang lebih tepat kanan, bukan tengah.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Pintu kayu besar sangat dekat di kiri foreground.",
+    "Pintu kayu lain di ujung koridor.",
+    "Lantai keramik putih, dinding terang.",
+    "Ruang berjalan relatif lebih kosong di kanan/tengah-kanan."
+  ]
+}

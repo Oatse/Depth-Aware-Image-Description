@@ -1,0 +1,18 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Menyebut area bawah-kanan berpotensi halangan visual; label: has_obstacle=no, front_area_status=relatif_lapang.",
+    "Menyebut lemari putih di atasnya tidak kuat dari citra."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Obj utama benar. Posisi/ruang kiri benar. Klaim lemari atas lemah; tampak papan/rak, bukan lemari. Klaim bawah-kanan halangan bertentangan dg anotasi/front relatif lapang; citra lantai depan terbuka.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Deretan mesin cuci/pengering sepanjang dinding kanan-belakang.",
+    "Area lantai depan/kiri terlihat cukup kosong.",
+    "Objek terdekat tampak mesin sisi kanan depan.",
+    "Di atas mesin tampak papan/rak, bukan lemari putih jelas."
+  ]
+}

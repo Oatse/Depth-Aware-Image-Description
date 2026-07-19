@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Tidak menyebut pintu sebagai halangan utama.",
+    "Arah area lapang kurang tepat: kanan > tengah."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Sebagian cocok: objek/halangan dekat di kiri. Namun posisi 'tengah-kiri' kurang tepat; halangan utama pintu kiri depan. Area lebih lapang cenderung kanan, bukan tengah.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Pintu kayu terbuka di kiri depan sangat dekat kamera.",
+    "Lorong/lantai kosong memanjang ke kanan-tengah.",
+    "Pintu lain di ujung lorong lebih jauh."
+  ]
+}

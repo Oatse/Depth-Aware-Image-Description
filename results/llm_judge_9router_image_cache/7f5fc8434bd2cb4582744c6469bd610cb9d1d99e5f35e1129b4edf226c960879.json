@@ -1,0 +1,14 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Umum benar: tengah lapang; kanan-bawah memang foreground/dekat. Namun objek utama kabinet kiri diabaikan; 'halangan' agak berlebih vs jalur tengah tetap terbuka.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kabinet kayu dominan di kiri.",
+    "Area lantai tengah menuju pintu relatif kosong.",
+    "Meja/konter kanan-bawah paling foreground/dekat."
+  ]
+}

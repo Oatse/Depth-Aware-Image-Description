@@ -1,0 +1,14 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 4,
+  "rationale": "Mayor cocok: kursi tengah-depan sangat dekat, menghalangi; kanan relatif lapang. Minor: sebut kategori 'dekat' bukan 'sangat_dekat'; 'berpotensi' lebih lemah dari terhalang nyata.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kursi besar dominan di tengah/bawah, sangat dekat kamera.",
+    "Area depan tertutup kursi.",
+    "Sisi kanan lantai/karpet lebih terbuka dibanding tengah."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Sesuai: galon/objek besar kiri-bawah sangat dekat → halangan; kanan relatif lebih lapang. Deskripsi generik, tanpa sebut galon.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 5,
+  "visual_evidence": [
+    "Objek galon besar di kiri-bawah, dekat kamera.",
+    "Area depan kiri terhalang.",
+    "Lantai kanan-depan relatif kosong/lapang dibanding kiri."
+  ]
+}

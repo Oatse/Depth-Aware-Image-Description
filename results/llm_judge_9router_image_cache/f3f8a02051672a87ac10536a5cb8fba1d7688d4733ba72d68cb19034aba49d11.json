@@ -1,0 +1,14 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 4,
+  "rationale": "Arah/status utama benar: kursi tengah sangat dekat → depan terhalang; kanan relatif lebih lapang. Minus: tidak sebut kursi; kategori hanya 'dekat' bukan 'sangat_dekat'.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kursi kantor besar dominan di tengah-depan.",
+    "Dudukan kursi di bawah-tengah paling dekat kamera.",
+    "Area kanan memperlihatkan lantai/karpet lebih terbuka dibanding tengah."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyiratkan halangan depan padahal area depan/tengah relatif lapang.",
+    "Bawah-kiri disebut potensi halangan; bukti hanya elemen tepi, bukan obstacle utama."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek utama benar: interior/lorong, lantai kayu, banyak pintu, tengah lapang. Lemah: klaim potensi halangan depan/bawah-kiri kurang sesuai label no_obstacle; hanya kusen/pintu dekat tepi kiri tampak, bukan halangan jalur utama.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lantai kayu terlihat jelas.",
+    "Beberapa pintu/kusen di kiri, tengah, kanan.",
+    "Area tengah lantai terbuka/lapang.",
+    "Tepi kiri dekat kamera berisi pintu/kusen, namun jalur tengah tidak terhalang."
+  ]
+}

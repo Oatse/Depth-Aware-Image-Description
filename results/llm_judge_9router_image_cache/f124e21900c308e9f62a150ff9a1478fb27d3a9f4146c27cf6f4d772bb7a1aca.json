@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Halangan utama kursi kanan/depan kurang disebut.",
+    "Arah lapang kanan berpotensi menyesatkan vs kursi/kabel kanan."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama cukup tepat. Spasial campur: meja kiri-bawah dekat benar; kursi kanan benar. Namun halangan utama kanan/depan kurang ditegaskan; klaim kanan lapang hanya sebagian benar.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Meja gelap besar menempati kiri-bawah/foreground.",
+    "Laptop, monitor, keyboard terlihat di meja.",
+    "Kursi kantor putih-hitam berada kanan/tengah-depan.",
+    "Area kanan lantai agak kosong tetapi terpotong kursi/kabel."
+  ]
+}

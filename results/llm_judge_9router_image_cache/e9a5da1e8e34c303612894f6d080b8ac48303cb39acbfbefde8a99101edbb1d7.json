@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut area tengah relatif lapang berlebihan.",
+    "Potensi halangan bawah-kanan bertentangan sebagian dg label has_obstacle=no."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Sebagian benar: bawah-kanan memang paling dekat/terisi kursi. Namun tengah tidak paling lapang; furnitur meja/kursi dominan. Label: tanpa halangan, area kiri lebih lapang.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Kursi/meja tampak di foreground bawah-kanan → dekat.",
+    "Area tengah berisi meja/kursi → tidak lapang.",
+    "Karpet kiri/depan relatif kosong → lebih lapang."
+  ]
+}

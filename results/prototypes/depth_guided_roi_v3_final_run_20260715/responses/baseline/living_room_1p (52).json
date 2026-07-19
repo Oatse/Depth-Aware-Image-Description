@@ -1,0 +1,6 @@
+{
+  "image_name": "living_room_1p (52).jpg",
+  "condition": "baseline",
+  "content": "{\"objects\": [\"perapian\", \"rak buku\", \"sofa\", \"meja kopi\", \"kipas angin\", \"jendela\", \"pintu kaca\"], \"description\": \"Interior ruang tamu bergaya pedesaan dengan dinding batu besar dan perapian. Terdapat rak buku di samping, serta sofa-sofa yang ditata mengelilingi meja kopi kayu. Ruangan ini memiliki langit-langit tinggi dengan balok kayu ekspos dan pencahayaan alami dari jendela serta pintu kaca.\"}",
+  "latency_ms": 30083
+}

@@ -15,6 +15,8 @@ PREDICTION_FIELDS = [
     "nearest_region",
     "distance_category",
     "estimated_distance",
+    "safe_direction",
+    "fusion_policy",
     "final_description",
     "gemma_latency_ms",
     "depth_latency_ms",

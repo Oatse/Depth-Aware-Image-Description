@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Klaim bawah-kanan jauh/tidak berhalangan kuat bertentangan dgn citra.",
+    "Pengulangan area tengah lapang."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek utama benar: tangga kayu indoor berpagar, terang. Tengah agak lapang sesuai label. Namun bawah-kanan berisi tangga/railing dekat, bukan jauh/tanpa halangan kuat.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Tangga dominan tengah-kanan.",
+    "Pagar/railing jelas.",
+    "Lampu dinding → interior terang.",
+    "Bawah-kanan: anak tangga+railing dekat.",
+    "Area lantai tengah-bawah relatif kosong."
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "pilot_id": "cgsp-nyuv2-20260718-v1",
+  "status": "frozen_before_inference",
+  "purpose": "Feasibility only; not a final thesis experiment and not threshold selection.",
+  "dataset": {
+    "repository": "sayakpaul/nyu_depth_v2",
+    "revision": "67602a2e747bf4f55f90ff2e724173fc10302843",
+    "source_file": "default/partial/validation/0000.parquet",
+    "sample_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "sample_size": 6
+  },
+  "model": {
+    "checkpoint": "Depth-Anything-V2-Metric-Indoor-Small-hf",
+    "runtime": "ONNX Runtime CPUExecutionProvider",
+    "training": false
+  },
+  "spatial_claim": {
+    "grid": "3x3",
+    "region_score": "p10 depth",
+    "claim_fields": [
+      "nearest_region",
+      "distance_category"
+    ],
+    "object_depth_grounding": false
+  },
+  "transforms": [
+    "original",
+    "brightness_0.60",
+    "brightness_1.40",
+    "gaussian_blur_radius_2.0",
+    "jpeg_quality_40"
+  ],
+  "gate": {
+    "minimum_nearest_region_agreement": 0.8,
+    "minimum_distance_category_agreement": 0.8,
+    "maximum_relative_mad": 0.12
+  },
+  "policies": [
+    "no_depth",
+    "always_fuse",
+    "confidence_gated"
+  ],
+  "primary_metrics": [
+    "nearest_region_accuracy",
+    "distance_category_accuracy",
+    "joint_claim_accuracy",
+    "coverage",
+    "selective_risk"
+  ],
+  "feasibility_gates": {
+    "depth_inference_success_rate": 1.0,
+    "minimum_gated_coverage": 0.2,
+    "maximum_gated_coverage": 0.9,
+    "require_gated_risk_not_worse_than_always_fuse": true,
+    "maximum_total_inference_seconds": 180
+  },
+  "interpretation_limits": [
+    "Six samples cannot establish generalization or statistical superiority.",
+    "The pilot evaluates regional depth claims, not object-specific distance.",
+    "Thresholds must not be changed after this run and reused under the same pilot id.",
+    "A final experiment requires a separate calibration split, held-out test split, and new preregistration."
+  ]
+}

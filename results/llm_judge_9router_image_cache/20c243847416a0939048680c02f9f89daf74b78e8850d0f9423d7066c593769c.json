@@ -1,0 +1,14 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Objek/posisi benar. Jarak dekat, depan terhalang kursi. Kanan relatif lebih lapang sesuai label. Bahasa agak ragu/berulang: 'potensi'.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kursi kantor dominan di tengah citra.",
+    "Dudukan/roda kursi sangat dekat di bawah-tengah → halangan depan.",
+    "Area kanan bawah tampak lebih kosong dibanding tengah; ada karpet/lantai."
+  ]
+}

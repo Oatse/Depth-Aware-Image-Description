@@ -1,0 +1,14 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Akurat: dapur, kabinet kayu kiri/dinding, meja/counter depan, pintu/akses ruang lain belakang. Spasial cukup tepat; 'sepanjang dinding' agak umum.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kabinet kayu di sisi kiri sepanjang area wastafel/kompor.",
+    "Counter/meja terlihat depan kanan.",
+    "Bukaan pintu ke ruang lain di latar belakang."
+  ]
+}

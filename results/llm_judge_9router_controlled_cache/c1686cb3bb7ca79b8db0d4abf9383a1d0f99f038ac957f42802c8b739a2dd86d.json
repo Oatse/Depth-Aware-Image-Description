@@ -1,0 +1,20 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut pagar kayu, bukan bangku ruang ganti.",
+    "Menyebut koridor/lorong; citra ruang ganti/ruang bangku.",
+    "Kedalaman bawah-kanan: dekat visual, bukan jauh.",
+    "Status halangan kanan-bawah diremehkan; ada bangku dekat."
+  ],
+  "groundedness": 2,
+  "overall": 2,
+  "rationale": "Salah tipe ruang/objek: bukan koridor+pagar, lebih ruang ganti dgn bangku. Jendela kanan benar. Klaim bawah-kanan terdekat tapi kategori jauh kontradiktif; area kanan-bawah berisi bangku dekat → potensi halangan, bukan jauh. Tengah relatif lapang sesuai.",
+  "semantic_correctness": 2,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Bangku panjang menempel dinding kanan+belakang.",
+    "Jendela di dinding kanan/atas.",
+    "Area lantai tengah kosong relatif lapang.",
+    "Kanan-bawah dekat kamera berisi ujung bangku/struktur hijau."
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Kiri disebut relatif lapang meski ada rak piring besar.",
+    "'Bawah-kanan paling dekat' tidak tegas; tepi bawah meja juga dekat."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama sesuai: wastafel, ubin, wadah logam/rak. Spasial cukup: kanan/depan dekat/terhalang selaras label, namun klaim bawah-kanan paling dekat agak tidak pasti; area kiri 'lapang' parsial karena ada rak piring.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Wastafel di tengah-bawah/kanan.",
+    "Ubin kotak-kotak di dinding.",
+    "Panci/saringan tergantung kanan-atas.",
+    "Rak piring di kiri.",
+    "Benda di kanan-depan: botol, mangkuk; bawah meja clutter."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 4,
+  "rationale": "Umum benar: kanan/bawah-kanan dekat+terhalang; ruang kosong lebih ke kiri/tengah. Kurang spesifik objek rak sepatu/koper; arah aman kiri tak disebut.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Rak sepatu+sepatu di sisi kanan, dekat kamera bawah-kanan.",
+    "Koper besar di kanan-belakang.",
+    "Lantai kiri/tengah relatif kosong."
+  ]
+}

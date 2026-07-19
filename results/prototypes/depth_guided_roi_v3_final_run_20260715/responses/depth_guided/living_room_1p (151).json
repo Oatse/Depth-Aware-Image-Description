@@ -1,0 +1,6 @@
+{
+  "image_name": "living_room_1p (151).jpg",
+  "condition": "depth_guided",
+  "content": "{\"marks\": [{\"id\": 1, \"object\": \"tanaman\"}, {\"id\": 2, \"object\": \"sofa\"}, {\"id\": 3, \"object\": \"meja kopi\"}]\n, \"priority_mark_id\": 1\n, \"description\": \"Objek di dalam kotak MARK 1 adalah tanaman. Objek di dalam kotak MARK 2 adalah sofa. Objek di dalam kotak MARK 3 adalah meja kopi.\"}",
+  "latency_ms": 35056
+}

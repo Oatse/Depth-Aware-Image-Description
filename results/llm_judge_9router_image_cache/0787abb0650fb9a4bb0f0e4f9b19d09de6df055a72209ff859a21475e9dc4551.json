@@ -1,0 +1,16 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Posisi 'tengah-kanan paling dekat' tidak sesuai geometri citra."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Koridor indoor benar; lantai oranye/kuning, dinding terang, memanjang. Status lapang/no obstacle cocok. Klaim tengah-kanan paling dekat kurang tepat; foreground bawah lebih dekat, area tengah/ujung jauh.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lorong panjang terlihat dari foreground ke ujung jauh.",
+    "Lantai mengilap kuning-oranye; dinding kanan putih, kiri gelap/biru.",
+    "Area tengah relatif kosong; pot tanaman jauh di ujung, bukan halangan dekat."
+  ]
+}

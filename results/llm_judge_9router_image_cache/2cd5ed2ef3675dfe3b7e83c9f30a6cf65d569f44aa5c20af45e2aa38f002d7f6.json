@@ -1,0 +1,15 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Akurat umum: wastafel/counter kiri, pintu/bingkai kanan, barang lantai kanan. Kurang spesifik: kantong belanja utama, area tengah lapang/terhalang sebagian tidak dijelaskan.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Wastafel+counter terlihat di kiri.",
+    "Pintu/bingkai kayu di kanan/belakang.",
+    "Kantong belanja cokelat di lantai kanan depan.",
+    "Ada barang lain dekat counter kiri; lantai tengah relatif kosong dengan keset merah."
+  ]
+}

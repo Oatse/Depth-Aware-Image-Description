@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Mislabel ruang: koridor/lorong vs ruang ganti.",
+    "Objek utama bangku tidak disebut jelas.",
+    "Depth grid bawah-kanan jauh → salah."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Sebagian benar: interior, lantai terang, elemen kayu, jendela kanan. Salah utama: disebut koridor/lorong+pagar; sebenarnya ruang ganti dg bangku. Klaim depth bawah-kanan jauh bertentangan: bawah-kanan dekat/foreground.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Bangku panjang menempel dinding kanan+kiri/belakang.",
+    "Jendela di dinding kanan/atas.",
+    "Lantai tengah lapang.",
+    "Region bawah-kanan berada dekat kamera, bukan jauh."
+  ]
+}

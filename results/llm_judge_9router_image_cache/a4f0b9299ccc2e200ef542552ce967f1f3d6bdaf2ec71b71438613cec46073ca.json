@@ -1,0 +1,14 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Cocok: kanan/tengah-kanan dekat terhalang; kiri lapang. Tidak sebut kulkas, tapi klaim area benar.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 5,
+  "visual_evidence": [
+    "Kulkas besar di kanan depan sangat dekat kamera.",
+    "Jalur lantai kiri tampak kosong memanjang.",
+    "Objek kanan menyempitkan/halangi area depan."
+  ]
+}

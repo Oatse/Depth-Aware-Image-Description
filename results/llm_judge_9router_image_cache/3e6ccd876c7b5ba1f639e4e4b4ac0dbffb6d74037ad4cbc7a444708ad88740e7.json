@@ -1,0 +1,20 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Tidak menyebut posisi pintu utama di kiri.",
+    "Tidak menyebut halangan dekat/front_area terhalang.",
+    "'Beberapa pintu membentang' kurang presisi; hanya tampak 2 pintu."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: koridor/ruang sempit, lantai keramik putih, dinding terang, pintu kayu. Spasial umum benar, tapi kurang: pintu dekat kiri, area depan agak terhalang pintu/kusen, kanan lebih lapang. 'Beberapa pintu membentang' agak berlebih; terlihat 2 pintu.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lantai keramik putih terlihat jelas.",
+    "Dinding krem/terang di kanan-kiri.",
+    "Pintu kayu besar dekat di kiri foreground.",
+    "Pintu kayu lain di ujung lorong.",
+    "Area kanan lorong kosong/lapang relatif."
+  ]
+}

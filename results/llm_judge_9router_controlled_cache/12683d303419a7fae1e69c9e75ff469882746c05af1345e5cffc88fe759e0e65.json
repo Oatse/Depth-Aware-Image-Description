@@ -1,0 +1,20 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Bawah-kiri disebut tidak ada halangan kuat, padahal ada objek dekat.",
+    "'Paling dekat' + 'kategori jauh' kontradiktif/rancu.",
+    "Safer/open area anotasi: tengah; kandidat menekankan kanan."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: pintu, cermin, gantungan. Posisi pintu lebih kanan-tengah, bukan hanya kanan. Klaim bawah-kiri paling dekat benar sebagian, tetapi ada tas/cermin dekat → potensi halangan; alasan 'kategori jauh' rancu. Area kanan memang lebih lapang lewat pintu.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Pintu kayu besar di kanan-tengah, terbuka.",
+    "Cermin kayu di kiri-bawah.",
+    "Gantungan/benda tergantung di dinding kiri.",
+    "Tas hitam/objek dekat di bawah-kiri.",
+    "Ruang lewat pintu kanan tampak lebih kosong."
+  ]
+}

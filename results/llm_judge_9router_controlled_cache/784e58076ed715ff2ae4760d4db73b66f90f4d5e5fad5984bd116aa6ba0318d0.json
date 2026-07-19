@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Ember kiri disebut tempat sampah.",
+    "Kiri disebut relatif lapang meski ada ember besar."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek umum benar: ruang berubin, rak kiri, 2 wadah lantai. Salah label: ember/bak kiri disebut tempat sampah. Klaim area kiri lapang lemah: kiri ditempati ember besar. Kedekatan/halangan tengah-kanan sebagian sesuai: wadah kanan dekat, pintu kanan foreground.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Dinding/lantai berubin terlihat.",
+    "Rak kecil di dinding kiri berisi perlengkapan.",
+    "Ember/bak besar abu-abu di kiri bawah.",
+    "Wadah hitam bertutup di kanan bawah dekat pintu.",
+    "Area depan terhalang 2 wadah."
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "image_name": "living_room_131.jpg",
+  "condition": "depth_guided",
+  "content": "{\n  \"marks\": [\n    {\"id\": 1, \"object\": \"black wire basket\"},\n    {\"id\": 2, \"object\": \"green armchair\"},\n    {\"id\": 3, \"object\": \"small table\"}\n  ],\n  \"priority_mark_id\": 1\n  ,\n  \"description\": \"Identifikasi objek di dalam kotak MARK 1, 2, dan 3. Urutan penomoran didasarkan pada estimasi kedalaman monokular relatif (MARK 1 paling dekat). Setiap ID harus berisi tepat satu objek.\"\n}",
+  "latency_ms": 30991
+}

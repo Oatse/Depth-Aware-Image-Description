@@ -1,0 +1,7 @@
+sample_index,ground_truth_nearest_region,ground_truth_distance_category,always_nearest_region,always_distance_category,always_region_correct,always_category_correct,always_joint_correct,gated_accepted,gated_nearest_region,gated_distance_category,gated_joint_correct,nearest_region_agreement,distance_category_agreement,relative_mad,rejection_reasons
+0,lower_right,sedang,lower_right,sedang,True,True,True,True,lower_right,sedang,True,1.0,0.8,0.018662,
+1,lower_right,dekat,lower_right,dekat,True,True,True,True,lower_right,dekat,True,1.0,1.0,0.005215,
+2,lower_left,dekat,lower_left,dekat,True,True,True,True,lower_left,dekat,True,1.0,1.0,0.024952,
+3,lower_center,sedang,lower_left,sedang,False,True,False,False,lower_left,sedang,,1.0,0.6,0.017441,distance_category_disagreement
+4,lower_right,dekat,lower_right,dekat,True,True,True,False,lower_right,sedang,,1.0,0.6,0.007467,distance_category_disagreement
+5,lower_right,sangat_dekat,lower_right,dekat,True,False,False,True,lower_right,dekat,False,1.0,1.0,0.045089,

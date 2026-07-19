@@ -1,0 +1,15 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas benar. Wastafel, ubin kotak, wadah logam terlihat. 'Rak penyimpanan' agak umum; rak piring kiri terlihat. Spasial minim; tidak sebut wastafel kanan/dekat/area depan terhalang.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Wastafel logam di bawah tengah-kanan.",
+    "Dinding ubin motif kotak/diagonal.",
+    "Panci/saringan logam tergantung di atas wastafel.",
+    "Rak piring putih di kiri wastafel."
+  ]
+}

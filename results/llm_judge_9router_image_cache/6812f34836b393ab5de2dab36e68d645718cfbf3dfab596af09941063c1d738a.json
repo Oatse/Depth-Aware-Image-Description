@@ -1,0 +1,14 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Umum, tanpa objek spesifik. Arah kanan lapang benar. Halangan dekat kiri/tengah-kiri cukup sesuai, meski objek terdekat lebih bawah-depan.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Bantal lantai/alas kecil di lantai depan agak kiri.",
+    "Barang menumpuk di kiri: bantal, tas, plastik.",
+    "Area kanan lantai relatif kosong/lapang."
+  ]
+}

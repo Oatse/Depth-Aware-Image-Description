@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Material lantai 'kayu' meragukan.",
+    "Tidak eksplisit arah aman kiri."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas cocok: ruang/koridor putih, bangku kanan, area relatif lapang. Lantai tampak ubin/beige, bukan jelas kayu. Spasial cukup: kanan dekat, bukan halangan frontal; kurang sebut kiri lebih aman/lapang.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Bangku kayu panjang di kanan-bawah/foreground.",
+    "Area kiri/tengah lantai relatif kosong.",
+    "Dinding putih, ruang memanjang, lampu plafon.",
+    "Lantai tampak beige/ubin; kayu tidak pasti."
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Lantai disebut kayu cokelat muda; citra lebih tampak lantai keras/beige, kayu hanya bangku."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: bangku kanan. Interior koridor/ruang sempit benar. Lantai tampak beige/kayu; 'lantai kayu cokelat muda' kurang tepat utk seluruh lantai, krn hanya bangku kayu jelas. Klaim depth 3x3 bawah-kanan sedang cocok label sedang, tak mudah diverifikasi visual penuh.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Bangku panjang kayu di kanan-bawah.",
+    "Dinding putih/krem, koridor memanjang.",
+    "Area kiri depan relatif lapang.",
+    "Objek bangku di sisi kanan, bukan penghalang utama jalur kiri."
+  ]
+}

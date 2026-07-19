@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut beberapa tempat sampah plastik; citra menunjukkan ember kiri + satu bin kanan.",
+    "Area kiri disebut lapang, padahal ditempati ember besar."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek utama salah: ember kiri disebut beberapa tempat sampah. Spasial sebagian benar: kanan/depan dekat terhalang; kiri tidak jelas lebih lapang karena ada ember besar.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Ember besar di lantai kiri-depan.",
+    "Tempat sampah/bin hitam di kanan-depan dekat pintu.",
+    "Dinding/lantai keramik terlihat.",
+    "Area kanan-depan lebih dekat/terhalang."
+  ]
+}

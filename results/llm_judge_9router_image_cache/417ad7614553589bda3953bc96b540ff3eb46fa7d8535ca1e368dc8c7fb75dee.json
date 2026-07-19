@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Tidak menyebut lorong/main area tengah.",
+    "Klaim halangan visual bawah-kiri agak berlebihan vs front area lapang/no obstacle."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Sebagian sesuai: tengah lapang, foreground kiri dekat. Kurang: fokus anotasi lorong tengah jauh/no obstacle; kandidat menekankan bawah-kiri sbg halangan potensial.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lorong/ruang terbuka di tengah.",
+    "Pintu/tepi pintu kiri-kanan dekat kamera.",
+    "Area tengah tanpa objek penghalang jelas."
+  ]
+}

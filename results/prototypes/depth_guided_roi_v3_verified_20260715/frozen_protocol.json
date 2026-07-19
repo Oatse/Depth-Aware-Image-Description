@@ -1,0 +1,27 @@
+{
+  "conditions": [
+    "baseline",
+    "som_control",
+    "depth_guided"
+  ],
+  "image_limit": 12,
+  "marks_per_image": 3,
+  "qa_thresholds": {
+    "min_area": 0.015,
+    "min_side": 0.06,
+    "max_iou": 0.15,
+    "min_border_margin": 0.01
+  },
+  "marked_gate": {
+    "schema_compliance": 1.0,
+    "target_coverage": 0.9,
+    "end_to_end_accuracy": 0.7,
+    "hallucinated_mark_ids": 0
+  },
+  "depth_ground_truth_available": false,
+  "detector_training_in_scope": false,
+  "max_relative_depth_spread": 0.5,
+  "preinference_visual_exclusions": {
+    "living_room_1p (143).jpg": "non-photorealistic illustration outside the target camera-image domain"
+  }
+}

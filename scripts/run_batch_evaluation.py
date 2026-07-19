@@ -27,7 +27,7 @@ from services.pipeline import analyze_image_bytes, prediction_row
 from services.result_logger import PREDICTION_FIELDS
 
 
-DEFAULT_MODES = ("gemma_only", "depth_only", "gemma_depth", "gemma_depth_prompted")
+DEFAULT_MODES = ("gemma_only", "depth_only", "gemma_depth")
 
 
 @dataclass(frozen=True, slots=True)
@@ -103,11 +103,17 @@ async def run_batch(config: BatchRunConfig) -> None:
     summary = evaluate_predictions(config.annotations_path, config.predictions_path, config.evaluation_path)
     print("Evaluation Summary:")
     print(f"- Total images: {summary.total_images}")
-    print(f"- Object accuracy: {summary.object_accuracy:.2%}")
-    print(f"- Position accuracy: {summary.position_accuracy:.2%}")
+    print(f"- Object accuracy: {_format_optional_percent(summary.object_accuracy)}")
+    print(f"- Position accuracy: {_format_optional_percent(summary.position_accuracy)}")
+    print(
+        "- Object-position joint accuracy: "
+        f"{_format_optional_percent(summary.object_position_joint_accuracy)}"
+    )
     print(f"- Distance category accuracy: {_format_optional_percent(summary.distance_category_accuracy)}")
     print(f"- Obstacle warning accuracy: {_format_optional_percent(summary.obstacle_warning_accuracy)}")
-    print(f"- Description quality: {summary.description_quality:.2f}/5")
+    print(f"- Obstacle precision: {_format_optional_percent(summary.obstacle_precision)}")
+    print(f"- Obstacle recall: {_format_optional_percent(summary.obstacle_recall)}")
+    print(f"- Obstacle F1: {_format_optional_percent(summary.obstacle_f1)}")
     print(f"- Average latency: {summary.average_latency_ms:.1f} ms")
 
 

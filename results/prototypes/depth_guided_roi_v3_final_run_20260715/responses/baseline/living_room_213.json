@@ -1,0 +1,6 @@
+{
+  "image_name": "living_room_213.jpg",
+  "condition": "baseline",
+  "content": "{\"objects\": [\"tempat tidur\", \"meja nakas\", \"lampu meja\", \"karpet\", \"sofa/bangku kecil\", \"lemari pakaian built-in\", \"jendela besar\"], \"description\": \"Sebuah kamar tidur modern dengan palet warna netral. Tempat tidur berukuran besar diletakkan di tengah, dihiasi sprei berwarna abu-abu dan bantal dekoratif. Di kedua sisi tempat tidur terdapat meja nakas kecil dengan lampu meja. Sebuah bangku panjang berwarna krem berada di depan tempat tidur. Dinding belakang menampilkan panel kayu atau laminasi berwarna terang, dengan bingkai persegi panjang besar yang menggantung di atas kepala ranjang. Di sebelah kanan, terlihat lemari pakaian built-in dari,\"\n}",
+  "latency_ms": 45197
+}

@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Salah posisi area paling dekat: tengah-kanan vs foreground/bawah."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Lorong benar; area tengah lapang benar; tanpa halangan kuat benar. Klaim tengah-kanan paling dekat keliru: area terdekat visual di foreground/bawah, bukan tengah-kanan. Kategori jauh sesuai label.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Citra: lorong panjang, pusat terbuka/lapang.",
+    "Foreground bawah paling dekat secara perspektif.",
+    "Sisi kanan berisi lemari/kaca sepanjang dinding, bukan area bebas terdekat.",
+    "Tidak tampak halangan besar di jalur tengah."
+  ]
+}

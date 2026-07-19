@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Safer/open area digeser ke kiri; anotasi/citra lebih mendukung tengah.",
+    "Posisi pintu disebut sisi kanan, padahal lebih tengah-kanan."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar. Posisi pintu kurang tepat: lebih tengah/kanan-tengah, bukan sisi kanan penuh. Area lapang utama tampak tengah/bawah, bukan kiri. Klaim bawah-kanan tanpa halangan sesuai citra.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Pintu kayu gelap tampak tengah-kanan.",
+    "Lantai keramik putih luas di tengah/bawah.",
+    "Kiri ada tirai hijau + keset, tidak sepenuhnya lapang.",
+    "Bawah-kanan kosong tanpa halangan jelas."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Akurat: pintu kayu kanan, cermin kiri, barang tergantung dekat cermin. Spasial sesuai citra. Tidak ada klaim berlebih.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 5,
+  "visual_evidence": [
+    "Pintu kayu terbuka di sisi kanan/tengah-kanan.",
+    "Cermin bingkai kayu bersandar di kiri bawah.",
+    "Gantungan/lanyard terlihat di dinding atas/dekat cermin."
+  ]
+}

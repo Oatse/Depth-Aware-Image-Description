@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut rak kayu.",
+    "Menyebut dipenuhi bingkai foto."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek utama salah: bukan rak kayu/bingkai foto, lebih cocok lemari plastik/laci biru. Posisi kanan, dekat, menghalangi, area kiri lebih lapang sesuai citra/anotasi. Seprai/kasur kiri bawah benar.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Lemari/laci biru besar di kanan/tengah-kanan.",
+    "Panel depan bergambar kartun, bukan bingkai foto.",
+    "Kasur/seprai terlihat kiri bawah.",
+    "Area kiri dinding/kasur relatif lebih terbuka.",
+    "Objek kanan dekat kamera → halangan depan/kanan."
+  ]
+}

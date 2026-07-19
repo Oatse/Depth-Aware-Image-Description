@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Kategori bawah-kanan disebut jauh, visual dekat.",
+    "Halangan bawah-kanan diremehkan; ada ember besar.",
+    "Bertentangan dg label: distance dekat, front terhalang, obstacle yes."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek umum benar: kamar mandi, ubin, bak/ember, rak. Spasial salah penting: bawah-kanan dekat + terhalang ember hitam, bukan jauh/tanpa halangan kuat. Klaim tengah lapang sebagian masuk akal.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Bak besar kiri-bawah/depan.",
+    "Ember hitam kanan-bawah/depan sangat dekat.",
+    "Lantai depan terisi objek kiri+kanan.",
+    "Rak penyimpanan kiri atas."
+  ]
+}

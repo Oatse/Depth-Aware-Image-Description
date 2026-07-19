@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menekankan halangan bawah-kiri; label/citra lebih mendukung halangan utama kanan/depan."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek umum benar. Spasial kanan benar. Klaim bawah-kiri dekat/halangan hanya sebagian: ada objek tepi kiri bawah, tapi halangan utama tampak kanan/depan: galon, meja kompor, barang.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lantai ubin putih; dinding terang.",
+    "Galon air besar di kanan-depan.",
+    "Kompor/peralatan masak di sisi kanan.",
+    "Area kiri-tengah relatif lapang.",
+    "Tepi kiri bawah ada kursi/benda parsial dekat."
+  ]
+}

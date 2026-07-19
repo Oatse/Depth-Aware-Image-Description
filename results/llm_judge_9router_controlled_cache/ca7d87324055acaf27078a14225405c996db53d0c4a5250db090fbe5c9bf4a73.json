@@ -1,0 +1,15 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Akurat: dapur, kabinet kayu, meja depan, pintu/ruang belakang. Spasial kanan-bawah dekat didukung meja/counter dekat. 'Potensi halangan' masuk akal visual, meski label bilang no obstacle.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kabinet kayu dominan sisi kiri, sebagian kanan.",
+    "Counter/meja dekat di kanan-bawah foreground.",
+    "Pintu terbuka ke ruang lain di tengah-belakang.",
+    "Area tengah lantai relatif lapang."
+  ]
+}

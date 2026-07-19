@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Salah identifikasi area kanan/tengah-kanan sbg halangan utama.",
+    "Menyebut area tengah lapang padahal terhalang pintu."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Pintu kayu benar. Lorong/ruang kanan benar. Posisi pintu disebut tengah; citra/label lebih kiri-tengah. Klaim tengah-kanan halangan bertentangan: kanan relatif lapang/arah aman. Area tengah lapang kurang tepat: pintu menghalangi.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Pintu kayu cokelat terbuka dominan kiri-tengah.",
+    "Ruang/lorong terlihat di kanan pintu.",
+    "Area kanan lebih kosong dibanding tengah.",
+    "Tengah terisi daun pintu."
+  ]
+}

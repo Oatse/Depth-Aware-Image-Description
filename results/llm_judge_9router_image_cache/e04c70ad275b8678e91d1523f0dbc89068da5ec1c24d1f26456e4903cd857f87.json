@@ -1,0 +1,20 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Objek utama kipas angin tidak disebut.",
+    "Relasi posisi kanan/dekat tidak dijelaskan.",
+    "Status halangan depan tidak dijelaskan."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Benar umum: ruang indoor, lantai keramik, berantakan, kabel/elektronik. Kurang spasial: tak sebut kipas kanan/dekat, area depan terhalang, tengah relatif lapang.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Lantai keramik terlihat.",
+    "Banyak barang di kiri/kanan lantai.",
+    "Kabel dekat meja kanan.",
+    "Peralatan elektronik/laptop/monitor di meja kanan.",
+    "Kipas angin berdiri di kanan depan."
+  ]
+}

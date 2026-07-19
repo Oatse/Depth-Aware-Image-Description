@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Tidak menyebut area tengah/kanan relatif lapang.",
+    "'Kipas angin berdiri di dinding' ambigu/kurang akurat."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar. Kipas berdiri dekat dinding sisi kanan. Bangku/meja kayu depan-kiri berisi tas/helm/barang. Frasa 'di dinding' kurang tepat: kipas di lantai dekat dinding, bukan menempel dinding.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kipas angin berdiri terlihat kanan-tengah dekat dinding.",
+    "Bangku/meja kayu di latar depan kiri.",
+    "Tas/helm/barang berada di atas bangku/meja."
+  ]
+}

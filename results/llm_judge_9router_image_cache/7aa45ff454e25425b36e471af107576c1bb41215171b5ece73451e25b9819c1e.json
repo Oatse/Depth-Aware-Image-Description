@@ -1,0 +1,15 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Umum akurat. Salah kecil: tangga lebih tengah, bukan sisi kiri; material 'batu' kurang pasti, tampak ubin/keramik.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Karpet oranye di lantai ubin bagian depan/tengah.",
+    "Tangga berada tengah menuju area atas.",
+    "Panel/railing kayu di kiri.",
+    "Pintu/jendela kaca besar di kanan, terlihat area luar."
+  ]
+}

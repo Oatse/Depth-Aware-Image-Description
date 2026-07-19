@@ -1,0 +1,17 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Depth grid: bawah-kiri disebut jauh, visual menunjukkan dekat."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Objek utama benar. Posisi umum benar. Klaim depth bawah-kiri jauh keliru: area bawah-kiri berisi objek dekat/foreground.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Pintu kayu besar di kanan/tengah-kanan.",
+    "Cermin bingkai kayu di kiri-bawah.",
+    "Gantungan/barang di dinding kiri dekat cermin.",
+    "Bawah-kiri tampak dekat: tas/cermin/lantai foreground."
+  ]
+}

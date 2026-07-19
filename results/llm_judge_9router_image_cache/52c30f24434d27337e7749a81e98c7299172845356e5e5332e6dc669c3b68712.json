@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar. Posisi meja/setup tengah benar. Halangan depan/dekat sesuai. Kiri relatif lebih lapang sesuai label, meski kiri ada mikrofon. Klaim bawah-kanan sebagai halangan dekat agak kabur; terlihat mouse/perangkat kanan, bukan jelas halangan utama.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Monitor besar tengah-belakang",
+    "Tablet depan monitor",
+    "Keyboard depan tablet",
+    "Mikrofon kiri depan",
+    "Mouse/perangkat di kanan-bawah",
+    "Area depan meja penuh objek"
+  ]
+}

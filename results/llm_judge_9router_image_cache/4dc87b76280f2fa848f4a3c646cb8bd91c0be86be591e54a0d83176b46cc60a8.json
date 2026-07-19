@@ -1,0 +1,15 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas sesuai: interior sempit, dinding putih, bangku kayu panjang kanan. Lantai tampak beige/cokelat, bukan jelas kayu → minor. Posisi kanan benar; area kiri lapang implisit.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Bangku panjang kayu terlihat di kanan depan.",
+    "Dinding putih di kedua sisi.",
+    "Ruang/koridor sempit memanjang.",
+    "Lantai cokelat muda/beige; tekstur kayu tidak jelas."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "selected_images": 12,
+  "completed_images": 9,
+  "expected_marks": 35,
+  "returned_marks": 25,
+  "matched_marks": 13,
+  "hallucinated_mark_ids": 0,
+  "image_coverage": 0.75,
+  "mark_coverage": 0.7143,
+  "object_accuracy": 0.3714,
+  "mean_gemma_latency_ms": 162046.0,
+  "gate_passed": false,
+  "gate_reason": "FAIL: jangan melatih detector; perbaiki atau buang mekanisme mark terlebih dahulu."
+}

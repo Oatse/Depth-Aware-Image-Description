@@ -1,5 +1,7 @@
 # A/B Test Isolated Load/Unload - Gemma e2b vs Qwen - 2026-07-07
 
+> Arsip eksperimen model. Perintah yang memakai Depth-to-Spatial Prompting tidak lagi berlaku pada runtime aktif.
+
 ## Tujuan
 
 Eksperimen ini mengulang A/B test dengan kontrol runtime yang lebih ketat: hanya satu model LLM yang dimuat pada satu waktu. Model di-load hanya saat dipakai, diuji secara serial satu gambar per job, lalu di-unload setelah selesai.

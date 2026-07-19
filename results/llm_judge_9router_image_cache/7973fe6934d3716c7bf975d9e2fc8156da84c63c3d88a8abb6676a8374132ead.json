@@ -1,0 +1,20 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut beberapa monitor padahal tampak laptop, bukan monitor terpisah.",
+    "Arah lapang kanan keliru; bukti/anotasi mengarah kiri."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek utama meja kerja benar; kursi, laptop, kabel benar. Klaim beberapa monitor tidak tampak. Spasial: dekat/terhalang cukup, tetapi area kanan lapang bertentangan; anotasi: kiri lebih lapang/aman.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Meja kerja di tengah-depan.",
+    "Dua laptop di meja.",
+    "Kursi kantor di belakang meja.",
+    "Kabel/barang kecil di atas meja.",
+    "Area depan bawah dekat, ada kipas/tepi meja sebagai halangan.",
+    "Kanan terisi laptop/meja, tidak jelas lapang."
+  ]
+}

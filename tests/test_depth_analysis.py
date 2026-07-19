@@ -29,6 +29,7 @@ def test_analyze_depth_regions_prioritizes_nearest_front_region() -> None:
     summary = analyze_depth_regions(depth_map)
 
     assert summary["nearest_region"] == "lower_center"
+    assert summary["analysis_method"] == "grid_p10"
     assert summary["distance_category"] == "sangat_dekat"
     assert "meter" not in summary["estimated_distance"]
     assert summary["front_area_status"] == "potensi_halangan"

@@ -1,0 +1,17 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Menyebut area tengah relatif lapang meski terisi furnitur."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama ruang duduk benar. Jendela besar benar. Bawah-kanan memang foreground terdekat, ada kursi/meja dekat → potensi halangan. 'Tengah lapang' agak lemah: tengah banyak meja/kursi; area kiri/bawah lebih lapang.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Jendela besar di belakang.",
+    "Kursi/sofa, meja kopi di tengah.",
+    "Kursi/meja foreground kanan-bawah paling dekat.",
+    "Area kiri/bawah relatif kosong dibanding tengah."
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Tengah-kanan disebut area paling dekat; visual menunjukkan foreground lebih dekat"
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Koridor panjang, lantai mengkilap, lemari kaca kanan sesuai. Area tengah lapang sesuai. Klaim tengah-kanan paling dekat kurang tepat; foreground lebih dekat, lorong utama tengah.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Koridor indoor memanjang ke belakang",
+    "Lantai reflektif/mengkilap",
+    "Deretan lemari/pajangan kaca di sisi kanan",
+    "Jalur tengah relatif kosong/lapang"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Area tengah disebut relatif lapang padahal terisi meja/kursi.",
+    "Kategori dekat/halangan agak overstate vs label sedang/no obstacle."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: area duduk, kursi/sofa, meja, jendela besar. Spasial sebagian benar: kanan-bawah memang foreground dekat. Namun area tengah tidak terlalu lapang; banyak furnitur. Klaim halangan kanan-bawah masuk akal visual, tapi label: no obstacle/front lapang/kiri lebih aman.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Jendela besar di belakang.",
+    "Kursi/sofa mengelilingi meja tengah.",
+    "Meja/kursi kanan-bawah tampak paling dekat foreground.",
+    "Area kiri-depan lebih kosong daripada tengah."
+  ]
+}

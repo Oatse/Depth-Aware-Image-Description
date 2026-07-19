@@ -1,5 +1,7 @@
 # Final Annotation Revalidation - 2026-07-08
 
+> Arsip revalidasi anotasi. Baris mode Depth-to-Spatial Prompting dipertahankan sebagai sejarah eksperimen, bukan fitur atau hasil utama aktif.
+
 Validasi ulang dilakukan bertahap per 5 gambar agar keputusan anotasi tidak terlalu kasar. Fokus validasi:
 
 - `main_object`

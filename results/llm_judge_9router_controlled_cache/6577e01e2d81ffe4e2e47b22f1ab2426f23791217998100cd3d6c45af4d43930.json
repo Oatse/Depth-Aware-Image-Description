@@ -1,0 +1,16 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Deskripsi sesuai: lorong indoor panjang, dinding terang, lantai cokelat-kuning, lapang, membentang jauh. Klaim depth tengah-kanan jauh masuk akal, meski titik hilang lebih tengah; kanan-tengah juga relatif jauh.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Lorong panjang pusat citra.",
+    "Lantai glossy cokelat-kuning.",
+    "Dinding kanan/kiri terang; sisi kiri ada panel biru/gelap.",
+    "Ujung lorong jauh tampak terang; pot tanaman kecil di ujung.",
+    "Area depan tengah lapang tanpa halangan besar."
+  ]
+}

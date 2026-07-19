@@ -1,0 +1,6 @@
+{
+  "image_name": "living_room_1p (205).jpg",
+  "condition": "depth_guided",
+  "content": "{\"priority_mark_id\":1,\"1\":\"vase\",\"2\":\"portrait painting\",\"3\":\"bookshelf\"}",
+  "latency_ms": 2158
+}

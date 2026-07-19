@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Open area salah: kandidat kanan lapang vs anotasi kiri.",
+    "Halangan/front salah fokus: bawah-kiri, bukan kursi kanan.",
+    "Main object kursi tidak dijadikan fokus."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Obj utama meja/monitor/laptop/kursi benar. Namun anotasi: objek utama kursi di kanan, area kiri relatif lapang, arah aman kiri. Kandidat menyebut bawah-kiri paling dekat/halangan, kanan lebih lapang → berlawanan dgn label; citra juga kanan berisi kursi, kiri meja/alat dekat.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Monitor+laptop di meja hitam kiri.",
+    "Kursi kantor putih dominan kanan.",
+    "Area bawah-kiri berisi meja/keyboard/arm, dekat kamera.",
+    "Lantai kanan bawah agak kosong, tapi kanan tengah terhalang kursi."
+  ]
+}

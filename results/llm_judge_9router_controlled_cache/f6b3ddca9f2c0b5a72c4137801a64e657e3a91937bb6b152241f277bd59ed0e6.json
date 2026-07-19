@@ -1,0 +1,15 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Umum benar: lorong/ruang sempit, lantai keramik putih, dinding terang, pintu kayu. Posisi kiri dekat/terhalang sesuai pintu/ambang kiri. Sedikit overclaim: 'beberapa pintu membentang sepanjang lorong' agak berlebih; terlihat pintu kiri dekat + pintu depan, bukan banyak sepanjang lorong.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Pintu kayu besar sangat dekat di sisi kiri.",
+    "Pintu kayu lain di ujung/depan lorong.",
+    "Area kanan berupa dinding kosong/lapang relatif.",
+    "Lantai keramik putih, dinding krem/terang."
+  ]
+}

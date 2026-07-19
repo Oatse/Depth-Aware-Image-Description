@@ -1,0 +1,15 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar. Posisi umum benar. Klaim depth 3x3 kurang jelas/kurang kuat, tapi tak jelas bertentangan.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Koper besar di lantai kiri dekat sudut/dinding.",
+    "Banyak sepatu/sandal di lantai sepanjang dinding bawah jendela.",
+    "Tirai hijau tergantung di sisi kanan atas.",
+    "Area lantai tengah depan relatif kosong."
+  ]
+}

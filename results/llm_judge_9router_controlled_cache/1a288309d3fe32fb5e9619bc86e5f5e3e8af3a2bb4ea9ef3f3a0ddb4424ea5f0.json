@@ -1,0 +1,15 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama sesuai: wastafel, ubin, wadah logam, rak. Posisi wastafel tengah-kanan; anotasi kanan. Halangan/dekat bawah-depan masuk akal. Klaim kiri lebih lapang agak inferensial, tapi diberi caveat.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Wastafel terlihat di area tengah-kanan bawah.",
+    "Panci/saringan logam tergantung di dinding atas-kanan.",
+    "Rak piring berada di kiri wastafel.",
+    "Area depan/bawah meja paling dekat kamera, berisi ruang bawah meja/barang."
+  ]
+}

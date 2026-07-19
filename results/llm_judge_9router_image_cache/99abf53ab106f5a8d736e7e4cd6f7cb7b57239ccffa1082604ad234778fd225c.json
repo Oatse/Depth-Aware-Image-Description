@@ -1,0 +1,15 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas sesuai: meja/perabot kayu tengah, lantai kayu, area tengah/depan relatif lapang. Bawah-kanan memang kursi dekat → bisa jadi halangan visual, meski label sekunder bilang no obstacle. Klaim agak umum.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Meja konsol kayu di tengah depan jendela.",
+    "Lantai kayu terlihat jelas.",
+    "Kursi kayu di kiri/kanan foreground; kanan-bawah dekat kamera.",
+    "Ruang tengah bawah relatif kosong dibanding sisi kiri/kanan."
+  ]
+}

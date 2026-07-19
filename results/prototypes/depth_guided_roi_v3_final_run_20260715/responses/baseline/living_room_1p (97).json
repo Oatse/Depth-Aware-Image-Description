@@ -1,0 +1,6 @@
+{
+  "image_name": "living_room_1p (97).jpg",
+  "condition": "baseline",
+  "content": "{\"objects\": [\"sofa\", \"meja kopi\", \"kursi berlengan\", \"rak buku\", \"meja makan\", \"lampu gantung\", \"jendela\"], \"description\": \"Ruangan interior bergaya klasik dengan lantai kayu dan dinding putih. Terdapat sofa berwarna terang di sisi kiri, meja kopi kecil, dan kursi berlengan yang menghadap ke tengah ruangan. Di bagian belakang terdapat rak buku tinggi berisi banyak koleksi. Di sebelah kanan, terlihat meja makan besar ditutupi taplak hijau muda. Ruangan ini diterangi oleh cahaya alami dari beberapa jendela besar.\"}",
+  "latency_ms": 37424
+}

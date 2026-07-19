@@ -1,0 +1,4 @@
+image_name,condition,schema_valid,expected_targets,returned_targets,matched_targets,hallucinated_mark_ids,latency_ms,error
+living_room_1059.jpg,baseline,True,3,3,3,0,111549,
+living_room_1059.jpg,som_control,True,3,3,2,0,23963,
+living_room_1059.jpg,depth_guided,True,3,3,2,0,30723,

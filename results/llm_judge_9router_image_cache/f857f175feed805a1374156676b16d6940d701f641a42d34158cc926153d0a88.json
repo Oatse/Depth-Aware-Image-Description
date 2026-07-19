@@ -1,0 +1,18 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Menyebut dua pintu",
+    "Menyebut tirai sisi kanan tanpa bukti visual"
+  ],
+  "groundedness": 2,
+  "overall": 3,
+  "rationale": "Sebagian benar: lantai keramik putih, pintu kayu cokelat, tirai kiri, karpet kecil. Salah: hanya 1 pintu terlihat; tirai kanan tidak terlihat. Karpet di kiri-depan, bukan area depan pintu utama.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "1 pintu kayu cokelat di tengah-kanan",
+    "lantai keramik putih",
+    "tirai hijau hanya di sisi kiri",
+    "karpet kecil di lantai kiri-depan"
+  ]
+}

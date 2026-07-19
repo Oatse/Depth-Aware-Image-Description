@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut tengah-kanan paling dekat/halangan utama.",
+    "Menyiratkan area tengah lebih lapang; citra+label: kanan lebih lapang."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Obj utama benar: pintu kayu. Interior/lantai/dinding benar. Posisi salah: pintu dominan tengah-kiri, bukan tengah-kanan terdekat. Area kanan justru jalur lebih lapang/aman. Klaim halangan tengah-kanan lemah/bertentangan.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Pintu kayu besar berada tengah-kiri frame.",
+    "Bukaan/lorong terlihat di kanan pintu.",
+    "Area kanan lantai terlihat memanjang relatif kosong.",
+    "Halangan utama: daun pintu terbuka menjorok ke depan/kiri-tengah."
+  ]
+}

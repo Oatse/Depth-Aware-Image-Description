@@ -1,0 +1,15 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Umum/vague. Kulkas kanan dekat tidak disebut spesifik. Spasial sesuai: kanan/tengah-kanan terhalang, kiri relatif lapang.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kulkas besar di kanan depan/tengah.",
+    "Barang/tas di atas kulkas kanan.",
+    "Jalur lantai kiri lebih kosong.",
+    "Area kanan depan menyempit/terhalang."
+  ]
+}

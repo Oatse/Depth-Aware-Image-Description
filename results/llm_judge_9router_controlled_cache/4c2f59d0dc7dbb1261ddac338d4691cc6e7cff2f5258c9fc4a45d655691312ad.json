@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Salah arah halangan: kandidat menekankan tengah-kanan, label/citra menunjukkan kanan relatif lapang.",
+    "Posisi objek utama kurang akurat: bukan tengah murni, lebih kiri."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek pintu benar; interior/lantai/dinding benar. Posisi pintu disebut tengah, lebih tepat kiri/tengah-kiri. Klaim tengah-kanan dekat/halangan kurang tepat: kanan tampak bukaan/area lebih lapang; halangan utama pintu di kiri/depan.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Pintu kayu besar dominan di tengah-kiri.",
+    "Area kanan berupa bukaan ke ruang/lorong berlantai keramik.",
+    "Dinding kanan dekat tepi, tetapi jalur kanan terlihat terbuka."
+  ]
+}

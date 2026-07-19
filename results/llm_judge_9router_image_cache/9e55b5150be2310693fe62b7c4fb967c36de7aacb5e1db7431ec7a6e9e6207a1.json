@@ -1,0 +1,18 @@
+{
+  "clarity": 3,
+  "critical_errors": [
+    "Klaim 'tengah-kanan paling dekat' kurang akurat/ambigu.",
+    "Frasa 'paling dekat' + 'kategori jauh' kontradiktif."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas cocok: lorong, area tengah lapang, tanpa halangan kuat, kedalaman utama jauh. Lemah: klaim tengah-kanan paling dekat ambigu/kurang tepat; area terdekat justru foreground/tepi kanan-kiri.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Citra: lorong memanjang ke tengah-belakang.",
+    "Area tengah lantai kosong → relatif lapang.",
+    "Tidak ada objek menghalangi jalur utama.",
+    "Bagian dekat kamera/tepi kanan-kiri lebih dekat daripada tengah-kanan jauh."
+  ]
+}

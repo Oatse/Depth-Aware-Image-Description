@@ -1,0 +1,16 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Meja kerja indoor, kursi kantor, laptop/perangkat elektronik terlihat. Kabel ada, agak berserakan. Klaim bawah-kiri dekat/terhalang cukup sesuai: meja/laptop foreground dekat; area depan terhalang. Tidak bahas arah aman kiri.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Meja dominan di tengah-bawah/foreground.",
+    "Kursi kantor di belakang meja.",
+    "Dua laptop/perangkat di atas meja.",
+    "Kabel terlihat di meja/lantai.",
+    "Objek foreground bawah membuat area depan terhalang."
+  ]
+}

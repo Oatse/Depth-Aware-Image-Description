@@ -1,0 +1,31 @@
+# Pilot Verdict
+
+- Tanggal: 2026-07-18
+- Pertanyaan: apakah ESP32 VROOM-32 dan HC-SR04 terbaca serta berjalan normal dalam isolasi?
+- Status awal: CP2102 terdeteksi tetapi driver Windows belum tersedia (`Code 28`).
+- Perbaikan host: driver resmi Silicon Labs CP210x VCP dipasang; board muncul sebagai COM7 dengan status `OK`.
+- Tes board: **LULUS**. Environment `board_check` berhasil build, flash, verifikasi hash, hard reset, dan mengirim JSON serial pada 115200 baud.
+- Identitas terukur: ESP32-D0WD-V3 revision 3, dual-core 240 MHz, crystal 40 MHz, MAC `e8:6b:ea:df:9d:d8`.
+- Bukti serial: `board_ready` diterima dengan `sensor_enabled=false`, lalu `safety_lock` diterima.
+- Wiring yang dilaporkan: sensor 1 memakai TRIG GPIO 5/ECHO GPIO 18; sensor 2 memakai TRIG GPIO 19/ECHO GPIO 21; VCC dan GND memakai rel bersama.
+- Risiko wiring: pengguna belum menyebut pembagi tegangan pada kedua ECHO. Bila rel positif berasal dari VIN/5 V, koneksi ECHO langsung ke GPIO tidak aman.
+- Tes build dua HC-SR04: **LULUS**. Environment `hcsr04` menghasilkan firmware untuk kedua pasangan GPIO, menambahkan `sensor_id`, dan memicu sensor secara bergantian setiap 70 ms.
+- Tes fisik HC-SR04 sebelum perbaikan wiring: **DITAHAN**. Aktivasi menunggu masing-masing ECHO diturunkan ke maksimum 3,3 V.
+- Uji fisik 20 detik setelah wiring diperbaiki: firmware `hcsr04` berhasil di-upload ke COM7 dan kedua konfigurasi sensor terlapor benar.
+- Sensor 1: sekitar 133 sampel, 0 valid; seluruhnya `echo_timeout` dengan `pulse_us=0`.
+- Sensor 2: sekitar 132 sampel, 0 valid; awalnya hanya pulsa 2–22 us (`out_of_range`), lalu `echo_timeout`.
+- Interpretasi: belum ada pantulan ultrasonik yang dapat dipakai. Ini belum membuktikan modul rusak karena target datar, jarak, orientasi, VCC, dan ground bersama belum dikontrol dalam uji.
+- Verdict saat ini: ESP32, driver, upload, dan firmware normal; kedua jalur sensor belum menghasilkan pengukuran jarak valid.
+- Uji lanjutan yang diperlukan: tempatkan kardus/papan datar tegak lurus sekitar 30 cm di depan satu sensor pada satu waktu, jauhkan arah dua sensor agar tidak saling mendengar, lalu ulangi capture.
+- Uji ulang dengan buku sebagai target: sekitar 20 detik, kedua sensor tetap terdeteksi dan konfigurasi GPIO benar.
+- Hasil uji buku: sensor 1 dan sensor 2 sama-sama `echo_timeout` dengan `pulse_us=0` pada seluruh sampel; tidak ada `valid=true`.
+- Diagnosis sementara: periksa tegangan VCC tiap modul, GND bersama, urutan resistor pembagi ECHO, dan uji satu sensor saja dengan sensor kedua dilepas.
+- Capture ulang berikutnya: hasil tetap tidak valid; sensor 1 dominan `echo_timeout`, sensor 2 hanya sempat menghasilkan pulsa 1–15 us lalu ikut `echo_timeout`.
+- Capture ulang terbaru: kedua sensor menghasilkan `pulse_us=0` dan `echo_timeout` pada seluruh sampel; tidak ada perubahan menuju pembacaan valid.
+- Uji isolasi sensor 1: environment `hcsr04_sensor1` berhasil build/upload dan hanya mengonfigurasi TRIG GPIO5/ECHO GPIO18.
+- Hasil isolasi sensor 1 selama 20 detik: 0 jarak valid; dominan `echo_timeout`, dengan pulsa noise 2–3 us pada sebagian sampel.
+- Kesimpulan isolasi: cross-talk dari sensor 2 bukan penyebab utama; periksa modul, VCC/GND, TRIG, dan pembagi ECHO sensor 1.
+- Catatan koreksi: uji isolasi sensor 1 di atas bukan sensor yang dimaksud pengguna; sensor yang dimaksud adalah TRIG GPIO19/ECHO GPIO21.
+- Uji isolasi sensor 2: environment `hcsr04_sensor2` berhasil build/upload dan hanya mengonfigurasi TRIG GPIO19/ECHO GPIO21; GPIO5/GPIO18 tidak dipicu.
+- Hasil isolasi sensor 2 selama 20 detik: sekitar 265 sampel, 0 jarak valid; dominan `echo_timeout` (`pulse_us=0`) dan pulsa noise sekitar 2-8 us (`out_of_range`).
+- Kesimpulan sensor 2: gangguan silang dari sensor 1 telah disingkirkan, tetapi jalur sensor GPIO19/GPIO21 masih belum menghasilkan ECHO yang valid. Kandidat tersisa adalah catu 5 V/GND, susunan pembagi tegangan ECHO, kabel/pin modul, atau modul HC-SR04 itu sendiri.

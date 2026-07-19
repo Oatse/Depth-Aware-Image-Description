@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut area tengah-kanan paling dekat/halangan; bukti lebih kuat pintu kiri-tengah sebagai objek dekat.",
+    "Menyebut area tengah relatif lapang; area kanan lebih lapang sesuai citra/anotasi."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Objek utama benar: pintu kayu cokelat indoor, lantai keramik, dinding terang. Namun posisi salah: pintu dominan kiri/tengah, bukan tengah-kanan. Area lapang justru kanan/lorong, bukan tengah. Halangan visual/front obstacle oleh pintu dekat cukup benar, tapi lokasinya kurang tepat.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Pintu kayu besar terbuka menempati kiri-tengah citra.",
+    "Lorong/ruang terbuka terlihat di kanan pintu.",
+    "Lantai keramik putih, dinding krem/putih terlihat.",
+    "Pintu dekat kamera → dapat menghalangi jalur depan/kiri."
+  ]
+}

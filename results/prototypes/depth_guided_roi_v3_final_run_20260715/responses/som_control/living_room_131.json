@@ -1,0 +1,6 @@
+{
+  "image_name": "living_room_131.jpg",
+  "condition": "som_control",
+  "content": "{\"marks\": [{\"id\": 1, \"object\": \"sofa\"}, {\"id\": 2, \"object\": \"coffee table\"}, {\"id\": 3, \"object\": \"armchair\"}]\n, \"priority_mark_id\": 3\n, \"description\": \"Identifikasi objek di dalam kotak MARK 1, 2, dan 3.\"}",
+  "latency_ms": 27949
+}

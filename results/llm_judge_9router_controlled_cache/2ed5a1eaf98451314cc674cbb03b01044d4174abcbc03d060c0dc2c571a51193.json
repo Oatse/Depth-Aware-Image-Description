@@ -1,0 +1,20 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Ember/bak kiri disebut tempat sampah.",
+    "Objek/halangan utama dinyatakan tengah-kanan, bukan kiri sesuai anotasi.",
+    "Klaim grid depth spesifik tidak jelas dari citra."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek umum benar: ruang berubin, rak dinding, 2 wadah lantai. Salah label: bak/ember kiri disebut tempat sampah. Posisi utama anotasi kiri, kandidat fokus tengah-kanan. Klaim depth 3x3 kurang terbukti langsung.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Dinding/lantai ubin terlihat.",
+    "Rak kecil di dinding kiri.",
+    "Bak/ember besar abu-abu di kiri bawah.",
+    "Wadah hitam bertutup di kanan bawah.",
+    "Area kanan dekat kamera sebagian tertutup pintu/wadah."
+  ]
+}

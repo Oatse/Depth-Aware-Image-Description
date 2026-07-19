@@ -1,0 +1,19 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Kategori kedalaman disebut dekat, bukan sangat_dekat.",
+    "Material perabot 'kayu' tidak terverifikasi jelas."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas sesuai: kursi tengah/depan, ranjang belakang, halangan depan, kanan relatif lebih terbuka. Kedalaman kurang kuat: harusnya sangat dekat. 'Perabotan kayu' tidak pasti.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kursi hitam besar dominan di tengah-depan.",
+    "Ranjang terlihat di belakang kiri/tengah.",
+    "Lemari biru di kanan belakang.",
+    "Bagian bawah-tengah terisi dudukan kursi/roda → halangan dekat.",
+    "Area kanan bawah masih ada lantai/karpet, relatif lebih lowong daripada tengah."
+  ]
+}

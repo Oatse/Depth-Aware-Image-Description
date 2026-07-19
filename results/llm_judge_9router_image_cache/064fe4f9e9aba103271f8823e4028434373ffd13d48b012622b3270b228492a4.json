@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut kayu → bertentangan.",
+    "Menyebut dipenuhi bingkai foto → bertentangan."
+  ],
+  "groundedness": 2,
+  "overall": 3,
+  "rationale": "Obj utama benar sebagian: rak/lemari biru. Salah material+isi: bukan kayu, bukan bingkai foto; tampak lemari plastik/laci bergambar. Posisi dinding+seprai/kasur kiri bawah benar.",
+  "semantic_correctness": 2,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Lemari/laci biru di kanan, dekat dinding.",
+    "Panel depan bergambar kartun, bukan foto.",
+    "Kasur/seprai terlihat kiri bawah.",
+    "Benda di atas lemari."
+  ]
+}

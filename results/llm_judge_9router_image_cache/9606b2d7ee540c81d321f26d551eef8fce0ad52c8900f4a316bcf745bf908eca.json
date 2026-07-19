@@ -1,0 +1,14 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Cukup sesuai: lorong tengah lapang, tanpa halangan kuat. Bawah-kiri memang area lantai dekat kamera. Frasa 'paling dekat' + 'kategori jauh' agak rancu.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Citra: lorong panjang, area tengah terbuka.",
+    "Lantai bawah-kiri dekat kamera, kosong.",
+    "Tidak tampak objek menghalangi jalur."
+  ]
+}

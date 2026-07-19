@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Tidak menyebut tangga sebagai objek utama.",
+    "Mengklaim potensi halangan bawah-kanan tanpa bukti kuat."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Benar: indoor, ubin, karpet oranye tengah, area tengah/depan cukup lapang. Kurang: objek utama tangga tengah tidak disebut. Salah/unsupported: bawah-kanan disebut potensi halangan; citra/label → tidak ada halangan jelas.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Karpet oranye di tengah lantai ubin.",
+    "Tangga berada di tengah-belakang.",
+    "Area lantai depan/tengah relatif kosong.",
+    "Bawah-kanan tampak area lantai dekat pintu kaca, bukan halangan jelas."
+  ]
+}

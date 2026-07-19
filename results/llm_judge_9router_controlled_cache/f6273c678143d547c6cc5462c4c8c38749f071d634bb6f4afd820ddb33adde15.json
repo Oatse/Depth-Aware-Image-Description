@@ -1,0 +1,17 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Depth grid bawah-kiri disebut sedang; visual lebih dekat."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Koridor panjang, dinding terang, lantai krem, ujung merah → benar. Klaim depth bawah-kiri sedang → meragukan; area bawah-kiri tampak foreground/dekat, bukan sedang.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lorong indoor memanjang ke tengah.",
+    "Dinding samping terang; lantai krem mengilap.",
+    "Ujung lorong/ruang belakang berdinding merah.",
+    "Area bawah-kiri berada dekat kamera/foreground."
+  ]
+}

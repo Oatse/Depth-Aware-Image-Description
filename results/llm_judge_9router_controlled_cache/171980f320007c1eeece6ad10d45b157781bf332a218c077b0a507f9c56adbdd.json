@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut dua pintu.",
+    "Menyebut tirai kiri-kanan.",
+    "Depth grid bawah-kanan diklaim jauh padahal dekat."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Sebagian benar: lantai putih, pintu kayu, karpet kecil. Salah: hanya 1 pintu jelas; tirai kanan tidak tampak; klaim depth bawah-kanan jauh bertentangan, area itu foreground/dekat.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Pintu kayu cokelat tunggal di tengah-kanan.",
+    "Tirai hijau hanya di sisi kiri.",
+    "Karpet kecil di depan-kiri dekat dinding.",
+    "Lantai bawah-kanan tampak area depan/dekat kamera."
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Objek kiri disebut tempat sampah, lebih tampak bak/ember.",
+    "Posisi utama label kiri, kandidat menekankan tengah-kanan."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama cukup tepat: ubin, 2 wadah besar, rak kiri. Namun 'tempat sampah' utk bak kiri kurang tepat; label: ember kiri. Klaim depth tengah-kanan dekat cocok utk ember/tong kanan, tapi label banding objek kiri; grid agak kabur.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Dinding/lantai berubin jelas.",
+    "Rak kecil di dinding kiri berisi barang mandi.",
+    "Bak/ember besar abu-abu di lantai kiri-depan.",
+    "Tong/ember hitam bertutup di lantai kanan-depan.",
+    "Area depan terhalang 2 wadah besar."
+  ]
+}

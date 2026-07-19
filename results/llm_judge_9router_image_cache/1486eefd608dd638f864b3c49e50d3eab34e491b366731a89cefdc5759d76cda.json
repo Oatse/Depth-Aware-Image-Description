@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut bawah-kanan kategori jauh padahal dekat.",
+    "Menyebut bawah-kanan tidak ada halangan kuat padahal ember besar menghalangi area depan."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek umum benar: kamar mandi, ubin, ember/bak, rak. Spasial lemah: bawah-kanan dekat/terhalang oleh ember hitam, bukan jauh/tanpa halangan. Area tengah relatif kosong sebagian benar.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Dinding/lantai keramik terlihat.",
+    "Rak sudut kiri berisi perlengkapan.",
+    "Bak besar abu-abu kiri-bawah; ember hitam kanan-bawah.",
+    "Objek lantai depan dekat kamera → potensi halangan."
+  ]
+}

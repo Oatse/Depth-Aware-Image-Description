@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Misidentifikasi lemari plastik sebagai rak dinding kayu.",
+    "Mengklaim berisi bingkai gambar."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek utama salah: bukan rak dinding kayu/bingkai gambar, melainkan lemari plastik berlaci. Bed benar. Halangan depan/tengah-kanan dekat benar. Kiri lapang benar.",
+  "semantic_correctness": 2,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lemari plastik biru tinggi di kanan/tengah-kanan.",
+    "Drawer bergambar kartun, bukan bingkai foto.",
+    "Kasur motif hitam-putih di kiri bawah.",
+    "Area kiri dinding/lantai relatif kosong.",
+    "Lemari dekat kamera → halangan depan kanan."
+  ]
+}

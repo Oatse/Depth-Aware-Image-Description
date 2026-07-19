@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Lokasi terdekat/halangan disebut tengah-kiri; visual lebih jelas kiri foreground.",
+    "Area lapang disebut tengah; label/visual lebih mendukung kanan relatif lapang."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: koridor, lantai putih, dinding terang, pintu kayu. Spasial sebagian tepat: pintu/halangan dekat di kiri. Namun area lapang lebih kanan/koridor kanan, bukan khusus tengah; 'tengah-kiri paling dekat' kurang presisi.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Pintu kayu besar sangat dekat di sisi kiri foreground.",
+    "Pintu lain tampak di ujung tengah lorong.",
+    "Lantai keramik putih, dinding krem/terang.",
+    "Area kanan lantai/lorong relatif kosong/lapang."
+  ]
+}

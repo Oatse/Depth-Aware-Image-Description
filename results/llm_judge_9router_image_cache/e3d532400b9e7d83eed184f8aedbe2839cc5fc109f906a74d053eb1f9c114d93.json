@@ -1,0 +1,17 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Klaim 'beberapa monitor' berpotensi overcount; citra jelas 1 monitor utama, layar kecil/tablet."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama sesuai: meja kerja, monitor, mikrofon. Spasial umumnya cocok: kanan/tengah-kanan dekat, menghalangi, kiri relatif lebih lapang. Sedikit kurang: 'beberapa monitor' kurang tepat; terlihat 1 monitor besar + tablet/layar kecil.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Meja hitam dominan indoor.",
+    "Monitor besar di kanan-belakang.",
+    "Mikrofon/boom arm menonjol di tengah-kanan depan.",
+    "Area kiri meja lebih kosong dibanding kanan, meski ada troli/barang di kiri bawah."
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 4,
+  "rationale": "Umum akurat: ruangan berantakan, lantai keramik, kabel/perangkat elektronik terlihat. Spasial minim: tidak sebut kipas kanan/dekat, area depan terhalang, tengah relatif lapang.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lantai keramik putih terlihat.",
+    "Kipas angin berdiri di kanan depan.",
+    "Meja/perangkat elektronik kanan, kabel di lantai.",
+    "Barang menumpuk kiri, depan, sekitar meja.",
+    "Jalur tengah relatif lebih kosong."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Sesuai: kanan/bawah-kanan dekat, penuh barang, halangan; kiri lebih lapang. Deskripsi generik tapi akurat.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 5,
+  "visual_evidence": [
+    "Bawah-kanan: tas/barang sangat dekat kamera.",
+    "Kanan: kardus, koper, pakaian menumpuk sepanjang dinding.",
+    "Kiri lantai relatif kosong → ruang lewat."
+  ]
+}

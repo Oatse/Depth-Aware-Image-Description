@@ -1,0 +1,17 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Posisi pintu bukan murni tengah; lebih kiri.",
+    "Klaim lorong lemah/tidak jelas dari citra."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Obj utama benar: pintu kayu cokelat gelap berpanel. Dinding terang, lantai keramik benar. Posisi disebut tengah; citra/label lebih kiri. 'Lorong' kurang tepat; tampak ruang/pintu ke area kanan.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Pintu kayu gelap besar dominan kiri-tengah.",
+    "Dinding putih/terang, lantai keramik putih.",
+    "Area kanan terbuka lewat ambang pintu."
+  ]
+}

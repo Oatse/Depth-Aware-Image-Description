@@ -7,6 +7,8 @@ numpy
 opencv-python
 requests
 httpx
+pyserial
+anyio
 python-dotenv
 pydantic
 pydantic-settings

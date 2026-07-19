@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Tidak identifikasi objek utama: kulkas.",
+    "Open area salah/kurang tepat: tengah disebut lapang, citra menunjukkan kiri lebih lapang."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Umum benar: koridor indoor berubin, ada halangan depan/kanan dekat. Kurang spesifik: tidak sebut kulkas, arah aman kiri. Klaim area tengah lapang agak meleset; yang lapang terutama kiri.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Koridor sempit berlantai ubin.",
+    "Kulkas/objek besar di kanan-depan menghalangi jalur tengah-kanan.",
+    "Sisi kiri relatif lebih terbuka menuju dapur belakang."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Posisi halangan utama salah: disebut bawah-kiri, seharusnya kanan-bawah/depan-kanan.",
+    "Objek utama kantong belanja tidak disebut."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Sebagian benar: wastafel kiri, tengah relatif lapang. Salah utama: halangan dekat disebut bawah-kiri; bukti utama kantong belanja bawah-kanan/depan-kanan. Klaim 'potensi halangan visual' kabur.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Wastafel terlihat di sisi kiri.",
+    "Area tengah lantai relatif kosong, ada keset merah.",
+    "Kantong belanja cokelat dekat kamera di kanan-bawah.",
+    "Sisi kiri-bawah ada meja/kardus, tetapi bukan halangan utama dibanding kantong kanan."
+  ]
+}

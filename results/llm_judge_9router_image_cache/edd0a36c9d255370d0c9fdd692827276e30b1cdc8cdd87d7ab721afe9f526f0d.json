@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Kontradiksi: tengah-kanan disebut paling dekat sekaligus kedalaman jauh.",
+    "Lokasi paling dekat tidak tepat; foreground bawah lebih dekat."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama lorong benar. Lantai mengkilap, lemari kanan, ujung terang sesuai. Spasial umum sesuai: tengah lapang, tanpa halangan kuat. Error: klaim tengah-kanan paling dekat tetapi juga kategori jauh; area terdekat visual lebih foreground/bawah, bukan tengah-kanan.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lorong panjang indoor terlihat jelas.",
+    "Lantai kuning mengkilap/reflektif.",
+    "Deretan lemari/kabinet kaca-kayu di kanan.",
+    "Ujung lorong terang; area tengah kosong/lapang."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Open area disebut tengah, bukan kiri/tengah-kiri.",
+    "Rak sepatu tidak disebut; sepatu diklaim di lantai."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama terlihat: koper kanan-belakang, sepatu/rak kanan. Halangan dekat kanan-bawah benar. Area lapang lebih kiri/tengah-kiri; kandidat sebut tengah → kurang presisi. Sepatu bukan hanya di lantai; ada rak.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Koper besar gelap menempel dinding sisi kanan-belakang.",
+    "Beberapa sepatu tersusun pada rak/area kanan depan.",
+    "Lantai kiri/tengah-kiri kosong luas.",
+    "Objek kanan-bawah paling dekat, berpotensi menghalangi jalur."
+  ]
+}

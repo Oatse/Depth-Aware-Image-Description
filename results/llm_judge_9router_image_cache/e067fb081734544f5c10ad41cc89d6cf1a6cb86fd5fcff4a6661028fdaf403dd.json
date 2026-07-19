@@ -1,0 +1,15 @@
+{
+  "clarity": 3,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Cocok: lorong panjang, tengah lapang, halangan kuat tidak ada. Minor: 'terdekat tengah-kanan' kurang jelas/terbukti; alasan 'kategori kedalaman jauh' janggal.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Lorong memanjang ke titik jauh.",
+    "Lantai tengah kosong relatif lapang.",
+    "Pot tanaman jauh di tengah, bukan halangan dekat kuat.",
+    "Sisi kanan ada bukaan/pintu dekat."
+  ]
+}

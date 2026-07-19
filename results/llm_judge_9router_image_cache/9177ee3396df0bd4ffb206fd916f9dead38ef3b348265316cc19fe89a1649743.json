@@ -1,0 +1,17 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Klaim 'membentang di sisi kanan' agak berlebih/tidak presisi."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama bangku kanan benar; interior koridor/ruang, dinding putih, lantai cokelat muda benar. Namun bangku tidak benar-benar membentang sepanjang sisi kanan; ada bangku panjang foreground kanan + bangku kecil tengah/jauh. Tidak sebut area kiri lapang/no obstacle.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Bangku panjang kayu di kanan bawah/foreground.",
+    "Koridor sempit, dinding putih, lantai cokelat muda.",
+    "Area kiri relatif kosong/lapang.",
+    "Bangku kecil terlihat di tengah-belakang."
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "image_name": "living_room_1p (408).jpg",
+  "condition": "baseline",
+  "content": "{\"objects\": [\"sofa\", \"tanaman hias\", \"meja kopi\", \"kursi\", \"rak buku\", \"dinding hijau\"], \"description\": \"Interior ruangan modern dengan dinding berwarna hijau mint. Terdapat sofa abu-abu di sisi kiri, meja kopi kayu bundar di tengah dikelilingi oleh kursi berlengan krem. Di belakangnya terdapat rak buku tinggi dan beberapa jam dinding bulat berbingkai cokelat. Lantai terbuat dari kayu.\"}",
+  "latency_ms": 27565
+}

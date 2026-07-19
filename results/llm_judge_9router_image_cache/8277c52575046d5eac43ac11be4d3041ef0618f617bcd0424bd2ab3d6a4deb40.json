@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut bawah-kanan berpotensi halangan; anotasi: has_obstacle=no.",
+    "Menyebut bingkai pintu kaca besar; citra lebih ambigu sebagai jendela/kaca besar."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama cocok: meja konsol/tabel tengah, kursi kayu, lantai kayu, kaca besar. Spasial cukup: tengah relatif lapang, bawah-kanan lebih dekat karena kursi kanan depan. Namun status halangan bawah-kanan agak berlebih vs anotasi no obstacle; pintu kaca besar kurang pasti, lebih tampak jendela/kaca.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Meja konsol panjang di tengah depan kaca.",
+    "Kursi kayu kiri-kanan, kursi kanan berada foreground bawah-kanan.",
+    "Area tengah bawah relatif terbuka dibanding sisi kursi.",
+    "Kaca besar menampilkan luar/vegetasi."
+  ]
+}

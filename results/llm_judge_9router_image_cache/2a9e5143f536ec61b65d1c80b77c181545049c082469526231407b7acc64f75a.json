@@ -1,0 +1,15 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Objek utama benar: meja kerja+monitor+audio. Posisi kanan/tengah-kanan benar. Kiri relatif lapang dibanding meja, meski ada rak/barang bawah kiri. Halangan depan/dekat benar. Bahasa agak repetitif, aman.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Monitor besar di kanan atas meja.",
+    "Mikrofon/boom arm di tengah-kanan depan.",
+    "Meja hitam dominan dekat kamera → halangan depan.",
+    "Area kiri dinding kosong lebih lapang; bawah kiri ada rak/barang."
+  ]
+}

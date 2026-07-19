@@ -1,0 +1,14 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 4,
+  "rationale": "Selaras: meja/peralatan dominan kanan-tengah, dekat, menghalangi; kiri relatif lebih lapang. Kurang spesifik objek utama.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Meja kerja hitam memenuhi tengah-kanan foreground.",
+    "Monitor, keyboard, mikrofon/arm di kanan-tengah dekat kamera.",
+    "Area kiri berisi troli kecil/clutter, tetapi ruang visual lebih kosong dibanding kanan."
+  ]
+}

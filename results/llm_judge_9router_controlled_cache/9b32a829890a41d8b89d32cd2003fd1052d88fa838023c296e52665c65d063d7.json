@@ -1,0 +1,15 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama lorong/ruang indoor benar. Pintu kayu, lantai kayu, dinding krem sesuai. Posisi pintu kiri/kanan/tengah umumnya benar. Klaim bawah-kiri dekat didukung foreground pintu/tepi pintu. 'Potensi halangan' agak lemah; area tengah tampak lapang, label no obstacle.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Lorong indoor dg lantai kayu, dinding krem.",
+    "Pintu kayu terlihat kiri foreground, kanan foreground, tengah/belakang.",
+    "Area tengah lantai relatif kosong/lapang.",
+    "Tepi/pintu kiri bawah dekat kamera, dapat tampak sebagai penghalang visual kecil."
+  ]
+}

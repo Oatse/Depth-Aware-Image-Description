@@ -1,0 +1,15 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Akurat: lorong panjang indoor, lantai mengkilap, lemari pajangan kaca di kanan memanjang. Selaras label: lorong tengah, jauh, area tengah lapang, tanpa halangan.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 5,
+  "visual_evidence": [
+    "Koridor indoor memanjang ke depan.",
+    "Lantai reflektif/mengkilap.",
+    "Sisi kanan berisi deretan lemari kaca/pajangan.",
+    "Area tengah kosong relatif lapang."
+  ]
+}

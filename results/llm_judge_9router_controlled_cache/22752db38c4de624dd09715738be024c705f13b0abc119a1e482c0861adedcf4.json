@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Depth grid bawah-kiri disebut jauh; visual menunjukkan dekat."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Koridor indoor, dinding terang, lantai reflektif benar. Klaim grid: bawah-kiri jauh salah; area bawah-kiri tampak foreground/dekat. 'Kedua sisi' ambigu.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Lorong panjang posisi tengah.",
+    "Lantai mengilap/reflektif.",
+    "Dinding terang kiri-kanan.",
+    "Area bawah-kiri = lantai dekat kamera."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut bawah-kiri sebagai halangan utama; citra/label lebih mendukung kanan/depan terhalang.",
+    "Menyebut tengah lebih lapang; label: kiri relatif lapang/arah lebih aman."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Objek kanan benar umum: galon/air, kompor/peralatan. Namun galon kanan utama kurang eksplisit. Spasial parsial: kanan terhalang jelas; kiri relatif lapang. Klaim bawah-kiri paling dekat/halangan kurang tepat; ada stool/sapu kiri dekat, tapi hambatan utama kanan/depan.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Galon besar di kanan bawah-depan.",
+    "Meja dapur/kompor/peralatan di kanan.",
+    "Area lantai kiri-tengah relatif kosong.",
+    "Stool/sapu tampak sebagian di kiri bawah."
+  ]
+}

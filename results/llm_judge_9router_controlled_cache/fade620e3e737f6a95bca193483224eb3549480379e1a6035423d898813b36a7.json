@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Depth region bawah-kanan dinilai sedang, padahal tampak dekat.",
+    "Main object kipas angin kanan tidak diidentifikasi."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Objek umum benar: ruang indoor, lantai keramik, lemari hijau, barang/kabel. Namun fokus anotasi kipas kanan/dekat/terhalang tidak disebut. Klaim depth bawah-kanan=sedang lemah; visual menunjukkan kipas foreground kanan-bawah sangat dekat.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Lemari hijau besar di kiri-tengah.",
+    "Lantai keramik terlihat.",
+    "Barang/kabel berserakan di lantai tengah-kanan.",
+    "Kipas angin besar di kanan-bawah foreground, dekat kamera, menghalangi area."
+  ]
+}

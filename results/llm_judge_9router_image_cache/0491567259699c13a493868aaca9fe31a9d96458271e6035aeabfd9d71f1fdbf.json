@@ -1,0 +1,14 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Akurat: lorong panjang indoor, dinding terang, lantai cokelat-kuning, memanjang jauh, area tengah lapang. Klaim pencahayaan merata cukup sesuai.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 5,
+  "visual_evidence": [
+    "Lorong tengah memanjang ke titik jauh.",
+    "Dinding kiri/kanan terang; lantai kuning-cokelat reflektif.",
+    "Tidak ada halangan dekat; pot jauh di tengah akhir lorong."
+  ]
+}

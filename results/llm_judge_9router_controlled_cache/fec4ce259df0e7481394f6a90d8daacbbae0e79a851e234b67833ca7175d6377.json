@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut lemari kayu membentang; visual lebih cocok kulkas/alat besar gelap, bukan kayu."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Cukup sesuai: koridor sempit, lantai keramik terang, objek/halangan kiri depan. Salah/kurang: 'lemari kayu' tidak tepat; terlihat kulkas/alat besar gelap, magic com kiri depan. 'beberapa peralatan rumah tangga' terlalu umum tapi valid. Depth bawah-kiri dekat+terhalang sesuai.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Magic com putih-biru di kiri bawah/depan.",
+    "Objek besar gelap di sepanjang kiri → halangan.",
+    "Koridor memanjang; kanan relatif kosong/lapang.",
+    "Lantai keramik terang terlihat."
+  ]
+}

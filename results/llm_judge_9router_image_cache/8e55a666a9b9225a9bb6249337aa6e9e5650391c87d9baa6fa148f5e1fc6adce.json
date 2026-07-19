@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut area kanan relatif lapang, padahal ada sepatu/rak.",
+    "Menyebut tengah-kiri sebagai halangan terdekat; koper lebih kiri, sepatu tengah-kanan.",
+    "Jarak 'sedang' kurang sesuai; objek tampak dekat."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek utama benar: koper hitam kiri, sepatu di lantai/rak. Namun klaim area kanan/depan relatif lapang kurang tepat: kanan masih ada rak/sepatu; area tengah depan lebih lapang. Jarak 'sedang' bertentangan dgn anotasi dekat. Halangan tengah-kiri kurang akurat; halangan utama kiri/depan kiri.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Koper hitam besar di kiri dekat sudut.",
+    "Banyak sepatu di lantai/rak sepanjang dinding bawah tengah-kanan.",
+    "Lantai kosong paling jelas di area tengah depan.",
+    "Tirai hijau di kanan atas, bukan area lintasan."
+  ]
+}

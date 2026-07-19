@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Halangan utama tidak diidentifikasi sebagai kantong kanan-bawah.",
+    "Status bawah-kiri sebagai halangan utama lemah; lebih berupa counter/tepi kiri, bukan jalur utama."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Objek utama kiri benar: wastafel/countertop. Barang lantai kanan ada, termasuk kantong. Tengah relatif lapang benar. Namun fokus halangan bawah-kiri kurang cocok: label/citra menunjukkan kantong belanja kanan-bawah sebagai halangan depan/kanan lebih penting.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Wastafel+countertop di kiri.",
+    "Kantong belanja di kanan-bawah lantai.",
+    "Keset merah di tengah, area sekitar tengah relatif kosong.",
+    "Pintu/bingkai di kanan, ruang kecil belakang."
+  ]
+}

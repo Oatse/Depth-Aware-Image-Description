@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Open area salah: disebut tengah, bukti/label → kanan relatif lapang.",
+    "Halangan kurang spesifik: obstacle utama pintu kiri dekat, bukan sekadar area tengah-kiri."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: lorong, lantai putih, dinding terang, pintu kayu. Spasial sebagian tepat: kiri/dekat memang terhalang pintu dekat. Namun area lapang lebih kanan, bukan tengah; front/ujung tertutup pintu.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Pintu kayu besar sangat dekat di kiri foreground.",
+    "Pintu lain di ujung koridor tengah.",
+    "Lantai keramik putih, dinding krem.",
+    "Ruang berjalan relatif kosong di kanan/tengah-kanan."
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Kedalaman tengah-kanan disebut 'jauh' meski diklaim paling dekat.",
+    "Lantai disebut karpet.",
+    "Area kiri disebut lebih lapang; bukti lebih mendukung area tengah/depan lapang."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek utama benar: bangku ruang ganti. Namun lantai disebut karpet terang → citra tampak lantai keras/vinil. Spasial lemah: kategori kedalaman 'jauh' bertentangan dg label 'sedang' + klaim 'paling dekat'. Area lapang lebih tengah/depan, bukan kiri.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Bangku panjang kuning dg rangka merah di sisi kanan + kiri/belakang.",
+    "Dinding berderet kait gantungan hitam.",
+    "Lantai terang tampak keras, bukan karpet.",
+    "Area tengah/depan relatif kosong tanpa halangan kuat."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Ambiguitas arah: 'di kedua sisi'"
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas tepat: lorong indoor panjang, dinding terang, lantai reflektif, jauh. Frasa 'membentang ke kejauhan di kedua sisi' kurang tepat/ambigu; citra menunjukkan memanjang ke depan, bukan dua sisi arah.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Lorong lurus di tengah gambar",
+    "Dinding kiri-kanan terang",
+    "Lantai mengilap/reflektif",
+    "Area depan relatif lapang tanpa halangan jelas",
+    "Ujung lorong jauh terlihat"
+  ]
+}

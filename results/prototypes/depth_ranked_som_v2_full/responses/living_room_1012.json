@@ -1,0 +1,33 @@
+{
+  "image": "living_room_1012.jpg",
+  "expected": [
+    {
+      "id": 1,
+      "class": "table",
+      "median_depth": 3.234734058380127,
+      "p10_depth": 2.7091619968414307
+    },
+    {
+      "id": 2,
+      "class": "photo frame",
+      "median_depth": 4.57683801651001,
+      "p10_depth": 4.064023017883301
+    },
+    {
+      "id": 3,
+      "class": "table",
+      "median_depth": 6.270561218261719,
+      "p10_depth": 5.898674488067627
+    }
+  ],
+  "parsed_response": {
+    "marks": [
+      {
+        "id": 1,
+        "object": "Bagian dari perapian atau meja marmer yang gelap"
+      }
+    ],
+    "description": "Objek bertanda adalah bagian dari struktur perapian di sudut ruangan."
+  },
+  "raw_response": "{'id': 'chatcmpl-g6sdp41sgikbk9lrm138o4', 'object': 'chat.completion', 'created': 1784003927, 'model': 'google/gemma-4-e4b', 'choices': [{'index': 0, 'message': {'role': 'assistant', 'content': '{\"marks\":[{\"id\":1,\"object\":\"Bagian dari perapian atau meja marmer yang gelap\"}],\"description\":\"Objek bertanda adalah bagian dari struktur perapian di sudut ruangan.\"}', 'reasoning_content': '\\nHere\\'s a thinking process to arrive at the desired JSON output:\\n\\n1.  **Analyze the Request:**\\n    *   **Goal:** Identify objects within specific marked boxes (MARK 1, MARK 2, MARK 3) in the provided indoor image.\\n    *   **Constraint 1 (Focus):** Only identify objects *inside* the specified boxes.\\n    *   **Constraint 2 (ID Meaning):** The numbers on the badges are Region IDs, not object names.\\n    *   **Constraint 3 (Exclusions):** Do not guess objects outside the boxes; do not use depth information.\\n    *   **Constraint 4 (Output Format):** Must be *only* valid JSON, no markdown formatting.\\n    *   **Constraint 5 (Structure):** Schema must be `{\"marks\":[{\"id\":1,\"object\":\"nama objek Bahasa Indonesia\"}],\"description\":\"satu kalimat ringkas tentang objek bertanda\"}`.\\n    *   **Constraint 6 (Completeness):** Include exactly one entry for every visible MARK badge (MARK 1, MARK 2, MARK 3).\\n    *   **Constraint 7 (Tone):** Output immediately without reasoning.\\n\\n2.  **Examine the Image and Marks:**\\n\\n    *   **MARK 1 (Bottom Right):** This box contains a dark wooden structure, likely part of a fireplace or mantlepiece, with some decorative elements/objects on it.\\n        *   *Object Identification:* A section of a mantelpiece/fireplace area.\\n        *   *Description Draft:* Bagian dari perapian atau meja marmer yang gelap.\\n\\n    *   **MARK 2 (Top Right):** This box is placed over the upper wall area, near the ceiling, in the corner. It seems to encompass part of the ornate molding/ceiling structure and the dark wallpaper/paneling.\\n        *   *Object Identification:* Ornamen dinding atau langit-langit yang gelap.\\n        *   *Description Draft:* Bagian dari dekorasi dinding dan langit-langit di sudut ruangan.\\n\\n    *   **MARK 3 (Bottom Center):** This box is centered on a piece of furniture, specifically a small table or stand placed in front of the window/mirror area.\\n        *   *Object Identification:* Meja kecil atau alas pajangan.\\n        *   *Description Draft:* Sebuah meja kecil yang diletakkan di depan jendela.\\n\\n3.  **Construct the JSON (Adhering to Schema and Constraints):**\\n\\n    *   ID 1: Fireplace/Mantelpiece section.\\n    *   ID 2: Wall/Ceiling decoration.\\n    *   ID 3: Small table.\\n\\n4.  **Final Review against Constraints:**\\n    *   Valid JSON? Yes.\\n    *   No markdown? Yes.\\n    *   Schema followed? Yes (`marks` array with `id` and `object`, plus `description`).\\n    *   All marks included (1, 2, 3)? Yes.\\n    *   Objects identified in Indonesian? Yes.\\n    *   No external guessing/depth used? Yes.\\n\\n5.  **Generate the Output.** (This leads to the final JSON structure.)', 'tool_calls': []}, 'logprobs': None, 'finish_reason': 'stop'}], 'usage': {'prompt_tokens': 315, 'completion_tokens': 726, 'total_tokens': 1041, 'completion_tokens_details': {'reasoning_tokens': 681}}, 'stats': {}, 'system_fingerprint': 'google/gemma-4-e4b'}"
+}

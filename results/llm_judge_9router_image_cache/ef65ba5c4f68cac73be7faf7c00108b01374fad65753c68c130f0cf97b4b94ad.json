@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Tidak menyebut tangga utama.",
+    "Menyatakan potensi halangan bawah-kanan tanpa bukti kuat."
+  ],
+  "groundedness": 3,
+  "overall": 2,
+  "rationale": "Sebagian benar: tengah lapang. Namun objek utama tangga tengah hilang. Klaim bawah-kanan sbg halangan tidak didukung; label: no obstacle, safer tengah.",
+  "semantic_correctness": 2,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Tangga terlihat di tengah depan.",
+    "Area lantai/tengah relatif terbuka.",
+    "Bawah-kanan berisi lantai/kaca, bukan halangan jelas."
+  ]
+}

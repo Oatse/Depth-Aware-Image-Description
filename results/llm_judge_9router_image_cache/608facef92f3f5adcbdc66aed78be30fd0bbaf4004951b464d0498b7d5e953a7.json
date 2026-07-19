@@ -1,0 +1,15 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Akurat: lorong panjang, lantai mengkilap, kedalaman jauh, depan/tengah lapang, tanpa halangan kuat. Sesuai citra+label.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 5,
+  "visual_evidence": [
+    "Lorong memanjang ke tengah/jauh.",
+    "Lantai reflektif mengkilap.",
+    "Area depan kosong/lapang.",
+    "Tidak ada objek penghalang jalur utama."
+  ]
+}

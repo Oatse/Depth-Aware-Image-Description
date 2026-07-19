@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Misidentifikasi objek utama.",
+    "Posisi objek utama disebut tengah, bukan kanan."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Obj utama salah: bukan rak dinding kayu/bingkai, melainkan lemari plastik kanan. Bed bawah kiri benar. Area kanan/depan terhalang, kiri lebih lapang benar.",
+  "semantic_correctness": 2,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lemari plastik biru besar di kanan/dekat.",
+    "Tempat tidur bermotif hitam-putih bawah kiri.",
+    "Area kiri dinding/lantai relatif kosong.",
+    "Tidak tampak rak dinding kayu berisi bingkai gambar."
+  ]
+}

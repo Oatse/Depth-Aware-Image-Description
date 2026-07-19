@@ -7,9 +7,16 @@ from services.evaluator import REQUIRED_ANNOTATION_COLUMNS
 
 
 IMAGE_EXTENSIONS = frozenset({".jpg", ".jpeg", ".png", ".webp"})
-EXPERIMENT_MODES = frozenset({"gemma_only", "depth_only", "gemma_depth", "gemma_depth_prompted"})
-GEMMA_MODES = frozenset({"gemma_only", "gemma_depth", "gemma_depth_prompted"})
-DEPTH_MODES = frozenset({"depth_only", "gemma_depth", "gemma_depth_prompted"})
+EVIDENCE_ANNOTATION_COLUMNS = frozenset({"distance_annotation_basis", "annotation_confidence"})
+FORBIDDEN_METRIC_COLUMNS = frozenset({
+    "absolute_distance",
+    "distance_cm",
+    "distance_meter",
+    "distance_meters",
+})
+EXPERIMENT_MODES = frozenset({"gemma_only", "depth_only", "gemma_depth"})
+GEMMA_MODES = frozenset({"gemma_only", "gemma_depth"})
+DEPTH_MODES = frozenset({"depth_only", "gemma_depth"})
 
 
 @dataclass(frozen=True, slots=True)
@@ -34,6 +41,7 @@ class ExperimentPreflightReport:
 class AnnotationIndex:
     image_names: frozenset[str]
     columns: frozenset[str]
+    rows: tuple[dict[str, str], ...] = ()
 
     @property
     def count(self) -> int:
@@ -88,6 +96,7 @@ def _read_annotation_index(annotations_path: Path) -> AnnotationIndex:
     return AnnotationIndex(
         image_names=frozenset(row.get("image_name", "") for row in rows if row.get("image_name")),
         columns=columns,
+        rows=tuple(rows),
     )
 
 
@@ -108,6 +117,42 @@ def _validate_dataset_files(
         errors.append(f"Kolom anotasi kurang: {', '.join(sorted(missing_columns))}.")
     if annotation_index.count == 0:
         errors.append(f"File anotasi belum memiliki baris data: {config.annotations_path}.")
+    missing_evidence_columns = EVIDENCE_ANNOTATION_COLUMNS - annotation_index.columns
+    if missing_evidence_columns:
+        errors.append(
+            "Kolom basis bukti anotasi kurang: "
+            + ", ".join(sorted(missing_evidence_columns))
+            + "."
+        )
+    forbidden_columns = FORBIDDEN_METRIC_COLUMNS & annotation_index.columns
+    if forbidden_columns:
+        errors.append(
+            "Kolom jarak fisik tidak diizinkan tanpa sensor ground truth: "
+            + ", ".join(sorted(forbidden_columns))
+            + "."
+        )
+    invalid_basis_images = sorted(
+        row.get("image_name", "")
+        for row in annotation_index.rows
+        if row.get("distance_annotation_basis", "").strip() != "visual_relative"
+    )
+    if invalid_basis_images:
+        errors.append(
+            "distance_annotation_basis harus visual_relative untuk semua citra: "
+            + ", ".join(invalid_basis_images)
+            + "."
+        )
+    invalid_confidence_images = sorted(
+        row.get("image_name", "")
+        for row in annotation_index.rows
+        if row.get("annotation_confidence", "").strip() not in {"high", "medium", "low"}
+    )
+    if invalid_confidence_images:
+        errors.append(
+            "annotation_confidence harus high, medium, atau low: "
+            + ", ".join(invalid_confidence_images)
+            + "."
+        )
 
     images_without_annotations = sorted(image_names - annotation_index.image_names)
     annotations_without_images = sorted(annotation_index.image_names - image_names)

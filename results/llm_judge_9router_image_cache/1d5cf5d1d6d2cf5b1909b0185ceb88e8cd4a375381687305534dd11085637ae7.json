@@ -1,0 +1,17 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Kuantitas 'beberapa botol air' kurang tepat/ambigu."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Umum benar. Galon air kanan, kompor/peralatan masak kanan. Lantai ubin putih, dinding terang benar. 'Beberapa botol air' agak berlebih; terlihat utama 1 galon + sebagian wadah kiri. Detail halangan/area kiri aman tak disebut.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Galon air besar di kanan dekat meja/kompor.",
+    "Kompor/peralatan masak di sisi kanan.",
+    "Lantai ubin putih; dinding terang.",
+    "Area kiri relatif kosong; depan kanan terhalang galon/meja."
+  ]
+}

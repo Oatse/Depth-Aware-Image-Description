@@ -1,0 +1,17 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Material lantai disebut kayu cokelat muda, visual kurang mendukung."
+  ],
+  "groundedness": 5,
+  "overall": 4,
+  "rationale": "Objek utama benar: bangku kayu kanan. Interior koridor/ruang, dinding putih/terang benar. Lantai tampak ubin/tan, bukan jelas kayu → minor. Spasial kanan benar; area kiri lapang tersirat. Tidak sebut jarak/halangan, tapi tidak salah.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Bangku panjang kayu di sisi kanan bawah memanjang ke belakang.",
+    "Ruang sempit memanjang, dinding terang, plafon lampu.",
+    "Area kiri lantai kosong relatif lapang.",
+    "Lantai tampak permukaan ubin/karpet tan, bukan kayu jelas."
+  ]
+}

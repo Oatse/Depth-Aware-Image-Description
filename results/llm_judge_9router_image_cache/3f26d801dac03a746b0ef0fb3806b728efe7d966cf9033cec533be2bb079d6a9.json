@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut beberapa tempat sampah plastik; visual utama ember/bak.",
+    "Klaim area kiri lebih lapang bertentangan: ada bak besar."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek utama lebih tepat ember/bak kiri + tong kanan, bukan beberapa tempat sampah. Tengah-kanan memang dekat/terhalang oleh tong/pintu, tetapi kiri tidak lapang karena ada bak besar dekat depan.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Dinding/lantai berubin terlihat.",
+    "Bak/ember besar di kiri bawah dekat dinding.",
+    "Tong hitam kanan bawah dekat pintu.",
+    "Area depan kiri-kanan sama-sama terisi objek."
+  ]
+}

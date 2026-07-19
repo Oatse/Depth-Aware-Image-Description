@@ -1,0 +1,18 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "'tumpukan koper' tidak tampak; hanya satu koper.",
+    "Open area lebih tepat kiri daripada tengah."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas sesuai. Objek kanan: koper+sepatu/rak sepatu. Area dekat/terhalang benar. Kurang: sebut 'tumpukan koper' padahal 1 koper; area lapang lebih kiri, bukan tengah utama.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Koper besar di kanan dekat dinding.",
+    "Rak/deret sepatu di kanan bawah, paling dekat kamera.",
+    "Lantai kiri-tengah kosong relatif lapang.",
+    "Objek kanan bawah menghalangi area depan kanan."
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "image_name": "living_room_1p (205).jpg",
+  "condition": "som_control",
+  "content": "{\"1\":\"rak buku\",\"2\":\"lukisan potret\",\"3\":\"vas\",\"priority_mark_id\":2}",
+  "latency_ms": 4037
+}

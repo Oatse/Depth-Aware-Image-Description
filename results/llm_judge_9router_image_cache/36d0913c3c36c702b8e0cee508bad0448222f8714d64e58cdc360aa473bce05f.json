@@ -1,0 +1,17 @@
+{
+  "clarity": 3,
+  "critical_errors": [
+    "Misidentifikasi bangku ruang ganti sebagai peralatan olahraga/palang paralel.",
+    "Menyatakan terbentang di lantai; objek berada menempel/di depan dinding, bertumpu kaki, bukan di lantai sebagai palang."
+  ],
+  "groundedness": 1,
+  "overall": 1,
+  "rationale": "Objek utama salah: bangku ruang ganti + gantungan dinding, bukan palang paralel olahraga. Klaim dipasang di dinding sebagian cocok utk gantungan/struktur, tapi 'terbentang di lantai' keliru.",
+  "semantic_correctness": 1,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Terlihat bangku panjang kuning berkaki merah sepanjang dinding.",
+    "Ada deretan kait/gantungan hitam di atas bangku.",
+    "Area tengah lantai relatif lapang tanpa halangan besar."
+  ]
+}

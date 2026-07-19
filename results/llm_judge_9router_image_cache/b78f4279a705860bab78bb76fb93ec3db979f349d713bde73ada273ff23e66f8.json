@@ -1,0 +1,15 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 4,
+  "rationale": "Objek utama umum benar: wastafel/counter kiri, pintu/bingkai kanan, barang lantai kanan. Kurang spesifik: kantong belanja kanan, area tengah, halangan depan.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Wastafel+counter terlihat sisi kiri.",
+    "Bingkai/pintu kayu di kanan/tengah.",
+    "Kantong belanja kertas di lantai kanan depan.",
+    "Area tengah relatif lapang; karpet merah di tengah."
+  ]
+}

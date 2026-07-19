@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut potensi halangan depan/bawah-kiri meski area depan tampak cukup lapang; tidak ada halangan utama."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: interior/lorong, lantai kayu, beberapa pintu. Tengah lapang sesuai. Klaim halangan depan/bawah-kiri agak spekulatif; sisi pintu dekat terlihat, tapi anotasi: no obstacle, front relatif lapang.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lantai kayu jelas.",
+    "Beberapa pintu terbuka/terlihat kiri-kanan-tengah.",
+    "Area tengah kosong/lapang.",
+    "Tepi/panel pintu dekat di kiri/kanan foreground dapat sedikit menghalangi pandangan."
+  ]
+}

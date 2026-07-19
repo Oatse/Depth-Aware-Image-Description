@@ -1,0 +1,17 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Depth region bawah-kanan kemungkinan lebih dekat daripada 'sedang'."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama cocok. Posisi meja tengah benar. Kursi sisi kiri/kanan benar. Klaim depth bawah-kanan 'sedang' kurang kuat; area itu berisi kursi foreground relatif dekat.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Meja konsol panjang di tengah depan jendela.",
+    "Lampu meja di atas meja, vas bunga kanan meja.",
+    "Kursi kayu di kiri-kanan, bagian bawah/foreground.",
+    "Lantai kayu terlihat jelas."
+  ]
+}

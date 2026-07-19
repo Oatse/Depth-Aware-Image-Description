@@ -14,8 +14,9 @@ Anotasi diperbaiki dengan prinsip berikut:
 
 - `main_object` dipilih sebagai objek atau struktur paling relevan untuk deskripsi visual-spasial, diprioritaskan sebagai potensi halangan jika objek tersebut dekat.
 - `object_position` memakai posisi kasar pada bidang gambar: kiri, tengah, atau kanan.
-- `distance_meter` adalah estimasi visual, bukan pengukuran sensor.
-- `distance_category` mengikuti protokol proyek: `sangat_dekat`, `dekat`, `sedang`, atau `jauh`.
+- `distance_category` adalah kategori kedekatan visual relatif, bukan pengukuran meter aktual.
+- `distance_annotation_basis` bernilai `visual_relative` untuk menegaskan bahwa anotasi dibuat dari perspektif citra.
+- `annotation_confidence` mencatat tingkat keyakinan anotator terhadap kategori visual tersebut.
 - `has_obstacle` bernilai `yes` jika objek dekat secara visual dan perlu diperlakukan sebagai potensi halangan; bukan klaim bahaya navigasi pasti.
 - `safer_direction` dibaca sebagai area relatif lebih lapang, bukan arah aman.
 
@@ -59,7 +60,7 @@ Anotasi diperbaiki dengan prinsip berikut:
 1. Dataset terlalu homogen: mayoritas gambar dari area rumah/kamar/kos yang sama.
 2. Banyak gambar bertema berulang: pintu, meja kerja, dapur, kamar mandi, kursi, kipas.
 3. Negative cases masih sedikit dibanding obstacle-positive cases.
-4. Jarak masih estimasi visual, bukan pengukuran meter aktual.
+4. Kategori jarak masih berbasis anotasi visual relatif, bukan pengukuran meter aktual.
 5. Beberapa label tetap dapat diperdebatkan karena definisi "halangan" belum berbasis user study atau sensor nyata.
 
 ## Implikasi Untuk Skripsi

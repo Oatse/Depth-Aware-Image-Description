@@ -1,0 +1,15 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas sesuai: dapur, kompor tengah, wadah/peralatan bawah, botol besar bawah-kiri. Grid/depth dekat bawah-kiri masuk akal; area depan/bawah terhalang objek. Ada klaim \"tersusun rapi\" agak subjektif; \"botol air besar\" lebih galon/dispenser air.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kompor gas dua tungku di tengah meja.",
+    "Panci/wajan di atas kompor; mug/tumbler kiri.",
+    "Rak/bawah meja berisi galon besar kiri-bawah, wadah, tabung gas, kardus.",
+    "Bawah-kiri tampak paling dekat ke kamera; objek besar menghalangi area bawah/depan."
+  ]
+}

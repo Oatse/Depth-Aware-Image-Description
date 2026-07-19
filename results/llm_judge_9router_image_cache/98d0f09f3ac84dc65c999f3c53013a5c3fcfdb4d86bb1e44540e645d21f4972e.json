@@ -1,0 +1,13 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 4,
+  "rationale": "Cocok: bawah-kiri dekat/halangan; kanan relatif lapang. Kurang: objek utama galon tidak disebut; kedalaman harusnya sangat_dekat.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Galon air besar di lantai bawah-kiri, sangat dekat kamera.",
+    "Area kanan lantai lebih kosong dibanding kiri, meski ada kardus sisi kanan."
+  ]
+}

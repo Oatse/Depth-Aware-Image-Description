@@ -1,0 +1,14 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 4,
+  "rationale": "Umum tepat: halangan dekat di kiri/tengah-kiri; kanan lebih lapang. Tidak sebut objek spesifik. 'paling dekat' agak simplifikasi: ada plastik/kantong kiri-bawah juga dekat.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Bantal lantai/alas kecil di area tengah-kiri depan.",
+    "Benda lain menumpuk di kiri: kasur/bantal, tas, plastik.",
+    "Area kanan lantai lebih kosong, jalur lebih lapang."
+  ]
+}

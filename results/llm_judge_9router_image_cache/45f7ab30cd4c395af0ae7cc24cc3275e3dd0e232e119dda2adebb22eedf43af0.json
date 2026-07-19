@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut bawah-kiri paling dekat sebagai halangan visual.",
+    "Kategori kedalaman 'sedang' bertentangan label 'jauh'."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Koridor, dinding terang, lantai cokelat muda, ruang/dinding merah ujung benar. Namun klaim bawah-kiri paling dekat + potensi halangan salah/kurang berdasar; label: jarak jauh, depan lapang, tanpa halangan, arah aman tengah. Area tengah lapang benar.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Lorong indoor memanjang ke tengah.",
+    "Ujung lorong: area merah terlihat.",
+    "Lantai depan kosong/lapang; tidak ada objek halangan bawah-kiri.",
+    "Perspektif menunjukkan jalur tengah terbuka."
+  ]
+}

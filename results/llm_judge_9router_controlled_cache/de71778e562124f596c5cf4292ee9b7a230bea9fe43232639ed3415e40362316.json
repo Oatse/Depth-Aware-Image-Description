@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Depth 3x3 bawah-kanan disebut jauh; visual menunjukkan dekat."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek umum benar: kamar mandi, ubin, bak/ember, wadah. Klaim depth bawah-kanan jauh salah: area kanan-bawah berisi ember dekat foreground.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Ubin dinding/lantai terlihat.",
+    "Bak besar di kiri-bawah.",
+    "Ember hitam di kanan-bawah dekat kamera.",
+    "Rak/wadah di kiri atas."
+  ]
+}

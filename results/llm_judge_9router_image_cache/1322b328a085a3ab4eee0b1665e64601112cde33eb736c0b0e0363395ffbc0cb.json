@@ -1,0 +1,14 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Umum benar: kanan-bawah foreground terdekat; tengah/lorong relatif lapang. Klaim halangan hanya potensial, agak berlebih vs anotasi no_obstacle.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "counter/island kanan-bawah paling foreground",
+    "area tengah menuju doorway kosong/lapang",
+    "kabinet dominan di kiri"
+  ]
+}

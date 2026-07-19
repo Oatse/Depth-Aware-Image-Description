@@ -1,0 +1,15 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Objek utama tepat: wastafel/meja kiri, ubin, pintu kanan. Spasial tepat: bawah-kiri sangat dekat/terhalang oleh meja/peralatan. Selaras label: wastafel kiri, front terhalang, tengah lebih lapang.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 5,
+  "visual_evidence": [
+    "Wastafel + meja di sisi kiri foreground.",
+    "Pintu terbuka di kanan menuju ruang kecil/toilet.",
+    "Ubin berpola jelas pada dinding/lantai.",
+    "Area bawah-kiri berisi meja/peralatan sangat dekat kamera → halangan."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Mengabaikan objek utama: meja konsol tengah.",
+    "Klaim bawah-kanan paling dekat kurang kuat karena kiri-bawah juga foreground.",
+    "Status halangan dibesar-besarkan; area tengah tetap lapang."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Sebagian sesuai: tengah lapang benar. Bawah-kanan memang ada kursi dekat, tetapi klaim area paling dekat/halangan kurang lengkap; kiri-bawah juga dekat. Tidak menyebut meja konsol tengah.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Meja konsol berada di tengah depan jendela.",
+    "Area tengah bawah relatif terbuka.",
+    "Kursi terlihat di kiri-bawah dan kanan-bawah, keduanya dekat foreground."
+  ]
+}

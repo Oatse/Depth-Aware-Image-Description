@@ -1,0 +1,18 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Status halangan bawah-kiri dilebihkan.",
+    "Kategori kedalaman dekat bertentangan dg label jauh utk objek/lorong utama."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: interior/lorong, lantai kayu, dinding krem, pintu kayu. Tengah relatif lapang sesuai. Namun kandidat menyebut bawah-kiri paling dekat + potensi halangan; label: jarak jauh, tanpa halangan, arah aman tengah. Visual kiri memang ada pintu dekat di foreground, tapi bukan halangan jalur utama; klaim halangan lemah.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lantai kayu, dinding krem terlihat.",
+    "Beberapa pintu kayu di kiri, tengah, kanan.",
+    "Area tengah depan cukup kosong/lapang.",
+    "Pintu kiri/kanan foreground dekat kamera, tetapi jalur tengah terbuka."
+  ]
+}

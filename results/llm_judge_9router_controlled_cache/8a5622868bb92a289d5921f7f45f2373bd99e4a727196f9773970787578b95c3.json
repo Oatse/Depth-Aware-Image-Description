@@ -1,0 +1,16 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas cocok: dapur, kompor, wadah, galon/botol air depan-kiri. Spasial utama benar: objek dekat kiri/bawah-kiri, menghalangi; kanan relatif lebih lapang. Minor: menyebut botol air latar depan kurang spesifik; 'bagian bawah-kiri paling dekat dibanding area lain' benar namun label lebih kuat: sangat_dekat, terhalang.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kompor di meja tengah.",
+    "Galon air besar di lantai kiri-depan.",
+    "Area depan-kiri terisi galon → halangan.",
+    "Area kanan lantai lebih kosong relatif, meski ada kardus/rak.",
+    "Dinding ubin, lantai keramik terlihat."
+  ]
+}

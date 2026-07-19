@@ -1,0 +1,18 @@
+{
+  "clarity": 3,
+  "critical_errors": [
+    "Tidak menyebut kipas angin sebagai objek utama.",
+    "Deskripsi terlalu generik."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Vague. Benar: indoor, ubin, banyak barang, tengah relatif lapang, kanan/bawah dekat berpotensi halangan. Kurang: objek utama kipas angin kanan tidak disebut; 'bawah-kanan' agak umum.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kipas angin berdiri di kanan-depan.",
+    "Lantai ubin; area tengah lebih kosong.",
+    "Barang/kabel/meja/kursi di sisi kanan; clutter bawah-kanan.",
+    "Banyak barang di kiri juga."
+  ]
+}

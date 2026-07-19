@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Posisi area paling dekat: tengah-kanan → tidak kuat/keliru."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Lorong benar; area depan/tengah lapang; tanpa halangan benar. Klaim tengah-kanan paling dekat kurang sesuai: area terdekat tampak foreground bawah/tengah, arah aman utama tengah.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lorong memanjang ke tengah.",
+    "Lantai tengah kosong/lapang.",
+    "Tidak tampak halangan signifikan di jalur tengah.",
+    "Foreground bawah lebih dekat daripada tengah-kanan."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "clarity": 4,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama tepat: mesin cuci/laundry. Ubin biru benar. Area kiri relatif lapang sesuai label. Klaim bawah-kanan paling dekat masuk akal dari perspektif, status bukan halangan dekat sesuai label. Minor: semua mesin disebut putih, padahal beberapa krem/gelap; posisi kanan kurang eksplisit.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Deretan mesin cuci berada sepanjang dinding kanan/belakang.",
+    "Lantai ubin biru terlihat jelas.",
+    "Area kiri/depan lebih kosong dibanding sisi kanan berisi mesin.",
+    "Bagian kanan-bawah dekat kamera berisi sisi mesin terpotong."
+  ]
+}

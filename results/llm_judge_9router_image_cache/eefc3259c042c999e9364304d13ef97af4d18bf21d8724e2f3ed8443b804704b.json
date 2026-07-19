@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut area kanan relatif lebih lapang.",
+    "Kategori kedalaman 'sedang' vs objek dekat.",
+    "Halangan diposisikan tengah-kiri, bukan jelas kiri/koper."
+  ],
+  "groundedness": 3,
+  "overall": 2,
+  "rationale": "Vague; objek utama koper kiri tak disebut. Kedalaman/arah kurang tepat. Area kanan berisi rak sepatu, bukan paling lapang; area tengah depan lebih kosong.",
+  "semantic_correctness": 2,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Koper besar di kiri dekat kamera/dinding.",
+    "Rak sepatu+sepatu memenuhi tengah-kanan belakang.",
+    "Lantai tengah-depan relatif kosong."
+  ]
+}

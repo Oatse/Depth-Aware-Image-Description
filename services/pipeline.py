@@ -2,16 +2,17 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 
+import anyio
+
 from app.config import Settings
 from models.depth_anything import DepthAnything
-from models.depth_prompting import build_depth_spatial_prompt
 from models.fusion import fuse_description
 from models.gemma_client import GemmaClient, GemmaClientError
 from services.depth_analysis import analyze_depth_regions
 from services.image_preprocess import preprocess_image
 
-GEMMA_MODES = frozenset({"gemma_only", "gemma_depth", "gemma_depth_prompted"})
-DEPTH_MODES = frozenset({"depth_only", "gemma_depth", "gemma_depth_prompted"})
+GEMMA_MODES = frozenset({"gemma_only", "gemma_depth"})
+DEPTH_MODES = frozenset({"depth_only", "gemma_depth"})
 
 
 @dataclass(frozen=True)
@@ -55,12 +56,14 @@ async def analyze_image_bytes(
     depth_mock = False
     depth_error: str | None = None
     if mode in DEPTH_MODES:
-        depth_result = depth_model.estimate(processed.image, filename)
+        depth_result = await anyio.to_thread.run_sync(depth_model.estimate, processed.image, filename)
         depth_latency_ms = depth_result.latency_ms
         depth_mock = depth_result.mock
         depth_map_url = _to_depth_map_url(depth_result.depth_map_path)
         if depth_result.success:
-            depth_summary = analyze_depth_regions(depth_result.depth_map)
+            depth_summary = analyze_depth_regions(
+                depth_result.depth_map,
+            )
         else:
             depth_error = depth_result.error
             if mode == "depth_only":
@@ -68,15 +71,14 @@ async def analyze_image_bytes(
 
     if mode in GEMMA_MODES:
         try:
-            prompt = build_depth_spatial_prompt(depth_summary) if mode == "gemma_depth_prompted" else None
-            gemma_result = await gemma_client.describe_image(processed.base64_image, prompt)
+            gemma_result = await gemma_client.describe_image(processed.base64_image)
             gemma_description = gemma_result.description
             gemma_structured = gemma_result.structured
             gemma_latency_ms = gemma_result.latency_ms
             gemma_mock = gemma_result.mock
         except GemmaClientError as exc:
             gemma_error = str(exc)
-            if mode in {"gemma_only", "gemma_depth_prompted"}:
+            if mode == "gemma_only":
                 return _failed_result(filename, mode, started_at, gemma_error)
 
     fusion_started_at = time.perf_counter()
@@ -117,6 +119,8 @@ def prediction_row(result: PipelineResult) -> dict:
         "nearest_region": depth_summary.get("nearest_region", ""),
         "distance_category": depth_summary.get("distance_category", ""),
         "estimated_distance": depth_summary.get("estimated_distance", ""),
+        "safe_direction": depth_summary.get("safe_direction", ""),
+        "fusion_policy": (result.display or {}).get("fusion_strategy", ""),
         "final_description": result.final_description or "",
         "gemma_latency_ms": result.latency.get("gemma_ms", 0),
         "depth_latency_ms": result.latency.get("depth_ms", 0),

@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Main object kipas tidak disebut.",
+    "Lokasi terdekat disebut tengah-kiri; visual lebih kiri-depan.",
+    "Status halangan dibesar-besarkan vs front lapang/no obstacle."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Omit kipas kanan. Tengah/kanan lantai lapang benar. Kiri-depan ada meja/barang dekat, bukan tengah-kiri utama. Klaim halangan visual parsial benar kiri, tapi label: front relatif lapang/no obstacle.",
+  "semantic_correctness": 2,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Kipas angin berdiri di kanan.",
+    "Meja/barang/helm di kiri-depan dekat kamera.",
+    "Area lantai tengah-kanan kosong/lapang."
+  ]
+}

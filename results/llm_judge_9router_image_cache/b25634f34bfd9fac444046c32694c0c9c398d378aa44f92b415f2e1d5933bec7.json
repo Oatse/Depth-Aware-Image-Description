@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Salah fokus halangan: bawah-kiri disebut utama/terdekat; galon kanan lebih jelas dekat.",
+    "Tidak menyebut galon air kanan sebagai objek utama.",
+    "Open area kurang tepat: disebut tengah, label/citra lebih mendukung kiri/tengah-kiri."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Sebagian benar: dapur, lantai keramik, meja kanan, alat masak/botol terlihat. Namun objek utama/halangan dekat ialah galon air kanan, bukan area bawah-kiri. Area lapang lebih kiri/tengah-kiri.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Galon air besar di kanan bawah-tengah, dekat kamera.",
+    "Meja dapur kanan berisi kompor, panci, botol/peralatan.",
+    "Lantai kiri/tengah-kiri relatif kosong.",
+    "Bawah-kiri ada objek parsial/stool/sapu, tetapi bukan halangan utama."
+  ]
+}

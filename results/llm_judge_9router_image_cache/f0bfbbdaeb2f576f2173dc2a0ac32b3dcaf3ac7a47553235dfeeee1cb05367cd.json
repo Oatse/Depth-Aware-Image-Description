@@ -1,0 +1,16 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas tepat: kursi utama tengah/depan, kamar, ranjang belakang, kanan relatif lapang. Kedalaman kurang kuat: label sangat_dekat/terhalang; kandidat hanya dekat, 'berpotensi' halangan. 'perabotan kayu' meragukan.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kursi hitam besar dominan di tengah-depan.",
+    "Ranjang terlihat di belakang kiri/tengah.",
+    "Lemari biru di kanan belakang.",
+    "Area kanan bawah ada ruang lantai/karpet relatif terbuka.",
+    "Kursi menghalangi area depan/bawah-tengah."
+  ]
+}

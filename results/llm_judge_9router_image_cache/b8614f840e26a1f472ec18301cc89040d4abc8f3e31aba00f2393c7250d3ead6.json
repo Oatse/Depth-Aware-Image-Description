@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut beberapa monitor; citra menunjukkan laptop, bukan monitor eksternal.",
+    "Open area diklaim kanan, bertentangan dg anotasi: kiri relatif lapang/safer_direction kiri."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek utama benar: meja kerja, laptop, kursi, kabel. Salah/lebih: 'beberapa monitor' tidak tampak; yg tampak 2 laptop. Spasial lemah: anotasi kiri lapang/arah aman kiri, kandidat sebut kanan lapang. Halangan depan/dekat benar umum, bawah-kiri dekat masuk akal sebagian.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Meja kerja di tengah/depan berisi 2 laptop, mouse, kabel, benda kecil.",
+    "Kursi kantor di belakang meja.",
+    "Area depan/bawah terisi meja+kipas/kabel → terhalang.",
+    "Kiri tampak sisi meja/ruang lebih terbuka dibanding kanan yg ditempati laptop besar."
+  ]
+}

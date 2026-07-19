@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Klaim pintu di kedua sisi bertentangan citra.",
+    "Arah lapang kurang tepat: kanan lebih lapang daripada tengah."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Sebagian cocok: lorong, lantai putih, pintu kayu, hambatan dekat/kiri. Salah/kurang: 'pintu di kedua sisi' tak tampak; area lapang utama kanan, bukan tengah.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lorong sempit dgn lantai keramik putih.",
+    "Pintu kayu sangat dekat di kiri → hambatan/penyempitan.",
+    "Pintu kayu lain di ujung depan.",
+    "Dinding kanan relatif kosong/lapang.",
+    "Tak ada pintu kanan terlihat."
+  ]
+}

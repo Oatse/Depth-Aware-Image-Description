@@ -1,4 +1,5 @@
 import io
+import time
 
 import numpy as np
 from fastapi.testclient import TestClient
@@ -37,6 +38,10 @@ def test_experiment_status_endpoint_returns_readiness_snapshot() -> None:
     assert "dataset_image_count" in data
     assert "readiness_score" in data
     assert isinstance(data["readiness_notes"], list)
+    assert data["artifact_profile"] == "final_44_gemma_e2b_20260708"
+    assert data["dataset_image_count"] == 44
+    assert data["annotation_count"] == 44
+    assert data["artifact_paths"]["images"] == "dataset/final_images"
 
 
 def test_analyze_endpoint_rejects_text_file() -> None:
@@ -75,23 +80,28 @@ def test_analyze_endpoint_returns_fused_result_with_mocks(monkeypatch) -> None:
     assert response.status_code == 200
     data = response.json()
     assert data["success"] is True
-    assert "Berdasarkan estimasi kedalaman" in data["final_description"]
+    assert "Berdasarkan grid depth 3x3" in data["final_description"]
+    assert data["display"]["fusion_strategy"] == "evidence_constrained_regional_late_fusion"
     assert data["depth_summary"]["nearest_region"] == "lower_center"
     assert isinstance(data["latency"]["fusion_ms"], int)
     assert data["latency"]["fusion_ms"] >= 0
 
 
-def test_analyze_endpoint_accepts_depth_to_spatial_prompted_mode(monkeypatch) -> None:
+def test_analyze_endpoint_rejects_retired_prompted_mode() -> None:
+    response = client.post(
+        "/analyze",
+        files={"image": ("sample.jpg", _sample_image_bytes(), "image/jpeg")},
+        data={"mode": "gemma_depth_prompted", "save_result": "false"},
+    )
+
+    assert response.status_code == 400
+    assert response.json()["error"] == "Mode must be one of gemma_only, depth_only, or gemma_depth."
+
+
+def test_analysis_job_endpoint_returns_accepted_then_completed(monkeypatch) -> None:
     class FakeGemmaClient:
         async def describe_image(self, base64_image: str, prompt: str | None = None) -> GemmaResult:
-            assert prompt is not None
-            assert "Depth-to-Spatial Prompting Schema" in prompt
-            return GemmaResult(
-                "Terlihat kursi di area tengah dengan konteks kedalaman relatif dari area bawah-tengah.",
-                "{}",
-                5,
-                mock=True,
-            )
+            return GemmaResult("Terlihat kursi di tengah ruangan.", "{}", 5, mock=True)
 
     class FakeDepthModel:
         def estimate(self, image, source_name: str) -> DepthResult:
@@ -104,13 +114,26 @@ def test_analyze_endpoint_accepts_depth_to_spatial_prompted_mode(monkeypatch) ->
     monkeypatch.setattr(analyze_route, "gemma_client", FakeGemmaClient())
     monkeypatch.setattr(analyze_route, "depth_model", FakeDepthModel())
 
-    response = client.post(
-        "/analyze",
-        files={"image": ("sample.jpg", _sample_image_bytes(), "image/jpeg")},
-        data={"mode": "gemma_depth_prompted", "save_result": "false"},
-    )
+    with TestClient(app) as live_client:
+        accepted = live_client.post(
+            "/analysis-jobs",
+            files={"image": ("sample.jpg", _sample_image_bytes(), "image/jpeg")},
+            data={"mode": "gemma_depth", "save_result": "false"},
+        )
 
-    assert response.status_code == 200
-    data = response.json()
-    assert data["mode"] == "gemma_depth_prompted"
-    assert data["display"]["fusion_strategy"] == "depth_to_spatial_prompting"
+        assert accepted.status_code == 202
+        accepted_data = accepted.json()
+        assert accepted_data["status"] == "queued"
+        assert accepted_data["poll_url"].endswith(accepted_data["job_id"])
+
+        result = None
+        for _ in range(100):
+            response = live_client.get(accepted_data["poll_url"])
+            result = response.json()
+            if result["status"] in {"completed", "failed"}:
+                break
+            time.sleep(0.01)
+
+        assert result is not None
+        assert result["status"] == "completed"
+        assert result["result"]["success"] is True

@@ -1,0 +1,18 @@
+{
+  "clarity": 3,
+  "critical_errors": [
+    "Tidak menyebut galon air sebagai objek utama.",
+    "Istilah 'halangan visual' agak kabur; halangan fisik lebih tepat."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Obj dapur/kompor/wadah benar. Namun obj utama label=galon kiri sangat dekat kurang disebut eksplisit; kandidat fokus umum 'area bawah-kiri'. Kanan relatif lapang benar sebagian, meski ada kardus/rak kanan. Klaim halangan visual dekat kiri sesuai citra/label.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Kompor di meja tengah.",
+    "Galon air besar di bawah kiri, sangat dekat.",
+    "Area depan/bawah kiri terhalang galon + kain.",
+    "Area kanan lantai lebih terbuka relatif, meski ada kardus kanan."
+  ]
+}

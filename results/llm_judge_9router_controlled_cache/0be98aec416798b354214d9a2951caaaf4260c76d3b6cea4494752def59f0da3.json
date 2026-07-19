@@ -1,0 +1,18 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Depth bawah-kanan 'sedang' kemungkinan salah; visual menunjukkan foreground/dekat."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: meja konsol tengah, lampu, vas bunga, kursi kiri/kanan, lantai kayu. Spasial umum benar. Klaim depth bawah-kanan sedang lemah: area kanan-bawah berisi kursi foreground → relatif dekat, bukan sedang.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Meja konsol di tengah depan jendela.",
+    "Lampu di atas meja, vas bunga kanan meja.",
+    "Kursi kayu di kiri dan kanan foreground.",
+    "Lantai kayu terlihat.",
+    "Region bawah-kanan ditempati kursi dekat kamera."
+  ]
+}

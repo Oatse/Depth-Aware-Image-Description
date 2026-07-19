@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Mengimplikasikan kursi tersusun di atas permukaan meja."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek utama benar: monitor, laptop, kursi, meja hitam. Namun frasa semua objek di atas meja → salah utk kursi. Posisi kursi kanan/dekat, area depan terhalang tidak disebut.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Monitor kiri di atas/melekat meja hitam.",
+    "Laptop di atas meja.",
+    "Kursi kantor putih di kanan, di lantai, dekat meja.",
+    "Permukaan meja hitam terlihat penuh perangkat."
+  ]
+}

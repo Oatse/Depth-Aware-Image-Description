@@ -1,0 +1,16 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas sesuai. Objek lantai kiri/depan, bangku kayu, koper kanan, area kanan lebih lapang. Salah/kurang tepat: 'tas/selimut' agak spekulatif; objek utama lebih bantal/karung plastik. 'tengah-kiri paling dekat' cukup, tetapi halangan utama tampak kiri-depan, bukan sekadar tengah-kiri.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Lantai keramik putih terlihat.",
+    "Bangku kayu di kiri-tengah dekat dinding.",
+    "Bantal/alas, plastik/tas hitam, barang di lantai kiri-depan.",
+    "Koper hitam di kanan dekat dinding.",
+    "Area kanan-tengah lantai relatif kosong/lapang."
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut tengah-kiri paling dekat/halangan; lebih tepat kiri bawah/bangku.",
+    "Mengabaikan area tengah relatif lapang sebagai arah aman utama."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar. Posisi kipas kanan benar. Bangku/tas/kotak kiri benar. Spasial campur: area lapang utama lebih tengah/kanan; halangan nyata di kiri oleh bangku, bukan jelas tengah-kiri. Klaim obstacle bertentangan dg label, tapi sebagian tampak dari citra.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Kipas angin berdiri di sisi kanan dekat dinding.",
+    "Bangku kayu di kiri bawah berisi tas/helm/kotak.",
+    "Lantai putih terbuka di area tengah-kanan.",
+    "Objek terdekat tampak bangku kiri bawah."
+  ]
+}

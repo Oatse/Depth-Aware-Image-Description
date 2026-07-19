@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut area kiri relatif lapang.",
+    "Kategori kedalaman 'sedang' tidak cocok; visual/label dekat.",
+    "Tripod tidak terverifikasi jelas."
+  ],
+  "groundedness": 4,
+  "overall": 3,
+  "rationale": "Objek umum benar: indoor, lemari, kabel/barang lantai. Salah/lemah: 'tripod' tidak jelas; objek utama dekat kanan tampak kipas. Bawah-kanan memang paling dekat/halangan. Kedalaman disebut sedang, padahal dekat. Area kiri bukan paling lapang; tengah lebih terbuka.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Kipas angin besar foreground kanan-bawah sangat dekat.",
+    "Lemari hijau di kiri; banyak barang/kabel di lantai.",
+    "Area tengah lantai relatif lebih kosong dibanding kiri.",
+    "Kiri berisi lemari, rak/barang, tas; tidak lapang."
+  ]
+}

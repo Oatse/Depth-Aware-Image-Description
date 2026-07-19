@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Menyebut rak penyimpanan sisi kanan; citra/label menunjukkan kulkas."
+  ],
+  "groundedness": 3,
+  "overall": 4,
+  "rationale": "Objek utama salah: rak, bukan kulkas. Namun botol/galon, kardus, lantai benar. Spasial utama benar: kanan/dekat terhalang, kiri lebih lapang.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kulkas abu-abu besar di kanan depan/tengah-kanan.",
+    "Kardus/tas merah di atas kulkas.",
+    "Galon air di kiri belakang; wadah/barang lain di belakang.",
+    "Jalur lantai kiri relatif kosong."
+  ]
+}

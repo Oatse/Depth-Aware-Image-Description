@@ -1,0 +1,17 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Area kanan 'lapang' kurang didukung."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Mayoritas cocok: dapur, kompor tengah, barang bawah, bawah-kiri dekat/halangan. Klaim kanan lapang lemah: kanan terisi kardus/tabung.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kompor gas di meja tengah.",
+    "Galon besar bawah-kiri paling dekat foreground.",
+    "Bawah meja penuh wadah, botol, tabung, kardus.",
+    "Kanan bawah terisi kardus/tabung, tidak jelas lapang."
+  ]
+}

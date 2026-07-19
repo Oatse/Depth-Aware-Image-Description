@@ -1,0 +1,20 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "bawah-kanan disebut jauh",
+    "halangan bawah-kanan diremehkan",
+    "front area seharusnya dekat+terhalang"
+  ],
+  "groundedness": 2,
+  "overall": 2,
+  "rationale": "Objek umum benar. Spatial utama salah: bawah-kanan dekat+terhalang ember, bukan jauh/tanpa halangan kuat. Kontradiksi internal: paling dekat tapi kategori jauh.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 1,
+  "visual_evidence": [
+    "ubin dinding/lantai terlihat",
+    "rak kiri berisi perlengkapan",
+    "ember/bak besar kiri depan",
+    "ember hitam kanan bawah/depan",
+    "area depan terhalang ember"
+  ]
+}

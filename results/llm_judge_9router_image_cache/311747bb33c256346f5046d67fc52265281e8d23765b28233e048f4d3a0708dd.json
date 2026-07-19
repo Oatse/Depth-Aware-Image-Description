@@ -1,0 +1,19 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Main object salah: rak penyimpanan vs kulkas/freezer.",
+    "Botol/wadah/kardus disebut di rak; rak tidak jelas terlihat."
+  ],
+  "groundedness": 3,
+  "overall": 4,
+  "rationale": "Sebagian benar: lantai putih, kardus/wadah/botol, sisi kiri lapang, kanan-depan dekat/terhalang. Salah utama: objek kanan disebut rak, padahal kulkas/freezer; area terdekat lebih kanan-depan daripada tengah-kanan.",
+  "semantic_correctness": 3,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kulkas/freezer abu-abu besar di kanan-depan.",
+    "Kardus/tas merah di atas kulkas/freezer.",
+    "Galon air di kiri-belakang; wadah/tabung/kotak di belakang.",
+    "Jalur kiri lantai relatif kosong.",
+    "Objek kanan-depan menonjol → halangan dekat."
+  ]
+}

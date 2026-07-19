@@ -1,0 +1,17 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Depth grid: bawah-kiri disebut jauh, visualnya dekat."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Lorong indoor panjang, dinding terang, lantai reflektif benar. Klaim koridor ke dua sisi ambigu. Klaim depth bawah-kiri jauh salah: area bawah-kiri foreground/lantai dekat.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Lorong tengah memanjang ke belakang.",
+    "Lantai mengilap/reflektif.",
+    "Dinding terang kiri-kanan.",
+    "Region bawah-kiri berada di foreground, tampak dekat."
+  ]
+}

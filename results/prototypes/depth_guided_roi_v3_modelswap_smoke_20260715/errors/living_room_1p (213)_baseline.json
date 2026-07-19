@@ -1,0 +1,5 @@
+{
+  "image": "living_room_1p (213).jpg",
+  "condition": "baseline",
+  "error": "4 validation errors for BaselineResponse\nobjects\n  Field required [type=missing, input_value={'objek_terlihat': ['sofa...ndela bernuansa gelap.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\ndescription\n  Field required [type=missing, input_value={'objek_terlihat': ['sofa...ndela bernuansa gelap.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\nobjek_terlihat\n  Extra inputs are not permitted [type=extra_forbidden, input_value=['sofa merah', 'meja kerj...plafon', 'tanaman hias'], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden\ndeskripsi_visual\n  Extra inputs are not permitted [type=extra_forbidden, input_value='Ruang indoor bergaya mod...endela bernuansa gelap.', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+}

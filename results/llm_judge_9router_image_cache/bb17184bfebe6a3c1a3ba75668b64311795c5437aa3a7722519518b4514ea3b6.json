@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Kontradiksi kedalaman: bawah-kiri paling dekat tetapi dikategorikan jauh."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Lorong indoor, lantai cokelat/kuning mengilap, dinding krem, pintu sisi kiri/kanan benar. Tengah lapang benar. Salah/ambigu: bawah-kiri disebut paling dekat tetapi kategori jauh; secara visual bawah-kiri foreground dekat.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Lorong panjang memusat ke tengah belakang.",
+    "Lantai mengilap cokelat-kuning.",
+    "Dinding krem, pintu/akses di kedua sisi.",
+    "Area tengah depan kosong/lapang.",
+    "Bawah-kiri = foreground dekat."
+  ]
+}

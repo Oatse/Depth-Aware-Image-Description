@@ -53,6 +53,7 @@ const depthMapGridWrap = document.querySelector("#depth-map-grid-wrap");
 const depthRegionGrid = document.querySelector("#depth-region-grid");
 const startCameraButton = document.querySelector("#start-camera");
 const captureImageButton = document.querySelector("#capture-image");
+const switchCameraButton = document.querySelector("#switch-camera");
 const cameraPreview = document.querySelector("#camera-preview");
 const cameraActions = document.querySelector("#camera-actions");
 const captureCanvas = document.querySelector("#capture-canvas");
@@ -74,7 +75,6 @@ const MODE_LABELS = {
   gemma_only: "Gemma Baseline",
   depth_only: "Kedalaman Saja",
   gemma_depth: "Gemma + Kedalaman Late Fusion",
-  gemma_depth_prompted: "Depth-to-Spatial Prompting",
 };
 
 const PROVENANCE_LABELS = {
@@ -82,7 +82,6 @@ const PROVENANCE_LABELS = {
   depth: "Depth",
   inference: "Inferensi",
   template: "Template",
-  prompted_gemma: "Gemma + Depth Prompt",
   guardrail: "Batasan",
 };
 
@@ -93,7 +92,9 @@ const SCENE_LABELS = {
 };
 
 let selectedBlob = null;
+let selectedCaptureMeta = null;
 let cameraStream = null;
+let cameraFacingMode = "environment";
 let loadingTimer = null;
 let loadingIndex = 0;
 let dragDepth = 0;
@@ -234,11 +235,8 @@ function setHelpText(button, title, text) {
 }
 
 function buildModeHelper(mode) {
-  if (mode === "gemma_depth_prompted") {
-    return "Depth masuk ke prompt Gemma.";
-  }
   if (mode === "gemma_depth") {
-    return "Visual + depth late fusion.";
+    return "Visual + depth regional berbatas bukti.";
   }
   if (mode === "gemma_only") {
     return "Hanya deskripsi visual.";
@@ -250,11 +248,8 @@ function buildModeHelper(mode) {
 }
 
 function buildModeTooltip(mode) {
-  if (mode === "gemma_depth_prompted") {
-    return "Mode ini menjalankan estimasi kedalaman lebih dulu, lalu metadata region dan kategori kedalaman relatif dimasukkan ke prompt Gemma sebelum deskripsi akhir dibuat.";
-  }
   if (mode === "gemma_depth") {
-    return "Mode ini menjalankan deskripsi visual Gemma dan ringkasan peta kedalaman secara terpisah, lalu menggabungkannya di tahap late fusion berbasis aturan.";
+    return "Mode ini menggabungkan deskripsi Gemma dengan ringkasan depth regional. Klaim depth tidak ditempelkan pada objek tertentu karena pipeline belum memiliki lokalisasi objek yang dapat membuktikan ikatan tersebut.";
   }
   if (mode === "gemma_only") {
     return "Mode ini hanya memakai deskripsi visual Gemma, sehingga kontribusi peta kedalaman tidak dihitung pada hasil akhir.";
@@ -326,7 +321,7 @@ formElement?.addEventListener("submit", async (event) => {
   setLoading(true);
   hideError();
   try {
-    const data = await analyzeMode(modeSelect?.value || "gemma_depth_prompted", true);
+    const data = await analyzeMode(modeSelect?.value || "gemma_depth", true);
     renderResult(data);
     renderSingleModeComparison(data);
   } catch (error) {
@@ -347,10 +342,9 @@ compareButton?.addEventListener("click", async () => {
   try {
     const gemmaOnly = await analyzeMode("gemma_only", false);
     const depthOnly = await analyzeMode("depth_only", false);
-    const prompted = await analyzeMode("gemma_depth_prompted", false);
     const gemmaDepth = buildControlledLateFusion(gemmaOnly, depthOnly);
-    renderResult(prompted);
-    renderModeComparison(gemmaOnly, depthOnly, gemmaDepth, prompted);
+    renderResult(gemmaDepth);
+    renderModeComparison(gemmaOnly, depthOnly, gemmaDepth);
   } catch (error) {
     comparisonStatus.textContent = "Gagal";
     showError(error.message || "Perbandingan mode gagal.");
@@ -359,6 +353,24 @@ compareButton?.addEventListener("click", async () => {
   }
 });
 
+async function openCamera(facingMode) {
+  cameraStream?.getTracks().forEach((track) => track.stop());
+  cameraStream = await navigator.mediaDevices.getUserMedia({
+    video: { facingMode: { ideal: facingMode } },
+    audio: false,
+  });
+  cameraPreview.srcObject = cameraStream;
+  const actualFacingMode = cameraStream.getVideoTracks()[0]?.getSettings().facingMode;
+  cameraFacingMode = actualFacingMode || facingMode;
+  cameraPreview.classList.remove("hidden");
+  cameraActions.classList.remove("hidden");
+  captureImageButton.disabled = false;
+  switchCameraButton.disabled = false;
+  const usesRearCamera = cameraFacingMode === "environment";
+  switchCameraButton.textContent = usesRearCamera ? "Ganti ke kamera depan" : "Ganti ke kamera belakang";
+  switchCameraButton.setAttribute("aria-label", switchCameraButton.textContent);
+}
+
 startCameraButton?.addEventListener("click", async () => {
   if (!navigator.mediaDevices?.getUserMedia) {
     showError("Peramban tidak mendukung akses kamera.");
@@ -366,14 +378,29 @@ startCameraButton?.addEventListener("click", async () => {
   }
 
   try {
-    cameraStream = await navigator.mediaDevices.getUserMedia({ video: true });
-    cameraPreview.srcObject = cameraStream;
-    cameraPreview.classList.remove("hidden");
-    cameraActions.classList.remove("hidden");
-    captureImageButton.disabled = false;
+    await openCamera("environment");
     hideError();
   } catch (error) {
     showError("Kamera tidak dapat diakses. Unggah gambar tetap dapat digunakan.");
+  }
+});
+
+switchCameraButton?.addEventListener("click", async () => {
+  const previousFacingMode = cameraFacingMode;
+  const nextFacingMode = previousFacingMode === "environment" ? "user" : "environment";
+  switchCameraButton.disabled = true;
+  captureImageButton.disabled = true;
+  try {
+    await openCamera(nextFacingMode);
+    hideError();
+  } catch (_error) {
+    try {
+      await openCamera(previousFacingMode);
+    } catch (_restoreError) {
+      cameraPreview.classList.add("hidden");
+      cameraActions.classList.add("hidden");
+    }
+    showError("Kamera yang dipilih tidak tersedia pada perangkat ini.");
   }
 });
 
@@ -383,6 +410,13 @@ captureImageButton?.addEventListener("click", () => {
     return;
   }
 
+  const captureTimeMs = Date.now();
+  const captureId = `cap_${captureTimeMs}_${crypto.randomUUID?.() || Math.random().toString(16).slice(2)}`;
+  selectedCaptureMeta = {
+    capture_id: captureId,
+    capture_time_ms: captureTimeMs,
+    camera_facing_mode: cameraFacingMode,
+  };
   captureCanvas.width = cameraPreview.videoWidth;
   captureCanvas.height = cameraPreview.videoHeight;
   const context = captureCanvas.getContext("2d");
@@ -685,16 +719,16 @@ async function analyzeMode(mode, saveResult) {
   formData.append("image", selectedBlob, selectedBlob.name || "gambar-kamera.jpg");
   formData.append("mode", mode);
   formData.append("save_result", saveResult ? "true" : "false");
-
-  const response = await fetch("/analyze", {
-    method: "POST",
-    body: formData,
-  });
-  const data = await response.json();
-  if (!response.ok || !data.success) {
-    throw new Error(data.error || "Analisis gagal.");
+  if (selectedCaptureMeta) {
+    formData.append("capture_id", selectedCaptureMeta.capture_id);
+    formData.append("capture_time_ms", String(selectedCaptureMeta.capture_time_ms));
+    formData.append("camera_facing_mode", selectedCaptureMeta.camera_facing_mode);
   }
-  return data;
+
+  if (!window.AnalysisJobClient) {
+    throw new Error("Klien antrean analisis tidak tersedia.");
+  }
+  return window.AnalysisJobClient.analyze(formData);
 }
 
 function setSelectedImage(file) {
@@ -704,6 +738,7 @@ function setSelectedImage(file) {
   }
 
   selectedBlob = file;
+  selectedCaptureMeta = null;
   showPreview(file);
   setActionAvailability(true);
   hideError();
@@ -721,6 +756,7 @@ function showPreview(file) {
 
 function clearSelectedImage() {
   selectedBlob = null;
+  selectedCaptureMeta = null;
   imageInput.value = "";
   imagePreview.removeAttribute("src");
   selectedFileName.textContent = "Gambar terpilih";
@@ -799,44 +835,40 @@ function renderSingleModeComparison(data) {
 
   comparisonStatus.textContent = "Mode aktif";
   comparisonOutput.innerHTML = `
-    <div class="comparison-finding">Mode ${escapeHtml(MODE_LABELS[data.mode] || data.mode || "terpilih")} sudah dianalisis. Jalankan perbandingan untuk melihat Gemma Baseline, depth-only, late fusion kontrol, dan Depth-to-Spatial Prompting pada gambar yang sama.</div>
+    <div class="comparison-finding">Mode ${escapeHtml(MODE_LABELS[data.mode] || data.mode || "terpilih")} sudah dianalisis. Jalankan perbandingan untuk melihat Gemma Baseline, depth-only, dan late fusion kontrol pada gambar yang sama.</div>
   `;
 }
 
-function renderModeComparison(gemmaOnly, depthOnly, gemmaDepth, prompted) {
+function renderModeComparison(gemmaOnly, depthOnly, gemmaDepth) {
   comparisonStatus.textContent = "Selesai";
-  const addsDepth = prompted.depth_summary?.distance_category || gemmaDepth.depth_summary?.nearest_region;
+  const addsDepth = gemmaDepth.depth_summary?.nearest_region;
   comparisonOutput.innerHTML = `
-    ${buildComparisonTable(gemmaOnly, depthOnly, gemmaDepth, prompted)}
+    ${buildComparisonTable(gemmaOnly, depthOnly, gemmaDepth)}
     <div class="comparison-finding">
       ${addsDepth
-        ? "Kontribusi depth tersedia sebagai metadata region/kategori pada depth-only, sebagai kalimat tambahan pada late fusion kontrol, dan sebagai konteks prompt pada Depth-to-Spatial Prompting. Kolom Gemma Baseline membaca relasi spasial visual tanpa metadata depth eksplisit."
+        ? "Kontribusi depth tersedia sebagai metadata region/kategori pada depth-only dan sebagai kalimat tambahan pada late fusion kontrol. Kolom Gemma Baseline membaca relasi spasial visual tanpa metadata depth eksplisit."
         : "Kontribusi kedalaman belum terlihat pada data respons. Periksa JSON mentah dan status waktu proses model."}
     </div>
   `;
 }
 
-function buildComparisonTable(gemmaOnly, depthOnly, gemmaDepth, prompted) {
+function buildComparisonTable(gemmaOnly, depthOnly, gemmaDepth) {
   const depthOnlySummary = depthOnly.depth_summary || {};
   const lateDepth = gemmaDepth.depth_summary || {};
-  const promptedDepth = prompted.depth_summary || {};
   const lateSections = gemmaDepth.display?.final_sections || {};
-  const promptedSections = prompted.display?.final_sections || {};
   const rows = [
     {
       aspect: "Deskripsi visual",
       gemma: summarizeVisual(gemmaOnly),
       depthOnly: "Tidak membaca semantik objek; hanya metadata depth.",
       lateFusion: summarizeVisual(gemmaDepth),
-      prompted: summarizeVisual(prompted),
-      contribution: "Gemma Baseline memakai gambar saja; prompted mode memberi konteks depth sejak awal.",
+      contribution: "Gemma Baseline memakai gambar saja; late fusion menambahkan hasil depth setelah deskripsi visual dibuat.",
     },
     {
       aspect: "Area terdekat",
       gemma: depthMetadataUnavailable(),
       depthOnly: formatArea(depthOnlySummary.nearest_region),
       lateFusion: formatArea(lateDepth.nearest_region),
-      prompted: formatArea(promptedDepth.nearest_region),
       contribution: "Berasal dari estimasi kedalaman relatif, bukan identitas objek pasti.",
     },
     {
@@ -844,15 +876,13 @@ function buildComparisonTable(gemmaOnly, depthOnly, gemmaDepth, prompted) {
       gemma: formatFusionStrategy(gemmaOnly.display?.fusion_strategy),
       depthOnly: "Depth summary",
       lateFusion: formatFusionStrategy(gemmaDepth.display?.fusion_strategy),
-      prompted: formatFusionStrategy(prompted.display?.fusion_strategy),
-      contribution: "Membedakan depth-only, post-processing, dan prompt-level fusion.",
+      contribution: "Membedakan baseline visual, depth-only, dan post-processing late fusion.",
     },
     {
       aspect: "Kategori kedalaman relatif",
       gemma: depthMetadataUnavailable(),
       depthOnly: formatCategory(depthOnlySummary.distance_category),
       lateFusion: formatCategory(lateDepth.distance_category),
-      prompted: formatCategory(promptedDepth.distance_category),
       contribution: "Ditambahkan dari threshold depth yang belum dikalibrasi sebagai meter presisi.",
     },
     {
@@ -860,7 +890,6 @@ function buildComparisonTable(gemmaOnly, depthOnly, gemmaDepth, prompted) {
       gemma: summarizeText(gemmaOnly.display?.final_sections?.potential_obstacle),
       depthOnly: summarizeText(depthOnly.display?.final_sections?.potential_obstacle),
       lateFusion: summarizeText(lateSections.potential_obstacle),
-      prompted: summarizeText(promptedSections.potential_obstacle),
       contribution: "Gemma dapat menyebut hambatan yang tampak; depth memberi indikator region relatif.",
     },
     {
@@ -868,7 +897,6 @@ function buildComparisonTable(gemmaOnly, depthOnly, gemmaDepth, prompted) {
       gemma: summarizeText(gemmaOnly.display?.final_sections?.open_area),
       depthOnly: summarizeText(depthOnly.display?.final_sections?.open_area),
       lateFusion: summarizeText(lateSections.open_area),
-      prompted: summarizeText(promptedSections.open_area),
       contribution: "Area relatif lapang bukan jalur aman.",
     },
     {
@@ -876,8 +904,7 @@ function buildComparisonTable(gemmaOnly, depthOnly, gemmaDepth, prompted) {
       gemma: formatMs(gemmaOnly.latency?.total_ms),
       depthOnly: formatMs(depthOnly.latency?.total_ms),
       lateFusion: formatMs(gemmaDepth.latency?.total_ms),
-      prompted: formatMs(prompted.latency?.total_ms),
-      contribution: buildLatencyDelta(gemmaOnly.latency?.total_ms, prompted.latency?.total_ms),
+      contribution: buildLatencyDelta(gemmaOnly.latency?.total_ms, gemmaDepth.latency?.total_ms),
     },
   ];
 
@@ -890,7 +917,6 @@ function buildComparisonTable(gemmaOnly, depthOnly, gemmaDepth, prompted) {
             <th>Gemma Baseline</th>
             <th>Depth-only</th>
             <th>Late Fusion</th>
-            <th>Prompted</th>
             <th>Kontribusi</th>
           </tr>
         </thead>
@@ -901,7 +927,6 @@ function buildComparisonTable(gemmaOnly, depthOnly, gemmaDepth, prompted) {
               <td data-label="Gemma Baseline">${escapeHtml(row.gemma)}</td>
               <td data-label="Depth-only">${escapeHtml(row.depthOnly)}</td>
               <td data-label="Late Fusion">${escapeHtml(row.lateFusion)}</td>
-              <td data-label="Prompted">${escapeHtml(row.prompted)}</td>
               <td data-label="Kontribusi">${escapeHtml(row.contribution)}</td>
             </tr>
           `).join("")}
@@ -977,7 +1002,7 @@ function setComparisonLoading(isLoading) {
   analyzeButton.disabled = isLoading || !selectedBlob;
   if (isLoading) {
     comparisonOutput.innerHTML = `
-      <div class="comparison-finding">Menjalankan baseline, depth-only, late fusion, dan Depth-to-Spatial Prompting secara berurutan pada gambar yang dipilih...</div>
+      <div class="comparison-finding">Menjalankan baseline dan depth-only secara berurutan, lalu membentuk late fusion terkontrol pada gambar yang dipilih...</div>
     `;
   }
 }
@@ -1056,9 +1081,9 @@ function hasLatencyValue(value) {
 
 function getLatencyStageRuns(mode) {
   return {
-    gemma: mode === "gemma_only" || mode === "gemma_depth" || mode === "gemma_depth_prompted",
-    depth: mode === "depth_only" || mode === "gemma_depth" || mode === "gemma_depth_prompted",
-    fusion: mode === "gemma_only" || mode === "depth_only" || mode === "gemma_depth" || mode === "gemma_depth_prompted",
+    gemma: mode === "gemma_only" || mode === "gemma_depth",
+    depth: mode === "depth_only" || mode === "gemma_depth",
+    fusion: mode === "gemma_only" || mode === "depth_only" || mode === "gemma_depth",
   };
 }
 
@@ -1081,9 +1106,10 @@ function formatCategory(value) {
 
 function formatFusionStrategy(value) {
   const labels = {
-    depth_to_spatial_prompting: "Depth-to-Spatial Prompting",
     late_rule_based_fusion_controlled: "Late fusion kontrol",
     late_rule_based_fusion: "Late rule-based fusion",
+    evidence_constrained_regional_late_fusion: "Fusi regional berbatas bukti",
+    legacy_verbose_late_fusion: "Late fusion verbose (kontrol lama)",
     depth_only_summary: "Depth summary",
     gemma_visual_spatial_baseline: "Gemma visual-spatial baseline",
     gemma_only: "Gemma-only",

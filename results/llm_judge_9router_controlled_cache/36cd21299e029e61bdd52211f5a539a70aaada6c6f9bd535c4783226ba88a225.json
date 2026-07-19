@@ -1,0 +1,19 @@
+{
+  "clarity": 5,
+  "critical_errors": [
+    "Posisi tangga disebut sisi kiri; citra menunjukkan tengah-belakang.",
+    "Kategori kedalaman bawah-kanan sedang meragukan; tampak dekat."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: lantai ubin, karpet oranye, tangga, panel kayu kiri, pintu kaca kanan. Salah/kurang: tangga bukan sisi kiri, lebih tengah-belakang. Klaim depth bawah-kanan 'sedang' lemah; area itu foreground/dekat.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Karpet oranye di bawah-tengah/foreground.",
+    "Tangga ubin berada tengah-belakang.",
+    "Panel kayu di kiri.",
+    "Pintu/jendela kaca besar di kanan.",
+    "Area bawah-kanan tampak dekat kamera."
+  ]
+}

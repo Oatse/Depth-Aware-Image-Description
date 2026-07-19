@@ -1,0 +1,20 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Open area disebut kanan; citra/label mendukung kiri.",
+    "Safer/lapang kanan tidak kuat: kanan padat objek.",
+    "Halangan dipersempit ke bawah-kiri, padahal front area meja dominan terhalang."
+  ],
+  "groundedness": 3,
+  "overall": 3,
+  "rationale": "Objek utama benar: meja kerja, kursi, laptop/perangkat, kabel. Namun klaim area kanan lebih lapang bertentangan dgn citra/label: kanan berisi laptop, meja, kabel; label open_area kiri, safer_direction kiri. Bawah-kiri dekat/terhalang cukup masuk akal karena meja/laptop dekat, tetapi status halangan depan lebih luas bukan spesifik bawah-kiri saja.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 2,
+  "visual_evidence": [
+    "Meja kerja dominan di tengah/depan.",
+    "Kursi kantor di belakang meja.",
+    "Dua laptop/perangkat elektronik di kiri-depan dan kanan.",
+    "Banyak kabel/benda kecil di atas meja.",
+    "Area kiri tampak relatif lebih terbuka di belakang/samping dibanding kanan yg terisi laptop/meja."
+  ]
+}

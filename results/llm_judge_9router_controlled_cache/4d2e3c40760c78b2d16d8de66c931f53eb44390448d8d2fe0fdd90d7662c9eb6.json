@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Open area salah: kandidat menyebut tengah, bukti/label kanan.",
+    "Halangan disebut tengah-kiri; lebih tepat kiri foreground."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Objek utama benar: lorong, lantai putih, dinding terang, pintu kayu. Posisi halangan kiri/dekat sesuai. Namun area lapang lebih tepat kanan, bukan tengah; 'beberapa pintu membentang' agak berlebih.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Pintu kayu besar di kiri foreground sangat dekat.",
+    "Pintu kayu lain di ujung lorong.",
+    "Lantai keramik putih, dinding krem terang.",
+    "Sisi kanan lorong relatif kosong/lapang."
+  ]
+}

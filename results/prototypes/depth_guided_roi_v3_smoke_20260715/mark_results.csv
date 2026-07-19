@@ -1,0 +1,7 @@
+image_name,condition,mark_id,expected_class,predicted_object,object_match,median_depth,p10_depth
+living_room_1059.jpg,som_control,1,sofa,sofa,True,,
+living_room_1059.jpg,som_control,2,table,coffee table,True,,
+living_room_1059.jpg,som_control,3,potted plant,plant,False,,
+living_room_1059.jpg,depth_guided,1,sofa,armchair,False,3.6589622497558594,3.3149170875549316
+living_room_1059.jpg,depth_guided,2,table,coffee table,True,3.9043946266174316,3.192756414413452
+living_room_1059.jpg,depth_guided,3,lamp,lamp,True,3.9580492973327637,3.9132118225097656

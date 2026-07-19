@@ -1,0 +1,15 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Benar: dapur indoor, kompor, wadah/penyimpanan bawah, galon. Kurang: 'tersusun rapi' agak subjektif; peralatan masak ada di atas kompor, bukan jelas di bawah.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Kompor gas hitam di meja tengah.",
+    "Rak/area bawah berisi galon, tabung gas, wadah, kardus.",
+    "Panci/wajan di atas kompor.",
+    "Area depan/bawah padat objek → terhalang."
+  ]
+}

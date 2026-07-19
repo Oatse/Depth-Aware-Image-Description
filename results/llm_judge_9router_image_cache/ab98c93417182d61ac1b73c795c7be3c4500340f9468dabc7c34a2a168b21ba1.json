@@ -1,0 +1,18 @@
+{
+  "clarity": 4,
+  "critical_errors": [
+    "Tidak mengidentifikasi kulkas.",
+    "Open area salah/vague: tengah disebut lapang, bukti kuat kiri lebih lapang."
+  ],
+  "groundedness": 4,
+  "overall": 4,
+  "rationale": "Umum benar: koridor indoor, lantai ubin, halangan depan/kanan. Kurang spesifik: tidak sebut kulkas, area aman kiri. Klaim tengah lapang agak meleset; kiri lebih lapang.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 3,
+  "visual_evidence": [
+    "Koridor sempit berubin.",
+    "Kulkas/objek besar di kanan-depan menghalangi jalur.",
+    "Sisi kiri lantai lebih terbuka untuk lewat.",
+    "Area tengah-kanan lebih dekat/menonjol sebagai halangan."
+  ]
+}

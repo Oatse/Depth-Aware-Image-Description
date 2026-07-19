@@ -1,0 +1,6 @@
+{
+  "image_name": "living_room_131.jpg",
+  "condition": "baseline",
+  "content": "{\"objects\": [\"sofa\", \"kursi hijau\", \"meja kopi\", \"perapian\", \"lukisan dinding\", \"lampu meja\"], \"description\": \"Ruangan interior modern dengan palet warna netral dan aksen hijau. Terdapat sofa putih di sisi kiri, dua kursi berlengan berwarna hijau muda di sisi kanan, serta perapian batu di tengah ruangan. Lantai kayu terang dilengkapi karpet bertekstur.\"}",
+  "latency_ms": 28593
+}

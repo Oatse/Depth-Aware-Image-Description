@@ -1,0 +1,15 @@
+{
+  "clarity": 3,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 4,
+  "rationale": "Objek besar benar: wastafel kiri, pintu kanan, area tengah lapang. Halangan kanan-depan sesuai, tapi disebut vague, tidak identifikasi kantong belanja. Repetitif.",
+  "semantic_correctness": 4,
+  "spatial_accuracy": 4,
+  "visual_evidence": [
+    "Wastafel/counter di kiri.",
+    "Pintu kayu terbuka di kanan.",
+    "Kantong belanja cokelat dekat bawah-kanan/depan pintu.",
+    "Area tengah lantai relatif kosong menuju pintu."
+  ]
+}

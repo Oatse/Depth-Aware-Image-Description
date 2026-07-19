@@ -1,0 +1,16 @@
+{
+  "clarity": 5,
+  "critical_errors": [],
+  "groundedness": 5,
+  "overall": 5,
+  "rationale": "Akurat: lorong panjang indoor, dinding terang, lantai krem, ujung ruang/dinding merah. Sesuai label: lorong tengah, jauh, area depan lapang, tanpa halangan.",
+  "semantic_correctness": 5,
+  "spatial_accuracy": 5,
+  "visual_evidence": [
+    "Koridor memanjang ke tengah gambar.",
+    "Dinding kiri/kanan terang.",
+    "Lantai krem/tan mengarah ke ujung.",
+    "Area ujung terlihat merah.",
+    "Tidak tampak obstacle di jalur tengah."
+  ]
+}
