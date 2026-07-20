@@ -119,6 +119,7 @@ async def run_analysis_job(job: AnalysisJobRequest) -> dict[str, object]:
         analyze_route.settings,
         analyze_route.gemma_client,
         analyze_route.depth_model,
+        job.sensor_evidence,
     )
     if not pipeline_result.success:
         raise RuntimeError(pipeline_result.error or "Analyze failed.")
@@ -140,6 +141,7 @@ async def run_analysis_job(job: AnalysisJobRequest) -> dict[str, object]:
         mock=pipeline_result.mock,
         error=pipeline_result.error,
         sensor_evidence=job.sensor_evidence,
+        sensor_contribution=pipeline_result.sensor_contribution,
     )
     if job.save_result and analyze_route.settings.save_results:
         log_prediction(analyze_route.settings.results_dir, analyze_route.prediction_row(pipeline_result))

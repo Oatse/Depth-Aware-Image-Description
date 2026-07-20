@@ -38,3 +38,12 @@ class FusionResult(TypedDict):
     depth_summary: dict | None
     warnings: list[str]
     display: DisplayPayload
+
+
+class SensorFusionResult(TypedDict):
+    status: str
+    reason_code: str | None
+    frontal_reference_cm: float | None
+    depth_consistency: str
+    description: str
+    warnings: list[str]

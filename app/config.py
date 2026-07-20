@@ -40,6 +40,7 @@ class Settings(BaseSettings):
     sensor_pair_disagreement_cm: float = Field(default=15.0, ge=0, le=500, validation_alias="SENSOR_PAIR_DISAGREEMENT_CM")
     sensor_clock_rtt_max_ms: int = Field(default=1000, ge=1, le=60000, validation_alias="SENSOR_CLOCK_RTT_MAX_MS")
     sensor_iot_strict: bool = Field(default=True, validation_alias="SENSOR_IOT_STRICT")
+    sensor_calibration_path: Path = Field(default=Path("./config/sensor_camera_calibration.json"), validation_alias="SENSOR_CALIBRATION_PATH")
 
     experiment_artifact_profile: str = "final_44_gemma_e2b_20260708"
     experiment_images_dir: Path = Path("./dataset/final_images")

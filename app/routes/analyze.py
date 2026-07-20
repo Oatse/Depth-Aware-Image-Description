@@ -70,6 +70,7 @@ async def analyze_image(
         settings,
         gemma_client,
         depth_model,
+        sensor_evidence,
     )
     if not pipeline_result.success:
         return _final_error_response(
@@ -99,6 +100,7 @@ async def analyze_image(
         mock=pipeline_result.mock,
         error=pipeline_result.error,
         sensor_evidence=sensor_evidence,
+        sensor_contribution=pipeline_result.sensor_contribution,
     )
 
     if save_result and settings.save_results:

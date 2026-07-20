@@ -52,6 +52,10 @@ _Avoid_: mengklaim depth sebagai sensor jarak atau pengganti pemahaman visual Ge
 Penanda warna pada teks deskripsi untuk memperlihatkan sumber informasi, seperti Gemma, depth, inferensi, template, atau guardrail.
 _Avoid_: menyebutnya tokenisasi model jika warna tidak berasal dari tokenizer asli
 
+**Referensi sensor frontal**:
+Ringkasan dua HC-SR04 yang segar dan sepakat pada bidang pandang sensor. Nilai ini berdiri sebagai evidence terpisah dan tidak mengidentifikasi objek yang disebut model visual.
+_Avoid_: jarak objek pasti, mengikat nilai sensor ke objek bernama, arah aman
+
 ## Relationships
 
 - **Deskripsi visual-spasial** menggabungkan satu **Deskripsi visual** dengan satu **Estimasi kedalaman**.
@@ -61,6 +65,7 @@ _Avoid_: menyebutnya tokenisasi model jika warna tidak berasal dari tokenizer as
 - **Region terdekat** dapat menunjukkan area/objek terdekat, tetapi tidak membuktikan identitas objek tanpa dukungan **Deskripsi visual**.
 - **Late fusion berbasis aturan** adalah strategi aktif; **Depth-to-Spatial Prompting** hanya artefak eksperimen negatif dan bukan mode pembanding final.
 - **Provenance highlighting** menjelaskan sumber teks pada UI, bukan jumlah token atau segmentasi tokenizer.
+- **Referensi sensor frontal** hanya dapat diterapkan pada kamera lingkungan dengan evidence paired; konflik dua sensor ditampilkan tanpa dirata-ratakan.
 
 ## Example dialogue
 

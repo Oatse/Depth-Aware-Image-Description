@@ -6,7 +6,9 @@ from models.depth_anything import DepthAnything
 from models.fusion import fuse_description
 from services.analysis_types import AnalysisMode
 from models.gemma_client import GemmaClient
+from models.sensor_fusion import append_sensor_section, fuse_sensor_reference
 from services.evidence_pipeline import build_evidence_bundle
+from services.sensor_calibration import CalibrationProfile
 
 GEMMA_MODES = frozenset({AnalysisMode.GEMMA_ONLY, AnalysisMode.GEMMA_DEPTH, AnalysisMode.IOT_ASSISTED})
 DEPTH_MODES = frozenset({AnalysisMode.DEPTH_ONLY, AnalysisMode.GEMMA_DEPTH, AnalysisMode.IOT_ASSISTED})
@@ -26,6 +28,7 @@ class PipelineResult:
     mock: dict[str, bool]
     error: str | None
     display: dict | None
+    sensor_contribution: dict | None
 
 
 async def analyze_image_bytes(
@@ -35,6 +38,7 @@ async def analyze_image_bytes(
     settings: Settings,
     gemma_client: GemmaClient | None = None,
     depth_model: DepthAnything | None = None,
+    sensor_evidence: dict | None = None,
 ) -> PipelineResult:
     started_at = time.perf_counter()
     evidence = await build_evidence_bundle(
@@ -53,6 +57,24 @@ async def analyze_image_bytes(
 
     fusion_started_at = time.perf_counter()
     fusion = fuse_description(evidence.gemma_description, evidence.depth_summary, mode, evidence.gemma_structured)
+    sensor_contribution = None
+    if mode == AnalysisMode.IOT_ASSISTED:
+        calibration_validated = False
+        if settings.sensor_calibration_path.exists():
+            calibration_validated = CalibrationProfile.load(settings.sensor_calibration_path).validated
+        sensor_contribution = fuse_sensor_reference(
+            sensor_evidence,
+            calibration_validated=calibration_validated,
+        )
+        if settings.sensor_iot_strict and sensor_contribution["status"] == "insufficient":
+            return _failed_result(
+                filename,
+                mode,
+                started_at,
+                sensor_contribution["reason_code"] or "Sensor evidence is insufficient.",
+            )
+        fusion["final_description"] = append_sensor_section(fusion["final_description"], sensor_contribution)
+        fusion["display"]["sensor_contribution"] = sensor_contribution
     fusion_latency_ms = int((time.perf_counter() - fusion_started_at) * 1000)
     total_latency_ms = int((time.perf_counter() - started_at) * 1000)
     return PipelineResult(
@@ -73,6 +95,7 @@ async def analyze_image_bytes(
         mock={"gemma": evidence.gemma_mock, "depth": evidence.depth_mock},
         error=evidence.gemma_error or evidence.depth_error,
         display=fusion["display"],
+        sensor_contribution=sensor_contribution,
     )
 
 
@@ -113,4 +136,5 @@ def _failed_result(filename: str, mode: str, started_at: float, error: str) -> P
         mock={"gemma": False, "depth": False},
         error=error,
         display=None,
+        sensor_contribution=None,
     )
