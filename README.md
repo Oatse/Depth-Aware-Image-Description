@@ -143,6 +143,8 @@ Buka:
 
 Pada tab Kamera, panel Sensor IoT menampilkan koneksi serial dan bacaan dua kanal secara live. Saat frame diambil, browser mengirim `capture_id`, waktu frame, dan arah kamera. Backend memilih sampel valid terdekat dalam jendela `SENSOR_MATCH_WINDOW_MS`. Upload gambar tetap menjadi fallback utama dan tidak membutuhkan sensor.
 
+Sebelum mode `iot_assisted` dapat dipilih, buka **Kalibrasi jarak sensor** pada panel Kamera. Hadapkan kedua HC-SR04 ke bidang datar, ukur jarak fisiknya, lalu catat sedikitnya tiga jarak referensi berbeda. Backend mengambil dua bacaan sensor pada setiap titik, menyimpan provenance lokal, dan hanya memvalidasi profil bila residual maksimum tidak melebihi 10 cm. Kalibrasi ini mengkarakterisasi referensi jarak frontal; kalibrasi tidak mengikat jarak ke objek atau ROI gambar.
+
 ## API
 
 ### `GET /health`
@@ -156,6 +158,18 @@ Mengembalikan readiness snapshot beserta `artifact_profile` dan semua path sumbe
 ### `GET /sensor-status`
 
 Mengembalikan status koneksi serial, jumlah percobaan reconnect, bacaan terbaru `sensor_1` dan `sensor_2`, serta umur masing-masing sampel. Reader akan mencoba tersambung kembali secara otomatis sehingga backend tidak perlu direstart ketika ESP32 baru dipasang.
+
+### `GET /sensor-calibration`
+
+Mengembalikan titik pengukuran lokal dan status profil kalibrasi jarak frontal.
+
+### `POST /sensor-calibration/captures`
+
+Menerima JSON `{"measured_cm": 60}`. Endpoint hanya menyimpan titik ketika dua sensor sedang `paired`, lalu menghitung rerata sensor dan residual terhadap jarak fisik yang dimasukkan.
+
+### `DELETE /sensor-calibration`
+
+Menghapus titik dan profil kalibrasi lokal agar pengukuran dapat diulang. Tindakan ini tersedia dari tombol **Reset kalibrasi** pada panel Kamera.
 
 ### `POST /analyze`
 

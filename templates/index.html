@@ -8,7 +8,7 @@
       name="description"
       content="Console eksperimen deskripsi gambar sadar kedalaman untuk inspeksi hasil Gemma, Depth Anything V2, dan fusi Gemma + Kedalaman pada citra dalam ruangan."
     />
-    <link rel="stylesheet" href="/static/style.css" />
+    <link rel="stylesheet" href="/static/style.css?v=20260721-calibration" />
   </head>
   <body>
     <a class="skip-link" href="#analysis-composer">Lewati ke input analisis</a>
@@ -154,6 +154,24 @@
                   </div>
                   <p id="sensor-connection-meta" class="sensor-connection-meta">Menghubungkan pembaca serial...</p>
                   <p id="sensor-capture-status" class="sensor-capture-status">Belum ada frame yang dianalisis bersama evidence sensor.</p>
+                  <details class="sensor-calibration-panel">
+                    <summary>Kalibrasi jarak sensor</summary>
+                    <p>Hadapkan kedua sensor ke bidang datar, ukur jaraknya secara fisik, lalu catat tiga jarak berbeda.</p>
+                    <div class="sensor-calibration-controls">
+                      <label for="calibration-measured-cm">
+                        <span>Jarak referensi</span>
+                        <span class="sensor-calibration-input">
+                          <input id="calibration-measured-cm" type="number" min="5.1" max="400" step="0.1" inputmode="decimal" />
+                          <span>cm</span>
+                        </span>
+                      </label>
+                      <button id="calibration-capture" type="button" class="secondary-button" disabled>Catat titik</button>
+                    </div>
+                    <div class="sensor-calibration-footer">
+                      <output id="calibration-status" aria-live="polite">Belum ada titik kalibrasi.</output>
+                      <button id="calibration-reset" type="button" class="text-button">Reset kalibrasi</button>
+                    </div>
+                  </details>
                 </section>
               </div>
             </div>
@@ -458,7 +476,7 @@
       </section>
     </main>
 
-    <script src="/static/analysis-job-client.js"></script>
-    <script src="/static/app.js"></script>
+    <script src="/static/analysis-job-client.js?v=20260721-calibration"></script>
+    <script src="/static/app.js?v=20260721-calibration"></script>
   </body>
 </html>

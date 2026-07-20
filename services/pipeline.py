@@ -66,6 +66,8 @@ async def analyze_image_bytes(
             sensor_evidence,
             calibration_validated=calibration_validated,
         )
+        if settings.sensor_iot_strict and not calibration_validated:
+            return _failed_result(filename, mode, started_at, "sensor_calibration_required")
         if settings.sensor_iot_strict and sensor_contribution["status"] == "insufficient":
             return _failed_result(
                 filename,

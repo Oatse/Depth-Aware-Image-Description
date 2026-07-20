@@ -43,6 +43,10 @@ class Settings(BaseSettings):
     sensor_clock_rtt_max_ms: int = Field(default=1000, ge=1, le=60000, validation_alias="SENSOR_CLOCK_RTT_MAX_MS")
     sensor_iot_strict: bool = Field(default=True, validation_alias="SENSOR_IOT_STRICT")
     sensor_calibration_path: Path = Field(default=Path("./config/sensor_camera_calibration.json"), validation_alias="SENSOR_CALIBRATION_PATH")
+    sensor_calibration_measurements_path: Path = Field(
+        default=Path("./config/sensor_camera_calibration_measurements.json"),
+        validation_alias="SENSOR_CALIBRATION_MEASUREMENTS_PATH",
+    )
 
     experiment_artifact_profile: str = "final_44_gemma_e2b_20260708"
     experiment_images_dir: Path = Path("./dataset/final_images")

@@ -14,6 +14,7 @@ from app.routes.analysis_comparisons import router as analysis_comparisons_route
 from app.routes.analysis_comparisons import run_comparison_job
 from app.routes.experiment_status import router as experiment_status_router
 from app.routes.sensor_status import router as sensor_status_router
+from app.routes.sensor_calibration import router as sensor_calibration_router
 from app.routes.time_sync import router as time_sync_router
 from app.routes.readiness import router as readiness_router
 from app.schemas import HealthResponse
@@ -70,6 +71,7 @@ app.include_router(analyze_jobs_router)
 app.include_router(analysis_comparisons_router)
 app.include_router(experiment_status_router)
 app.include_router(sensor_status_router)
+app.include_router(sensor_calibration_router)
 app.include_router(time_sync_router)
 app.include_router(readiness_router)
 gemma_client = GemmaClient(settings)

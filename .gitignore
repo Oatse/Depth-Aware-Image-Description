@@ -18,6 +18,7 @@ results/depth_maps/*.png
 results/sensor_captures.jsonl
 results/analysis_runs.jsonl
 config/sensor_camera_calibration.json
+config/sensor_camera_calibration_measurements.json
 certs/
 
 # Large local model files

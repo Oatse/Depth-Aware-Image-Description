@@ -57,7 +57,12 @@ def test_comparison_reuses_one_gemma_and_depth_inference() -> None:
     depth = CountingDepth()
 
     async def run():
-        return await compare_image_bytes(_request(), Settings(gemma_mock=True, depth_mock=True), gemma, depth)
+        return await compare_image_bytes(
+            _request(),
+            Settings(gemma_mock=True, depth_mock=True, sensor_iot_strict=False),
+            gemma,
+            depth,
+        )
 
     result = anyio.run(run)
     assert gemma.calls == 1
@@ -72,6 +77,7 @@ def test_comparison_job_endpoint_returns_backend_owned_modes(monkeypatch) -> Non
     depth = CountingDepth()
     monkeypatch.setattr(analyze_route, "gemma_client", gemma)
     monkeypatch.setattr(analyze_route, "depth_model", depth)
+    monkeypatch.setattr(analyze_route.settings, "sensor_iot_strict", False)
     with TestClient(app) as client:
         accepted = client.post(
             "/analysis-comparisons",
@@ -90,3 +96,17 @@ def test_comparison_job_endpoint_returns_backend_owned_modes(monkeypatch) -> Non
     assert set(result["modes"]) == {"gemma_only", "gemma_depth", "iot_assisted"}
     assert gemma.calls == 1
     assert depth.calls == 1
+
+
+def test_comparison_marks_iot_unavailable_until_calibration(monkeypatch) -> None:
+    gemma = CountingGemma()
+    depth = CountingDepth()
+
+    async def run():
+        return await compare_image_bytes(_request(), Settings(gemma_mock=True, depth_mock=True), gemma, depth)
+
+    result = anyio.run(run)
+    iot = result["modes"]["iot_assisted"]
+    assert iot["success"] is False
+    assert iot["error"] == "sensor_calibration_required"
+    assert iot["sensor_contribution"]["status"] == "insufficient"

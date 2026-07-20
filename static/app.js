@@ -70,6 +70,10 @@ const sensor1Output = document.querySelector("#sensor-1-output");
 const sensor2Output = document.querySelector("#sensor-2-output");
 const sensorConnectionMeta = document.querySelector("#sensor-connection-meta");
 const sensorCaptureStatus = document.querySelector("#sensor-capture-status");
+const calibrationMeasuredInput = document.querySelector("#calibration-measured-cm");
+const calibrationCaptureButton = document.querySelector("#calibration-capture");
+const calibrationResetButton = document.querySelector("#calibration-reset");
+const calibrationStatus = document.querySelector("#calibration-status");
 const workflowStateLabel = document.querySelector("#workflow-state-label");
 const workflowSteps = Array.from(document.querySelectorAll("#workflow-state [data-workflow-state]"));
 const iotModeOption = document.querySelector("#iot-mode-option");
@@ -93,6 +97,7 @@ const MODE_LABELS = {
   gemma_only: "Gemma Baseline",
   depth_only: "Kedalaman Saja",
   gemma_depth: "Gemma + Kedalaman Late Fusion",
+  iot_assisted: "IoT-Assisted",
 };
 
 const PROVENANCE_LABELS = {
@@ -141,6 +146,39 @@ async function refreshReadiness() {
     iotRuntimeReady = false;
   }
   updateIotModeAvailability();
+}
+
+function renderCalibrationStatus(payload) {
+  const profile = payload?.profile || {};
+  const count = Number(profile.capture_count || 0);
+  const validated = profile.validated === true;
+  const residual = Number(profile.max_residual_cm);
+  if (calibrationStatus) {
+    if (validated) {
+      calibrationStatus.textContent = `Valid: ${count} titik, residual maksimum ${residual.toFixed(1)} cm.`;
+    } else if (profile.status === "residual_exceeds_gate") {
+      calibrationStatus.textContent = `${count} titik tercatat, tetapi residual ${residual.toFixed(1)} cm melewati gate 10 cm.`;
+    } else if (profile.status === "insufficient_reference_distances") {
+      calibrationStatus.textContent = `${count} titik tercatat, tetapi diperlukan tiga jarak referensi yang berbeda.`;
+    } else {
+      calibrationStatus.textContent = `${count}/3 titik kalibrasi tercatat.`;
+    }
+    calibrationStatus.classList.toggle("is-valid", validated);
+  }
+}
+
+async function refreshCalibrationStatus() {
+  try {
+    const response = await fetch("/sensor-calibration", { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    renderCalibrationStatus(await response.json());
+  } catch (error) {
+    if (calibrationStatus) {
+      calibrationStatus.textContent = `Status kalibrasi tidak tersedia (${error.message}).`;
+    }
+  }
 }
 
 const SCENE_LABELS = {
@@ -225,6 +263,9 @@ function renderLiveSensorStatus(evidence) {
   sensorLivePanel.classList.toggle("is-partial", status === "partial");
   sensorLivePanel.classList.toggle("is-disconnected", Boolean(evidence?.enabled && !evidence?.connected));
   latestSensorPaired = status === "paired";
+  if (calibrationCaptureButton) {
+    calibrationCaptureButton.disabled = !latestSensorPaired;
+  }
   if (latestSensorPaired && activeSource === "camera") {
     setWorkflowState("sensor");
   }
@@ -276,8 +317,50 @@ function startSensorStatusPolling() {
     return;
   }
   refreshSensorStatus();
+  refreshCalibrationStatus();
   sensorStatusTimer = window.setInterval(refreshSensorStatus, 1000);
 }
+
+calibrationCaptureButton?.addEventListener("click", async () => {
+  const measuredCm = Number(calibrationMeasuredInput?.value);
+  if (!Number.isFinite(measuredCm) || measuredCm <= 5 || measuredCm > 400) {
+    calibrationStatus.textContent = "Masukkan jarak referensi antara 5 dan 400 cm.";
+    calibrationMeasuredInput?.focus();
+    return;
+  }
+  calibrationCaptureButton.disabled = true;
+  try {
+    const response = await fetch("/sensor-calibration/captures", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ measured_cm: measuredCm }),
+    });
+    const payload = await response.json();
+    if (!response.ok) {
+      throw new Error(payload.detail || `HTTP ${response.status}`);
+    }
+    renderCalibrationStatus(payload);
+    calibrationMeasuredInput.value = "";
+    await refreshReadiness();
+  } catch (error) {
+    calibrationStatus.textContent = `Titik tidak tersimpan: ${error.message}`;
+  } finally {
+    calibrationCaptureButton.disabled = !latestSensorPaired;
+  }
+});
+
+calibrationResetButton?.addEventListener("click", async () => {
+  if (!window.confirm("Hapus seluruh titik dan profil kalibrasi sensor?")) {
+    return;
+  }
+  const response = await fetch("/sensor-calibration", { method: "DELETE" });
+  if (!response.ok) {
+    calibrationStatus.textContent = "Kalibrasi gagal direset.";
+    return;
+  }
+  renderCalibrationStatus({ profile: { status: "insufficient_captures", capture_count: 0, validated: false } });
+  await refreshReadiness();
+});
 
 function stopSensorStatusPolling() {
   if (sensorStatusTimer === null) {
@@ -355,6 +438,7 @@ window.addEventListener("pagehide", () => {
 
 refreshHealth();
 refreshReadiness();
+refreshCalibrationStatus();
 syncCaptureClock().catch(() => {
   captureClock = null;
 });

@@ -621,6 +621,74 @@ p {
   padding-top: 10px;
 }
 
+.sensor-calibration-panel {
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
+.sensor-calibration-panel summary {
+  cursor: pointer;
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 740;
+}
+
+.sensor-calibration-panel > p,
+.sensor-calibration-footer output {
+  color: var(--ink-muted);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.sensor-calibration-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.sensor-calibration-controls label {
+  display: grid;
+  gap: 5px;
+  color: var(--ink-muted);
+  font-size: 0.72rem;
+  font-weight: 720;
+}
+
+.sensor-calibration-input {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: #ffffff;
+  padding: 0 12px;
+}
+
+.sensor-calibration-input input {
+  min-width: 0;
+  min-height: 40px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+}
+
+.sensor-calibration-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.sensor-calibration-footer output.is-valid {
+  color: #267445;
+  font-weight: 740;
+}
+
 #image-input {
   position: absolute;
   width: 1px;
@@ -1751,6 +1819,13 @@ pre {
  }
  .sensor-channel-grid {
   grid-template-columns: 1fr;
+ }
+ .sensor-calibration-controls {
+  grid-template-columns: 1fr;
+ }
+ .sensor-calibration-footer {
+  align-items: flex-start;
+  flex-direction: column;
  }
 
   .selected-preview {

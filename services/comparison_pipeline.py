@@ -46,7 +46,18 @@ async def compare_image_bytes(
     contribution = fuse_sensor_reference(request.sensor_evidence, calibration_validated=calibration_validated)
     iot = _render_mode(evidence, "iot_assisted")
     iot["sensor_contribution"] = contribution
-    if contribution["status"] == "insufficient":
+    if settings.sensor_iot_strict and not calibration_validated:
+        iot["success"] = False
+        iot["error"] = "sensor_calibration_required"
+        iot["sensor_contribution"] = {
+            "status": "insufficient",
+            "reason_code": "sensor_calibration_required",
+            "frontal_reference_cm": None,
+            "depth_consistency": "not_evaluated",
+            "description": "Mode IoT-assisted menunggu profil kalibrasi jarak frontal yang tervalidasi.",
+            "warnings": ["Kalibrasi sensor belum tervalidasi."],
+        }
+    elif contribution["status"] == "insufficient":
         iot["success"] = False
         iot["error"] = contribution["reason_code"]
     else:

@@ -37,11 +37,11 @@ def fuse_sensor_reference(
         )
     values = [float(sample["distance_cm"]) for sample in samples.values()]
     reference = round(sum(values) / len(values), 2)
-    consistency = "not_evaluated" if not calibration_validated else "available_for_evaluation"
+    consistency = "not_evaluated" if not calibration_validated else "distance_reference_validated"
     calibration_text = (
-        " Konsistensi dengan ROI depth belum dievaluasi karena profil kalibrasi belum tervalidasi."
+        " Akurasi jarak belum lolos kalibrasi terhadap pengukuran fisik."
         if not calibration_validated
-        else " Referensi ini tersedia untuk evaluasi konsistensi terhadap ROI depth terkalibrasi."
+        else " Akurasi jarak telah lolos gate residual terhadap bidang datar; nilai ini tetap tidak diikat ke objek atau ROI gambar."
     )
     return {
         "status": "applied",

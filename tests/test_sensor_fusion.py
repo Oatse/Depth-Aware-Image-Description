@@ -22,6 +22,12 @@ def test_paired_sensor_adds_separate_frontal_reference() -> None:
     assert contribution["depth_consistency"] == "not_evaluated"
 
 
+def test_validated_distance_calibration_does_not_claim_object_or_roi_binding() -> None:
+    contribution = fuse_sensor_reference(_paired(), calibration_validated=True)
+    assert contribution["depth_consistency"] == "distance_reference_validated"
+    assert "tidak diikat ke objek atau ROI" in contribution["description"]
+
+
 def test_pair_conflict_keeps_both_values_and_never_averages() -> None:
     evidence = _paired(40, 90)
     evidence["status"] = "pair_conflict"
