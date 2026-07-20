@@ -1,16 +1,12 @@
 import time
 from dataclasses import dataclass
 from pathlib import Path
-
-import anyio
-
 from app.config import Settings
 from models.depth_anything import DepthAnything
 from models.fusion import fuse_description
-from models.gemma_client import GemmaClient, GemmaClientError
-from services.depth_analysis import analyze_depth_regions
-from services.image_preprocess import preprocess_image
 from services.analysis_types import AnalysisMode
+from models.gemma_client import GemmaClient
+from services.evidence_pipeline import build_evidence_bundle
 
 GEMMA_MODES = frozenset({AnalysisMode.GEMMA_ONLY, AnalysisMode.GEMMA_DEPTH, AnalysisMode.IOT_ASSISTED})
 DEPTH_MODES = frozenset({AnalysisMode.DEPTH_ONLY, AnalysisMode.GEMMA_DEPTH, AnalysisMode.IOT_ASSISTED})
@@ -41,68 +37,41 @@ async def analyze_image_bytes(
     depth_model: DepthAnything | None = None,
 ) -> PipelineResult:
     started_at = time.perf_counter()
-    processed = preprocess_image(image_bytes, settings.image_max_dimension)
-    gemma_client = gemma_client or GemmaClient(settings)
-    depth_model = depth_model or DepthAnything(settings)
-
-    gemma_description: str | None = None
-    gemma_structured: dict | None = None
-    gemma_latency_ms = 0
-    gemma_mock = False
-    gemma_error: str | None = None
-
-    depth_summary: dict | None = None
-    depth_latency_ms = 0
-    depth_map_url: str | None = None
-    depth_mock = False
-    depth_error: str | None = None
-    if mode in DEPTH_MODES:
-        depth_result = await anyio.to_thread.run_sync(depth_model.estimate, processed.image, filename)
-        depth_latency_ms = depth_result.latency_ms
-        depth_mock = depth_result.mock
-        depth_map_url = _to_depth_map_url(depth_result.depth_map_path)
-        if depth_result.success:
-            depth_summary = analyze_depth_regions(
-                depth_result.depth_map,
-            )
-        else:
-            depth_error = depth_result.error
-            if mode == "depth_only":
-                return _failed_result(filename, mode, started_at, depth_error or "Depth inference failed.")
-
-    if mode in GEMMA_MODES:
-        try:
-            gemma_result = await gemma_client.describe_image(processed.base64_image)
-            gemma_description = gemma_result.description
-            gemma_structured = gemma_result.structured
-            gemma_latency_ms = gemma_result.latency_ms
-            gemma_mock = gemma_result.mock
-        except GemmaClientError as exc:
-            gemma_error = str(exc)
-            if mode == "gemma_only":
-                return _failed_result(filename, mode, started_at, gemma_error)
+    evidence = await build_evidence_bundle(
+        image_bytes,
+        filename,
+        settings,
+        include_gemma=mode in GEMMA_MODES,
+        include_depth=mode in DEPTH_MODES,
+        gemma_client=gemma_client,
+        depth_model=depth_model,
+    )
+    if mode == AnalysisMode.DEPTH_ONLY and evidence.depth_error:
+        return _failed_result(filename, mode, started_at, evidence.depth_error)
+    if mode == AnalysisMode.GEMMA_ONLY and evidence.gemma_error:
+        return _failed_result(filename, mode, started_at, evidence.gemma_error)
 
     fusion_started_at = time.perf_counter()
-    fusion = fuse_description(gemma_description, depth_summary, mode, gemma_structured)
+    fusion = fuse_description(evidence.gemma_description, evidence.depth_summary, mode, evidence.gemma_structured)
     fusion_latency_ms = int((time.perf_counter() - fusion_started_at) * 1000)
     total_latency_ms = int((time.perf_counter() - started_at) * 1000)
     return PipelineResult(
         success=True,
         filename=filename,
         mode=mode,
-        gemma_description=gemma_description,
-        gemma_structured=gemma_structured,
-        depth_summary=depth_summary,
+        gemma_description=evidence.gemma_description,
+        gemma_structured=evidence.gemma_structured,
+        depth_summary=evidence.depth_summary,
         final_description=fusion["final_description"],
         latency={
-            "gemma_ms": gemma_latency_ms,
-            "depth_ms": depth_latency_ms,
+            "gemma_ms": evidence.gemma_latency_ms,
+            "depth_ms": evidence.depth_latency_ms,
             "fusion_ms": fusion_latency_ms,
             "total_ms": total_latency_ms,
         },
-        depth_map_url=depth_map_url,
-        mock={"gemma": gemma_mock, "depth": depth_mock},
-        error=gemma_error or depth_error,
+        depth_map_url=evidence.depth_map_url,
+        mock={"gemma": evidence.gemma_mock, "depth": evidence.depth_mock},
+        error=evidence.gemma_error or evidence.depth_error,
         display=fusion["display"],
     )
 
@@ -145,13 +114,3 @@ def _failed_result(filename: str, mode: str, started_at: float, error: str) -> P
         error=error,
         display=None,
     )
-
-
-def _to_depth_map_url(depth_map_path: str | None) -> str | None:
-    if not depth_map_path:
-        return None
-    normalized = depth_map_path.replace("\\", "/")
-    marker = "results/"
-    if marker in normalized:
-        return "/" + normalized[normalized.index(marker):]
-    return normalized
