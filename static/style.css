@@ -472,6 +472,103 @@ p {
   line-height: 1.45;
 }
 
+.sensor-live-panel {
+  display: grid;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  padding: 16px;
+}
+
+.sensor-live-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.sensor-live-heading > div {
+  display: grid;
+  gap: 3px;
+}
+
+.sensor-kicker {
+  color: var(--ink-muted);
+  font-size: 0.67rem;
+  font-weight: 760;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.sensor-live-heading strong {
+  color: var(--ink);
+  font-size: 0.94rem;
+}
+
+.sensor-pair-status {
+  border-radius: 999px;
+  background: var(--surface-soft);
+  color: var(--ink-muted);
+  padding: 6px 9px;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.sensor-live-panel.is-paired .sensor-pair-status {
+  background: #edf8f0;
+  color: #267445;
+}
+
+.sensor-live-panel.is-partial .sensor-pair-status {
+  background: #fff6df;
+  color: #8a6419;
+}
+
+.sensor-live-panel.is-disconnected .sensor-pair-status {
+  background: #fff0ee;
+  color: var(--error);
+}
+
+.sensor-channel-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.sensor-channel {
+  display: grid;
+  gap: 5px;
+  border-left: 2px solid var(--line-strong);
+  padding: 4px 10px;
+}
+
+.sensor-channel span {
+  color: var(--ink-muted);
+  font-size: 0.72rem;
+  font-weight: 720;
+}
+
+.sensor-channel output {
+  color: var(--ink);
+  font-size: 0.84rem;
+  font-weight: 740;
+}
+
+.sensor-connection-meta,
+.sensor-capture-status {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.sensor-capture-status {
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
 #image-input {
   position: absolute;
   width: 1px;
@@ -1598,6 +1695,9 @@ pre {
   min-height: 220px;
  }
  .camera-actions {
+  grid-template-columns: 1fr;
+ }
+ .sensor-channel-grid {
   grid-template-columns: 1fr;
  }
 

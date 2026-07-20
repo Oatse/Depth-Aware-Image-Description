@@ -64,6 +64,12 @@ const switchCameraButton = document.querySelector("#switch-camera");
 const cameraPreview = document.querySelector("#camera-preview");
 const cameraActions = document.querySelector("#camera-actions");
 const captureCanvas = document.querySelector("#capture-canvas");
+const sensorLivePanel = document.querySelector("#sensor-live-panel");
+const sensorPairStatus = document.querySelector("#sensor-pair-status");
+const sensor1Output = document.querySelector("#sensor-1-output");
+const sensor2Output = document.querySelector("#sensor-2-output");
+const sensorConnectionMeta = document.querySelector("#sensor-connection-meta");
+const sensorCaptureStatus = document.querySelector("#sensor-capture-status");
 
 const REGION_LABELS = {
   upper_left: "atas-kiri",
@@ -106,6 +112,7 @@ let activeSource = "upload";
 let loadingTimer = null;
 let loadingIndex = 0;
 let dragDepth = 0;
+let sensorStatusTimer = null;
 
 const ACCEPTED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 
@@ -128,6 +135,94 @@ function hideCameraError() {
 function showCameraError(message) {
   cameraError.textContent = message;
   cameraError.classList.remove("hidden");
+}
+
+function formatSensorSample(sample) {
+  if (!sample || !Number.isFinite(Number(sample.distance_cm))) {
+    return "Belum ada sampel valid";
+  }
+  const age = Number.isFinite(Number(sample.age_ms)) ? ` · selisih ${Math.abs(Number(sample.age_ms))} ms` : "";
+  return `${Number(sample.distance_cm).toFixed(1)} cm${age}`;
+}
+
+function getSensorStatusLabel(status, connected) {
+  const labels = {
+    paired: "2 SENSOR AKTIF",
+    partial: "1 SENSOR AKTIF",
+    disabled: "NONAKTIF",
+    camera_sensor_direction_mismatch: "ARAH TIDAK SESUAI",
+  };
+  return labels[status] || (connected ? "MENUNGGU DATA" : "TERPUTUS");
+}
+
+function renderLiveSensorStatus(evidence) {
+  if (!sensorLivePanel) {
+    return;
+  }
+  const status = evidence?.status || "unavailable";
+  const samples = evidence?.samples || {};
+  sensorPairStatus.textContent = getSensorStatusLabel(status, evidence?.connected);
+  sensor1Output.textContent = formatSensorSample(samples.sensor_1);
+  sensor2Output.textContent = formatSensorSample(samples.sensor_2);
+  sensorLivePanel.classList.toggle("is-paired", status === "paired");
+  sensorLivePanel.classList.toggle("is-partial", status === "partial");
+  sensorLivePanel.classList.toggle("is-disconnected", Boolean(evidence?.enabled && !evidence?.connected));
+
+  const port = evidence?.port || "port belum dikonfigurasi";
+  const attempts = Number(evidence?.connection_attempts || 0);
+  sensorConnectionMeta.textContent = evidence?.reader_error
+    ? `${port} · gagal tersambung (${attempts} percobaan): ${evidence.reader_error}`
+    : `${port} · jendela data ±${evidence?.window_ms ?? "-"} ms`;
+}
+
+function renderCapturedSensorEvidence(evidence) {
+  if (!sensorCaptureStatus) {
+    return;
+  }
+  if (!evidence) {
+    sensorCaptureStatus.textContent = "Analisis ini tidak membawa metadata capture kamera.";
+    return;
+  }
+  if (evidence.status === "camera_sensor_direction_mismatch") {
+    sensorCaptureStatus.textContent = "Evidence tidak dipasangkan karena frame berasal dari kamera depan, sedangkan sensor menghadap ke depan perangkat.";
+    return;
+  }
+  const source = evidence.match_time_source === "client_capture" ? "waktu frame kamera" : "waktu terima server";
+  const count = Object.keys(evidence.samples || {}).length;
+  sensorCaptureStatus.textContent = `Capture ${evidence.capture_id || "tanpa ID"}: ${count}/2 sensor cocok memakai ${source} dalam jendela ±${evidence.window_ms ?? "-"} ms.`;
+}
+
+async function refreshSensorStatus() {
+  try {
+    const response = await fetch("/sensor-status", { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    renderLiveSensorStatus(await response.json());
+  } catch (error) {
+    renderLiveSensorStatus({
+      status: "unavailable",
+      connected: false,
+      samples: {},
+      reader_error: `status web tidak tersedia (${error.message})`,
+    });
+  }
+}
+
+function startSensorStatusPolling() {
+  if (sensorStatusTimer !== null) {
+    return;
+  }
+  refreshSensorStatus();
+  sensorStatusTimer = window.setInterval(refreshSensorStatus, 1000);
+}
+
+function stopSensorStatusPolling() {
+  if (sensorStatusTimer === null) {
+    return;
+  }
+  window.clearInterval(sensorStatusTimer);
+  sensorStatusTimer = null;
 }
 
 async function activateCamera() {
@@ -166,8 +261,10 @@ function setSourceTab(source, { focus = false } = {}) {
 
   if (cameraActive) {
     activateCamera();
+    startSensorStatusPolling();
   } else {
     stopCameraStream();
+    stopSensorStatusPolling();
     hideCameraError();
   }
 }
@@ -188,7 +285,10 @@ sourceTabs.forEach((tab, index) => {
 });
 
 cameraRetryButton?.addEventListener("click", activateCamera);
-window.addEventListener("pagehide", stopCameraStream);
+window.addEventListener("pagehide", () => {
+  stopCameraStream();
+  stopSensorStatusPolling();
+});
 
 refreshHealth();
 
@@ -858,6 +958,8 @@ function renderResult(data) {
   const latencyStages = getLatencyStageRuns(data.mode);
   const finalSections = data.display?.final_sections || {};
 
+  renderCapturedSensorEvidence(data.sensor_evidence);
+
   renderFinalDescription(data, finalSections);
   gemmaDescription.textContent = finalSections.visual_description || data.gemma_description || data.description_gemma || "-";
   depthSummary.textContent = JSON.stringify(depth, null, 2);
@@ -1025,6 +1127,7 @@ function buildControlledLateFusion(gemmaOnly, depthOnly) {
 
   return {
     mode: "gemma_depth",
+    sensor_evidence: gemmaOnly.sensor_evidence || depthOnly.sensor_evidence || null,
     gemma_description: gemmaOnly.gemma_description || gemmaOnly.description_gemma || summarizeVisual(gemmaOnly),
     depth_summary: depthOnly.depth_summary || {},
     final_description: `${summarizeVisual(gemmaOnly)} ${summarizeText(depthSections.depth_insight)}`.trim(),

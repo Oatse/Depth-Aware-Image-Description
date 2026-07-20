@@ -65,4 +65,4 @@ sekadar tertancap tidak dapat dideteksi; status sensor disimpulkan dari respons 
 - Pembacaan dasar normal: mayoritas sampel dari masing-masing `sensor_id` bernilai `valid=true`, berada pada 2–400 cm, dan berubah saat target digerakkan.
 - `echo_timeout` terus-menerus: periksa VCC/GND, GPIO, pembagi tegangan, orientasi sensor, dan target.
 
-Pilot ini bukan firmware produksi dan belum terintegrasi ke pipeline Bride-Gap.
+Firmware ini tetap berstatus pilot, tetapi keluaran JSON serialnya sekarang dapat dibaca aplikasi utama sebagai evidence jarak frontal yang dipasangkan dengan waktu capture kamera. Integrasi tersebut belum merupakan kalibrasi spasial sensor-kamera, tidak mengubah bacaan HC-SR04 menjadi depth-map, dan tidak mendukung klaim navigasi aman atau jarak objek presisi.

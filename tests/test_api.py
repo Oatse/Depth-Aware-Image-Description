@@ -44,6 +44,37 @@ def test_experiment_status_endpoint_returns_readiness_snapshot() -> None:
     assert data["artifact_paths"]["images"] == "dataset/final_images"
 
 
+def test_sensor_status_endpoint_exposes_two_live_sensor_channels(monkeypatch) -> None:
+    class FakeSensorBridge:
+        def snapshot(self, capture_time_ms: int, window_ms: int) -> dict:
+            return {
+                "enabled": True,
+                "connected": True,
+                "port": "COM7",
+                "capture_time_ms": capture_time_ms,
+                "window_ms": window_ms,
+                "status": "paired",
+                "samples": {
+                    "sensor_1": {"distance_cm": 81.2, "age_ms": 20},
+                    "sensor_2": {"distance_cm": 83.8, "age_ms": 15},
+                },
+                "reader_error": None,
+                "connection_attempts": 1,
+                "last_sample_time_ms": capture_time_ms - 15,
+            }
+
+    monkeypatch.setattr(app.state, "sensor_bridge", FakeSensorBridge(), raising=False)
+
+    response = client.get("/sensor-status")
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data["success"] is True
+    assert data["status"] == "paired"
+    assert data["samples"]["sensor_1"]["distance_cm"] == 81.2
+    assert data["samples"]["sensor_2"]["distance_cm"] == 83.8
+
+
 def test_analyze_endpoint_rejects_text_file() -> None:
     response = client.post(
         "/analyze",
@@ -137,3 +168,66 @@ def test_analysis_job_endpoint_returns_accepted_then_completed(monkeypatch) -> N
         assert result is not None
         assert result["status"] == "completed"
         assert result["result"]["success"] is True
+
+
+def test_camera_analysis_job_pairs_sensor_snapshot_to_actual_frame_time(monkeypatch) -> None:
+    class FakeDepthModel:
+        def estimate(self, image, source_name: str) -> DepthResult:
+            depth_map = np.full((9, 9), 2.0, dtype=np.float32)
+            return DepthResult(True, depth_map, None, 4, depth_map.shape, mock=True)
+
+    class RecordingSensorBridge:
+        def __init__(self) -> None:
+            self.capture_times: list[int] = []
+
+        def snapshot(self, capture_time_ms: int, window_ms: int) -> dict:
+            self.capture_times.append(capture_time_ms)
+            return {
+                "enabled": True,
+                "connected": True,
+                "port": "COM7",
+                "capture_time_ms": capture_time_ms,
+                "window_ms": window_ms,
+                "status": "paired",
+                "samples": {
+                    "sensor_1": {"distance_cm": 90.0, "age_ms": -4},
+                    "sensor_2": {"distance_cm": 91.0, "age_ms": 7},
+                },
+                "reader_error": None,
+            }
+
+    import app.routes.analyze as analyze_route
+
+    monkeypatch.setattr(analyze_route, "depth_model", FakeDepthModel())
+    sensor_bridge = RecordingSensorBridge()
+    frame_time_ms = int(time.time() * 1000)
+
+    with TestClient(app) as live_client:
+        app.state.sensor_bridge = sensor_bridge
+        accepted = live_client.post(
+            "/analysis-jobs",
+            files={"image": ("camera.jpg", _sample_image_bytes(), "image/jpeg")},
+            data={
+                "mode": "depth_only",
+                "save_result": "false",
+                "capture_id": "cap_integration",
+                "capture_time_ms": str(frame_time_ms),
+                "camera_facing_mode": "environment",
+            },
+        )
+        assert accepted.status_code == 202
+
+        result = None
+        for _ in range(100):
+            result = live_client.get(accepted.json()["poll_url"]).json()
+            if result["status"] in {"completed", "failed"}:
+                break
+            time.sleep(0.01)
+
+    assert sensor_bridge.capture_times == [frame_time_ms]
+    assert result is not None
+    assert result["status"] == "completed"
+    evidence = result["result"]["sensor_evidence"]
+    assert evidence["capture_id"] == "cap_integration"
+    assert evidence["match_time_source"] == "client_capture"
+    assert evidence["status"] == "paired"

@@ -1,4 +1,5 @@
 import csv
+import json
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -35,6 +36,24 @@ def log_prediction(results_dir: Path, row: dict[str, Any]) -> None:
             "timestamp": datetime.now(timezone.utc).isoformat(),
             **{field: row.get(field, "") for field in PREDICTION_FIELDS if field != "timestamp"},
         })
+
+
+def log_sensor_evidence(
+    results_dir: Path,
+    *,
+    image_name: str,
+    mode: str,
+    evidence: dict[str, Any],
+) -> None:
+    results_dir.mkdir(parents=True, exist_ok=True)
+    record = {
+        "logged_at": datetime.now(timezone.utc).isoformat(),
+        "image_name": image_name,
+        "mode": mode,
+        "sensor_evidence": evidence,
+    }
+    with (results_dir / "sensor_captures.jsonl").open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(record, ensure_ascii=False, separators=(",", ":")) + "\n")
 
 
 def _ensure_prediction_file_schema(output_path: Path) -> None:

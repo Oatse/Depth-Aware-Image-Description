@@ -15,6 +15,10 @@ venv/
 *.log
 .uvicorn.*.log
 results/depth_maps/*.png
+results/sensor_captures.jsonl
+results/analysis_runs.jsonl
+config/sensor_camera_calibration.json
+certs/
 
 # Large local model files
 model_weights/

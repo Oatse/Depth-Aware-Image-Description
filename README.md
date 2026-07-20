@@ -25,6 +25,7 @@ Proyek ini adalah proof-of-concept implementasi model, bukan aplikasi navigasi p
 ```text
 Web Interface
   -> FastAPI Backend
+  -> Camera Frame Metadata + Reconnecting ESP32 Serial Bridge
   -> Image Validation + Preprocessing
   -> Bounded In-Process Analysis Queue (polling API)
   -> Gemma Client
@@ -84,6 +85,12 @@ Variabel penting:
 - `EXPERIMENT_EVALUATION_PATH=./results/final_evaluation_metrics_20260714.csv`
 - `GEMMA_MOCK=false`
 - `DEPTH_MOCK=false`
+- `SENSOR_SERIAL_PORT=COM7`
+- `SENSOR_SERIAL_BAUD=115200`
+- `SENSOR_MATCH_WINDOW_MS=250`
+- `SENSOR_MAX_CLOCK_SKEW_MS=5000`
+- `SENSOR_RECONNECT_INTERVAL_MS=1000`
+- `SENSOR_STATUS_WINDOW_MS=1000`
 
 Mock hanya aktif jika eksplisit diset ke `true`. Jangan gunakan hasil mock sebagai hasil eksperimen final.
 
@@ -104,6 +111,7 @@ Buka:
 
 - `http://127.0.0.1:8000/`
 - `http://127.0.0.1:8000/health`
+- `http://127.0.0.1:8000/sensor-status`
 
 ## Menggunakan UI
 
@@ -115,7 +123,7 @@ Buka:
 3. Klik `Analyze`.
 4. UI menampilkan final description, deskripsi Gemma, depth summary, latency, dan depth map jika tersedia.
 
-Kamera browser tersedia sebagai opsi tambahan. Upload gambar tetap menjadi fallback utama.
+Pada tab Kamera, panel Sensor IoT menampilkan koneksi serial dan bacaan dua kanal secara live. Saat frame diambil, browser mengirim `capture_id`, waktu frame, dan arah kamera. Backend memilih sampel valid terdekat dalam jendela `SENSOR_MATCH_WINDOW_MS`. Upload gambar tetap menjadi fallback utama dan tidak membutuhkan sensor.
 
 ## API
 
@@ -127,6 +135,10 @@ Mengembalikan status backend, Gemma, dan model depth.
 
 Mengembalikan readiness snapshot beserta `artifact_profile` dan semua path sumber. Default menunjuk snapshot final 44 citra, bukan dataset development 30 citra. Path dapat dioverride melalui environment agar dashboard selalu menyatakan artefak yang sedang dibaca.
 
+### `GET /sensor-status`
+
+Mengembalikan status koneksi serial, jumlah percobaan reconnect, bacaan terbaru `sensor_1` dan `sensor_2`, serta umur masing-masing sampel. Reader akan mencoba tersambung kembali secara otomatis sehingga backend tidak perlu direstart ketika ESP32 baru dipasang.
+
 ### `POST /analyze`
 
 Form data:
@@ -134,6 +146,9 @@ Form data:
 - `image`: file JPG, PNG, atau WebP.
 - `mode`: `gemma_only`, `depth_only`, atau `gemma_depth`.
 - `save_result`: `true` atau `false`.
+- `capture_id`: ID unik frame kamera (opsional untuk upload).
+- `capture_time_ms`: Unix time milidetik saat frame kamera diambil (opsional untuk upload).
+- `camera_facing_mode`: `environment` atau `user` (opsional untuk upload).
 
 Response utama berisi:
 
@@ -144,6 +159,9 @@ Response utama berisi:
 - `latency`
 - `mode`
 - `depth_map_url`
+- `sensor_evidence` untuk capture kamera; evidence ini adalah referensi jarak frontal yang dipasangkan menurut waktu, bukan depth-map atau pengukuran objek terkalibrasi.
+
+Jika penyimpanan hasil aktif, capture kamera juga ditulis ke `results/sensor_captures.jsonl` agar pasangan timestamp, status, dan sampel dua sensor dapat diaudit ulang.
 - `mock`
 - `error`
 

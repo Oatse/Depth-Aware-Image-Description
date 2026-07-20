@@ -123,6 +123,27 @@
                   <button id="capture-image" type="button" class="secondary-button" disabled>Ambil frame</button>
                   <button id="switch-camera" type="button" class="secondary-button" disabled>Ganti ke kamera depan</button>
                 </div>
+                <section id="sensor-live-panel" class="sensor-live-panel" aria-labelledby="sensor-live-title" aria-live="polite">
+                  <div class="sensor-live-heading">
+                    <div>
+                      <span class="sensor-kicker">Referensi jarak frontal</span>
+                      <strong id="sensor-live-title">Sensor IoT</strong>
+                    </div>
+                    <span id="sensor-pair-status" class="sensor-pair-status">MEMERIKSA</span>
+                  </div>
+                  <div class="sensor-channel-grid">
+                    <div class="sensor-channel">
+                      <span>Sensor 1</span>
+                      <output id="sensor-1-output">Menunggu data</output>
+                    </div>
+                    <div class="sensor-channel">
+                      <span>Sensor 2</span>
+                      <output id="sensor-2-output">Menunggu data</output>
+                    </div>
+                  </div>
+                  <p id="sensor-connection-meta" class="sensor-connection-meta">Menghubungkan pembaca serial...</p>
+                  <p id="sensor-capture-status" class="sensor-capture-status">Belum ada frame yang dianalisis bersama evidence sensor.</p>
+                </section>
               </div>
             </div>
 

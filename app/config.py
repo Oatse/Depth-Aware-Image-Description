@@ -33,9 +33,9 @@ class Settings(BaseSettings):
     sensor_serial_port: str = Field(default="", validation_alias="SENSOR_SERIAL_PORT")
     sensor_serial_baud: int = Field(default=115200, validation_alias="SENSOR_SERIAL_BAUD")
     sensor_match_window_ms: int = Field(default=250, ge=1, le=5000, validation_alias="SENSOR_MATCH_WINDOW_MS")
-    sensor_serial_port: str = Field(default="", validation_alias="SENSOR_SERIAL_PORT")
-    sensor_serial_baud: int = Field(default=115200, validation_alias="SENSOR_SERIAL_BAUD")
-    sensor_match_window_ms: int = Field(default=250, ge=1, le=5000, validation_alias="SENSOR_MATCH_WINDOW_MS")
+    sensor_max_clock_skew_ms: int = Field(default=5000, ge=0, le=60000, validation_alias="SENSOR_MAX_CLOCK_SKEW_MS")
+    sensor_reconnect_interval_ms: int = Field(default=1000, ge=100, le=30000, validation_alias="SENSOR_RECONNECT_INTERVAL_MS")
+    sensor_status_window_ms: int = Field(default=1000, ge=100, le=10000, validation_alias="SENSOR_STATUS_WINDOW_MS")
 
     experiment_artifact_profile: str = "final_44_gemma_e2b_20260708"
     experiment_images_dir: Path = Path("./dataset/final_images")

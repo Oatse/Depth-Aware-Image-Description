@@ -11,6 +11,7 @@ from app.routes.analyze import router as analyze_router
 from app.routes.analyze_jobs import router as analyze_jobs_router
 from app.routes.analyze_jobs import run_analysis_job
 from app.routes.experiment_status import router as experiment_status_router
+from app.routes.sensor_status import router as sensor_status_router
 from app.schemas import HealthResponse
 from models.gemma_client import GemmaClient
 from services.analysis_jobs import AnalysisJobService
@@ -28,7 +29,11 @@ async def lifespan(application: FastAPI):
         retained_jobs=settings.analysis_retained_jobs,
     )
     application.state.analysis_jobs = analysis_jobs
-    sensor_bridge = SensorBridge(settings.sensor_serial_port, settings.sensor_serial_baud)
+    sensor_bridge = SensorBridge(
+        settings.sensor_serial_port,
+        settings.sensor_serial_baud,
+        reconnect_interval_seconds=settings.sensor_reconnect_interval_ms / 1000,
+    )
     sensor_bridge.start()
     application.state.sensor_bridge = sensor_bridge
     async with anyio.create_task_group() as task_group:
@@ -51,6 +56,7 @@ templates = Jinja2Templates(directory="templates")
 app.include_router(analyze_router)
 app.include_router(analyze_jobs_router)
 app.include_router(experiment_status_router)
+app.include_router(sensor_status_router)
 gemma_client = GemmaClient(settings)
 
 
