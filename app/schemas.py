@@ -12,6 +12,7 @@ class HealthResponse(BaseModel):
     app: str
     backend: str
     gemma: str
+    gemma_model: str
     depth_model: str
 
 

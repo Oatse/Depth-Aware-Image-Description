@@ -25,6 +25,7 @@ async def readiness(request: Request) -> dict[str, object]:
     checks = {
         "backend": "ready",
         "gemma": gemma_status,
+        "gemma_model": settings.lm_studio_model,
         "depth": settings.depth_model_status,
         "sensor": sensor.get("status", "unavailable"),
         "two_sensor_fresh": sensor.get("status") == "paired",

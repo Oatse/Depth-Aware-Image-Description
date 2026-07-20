@@ -26,6 +26,7 @@ def test_health_endpoint_returns_backend_status() -> None:
     data = response.json()
     assert data["success"] is True
     assert data["backend"] == "ok"
+    assert data["gemma_model"] == "google/gemma-4-e2b"
 
 
 def test_experiment_status_endpoint_returns_readiness_snapshot() -> None:

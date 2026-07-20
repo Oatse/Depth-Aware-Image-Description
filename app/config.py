@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     tls_keyfile: Path = Field(default=Path("./certs/localhost-key.pem"), validation_alias="TLS_KEYFILE")
 
     lm_studio_url: str = "http://localhost:1234"
-    lm_studio_model: str = "google/gemma-4-e4b"
+    lm_studio_model: str = "google/gemma-4-e2b"
     lm_studio_timeout: int = 240
     lm_studio_health_timeout: float = 2.0
     lm_studio_max_tokens: int = 900

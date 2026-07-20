@@ -36,6 +36,10 @@ def test_default_token_budget_is_bounded_for_two_sentence_descriptions() -> None
     assert settings.lm_studio_max_tokens <= 1000
 
 
+def test_default_runtime_model_is_gemma_e2b() -> None:
+    assert Settings().lm_studio_model == "google/gemma-4-e2b"
+
+
 def test_mock_description_does_not_restore_retired_depth_prompting_behavior() -> None:
     # Given
     client = GemmaClient(Settings(gemma_mock=True))

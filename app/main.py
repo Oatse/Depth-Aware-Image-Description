@@ -91,5 +91,6 @@ async def health() -> HealthResponse:
         app=settings.app_name,
         backend="ok",
         gemma=await gemma_client.check_status(),
+        gemma_model=settings.lm_studio_model,
         depth_model=settings.depth_model_status,
     )

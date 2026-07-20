@@ -73,7 +73,7 @@ copy .env.example .env
 Variabel penting:
 
 - `LM_STUDIO_URL=http://localhost:1234`
-- `LM_STUDIO_MODEL=gemma-4-e4b-it`
+- `LM_STUDIO_MODEL=google/gemma-4-e2b`
 - `LM_STUDIO_HEALTH_TIMEOUT=2`
 - `DEPTH_MODEL_PATH=./model_weights/Depth-Anything-V2-Metric-Indoor-Small-hf`
 - `ANALYSIS_QUEUE_CAPACITY=8`
