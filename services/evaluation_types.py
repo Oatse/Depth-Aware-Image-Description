@@ -26,6 +26,21 @@ SEMANTIC_EVALUATED_MODES = frozenset({
 
 
 @dataclass(frozen=True, slots=True)
+class IoTEvaluationSummary:
+    capture_count: int
+    pairing_coverage: float
+    partial_rate: float
+    conflict_rate: float
+    stale_rate: float
+    mean_timestamp_offset_ms: float | None
+    mean_sensor_disagreement_cm: float | None
+    absolute_error_cm: float | None
+    sensor_depth_consistency_accuracy: float | None
+    latency_overhead_ms: float | None
+    description_quality_delta: float | None
+
+
+@dataclass(frozen=True, slots=True)
 class EvaluationSummary:
     total_images: int
     prediction_coverage: float

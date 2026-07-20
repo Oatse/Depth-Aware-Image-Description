@@ -115,6 +115,8 @@ Integrasi Gemma saat ini memakai endpoint OpenAI-compatible LM Studio:
 - `GET /v1/models` untuk health check ringan.
 - `POST /v1/chat/completions` untuk inferensi vision-language.
 
+Evaluasi IoT tidak memakai dataset statis sebagai ground truth sensor. Isi manifest capture nyata dengan jarak target terukur, status pairing, offset waktu, disagreement, latency, dan skor deskripsi kedua mode, lalu jalankan `python scripts/run_iot_capture_protocol.py dataset/iot_capture_manifest.csv`.
+
 LM Studio native v1 REST API di `/api/v1/*` tetap bisa dipertimbangkan nanti, tetapi prototype ini sengaja memakai OpenAI-compatible endpoint karena payload image chat-nya sesuai kebutuhan dan stabil untuk client lokal.
 
 ## Menjalankan Backend

@@ -44,3 +44,6 @@ def to_float(value: str) -> float:
     except (TypeError, ValueError):
         return 0.0
 
+
+def mean(values: list[float]) -> float | None:
+    return sum(values) / len(values) if values else None

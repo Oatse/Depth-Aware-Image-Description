@@ -13,13 +13,45 @@ from services.evaluation_metrics import (
     obstacle_confusion,
     safe_ratio,
     to_float,
+    mean,
 )
 from services.evaluation_types import (
     DEPTH_EVALUATED_MODES,
     REQUIRED_ANNOTATION_COLUMNS,
     SEMANTIC_EVALUATED_MODES,
     EvaluationSummary,
+    IoTEvaluationSummary,
 )
+
+
+def evaluate_iot_manifest(manifest_path: Path) -> IoTEvaluationSummary:
+    rows = _read_csv_dicts(manifest_path)
+    required = {"capture_id", "status", "ground_truth_cm", "sensor_1_cm", "sensor_2_cm", "timestamp_offset_ms", "mode", "total_latency_ms", "gemma_depth_latency_ms"}
+    if not rows:
+        raise ValueError("IoT manifest kosong.")
+    missing = required - set(rows[0])
+    if missing:
+        raise ValueError(f"IoT manifest columns missing: {', '.join(sorted(missing))}")
+    statuses = [row["status"].strip() for row in rows]
+    paired = [row for row in rows if row["status"] == "paired"]
+    disagreements = [abs(to_float(row["sensor_1_cm"]) - to_float(row["sensor_2_cm"])) for row in paired]
+    absolute_errors = [abs((to_float(row["sensor_1_cm"]) + to_float(row["sensor_2_cm"])) / 2 - to_float(row["ground_truth_cm"])) for row in paired]
+    consistency_values = [row["sensor_depth_consistent"].strip().lower() for row in rows if row.get("sensor_depth_consistent", "").strip().lower() in {"yes", "no"}]
+    description_deltas = [to_float(row["iot_description_score"]) - to_float(row["gemma_depth_description_score"]) for row in rows if row.get("iot_description_score") and row.get("gemma_depth_description_score")]
+    overhead = [to_float(row["total_latency_ms"]) - to_float(row["gemma_depth_latency_ms"]) for row in rows]
+    return IoTEvaluationSummary(
+        capture_count=len(rows),
+        pairing_coverage=len(paired) / len(rows),
+        partial_rate=statuses.count("partial") / len(rows),
+        conflict_rate=statuses.count("pair_conflict") / len(rows),
+        stale_rate=statuses.count("stale") / len(rows),
+        mean_timestamp_offset_ms=mean([to_float(row["timestamp_offset_ms"]) for row in rows]),
+        mean_sensor_disagreement_cm=mean(disagreements),
+        absolute_error_cm=mean(absolute_errors),
+        sensor_depth_consistency_accuracy=(sum(value == "yes" for value in consistency_values) / len(consistency_values) if consistency_values else None),
+        latency_overhead_ms=mean(overhead),
+        description_quality_delta=mean(description_deltas),
+    )
 
 
 def evaluate_predictions(
