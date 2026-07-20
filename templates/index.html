@@ -71,6 +71,17 @@
         <form id="analyze-form" class="composer-shell" aria-label="Form analisis gambar">
           <div id="analysis-composer" class="analysis-composer">
             <div class="composer-prompt">
+              <div class="workflow-status" aria-live="polite">
+                <span id="workflow-state-label">Memeriksa runtime</span>
+                <ol id="workflow-state" aria-label="Tahapan analisis">
+                  <li data-workflow-state="runtime">Runtime</li>
+                  <li data-workflow-state="camera">Kamera</li>
+                  <li data-workflow-state="sensor">Sensor</li>
+                  <li data-workflow-state="captured">Frame</li>
+                  <li data-workflow-state="analyzing">Analisis</li>
+                  <li data-workflow-state="result">Hasil</li>
+                </ol>
+              </div>
               <div class="source-switcher" role="tablist" aria-label="Pilih sumber gambar">
                 <button
                   id="source-upload-tab"
@@ -162,17 +173,19 @@
                   <span>Mode analisis</span>
                   <select id="mode-select" name="mode">
                     <option value="gemma_depth">Fusi Regional Berbatas Bukti</option>
+                    <option id="iot-mode-option" value="iot_assisted" disabled>IoT-Assisted</option>
                     <option value="gemma_only">Gemma Baseline</option>
                     <option value="depth_only">Kedalaman Saja</option>
                   </select>
                 </label>
+                <p id="iot-mode-reason" class="iot-mode-reason">IoT-assisted menunggu readiness sensor, kalibrasi, dan kamera belakang.</p>
                 <button id="analyze-button" type="submit" class="send-button" disabled aria-label="Analisis gambar">
                   <span aria-hidden="true">Analisis</span>
                 </button>
               </div>
 
               <div class="compare-row">
-                <p>Bandingkan Gemma Baseline, depth-only, dan fusi regional pada gambar yang sama.</p>
+                <p>Bandingkan Gemma Baseline, Gemma + Depth, dan IoT-assisted dari evidence backend yang sama.</p>
                 <button id="compare-button" type="button" class="secondary-button" disabled>
                   Bandingkan mode
                 </button>

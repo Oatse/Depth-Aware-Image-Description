@@ -70,6 +70,10 @@ const sensor1Output = document.querySelector("#sensor-1-output");
 const sensor2Output = document.querySelector("#sensor-2-output");
 const sensorConnectionMeta = document.querySelector("#sensor-connection-meta");
 const sensorCaptureStatus = document.querySelector("#sensor-capture-status");
+const workflowStateLabel = document.querySelector("#workflow-state-label");
+const workflowSteps = Array.from(document.querySelectorAll("#workflow-state [data-workflow-state]"));
+const iotModeOption = document.querySelector("#iot-mode-option");
+const iotModeReason = document.querySelector("#iot-mode-reason");
 let captureClock = null;
 
 const REGION_LABELS = {
@@ -94,10 +98,50 @@ const MODE_LABELS = {
 const PROVENANCE_LABELS = {
   gemma: "Gemma",
   depth: "Depth",
+  sensor: "Sensor frontal",
   inference: "Inferensi",
   template: "Template",
   guardrail: "Batasan",
 };
+
+function setWorkflowState(state) {
+  const currentIndex = WORKFLOW_STATES.indexOf(state);
+  workflowSteps.forEach((step, index) => {
+    step.classList.toggle("is-complete", index < currentIndex);
+    step.classList.toggle("is-current", index === currentIndex);
+  });
+  if (workflowStateLabel) {
+    workflowStateLabel.textContent = WORKFLOW_LABELS[state] || state;
+  }
+}
+
+function updateIotModeAvailability() {
+  const rearCapture = activeSource === "camera" && cameraFacingMode === "environment";
+  const enabled = iotRuntimeReady && latestSensorPaired && rearCapture;
+  if (iotModeOption) {
+    iotModeOption.disabled = !enabled;
+  }
+  if (!enabled && modeSelect?.value === "iot_assisted") {
+    modeSelect.value = "gemma_depth";
+  }
+  if (iotModeReason) {
+    iotModeReason.textContent = enabled
+      ? "IoT-assisted siap: kamera belakang, sensor paired, clock, dan kalibrasi memenuhi gate."
+      : "IoT-assisted belum tersedia: gunakan kamera belakang dan selesaikan gate readiness sensor/kalibrasi.";
+  }
+}
+
+async function refreshReadiness() {
+  try {
+    const response = await fetch("/readiness", { cache: "no-store" });
+    const payload = await response.json();
+    iotRuntimeReady = Boolean(response.ok && payload.ready);
+    setWorkflowState("runtime");
+  } catch (_error) {
+    iotRuntimeReady = false;
+  }
+  updateIotModeAvailability();
+}
 
 const SCENE_LABELS = {
   indoor: "dalam ruangan",
@@ -114,6 +158,18 @@ let loadingTimer = null;
 let loadingIndex = 0;
 let dragDepth = 0;
 let sensorStatusTimer = null;
+let latestSensorPaired = false;
+let iotRuntimeReady = false;
+
+const WORKFLOW_STATES = ["runtime", "camera", "sensor", "captured", "analyzing", "result"];
+const WORKFLOW_LABELS = {
+  runtime: "Memeriksa runtime",
+  camera: "Kamera siap",
+  sensor: "Dua sensor paired",
+  captured: "Frame siap dianalisis",
+  analyzing: "Analisis berjalan",
+  result: "Hasil tersedia",
+};
 
 const ACCEPTED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 
@@ -168,6 +224,11 @@ function renderLiveSensorStatus(evidence) {
   sensorLivePanel.classList.toggle("is-paired", status === "paired");
   sensorLivePanel.classList.toggle("is-partial", status === "partial");
   sensorLivePanel.classList.toggle("is-disconnected", Boolean(evidence?.enabled && !evidence?.connected));
+  latestSensorPaired = status === "paired";
+  if (latestSensorPaired && activeSource === "camera") {
+    setWorkflowState("sensor");
+  }
+  updateIotModeAvailability();
 
   const port = evidence?.port || "port belum dikonfigurasi";
   const attempts = Number(evidence?.connection_attempts || 0);
@@ -184,7 +245,7 @@ function renderCapturedSensorEvidence(evidence) {
     sensorCaptureStatus.textContent = "Analisis ini tidak membawa metadata capture kamera.";
     return;
   }
-  if (evidence.status === "camera_sensor_direction_mismatch") {
+  if (["camera_sensor_direction_mismatch", "direction_mismatch"].includes(evidence.status)) {
     sensorCaptureStatus.textContent = "Evidence tidak dipasangkan karena frame berasal dari kamera depan, sedangkan sensor menghadap ke depan perangkat.";
     return;
   }
@@ -268,6 +329,7 @@ function setSourceTab(source, { focus = false } = {}) {
     stopSensorStatusPolling();
     hideCameraError();
   }
+  updateIotModeAvailability();
 }
 
 sourceTabs.forEach((tab, index) => {
@@ -292,6 +354,7 @@ window.addEventListener("pagehide", () => {
 });
 
 refreshHealth();
+refreshReadiness();
 syncCaptureClock().catch(() => {
   captureClock = null;
 });
@@ -562,6 +625,8 @@ async function openCamera(facingMode) {
   const usesRearCamera = cameraFacingMode === "environment";
   switchCameraButton.textContent = usesRearCamera ? "Ganti ke kamera depan" : "Ganti ke kamera belakang";
   switchCameraButton.setAttribute("aria-label", switchCameraButton.textContent);
+  setWorkflowState("camera");
+  updateIotModeAvailability();
 }
 
 switchCameraButton?.addEventListener("click", async () => {
@@ -608,6 +673,8 @@ captureImageButton?.addEventListener("click", () => {
     selectedBlob = new File([blob], "gambar-kamera.jpg", { type: "image/jpeg" });
     showPreview(selectedBlob);
     setActionAvailability(true);
+    setWorkflowState("captured");
+    updateIotModeAvailability();
     hideError();
   }, "image/jpeg", 0.9);
 });
@@ -738,8 +805,11 @@ function cancelHelpClose() {
 
 function renderFinalDescription(data, finalSections) {
   const segments = Array.isArray(data.display?.provenance_segments)
-    ? data.display.provenance_segments
+    ? [...data.display.provenance_segments]
     : [];
+  if (data.sensor_contribution?.description) {
+    segments.push({ source: "sensor", text: `Referensi sensor frontal: ${data.sensor_contribution.description}` });
+  }
   finalDescription.innerHTML = segments.length > 0
     ? buildProvenanceDescription(segments)
     : `<p>${escapeHtml(buildFinalSummary(data, finalSections))}</p>`;
@@ -967,6 +1037,8 @@ function setSelectedImage(file) {
   }
   showPreview(file);
   setActionAvailability(true);
+  setWorkflowState("captured");
+  updateIotModeAvailability();
   hideError();
 }
 
@@ -995,6 +1067,7 @@ function clearSelectedImage() {
 
 function renderResult(data) {
   resultShell.classList.remove("hidden");
+  setWorkflowState("result");
 
   const depth = data.depth_summary || {};
   const latency = data.latency || {};
@@ -1187,6 +1260,7 @@ function setComparisonLoading(isLoading) {
   compareButton.disabled = isLoading || !selectedBlob;
   analyzeButton.disabled = isLoading || !selectedBlob;
   if (isLoading) {
+    setWorkflowState("analyzing");
     comparisonOutput.innerHTML = `
       <div class="comparison-finding">Menjalankan baseline dan depth-only secara berurutan, lalu membentuk late fusion terkontrol pada gambar yang dipilih...</div>
     `;

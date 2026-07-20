@@ -20,7 +20,7 @@ Plan ini menganggap seluruh pekerjaan dikirim dalam satu PR, dengan setiap langk
 - [x] Step 7: Move Comparison to a Backend-Owned Job
 - [x] Step 8: Unify Persistence and Audit Trail
 - [x] Step 9: Complete Mobile-LAN Runtime and Readiness Checks
-- [ ] Step 10: Rebuild the UI Around Explicit System States
+- [x] Step 10: Rebuild the UI Around Explicit System States
 - [ ] Step 11: Extend Evaluation for IoT Contribution
 - [ ] Step 12: End-to-End Acceptance and Documentation
 
