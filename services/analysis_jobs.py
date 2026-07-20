@@ -8,6 +8,8 @@ import anyio
 from anyio import WouldBlock
 from anyio.streams.memory import MemoryObjectReceiveStream, MemoryObjectSendStream
 
+from services.analysis_types import AnalysisMode
+
 
 class AnalysisJobStatus(StrEnum):
     QUEUED = "queued"
@@ -27,7 +29,7 @@ class AnalysisJobRequest:
     content_type: str
     width: int
     height: int
-    mode: str
+    mode: AnalysisMode
     save_result: bool
     capture_id: str | None = None
     capture_time_ms: int | None = None

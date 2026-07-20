@@ -10,9 +10,10 @@ from models.fusion import fuse_description
 from models.gemma_client import GemmaClient, GemmaClientError
 from services.depth_analysis import analyze_depth_regions
 from services.image_preprocess import preprocess_image
+from services.analysis_types import AnalysisMode
 
-GEMMA_MODES = frozenset({"gemma_only", "gemma_depth"})
-DEPTH_MODES = frozenset({"depth_only", "gemma_depth"})
+GEMMA_MODES = frozenset({AnalysisMode.GEMMA_ONLY, AnalysisMode.GEMMA_DEPTH, AnalysisMode.IOT_ASSISTED})
+DEPTH_MODES = frozenset({AnalysisMode.DEPTH_ONLY, AnalysisMode.GEMMA_DEPTH, AnalysisMode.IOT_ASSISTED})
 
 
 @dataclass(frozen=True)

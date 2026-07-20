@@ -12,7 +12,7 @@ Plan ini menganggap seluruh pekerjaan dikirim dalam satu PR, dengan setiap langk
 ## Progress
 
 - [x] Step 1: Commit the Existing Sensor-Camera Foundation
-- [ ] Step 2: Introduce Typed Domain Contracts and Final Mode Taxonomy
+- [x] Step 2: Introduce Typed Domain Contracts and Final Mode Taxonomy
 - [ ] Step 3: Normalize Phone Capture Time Against Backend Time
 - [ ] Step 4: Add Sensor Quality Classification and Calibration Profile
 - [ ] Step 5: Build a Shared Evidence Pipeline

@@ -36,6 +36,10 @@ class Settings(BaseSettings):
     sensor_max_clock_skew_ms: int = Field(default=5000, ge=0, le=60000, validation_alias="SENSOR_MAX_CLOCK_SKEW_MS")
     sensor_reconnect_interval_ms: int = Field(default=1000, ge=100, le=30000, validation_alias="SENSOR_RECONNECT_INTERVAL_MS")
     sensor_status_window_ms: int = Field(default=1000, ge=100, le=10000, validation_alias="SENSOR_STATUS_WINDOW_MS")
+    sensor_freshness_max_age_ms: int = Field(default=1000, ge=1, le=60000, validation_alias="SENSOR_FRESHNESS_MAX_AGE_MS")
+    sensor_pair_disagreement_cm: float = Field(default=15.0, ge=0, le=500, validation_alias="SENSOR_PAIR_DISAGREEMENT_CM")
+    sensor_clock_rtt_max_ms: int = Field(default=1000, ge=1, le=60000, validation_alias="SENSOR_CLOCK_RTT_MAX_MS")
+    sensor_iot_strict: bool = Field(default=True, validation_alias="SENSOR_IOT_STRICT")
 
     experiment_artifact_profile: str = "final_44_gemma_e2b_20260708"
     experiment_images_dir: Path = Path("./dataset/final_images")

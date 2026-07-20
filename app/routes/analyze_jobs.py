@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 import app.routes.analyze as analyze_route
 from app.schemas import AnalysisJobAcceptedResponse, AnalysisJobStatusResponse, AnalyzeResponse
 from services.analysis_jobs import AnalysisJobRequest, AnalysisJobService, AnalysisQueueFullError
+from services.analysis_types import normalize_analysis_mode
 from services.image_preprocess import ImagePreprocessError, preprocess_image
 from services.result_logger import log_prediction, log_sensor_evidence
 from services.sensor_evidence import collect_sensor_evidence
@@ -24,8 +25,9 @@ async def create_analysis_job(
     capture_time_ms: int | None = Form(default=None),
     camera_facing_mode: str | None = Form(default=None),
 ) -> JSONResponse:
-    normalized_mode = "gemma_depth" if mode == "full" else mode
-    if mode not in analyze_route.SUPPORTED_MODES:
+    try:
+        normalized_mode = normalize_analysis_mode(mode)
+    except ValueError:
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
             content={"error": "Mode must be one of gemma_only, depth_only, or gemma_depth."},

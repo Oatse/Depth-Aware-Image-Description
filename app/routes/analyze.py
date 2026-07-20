@@ -6,6 +6,7 @@ from app.schemas import AnalyzeResponse
 from models.depth_anything import DepthAnything
 from models.gemma_client import GemmaClient, GemmaClientError
 from services.image_preprocess import ImagePreprocessError, preprocess_image
+from services.analysis_types import AnalysisMode, normalize_analysis_mode
 from services.pipeline import analyze_image_bytes, prediction_row
 from services.result_logger import log_prediction, log_sensor_evidence
 from services.sensor_evidence import collect_sensor_evidence
@@ -16,7 +17,7 @@ settings = get_settings()
 gemma_client = GemmaClient(settings)
 depth_model = DepthAnything(settings)
 
-SUPPORTED_MODES = {"gemma_only", "depth_only", "gemma_depth", "full"}
+SUPPORTED_MODES = {mode.value for mode in AnalysisMode} | {"full"}
 
 
 @router.post("/analyze", response_model=AnalyzeResponse)
@@ -29,8 +30,9 @@ async def analyze_image(
     capture_time_ms: int | None = Form(default=None),
     camera_facing_mode: str | None = Form(default=None),
 ) -> JSONResponse:
-    normalized_mode = "gemma_depth" if mode == "full" else mode
-    if mode not in SUPPORTED_MODES:
+    try:
+        normalized_mode = normalize_analysis_mode(mode)
+    except ValueError:
         return _error_response(
             "Mode must be one of gemma_only, depth_only, or gemma_depth.",
             status.HTTP_400_BAD_REQUEST,
