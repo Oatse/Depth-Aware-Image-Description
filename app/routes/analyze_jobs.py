@@ -1,4 +1,5 @@
 import anyio
+from uuid import uuid4
 from fastapi import APIRouter, File, Form, Request, UploadFile, status
 from fastapi.responses import JSONResponse
 
@@ -7,7 +8,7 @@ from app.schemas import AnalysisJobAcceptedResponse, AnalysisJobStatusResponse, 
 from services.analysis_jobs import AnalysisJobRequest, AnalysisJobService, AnalysisQueueFullError
 from services.analysis_types import normalize_analysis_mode
 from services.image_preprocess import ImagePreprocessError, preprocess_image
-from services.result_logger import log_prediction, log_sensor_evidence
+from services.result_logger import log_analysis_run, log_prediction, log_sensor_evidence
 from services.sensor_evidence import collect_sensor_evidence
 from services.validation import ImageValidationError, validate_upload_file
 
@@ -123,8 +124,10 @@ async def run_analysis_job(job: AnalysisJobRequest) -> dict[str, object]:
     )
     if not pipeline_result.success:
         raise RuntimeError(pipeline_result.error or "Analyze failed.")
+    analysis_run_id = uuid4().hex
     response = AnalyzeResponse(
         success=True,
+        analysis_run_id=analysis_run_id,
         filename=job.filename,
         content_type=job.content_type,
         width=job.width,
@@ -144,6 +147,14 @@ async def run_analysis_job(job: AnalysisJobRequest) -> dict[str, object]:
         sensor_contribution=pipeline_result.sensor_contribution,
     )
     if job.save_result and analyze_route.settings.save_results:
+        log_analysis_run(
+            analyze_route.settings.results_dir,
+            analysis_run_id=analysis_run_id,
+            capture_id=job.capture_id,
+            filename=job.filename,
+            sensor_evidence=job.sensor_evidence,
+            outputs={job.mode.value: response.model_dump(mode="json")},
+        )
         log_prediction(analyze_route.settings.results_dir, analyze_route.prediction_row(pipeline_result))
         if job.sensor_evidence is not None:
             log_sensor_evidence(

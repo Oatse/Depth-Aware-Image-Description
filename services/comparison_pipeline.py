@@ -9,6 +9,7 @@ from models.gemma_client import GemmaClient
 from models.sensor_fusion import append_sensor_section, fuse_sensor_reference
 from services.evidence_pipeline import AnalysisEvidenceBundle, build_evidence_bundle
 from services.sensor_calibration import CalibrationProfile
+from services.result_logger import log_analysis_run
 
 
 @dataclass(frozen=True, slots=True)
@@ -51,7 +52,7 @@ async def compare_image_bytes(
     else:
         iot["final_description"] = append_sensor_section(iot["final_description"], contribution)
         iot["display"]["sensor_contribution"] = contribution
-    return {
+    result = {
         "success": True,
         "capture_id": request.capture_id,
         "filename": request.filename,
@@ -65,6 +66,15 @@ async def compare_image_bytes(
             "iot_assisted": iot,
         },
     }
+    run_id = log_analysis_run(
+        settings.results_dir,
+        capture_id=request.capture_id,
+        filename=request.filename,
+        sensor_evidence=request.sensor_evidence,
+        outputs=result["modes"],
+    ) if settings.save_results else None
+    result["analysis_run_id"] = run_id
+    return result
 
 
 def _render_mode(evidence: AnalysisEvidenceBundle, mode: str) -> dict[str, object]:

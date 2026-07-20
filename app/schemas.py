@@ -47,6 +47,7 @@ class SensorContributionModel(BaseModel):
 
 class AnalyzeResponse(BaseModel):
     success: bool
+    analysis_run_id: str | None = None
     filename: str | None = None
     content_type: str | None = None
     width: int | None = None

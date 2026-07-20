@@ -3,6 +3,9 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+from uuid import uuid4
+
+from services.run_repository import RunRepository
 
 
 PREDICTION_FIELDS = [
@@ -54,6 +57,27 @@ def log_sensor_evidence(
     }
     with (results_dir / "sensor_captures.jsonl").open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(record, ensure_ascii=False, separators=(",", ":")) + "\n")
+
+
+def log_analysis_run(
+    results_dir: Path,
+    *,
+    capture_id: str | None,
+    filename: str,
+    sensor_evidence: dict[str, Any] | None,
+    outputs: dict[str, Any],
+    analysis_run_id: str | None = None,
+) -> str:
+    run_id = analysis_run_id or uuid4().hex
+    record = {
+        "analysis_run_id": run_id,
+        "capture_id": capture_id,
+        "image": {"filename": filename},
+        "sensor_evidence": sensor_evidence,
+        "outputs": outputs,
+        "logged_at": datetime.now(timezone.utc).isoformat(),
+    }
+    return RunRepository(results_dir / "analysis_runs.jsonl").append(record)
 
 
 def _ensure_prediction_file_schema(output_path: Path) -> None:

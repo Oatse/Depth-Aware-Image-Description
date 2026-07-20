@@ -1,5 +1,6 @@
 from fastapi import APIRouter, File, Form, Request, UploadFile, status
 from fastapi.responses import JSONResponse
+from uuid import uuid4
 
 from app.config import get_settings
 from app.schemas import AnalyzeResponse
@@ -8,7 +9,7 @@ from models.gemma_client import GemmaClient, GemmaClientError
 from services.image_preprocess import ImagePreprocessError, preprocess_image
 from services.analysis_types import AnalysisMode, normalize_analysis_mode
 from services.pipeline import analyze_image_bytes, prediction_row
-from services.result_logger import log_prediction, log_sensor_evidence
+from services.result_logger import log_analysis_run, log_prediction, log_sensor_evidence
 from services.sensor_evidence import collect_sensor_evidence
 from services.validation import ImageValidationError, validate_upload_file
 
@@ -82,8 +83,10 @@ async def analyze_image(
             pipeline_result.error or "Analyze failed.",
         )
 
+    analysis_run_id = uuid4().hex
     response = AnalyzeResponse(
         success=True,
+        analysis_run_id=analysis_run_id,
         filename=upload.filename,
         content_type=upload.content_type,
         width=processed.width,
@@ -104,6 +107,14 @@ async def analyze_image(
     )
 
     if save_result and settings.save_results:
+        log_analysis_run(
+            settings.results_dir,
+            analysis_run_id=analysis_run_id,
+            capture_id=capture_id,
+            filename=upload.filename,
+            sensor_evidence=sensor_evidence,
+            outputs={normalized_mode.value: response.model_dump(mode="json")},
+        )
         log_prediction(settings.results_dir, prediction_row(pipeline_result))
         if sensor_evidence is not None:
             log_sensor_evidence(
