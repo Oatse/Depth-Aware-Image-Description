@@ -24,6 +24,8 @@ async def create_analysis_job(
     capture_id: str | None = Form(default=None),
     capture_time_ms: int | None = Form(default=None),
     camera_facing_mode: str | None = Form(default=None),
+    clock_offset_ms: int | None = Form(default=None),
+    clock_rtt_ms: int | None = Form(default=None),
 ) -> JSONResponse:
     try:
         normalized_mode = normalize_analysis_mode(mode)
@@ -54,6 +56,9 @@ async def create_analysis_job(
                 camera_facing_mode=camera_facing_mode,
                 match_window_ms=analyze_route.settings.sensor_match_window_ms,
                 max_clock_skew_ms=analyze_route.settings.sensor_max_clock_skew_ms,
+                clock_offset_ms=clock_offset_ms,
+                clock_rtt_ms=clock_rtt_ms,
+                max_clock_rtt_ms=analyze_route.settings.sensor_clock_rtt_max_ms,
             )
         record = service.enqueue(AnalysisJobRequest(
             image_bytes=upload.data,

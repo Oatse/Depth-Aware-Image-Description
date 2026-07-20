@@ -13,7 +13,7 @@ Plan ini menganggap seluruh pekerjaan dikirim dalam satu PR, dengan setiap langk
 
 - [x] Step 1: Commit the Existing Sensor-Camera Foundation
 - [x] Step 2: Introduce Typed Domain Contracts and Final Mode Taxonomy
-- [ ] Step 3: Normalize Phone Capture Time Against Backend Time
+- [x] Step 3: Normalize Phone Capture Time Against Backend Time
 - [ ] Step 4: Add Sensor Quality Classification and Calibration Profile
 - [ ] Step 5: Build a Shared Evidence Pipeline
 - [ ] Step 6: Implement Thesis-Safe IoT-Assisted Fusion

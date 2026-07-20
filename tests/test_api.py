@@ -129,6 +129,15 @@ def test_analyze_endpoint_rejects_retired_prompted_mode() -> None:
     assert response.json()["error"] == "Mode must be one of gemma_only, depth_only, or gemma_depth."
 
 
+def test_time_sync_returns_backend_epoch() -> None:
+    response = client.get("/time-sync")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert isinstance(payload["server_time_ms"], int)
+    assert payload["clock_domain"] == "unix_epoch_ms"
+
+
 def test_analysis_job_endpoint_returns_accepted_then_completed(monkeypatch) -> None:
     class FakeGemmaClient:
         async def describe_image(self, base64_image: str, prompt: str | None = None) -> GemmaResult:

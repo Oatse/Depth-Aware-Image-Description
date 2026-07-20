@@ -70,6 +70,7 @@ const sensor1Output = document.querySelector("#sensor-1-output");
 const sensor2Output = document.querySelector("#sensor-2-output");
 const sensorConnectionMeta = document.querySelector("#sensor-connection-meta");
 const sensorCaptureStatus = document.querySelector("#sensor-capture-status");
+let captureClock = null;
 
 const REGION_LABELS = {
   upper_left: "atas-kiri",
@@ -291,6 +292,9 @@ window.addEventListener("pagehide", () => {
 });
 
 refreshHealth();
+syncCaptureClock().catch(() => {
+  captureClock = null;
+});
 
 systemStatusToggle?.addEventListener("click", () => {
   if (!systemStatusPanel) {
@@ -890,6 +894,9 @@ function formatSystemStatus(value) {
 }
 
 async function analyzeMode(mode, saveResult) {
+  if (!captureClock) {
+    await syncCaptureClock();
+  }
   const formData = new FormData();
   formData.append("image", selectedBlob, selectedBlob.name || "gambar-kamera.jpg");
   formData.append("mode", mode);
@@ -899,11 +906,35 @@ async function analyzeMode(mode, saveResult) {
     formData.append("capture_time_ms", String(selectedCaptureMeta.capture_time_ms));
     formData.append("camera_facing_mode", selectedCaptureMeta.camera_facing_mode);
   }
+  if (captureClock) {
+    formData.append("clock_offset_ms", String(captureClock.offset_ms));
+    formData.append("clock_rtt_ms", String(captureClock.rtt_ms));
+  }
 
   if (!window.AnalysisJobClient) {
     throw new Error("Klien antrean analisis tidak tersedia.");
   }
   return window.AnalysisJobClient.analyze(formData);
+}
+
+async function syncCaptureClock() {
+  const samples = [];
+  for (let index = 0; index < 3; index += 1) {
+    const startedAt = performance.now();
+    const clientBeforeMs = Date.now();
+    const response = await fetch(`/time-sync?sample=${index}`, { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error("Sinkronisasi waktu backend gagal.");
+    }
+    const payload = await response.json();
+    const clientAfterMs = Date.now();
+    const rttMs = Math.max(0, Math.round(performance.now() - startedAt));
+    const midpointMs = (clientBeforeMs + clientAfterMs) / 2;
+    samples.push({ offset_ms: Math.round(payload.server_time_ms - midpointMs), rtt_ms: rttMs });
+  }
+  samples.sort((left, right) => left.rtt_ms - right.rtt_ms);
+  captureClock = samples[0] || null;
+  return captureClock;
 }
 
 function setSelectedImage(file) {
