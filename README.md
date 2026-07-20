@@ -94,6 +94,22 @@ Variabel penting:
 
 Mock hanya aktif jika eksplisit diset ke `true`. Jangan gunakan hasil mock sebagai hasil eksperimen final.
 
+### Menjalankan dari HP
+
+Kamera browser pada alamat LAN memerlukan secure context. Buat certificate lokal yang dipercaya HP di folder `certs/` (folder ini diabaikan Git), lalu jalankan:
+
+```powershell
+.\scripts\start_mobile.ps1
+```
+
+Script bind ke `0.0.0.0`, menampilkan URL HTTPS LAN dan status rule firewall. Setelah server hidup, jalankan preflight berikut dari terminal lain:
+
+```powershell
+python .\scripts\preflight_runtime.py --url https://127.0.0.1:8000/readiness --allow-insecure
+```
+
+Status IoT baru `ready` jika model LM Studio yang dikonfigurasi loaded, depth model tersedia, dua sensor fresh/paired, profile kalibrasi tervalidasi, dan request memakai secure context. Gunakan `--allow-insecure` hanya untuk pemeriksaan certificate lokal dari PC, bukan sebagai pengganti trust certificate pada HP.
+
 Integrasi Gemma saat ini memakai endpoint OpenAI-compatible LM Studio:
 
 - `GET /v1/models` untuk health check ringan.

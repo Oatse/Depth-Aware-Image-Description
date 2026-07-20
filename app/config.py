@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     app_env: str = "development"
     app_host: str = Field(default="127.0.0.1", validation_alias="APP_HOST")
     app_port: int = Field(default=8000, validation_alias="APP_PORT")
+    tls_certfile: Path = Field(default=Path("./certs/localhost.pem"), validation_alias="TLS_CERTFILE")
+    tls_keyfile: Path = Field(default=Path("./certs/localhost-key.pem"), validation_alias="TLS_KEYFILE")
 
     lm_studio_url: str = "http://localhost:1234"
     lm_studio_model: str = "google/gemma-4-e4b"
