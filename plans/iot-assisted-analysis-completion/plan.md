@@ -17,7 +17,7 @@ Plan ini menganggap seluruh pekerjaan dikirim dalam satu PR, dengan setiap langk
 - [x] Step 4: Add Sensor Quality Classification and Calibration Profile
 - [x] Step 5: Build a Shared Evidence Pipeline
 - [x] Step 6: Implement Thesis-Safe IoT-Assisted Fusion
-- [ ] Step 7: Move Comparison to a Backend-Owned Job
+- [x] Step 7: Move Comparison to a Backend-Owned Job
 - [ ] Step 8: Unify Persistence and Audit Trail
 - [ ] Step 9: Complete Mobile-LAN Runtime and Readiness Checks
 - [ ] Step 10: Rebuild the UI Around Explicit System States

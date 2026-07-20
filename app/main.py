@@ -10,6 +10,8 @@ from app.config import get_settings
 from app.routes.analyze import router as analyze_router
 from app.routes.analyze_jobs import router as analyze_jobs_router
 from app.routes.analyze_jobs import run_analysis_job
+from app.routes.analysis_comparisons import router as analysis_comparisons_router
+from app.routes.analysis_comparisons import run_comparison_job
 from app.routes.experiment_status import router as experiment_status_router
 from app.routes.sensor_status import router as sensor_status_router
 from app.routes.time_sync import router as time_sync_router
@@ -30,6 +32,12 @@ async def lifespan(application: FastAPI):
         retained_jobs=settings.analysis_retained_jobs,
     )
     application.state.analysis_jobs = analysis_jobs
+    comparison_jobs = AnalysisJobService(
+        runner=run_comparison_job,
+        queue_capacity=settings.analysis_queue_capacity,
+        retained_jobs=settings.analysis_retained_jobs,
+    )
+    application.state.comparison_jobs = comparison_jobs
     sensor_bridge = SensorBridge(
         settings.sensor_serial_port,
         settings.sensor_serial_baud,
@@ -39,9 +47,11 @@ async def lifespan(application: FastAPI):
     application.state.sensor_bridge = sensor_bridge
     async with anyio.create_task_group() as task_group:
         task_group.start_soon(analysis_jobs.serve)
+        task_group.start_soon(comparison_jobs.serve)
         yield
         sensor_bridge.stop()
         await analysis_jobs.close()
+        await comparison_jobs.close()
 
 
 app = FastAPI(
@@ -56,6 +66,7 @@ app.mount("/results", StaticFiles(directory=str(settings.results_dir)), name="re
 templates = Jinja2Templates(directory="templates")
 app.include_router(analyze_router)
 app.include_router(analyze_jobs_router)
+app.include_router(analysis_comparisons_router)
 app.include_router(experiment_status_router)
 app.include_router(sensor_status_router)
 app.include_router(time_sync_router)

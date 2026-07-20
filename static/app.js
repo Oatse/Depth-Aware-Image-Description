@@ -533,11 +533,10 @@ compareButton?.addEventListener("click", async () => {
   setComparisonLoading(true);
   hideError();
   try {
-    const gemmaOnly = await analyzeMode("gemma_only", false);
-    const depthOnly = await analyzeMode("depth_only", false);
-    const gemmaDepth = buildControlledLateFusion(gemmaOnly, depthOnly);
-    renderResult(gemmaDepth);
-    renderModeComparison(gemmaOnly, depthOnly, gemmaDepth);
+    const comparison = await compareModes();
+    const { gemma_only: gemmaOnly, gemma_depth: gemmaDepth, iot_assisted: iotAssisted } = comparison.modes;
+    renderResult(iotAssisted.success ? iotAssisted : gemmaDepth);
+    renderModeComparison(gemmaOnly, gemmaDepth, iotAssisted);
   } catch (error) {
     comparisonStatus.textContent = "Gagal";
     showError(error.message || "Perbandingan mode gagal.");
@@ -917,6 +916,24 @@ async function analyzeMode(mode, saveResult) {
   return window.AnalysisJobClient.analyze(formData);
 }
 
+async function compareModes() {
+  if (!captureClock) {
+    await syncCaptureClock();
+  }
+  const formData = new FormData();
+  formData.append("image", selectedBlob, selectedBlob.name || "gambar-kamera.jpg");
+  if (selectedCaptureMeta) {
+    formData.append("capture_id", selectedCaptureMeta.capture_id);
+    formData.append("capture_time_ms", String(selectedCaptureMeta.capture_time_ms));
+    formData.append("camera_facing_mode", selectedCaptureMeta.camera_facing_mode);
+  }
+  if (captureClock) {
+    formData.append("clock_offset_ms", String(captureClock.offset_ms));
+    formData.append("clock_rtt_ms", String(captureClock.rtt_ms));
+  }
+  return window.AnalysisJobClient.compare(formData);
+}
+
 async function syncCaptureClock() {
   const samples = [];
   for (let index = 0; index < 3; index += 1) {
@@ -1046,76 +1063,61 @@ function renderSingleModeComparison(data) {
 
   comparisonStatus.textContent = "Mode aktif";
   comparisonOutput.innerHTML = `
-    <div class="comparison-finding">Mode ${escapeHtml(MODE_LABELS[data.mode] || data.mode || "terpilih")} sudah dianalisis. Jalankan perbandingan untuk melihat Gemma Baseline, depth-only, dan late fusion kontrol pada gambar yang sama.</div>
+    <div class="comparison-finding">Mode ${escapeHtml(MODE_LABELS[data.mode] || data.mode || "terpilih")} sudah dianalisis. Jalankan perbandingan backend untuk melihat Gemma Baseline, Gemma + Depth, dan IoT-assisted pada evidence yang sama.</div>
   `;
 }
 
-function renderModeComparison(gemmaOnly, depthOnly, gemmaDepth) {
+function renderModeComparison(gemmaOnly, gemmaDepth, iotAssisted) {
   comparisonStatus.textContent = "Selesai";
   const addsDepth = gemmaDepth.depth_summary?.nearest_region;
   comparisonOutput.innerHTML = `
-    ${buildComparisonTable(gemmaOnly, depthOnly, gemmaDepth)}
+    ${buildComparisonTable(gemmaOnly, gemmaDepth, iotAssisted)}
     <div class="comparison-finding">
       ${addsDepth
-        ? "Kontribusi depth tersedia sebagai metadata region/kategori pada depth-only dan sebagai kalimat tambahan pada late fusion kontrol. Kolom Gemma Baseline membaca relasi spasial visual tanpa metadata depth eksplisit."
+        ? "Ketiga mode berasal dari satu inferensi Gemma dan satu inferensi depth. Kolom IoT menambahkan referensi sensor frontal hanya saat evidence valid."
         : "Kontribusi kedalaman belum terlihat pada data respons. Periksa JSON mentah dan status waktu proses model."}
     </div>
   `;
 }
 
-function buildComparisonTable(gemmaOnly, depthOnly, gemmaDepth) {
-  const depthOnlySummary = depthOnly.depth_summary || {};
-  const lateDepth = gemmaDepth.depth_summary || {};
-  const lateSections = gemmaDepth.display?.final_sections || {};
+function buildComparisonTable(gemmaOnly, gemmaDepth, iotAssisted) {
+  const depthSummary = gemmaDepth.depth_summary || {};
+  const sensor = iotAssisted.sensor_contribution || {};
   const rows = [
     {
       aspect: "Deskripsi visual",
       gemma: summarizeVisual(gemmaOnly),
-      depthOnly: "Tidak membaca semantik objek; hanya metadata depth.",
-      lateFusion: summarizeVisual(gemmaDepth),
-      contribution: "Gemma Baseline memakai gambar saja; late fusion menambahkan hasil depth setelah deskripsi visual dibuat.",
+      gemmaDepth: summarizeVisual(gemmaDepth),
+      iot: summarizeVisual(iotAssisted),
+      contribution: "Semantik visual berasal dari inferensi Gemma yang sama.",
     },
     {
       aspect: "Area terdekat",
       gemma: depthMetadataUnavailable(),
-      depthOnly: formatArea(depthOnlySummary.nearest_region),
-      lateFusion: formatArea(lateDepth.nearest_region),
+      gemmaDepth: formatArea(depthSummary.nearest_region),
+      iot: formatArea(iotAssisted.depth_summary?.nearest_region),
       contribution: "Berasal dari estimasi kedalaman relatif, bukan identitas objek pasti.",
     },
     {
-      aspect: "Strategi fusi",
-      gemma: formatFusionStrategy(gemmaOnly.display?.fusion_strategy),
-      depthOnly: "Depth summary",
-      lateFusion: formatFusionStrategy(gemmaDepth.display?.fusion_strategy),
-      contribution: "Membedakan baseline visual, depth-only, dan post-processing late fusion.",
+      aspect: "Referensi sensor frontal",
+      gemma: "Tidak digunakan",
+      gemmaDepth: "Tidak digunakan",
+      iot: sensor.description || `Tidak tersedia: ${sensor.reason_code || "tanpa evidence"}`,
+      contribution: "Sensor tidak mengidentifikasi objek dan konflik tidak dirata-ratakan.",
     },
     {
       aspect: "Kategori kedalaman relatif",
       gemma: depthMetadataUnavailable(),
-      depthOnly: formatCategory(depthOnlySummary.distance_category),
-      lateFusion: formatCategory(lateDepth.distance_category),
+      gemmaDepth: formatCategory(depthSummary.distance_category),
+      iot: formatCategory(iotAssisted.depth_summary?.distance_category),
       contribution: "Ditambahkan dari threshold depth yang belum dikalibrasi sebagai meter presisi.",
-    },
-    {
-      aspect: "Potensi halangan visual",
-      gemma: summarizeText(gemmaOnly.display?.final_sections?.potential_obstacle),
-      depthOnly: summarizeText(depthOnly.display?.final_sections?.potential_obstacle),
-      lateFusion: summarizeText(lateSections.potential_obstacle),
-      contribution: "Gemma dapat menyebut hambatan yang tampak; depth memberi indikator region relatif.",
-    },
-    {
-      aspect: "Area relatif lapang",
-      gemma: summarizeText(gemmaOnly.display?.final_sections?.open_area),
-      depthOnly: summarizeText(depthOnly.display?.final_sections?.open_area),
-      lateFusion: summarizeText(lateSections.open_area),
-      contribution: "Area relatif lapang bukan jalur aman.",
     },
     {
       aspect: "Latensi",
       gemma: formatMs(gemmaOnly.latency?.total_ms),
-      depthOnly: formatMs(depthOnly.latency?.total_ms),
-      lateFusion: formatMs(gemmaDepth.latency?.total_ms),
-      contribution: buildLatencyDelta(gemmaOnly.latency?.total_ms, gemmaDepth.latency?.total_ms),
+      gemmaDepth: formatMs(gemmaDepth.latency?.total_ms),
+      iot: formatMs(iotAssisted.latency?.total_ms),
+      contribution: buildLatencyDelta(gemmaOnly.latency?.total_ms, iotAssisted.latency?.total_ms),
     },
   ];
 
@@ -1126,8 +1128,8 @@ function buildComparisonTable(gemmaOnly, depthOnly, gemmaDepth) {
           <tr>
             <th>Aspek</th>
             <th>Gemma Baseline</th>
-            <th>Depth-only</th>
-            <th>Late Fusion</th>
+            <th>Gemma + Depth</th>
+            <th>IoT-assisted</th>
             <th>Kontribusi</th>
           </tr>
         </thead>
@@ -1136,8 +1138,8 @@ function buildComparisonTable(gemmaOnly, depthOnly, gemmaDepth) {
             <tr>
               <th scope="row">${escapeHtml(row.aspect)}</th>
               <td data-label="Gemma Baseline">${escapeHtml(row.gemma)}</td>
-              <td data-label="Depth-only">${escapeHtml(row.depthOnly)}</td>
-              <td data-label="Late Fusion">${escapeHtml(row.lateFusion)}</td>
+              <td data-label="Gemma + Depth">${escapeHtml(row.gemmaDepth)}</td>
+              <td data-label="IoT-assisted">${escapeHtml(row.iot)}</td>
               <td data-label="Kontribusi">${escapeHtml(row.contribution)}</td>
             </tr>
           `).join("")}
@@ -1145,34 +1147,6 @@ function buildComparisonTable(gemmaOnly, depthOnly, gemmaDepth) {
       </table>
     </div>
   `;
-}
-
-function buildControlledLateFusion(gemmaOnly, depthOnly) {
-  const depthSections = depthOnly.display?.final_sections || {};
-  const latency = {
-    gemma_ms: gemmaOnly.latency?.gemma_ms || 0,
-    depth_ms: depthOnly.latency?.depth_ms || depthOnly.latency?.total_ms || 0,
-    fusion_ms: 0,
-    total_ms: sumLatency(gemmaOnly.latency?.total_ms, depthOnly.latency?.total_ms),
-  };
-
-  return {
-    mode: "gemma_depth",
-    sensor_evidence: gemmaOnly.sensor_evidence || depthOnly.sensor_evidence || null,
-    gemma_description: gemmaOnly.gemma_description || gemmaOnly.description_gemma || summarizeVisual(gemmaOnly),
-    depth_summary: depthOnly.depth_summary || {},
-    final_description: `${summarizeVisual(gemmaOnly)} ${summarizeText(depthSections.depth_insight)}`.trim(),
-    latency,
-    display: {
-      fusion_strategy: "late_rule_based_fusion_controlled",
-      final_sections: {
-        visual_description: summarizeVisual(gemmaOnly),
-        depth_insight: depthSections.depth_insight || "Informasi kedalaman tidak tersedia.",
-        potential_obstacle: depthSections.potential_obstacle || "Potensi halangan visual belum dapat ditentukan.",
-        open_area: depthSections.open_area || "Area relatif lapang belum dapat ditentukan.",
-      },
-    },
-  };
 }
 
 function buildDepthInsightList(depth, finalSections) {

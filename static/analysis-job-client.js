@@ -14,10 +14,18 @@
   }
 
   async function analyze(formData, options = {}) {
+    return submitAndPoll("/analysis-jobs", formData, options);
+  }
+
+  async function compare(formData, options = {}) {
+    return submitAndPoll("/analysis-comparisons", formData, options);
+  }
+
+  async function submitAndPoll(endpoint, formData, options = {}) {
     const pollIntervalMs = options.pollIntervalMs || 400;
     const timeoutMs = options.timeoutMs || 300000;
     const startedAt = Date.now();
-    const acceptedResponse = await fetch("/analysis-jobs", {
+    const acceptedResponse = await fetch(endpoint, {
       method: "POST",
       body: formData,
     });
@@ -43,5 +51,5 @@
     throw new Error("Analisis melewati batas tunggu lima menit.");
   }
 
-  global.AnalysisJobClient = Object.freeze({ analyze });
+  global.AnalysisJobClient = Object.freeze({ analyze, compare });
 })(window);
