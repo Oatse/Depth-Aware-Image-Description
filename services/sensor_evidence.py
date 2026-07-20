@@ -4,6 +4,7 @@ import time
 from typing import Any, Protocol
 
 from services.capture_clock import CaptureClock, normalize_capture_time
+from services.sensor_quality import classify_sensor_evidence
 
 
 class SensorSnapshotSource(Protocol):
@@ -21,6 +22,8 @@ def collect_sensor_evidence(
     clock_offset_ms: int | None = None,
     clock_rtt_ms: int | None = None,
     max_clock_rtt_ms: int = 1000,
+    freshness_max_age_ms: int | None = None,
+    pair_disagreement_cm: float | None = None,
     now_ms: int | None = None,
 ) -> dict[str, Any] | None:
     if client_capture_time_ms is None:
@@ -69,4 +72,10 @@ def collect_sensor_evidence(
             "camera_facing_mode": camera_facing_mode,
         }
     )
+    if freshness_max_age_ms is not None and pair_disagreement_cm is not None:
+        evidence = classify_sensor_evidence(
+            evidence,
+            max_age_ms=freshness_max_age_ms,
+            max_disagreement_cm=pair_disagreement_cm,
+        )
     return evidence

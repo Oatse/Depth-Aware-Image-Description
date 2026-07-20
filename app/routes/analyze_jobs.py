@@ -59,6 +59,8 @@ async def create_analysis_job(
                 clock_offset_ms=clock_offset_ms,
                 clock_rtt_ms=clock_rtt_ms,
                 max_clock_rtt_ms=analyze_route.settings.sensor_clock_rtt_max_ms,
+                freshness_max_age_ms=analyze_route.settings.sensor_freshness_max_age_ms,
+                pair_disagreement_cm=analyze_route.settings.sensor_pair_disagreement_cm,
             )
         record = service.enqueue(AnalysisJobRequest(
             image_bytes=upload.data,
