@@ -22,7 +22,7 @@ Plan ini menganggap seluruh pekerjaan dikirim dalam satu PR, dengan setiap langk
 - [x] Step 9: Complete Mobile-LAN Runtime and Readiness Checks
 - [x] Step 10: Rebuild the UI Around Explicit System States
 - [x] Step 11: Extend Evaluation for IoT Contribution
-- [ ] Step 12: End-to-End Acceptance and Documentation
+- [x] Step 12: End-to-End Acceptance and Documentation (reproducible gates passed; external/manual gates documented)
 
 ## Current-State Findings
 
