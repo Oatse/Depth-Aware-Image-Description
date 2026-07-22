@@ -1,607 +1,221 @@
-# Project Initialization - Depth-Aware Image Description
+# Project Initialization Bridge-Gap
 
-Dokumen ini menjadi dokumentasi pusat untuk inisialisasi, arah akademik, dan konteks teknis proyek skripsi. Isi dokumen merangkum keputusan desain, pembahasan topik, dasar penelitian, arsitektur sistem, tanggung jawab modul, serta rujukan utama yang sudah disimpan ke `docs/pustaka/`.
+## 1. Judul kerja
 
-Status dokumen: draft kerja untuk Bab 1, Bab 2, Bab 3, dan dokumentasi implementasi.
+**Sistem Deskripsi Gambar Indoor Berbahasa Indonesia Menggunakan Gemma 4 E2B dengan Referensi Jarak Frontal dari Dua Sensor HC-SR04**
 
-Tanggal pembaruan: 2026-07-14.
+Judul final harus disetujui dosen pembimbing. Frasa “referensi jarak frontal” dipertahankan untuk mencegah klaim bahwa sensor mengukur objek yang disebut model.
 
-## 1. Deskripsi Proyek
+## 2. Posisi penelitian
 
-Proyek ini adalah prototype penelitian untuk membuat sistem **depth-aware image description** pada citra lingkungan indoor. Sistem menerima gambar ruangan, memproses gambar dengan Depth Anything V2 Metric Indoor Small untuk memperkirakan informasi kedalaman relatif, lalu memakai vision-language model Gemma untuk menghasilkan deskripsi visual. Mode aktif `gemma_depth` memakai fusi regional berbatas bukti: fakta depth ditambahkan pada level area, tanpa mengklaim bahwa depth suatu area merupakan jarak objek tertentu karena pipeline tidak memiliki box, mask, atau pelacak objek-depth.
+Penelitian ini berbentuk perancangan dan evaluasi prototipe teknis. Sistem menerima satu citra indoor, menghasilkan deskripsi Bahasa Indonesia melalui Gemma 4 E2B, dan menyertakan referensi sensor frontal yang dikumpulkan dekat dengan waktu capture. Jalur visual dan jalur sensor dievaluasi secara terpisah karena tidak tersedia pengikatan spasial yang membuktikan bahwa echo sensor berasal dari objek yang dinamai Gemma.
 
-Fokus proyek bukan membuat aplikasi navigasi siap produksi, melainkan membangun dan mengevaluasi pipeline AI yang dapat memperkaya deskripsi gambar indoor dengan konteks spasial. Karena itu, klaim utama proyek adalah peningkatan kelengkapan informasi visual-spasial, bukan jaminan keselamatan navigasi.
+Kontribusi yang realistis:
 
-Ringkasan posisi proyek:
+1. implementasi lokal deskripsi citra indoor berbahasa Indonesia;
+2. pencocokan waktu capture dengan dua sensor frontal serta status evidence yang dapat diaudit;
+3. evaluasi teknis terpisah untuk kualitas deskripsi dan akurasi sensor pada setup terkendali.
 
-- Domain: computer vision, vision-language model, monocular depth estimation, assistive scene understanding.
-- Objek penelitian: citra lingkungan indoor.
-- Output utama: deskripsi Bahasa Indonesia yang menggabungkan deskripsi semantik dan ringkasan kedalaman relatif.
-- Mode aktif: `gemma_only` sebagai Gemma Baseline, `depth_only`, dan `gemma_depth`. `gemma_depth_prompted` dipensiunkan dan hanya dipertahankan sebagai artefak keputusan negatif.
-- Karakter penelitian: implementatif dan evaluatif.
+Kontribusi tidak diposisikan sebagai metode fusion baru, sistem navigasi, atau pembuktian manfaat pengguna.
 
-## 2. Tujuan Proyek Baru
+## 3. Rumusan masalah
 
-### 2.1 Tujuan Utama
+1. Bagaimana merancang prototipe yang menghasilkan deskripsi gambar indoor berbahasa Indonesia menggunakan Gemma 4 E2B?
+2. Bagaimana mengintegrasikan dua HC-SR04 sebagai referensi jarak frontal dengan mempertahankan nilai, waktu, identitas sensor, arah kamera, dan status evidence?
+3. Bagaimana mengevaluasi kualitas deskripsi Gemma dan akurasi pembacaan HC-SR04 secara terpisah pada skenario pengujian yang terkendali?
 
-Tujuan utama proyek adalah mengembangkan prototype sistem deskripsi gambar indoor yang menggabungkan kemampuan deskripsi visual dari Gemma dengan estimasi kedalaman dari Depth Anything V2 Metric Indoor Small untuk menghasilkan deskripsi yang lebih sadar ruang.
+## 4. Tujuan penelitian
 
-Secara praktis, sistem diharapkan mampu:
+1. Mengimplementasikan pipeline deskripsi satu citra indoor menggunakan Gemma 4 E2B.
+2. Mengimplementasikan akuisisi dan klasifikasi evidence dari dua HC-SR04 yang sinkron dengan capture.
+3. Mengukur kualitas deskripsi dengan rubrik yang ditetapkan serta error tiap sensor pada target planar setelah titik nol sensor diselaraskan dengan `ground_truth_cm` eksternal beracuan kamera.
 
-1. Menerima input gambar indoor dari web interface.
-2. Menghasilkan deskripsi visual menggunakan Gemma melalui LM Studio lokal.
-3. Menghasilkan depth map menggunakan Depth Anything V2 Metric Indoor Small.
-4. Menganalisis depth map ke dalam region sederhana, seperti area atas, tengah, bawah, kiri, kanan, dan sekitarnya.
-5. Menentukan kategori kedalaman relatif, area terdekat, status area depan, serta area yang relatif lebih lapang.
-6. Menghasilkan final description Bahasa Indonesia melalui Gemma-only, depth-only, atau fusi regional berbatas bukti.
-7. Menyimpan hasil prediksi dan menjalankan evaluasi berbasis anotasi manual.
+Tujuan tidak mencakup estimasi metrik objek dari citra, navigasi, deteksi rintangan keselamatan, atau UAT pengguna tunanetra.
 
-### 2.2 Tujuan Akademik
+## 5. Ruang lingkup
 
-Tujuan akademik proyek adalah mengukur apakah dan pada aspek apa penambahan informasi kedalaman mengubah keluaran deskripsi gambar indoor dibanding deskripsi berbasis vision-language model saja. Hasil dapat positif, netral, atau negatif; desain penelitian tidak mengasumsikan peningkatan.
+### Termasuk
 
-Tujuan akademik dapat dirumuskan sebagai berikut:
+- satu citra RGB indoor per analisis;
+- Bahasa Indonesia sebagai bahasa keluaran;
+- `google/gemma-4-e2b` melalui LM Studio;
+- dua HC-SR04 dan ESP32-WROOM-32;
+- kamera belakang untuk capture yang memakai evidence sensor;
+- pencocokan waktu capture-sensor;
+- klasifikasi `paired`, `partial`, `pair_conflict`, `stale`, `direction_mismatch`, dan `unavailable`;
+- pencatatan nilai sensor individual, age/timestamp, disagreement, status, dan alasan status;
+- rata-rata aritmetika dua sensor hanya pada base case `paired`;
+- evaluasi black-box, integrasi, performa, dan pengukuran fisik terkendali.
 
-1. Mengimplementasikan pipeline depth-aware image description berbasis Gemma dan Depth Anything V2.
-2. Mengevaluasi perbedaan output antara mode aktif `gemma_only`, `depth_only`, dan `gemma_depth` pada gambar yang sama.
-3. Menganalisis kontribusi depth estimation terhadap informasi posisi, kategori kedalaman relatif, potensi hambatan, dan kelengkapan deskripsi.
-4. Mengukur trade-off antara peningkatan informasi spasial dan waktu inferensi.
-5. Menyusun batasan sistem agar hasil penelitian tidak overclaim sebagai alat navigasi aman.
+### Tidak termasuk
 
-## 3. Rekomendasi Judul Penelitian
+- jarak ke objek bernama atau piksel tertentu;
+- peta ruang tiga dimensi;
+- pelokalan objek berdasarkan cone sensor;
+- perintah navigasi atau jaminan keselamatan;
+- klaim manfaat pengguna akhir tanpa UAT;
+- inference real-time sebagai klaim tanpa pengukuran latency yang relevan;
+- novelty algoritmik dari penambahan teks sensor.
 
-Judul utama yang direkomendasikan:
+## 6. Dasar perhitungan sensor
 
-> Implementasi dan Evaluasi Depth-Aware Image Description Menggunakan Gemma dan Depth Anything V2 pada Citra Lingkungan Indoor
-
-Alternatif judul:
-
-1. Implementasi Sistem Deskripsi Gambar Indoor Berbasis Vision-Language Model dan Estimasi Kedalaman Monokular.
-2. Evaluasi Pengaruh Informasi Kedalaman terhadap Kualitas Deskripsi Gambar Indoor Menggunakan Gemma dan Depth Anything V2.
-3. Pengembangan Prototype Depth-Aware Image Description untuk Pemahaman Lingkungan Indoor.
-4. Integrasi Gemma dan Depth Anything V2 untuk Deskripsi Visual-Spasial pada Citra Indoor.
-
-Judul yang paling kuat adalah judul utama karena memuat metode, objek, dan fokus evaluasi secara langsung.
-
-## 4. Rumusan Masalah
-
-Rumusan masalah yang disarankan:
-
-1. Bagaimana merancang pipeline depth-aware image description yang menggabungkan Gemma dan Depth Anything V2 pada citra lingkungan indoor?
-2. Bagaimana informasi depth map dapat diterjemahkan menjadi informasi spasial seperti kategori kedalaman relatif, area terdekat, status area depan, dan area yang relatif lebih lapang?
-3. Apakah fusi regional berbatas bukti memberi informasi kedalaman yang lebih terukur tanpa menambah klaim visual yang tidak didukung dibanding `gemma_only` dan `depth_only`?
-4. Bagaimana pengaruh penambahan depth estimation terhadap waktu pemrosesan sistem?
-5. Apa keterbatasan sistem dalam menghasilkan deskripsi visual-spasial pada citra indoor?
-
-## 5. Batasan Masalah
-
-Batasan masalah diperlukan agar penelitian tetap realistis untuk skripsi dan tidak mengklaim hal yang belum diuji.
-
-Batasan yang disarankan:
-
-1. Input sistem berupa gambar statis, bukan video real-time.
-2. Objek penelitian dibatasi pada citra lingkungan indoor.
-3. Model vision-language yang digunakan adalah Gemma yang berjalan secara lokal melalui LM Studio.
-4. Model kedalaman yang digunakan adalah Depth Anything V2 Metric Indoor Small dari folder `model_weights/`.
-5. Depth map digunakan untuk kategori kedalaman relatif, bukan pengukuran jarak presisi centimeter.
-6. Fusion aktif berupa post-processing berbasis aturan yang menjaga klaim semantik Gemma dan klaim depth regional tetap terpisah; sistem bukan learned fusion dan bukan training model baru.
-7. Evaluasi menggunakan anotasi visual-relatif manual pada dataset lokal. Anotasi bukan ground truth jarak fisik dan belum memiliki agreement antar-anotator.
-8. Prototype tidak diklaim sebagai sistem navigasi aman untuk pengguna tunanetra.
-9. Output sistem berupa deskripsi teks Bahasa Indonesia dan metadata analisis, bukan audio guidance sebagai fitur utama.
-10. Akurasi sistem sangat bergantung pada kualitas gambar, pencahayaan, objek dominan, dan kemampuan model lokal.
-
-## 6. Tech Stack
-
-Tech stack yang digunakan:
-
-| Lapisan | Teknologi | Fungsi |
-|---|---|---|
-| Backend | Python, FastAPI, Uvicorn | API upload gambar, routing, orchestration pipeline |
-| Model VLM | Gemma via LM Studio OpenAI-compatible API | Deskripsi visual dan ekstraksi informasi semantik |
-| Model Depth | Depth Anything V2 Metric Indoor Small ONNX | Estimasi kedalaman dari satu gambar RGB |
-| Runtime Depth | ONNX Runtime | Inferensi model depth lokal |
-| Image Processing | Pillow, NumPy | Validasi, resize, normalisasi gambar, depth analysis |
-| Frontend | HTML, CSS, JavaScript vanilla | Web interface untuk upload, mode, dan hasil analisis |
-| Evaluation | CSV, Python scripts | Logging prediksi dan evaluasi terhadap anotasi |
-| Testing | Pytest | Unit test dan API test |
-| Local AI Server | LM Studio | Menjalankan Gemma secara lokal |
-
-Konfigurasi penting:
-
-- `LM_STUDIO_URL=http://localhost:1234`
-- `LM_STUDIO_MODEL=gemma-4-e4b-it`
-- `DEPTH_MODEL_PATH=./model_weights/Depth-Anything-V2-Metric-Indoor-Small-hf`
-- `GEMMA_MOCK=false`
-- `DEPTH_MOCK=false`
-
-Mock hanya boleh digunakan untuk development atau smoke test, bukan eksperimen final.
-
-## 7. Arsitektur Sistem Baru
-
-### 7.1 Arsitektur Ringkas
+Prinsip HC-SR04 adalah pengukuran waktu tempuh pulang-pergi:
 
 ```text
-User / Web Browser
-  -> FastAPI Backend
-  -> Upload Validation
-  -> Image Preprocessing
-  -> Depth Anything V2 ONNX
-  -> 9-Region Depth Analysis
-  -> Gemma Client via LM Studio
-  -> Evidence-Constrained Regional Late Fusion
-  -> Final Indonesian Description
-  -> Prediction Log + Evaluation CSV + Depth Map
+d = v * t / 2
 ```
 
-Arsitektur ini sengaja dibuat modular agar setiap bagian bisa diuji dan dibahas dalam skripsi. Gemma bertanggung jawab pada deskripsi semantik gambar, sedangkan Depth Anything menyediakan estimasi kedalaman yang diringkas per area. Fusion layer aktif hanya menambahkan pernyataan depth regional dan tidak mengikatnya ke objek Gemma. Kebijakan verbose lama tersedia khusus eksperimen terkontrol, bukan mode produk. Ringkasan region depth memakai grid 3x3 aplikasi; grid ini adalah post-processing atas peta kedalaman kontinu, bukan keluaran asli Depth Anything.
+Firmware menghasilkan `distance_cm`. Backend tidak boleh menciptakan koreksi baru tanpa prosedur kalibrasi dan bukti residual terhadap alat ukur eksternal.
 
-### 7.2 Alur Utama
+Bidang referensi kamera berada 3 cm di belakang muka akustik HC-SR04 akibat gabungan ketebalan kerangka prototipe dan dudukan/kerangka sensor. Gunakan definisi berikut:
 
-Alur utama sistem:
-
-1. Pengguna membuka web interface.
-2. Pengguna memilih gambar dan mode analisis.
-3. Frontend mengirim gambar ke endpoint `POST /analysis-jobs` dan menerima HTTP 202 beserta `job_id`.
-4. Backend memvalidasi jenis file, ukuran file, dan mode analisis.
-5. Gambar diproses agar sesuai batas ukuran sistem.
-6. Jika mode menggunakan depth, gambar diproses oleh Depth Anything V2 ONNX.
-7. Output depth map dianalisis menjadi region dan kategori kedalaman relatif.
-8. Jika mode menggunakan Gemma, gambar dikirim ke LM Studio untuk deskripsi visual.
-9. Pada `gemma_depth`, output Gemma dan output depth digabung dengan kebijakan fusi regional berbatas bukti; tidak ada object-depth binding.
-10. Frontend memantau `GET /analysis-jobs/{job_id}` sampai status `completed` atau `failed`.
-11. Sistem mengembalikan final description, metadata display, latency, depth map URL, provenance kebijakan fusi, dan debug output.
-12. Jika `save_result=true`, sistem menyimpan prediction row ke `results/predictions.csv`.
-13. Evaluasi dapat dijalankan dengan membandingkan prediction CSV dan annotation CSV.
-
-## 8. Tanggung Jawab Setiap Modul
-
-| Modul/File | Tanggung Jawab |
-|---|---|
-| `app/main.py` | Membuat FastAPI app, mount static/template/result, menyediakan endpoint health. |
-| `app/config.py` | Menyimpan konfigurasi aplikasi, LM Studio, model depth, limit gambar, dan direktori hasil. |
-| `app/schemas.py` | Mendefinisikan response schema untuk hasil analisis. |
-| `app/routes/analyze.py` | Endpoint upload gambar, validasi awal, pemanggilan pipeline, dan response JSON. |
-| `services/validation.py` | Validasi tipe file, ukuran file, dan mode analisis. |
-| `services/image_preprocess.py` | Membaca image bytes, konversi RGB, resize, dan encoding base64 untuk model. |
-| `models/gemma_client.py` | Client HTTP ke LM Studio, prompt Gemma, parsing JSON terstruktur, sanitasi deskripsi. |
-| `models/depth_anything.py` | Adapter ONNX Runtime untuk Depth Anything, preprocessing tensor, inference, dan simpan depth map. |
-| `services/depth_analysis.py` | Membagi depth map menjadi region, menentukan nearest region, kategori kedalaman relatif, front status, warning, dan area relatif lapang. |
-| `models/fusion.py` | Mengelola final description, strategi fusi, display payload, dan provenance segments. |
-| `services/pipeline.py` | Orchestrator utama analisis gambar, menghubungkan preprocessing, Gemma, depth, fusion, dan prediction row. |
-| `services/result_logger.py` | Menulis hasil prediksi ke `results/predictions.csv`. |
-| `services/evaluator.py` | Membandingkan annotation dan prediction untuk menghasilkan metrik evaluasi. |
-| `scripts/run_single_image.py` | CLI untuk menjalankan analisis pada satu gambar. |
-| `scripts/run_batch_evaluation.py` | CLI untuk batch inference dan evaluasi per mode. |
-| `scripts/run_evaluation.py` | CLI untuk menghitung evaluasi dari CSV yang sudah ada. |
-| `scripts/smoke_test.py` | Smoke test backend/API dengan server sementara. |
-| `templates/index.html` | Struktur UI web. |
-| `static/app.js` | Interaksi upload, request API, dan render hasil. |
-| `static/style.css` | Desain visual web interface. |
-| `dataset/annotations.csv` | Ground truth manual untuk evaluasi. |
-| `results/predictions.csv` | Log hasil prediksi sistem. |
-| `results/evaluation.csv` | Output evaluasi otomatis. |
-| `docs/evaluation_protocol.md` | Protokol evaluasi eksperimen skripsi. |
-| `docs/pustaka/` | Arsip PDF/HTML rujukan utama. |
-
-## 9. Inti Pembahasan Skripsi
-
-Inti pembahasan proyek adalah:
-
-> Deskripsi gambar biasa dari vision-language model dapat menjelaskan isi gambar, tetapi belum tentu memberikan informasi spasial yang cukup. Penelitian ini menguji apakah penambahan estimasi kedalaman dapat membuat deskripsi gambar indoor lebih informatif dalam aspek posisi, jarak, area dekat, dan potensi hambatan.
-
-Dengan framing ini, topik utama bukan sekadar web app atau penggunaan model AI, melainkan **fusion antara pemahaman semantik gambar dan estimasi kedalaman monokular untuk menghasilkan deskripsi visual-spasial**.
-
-Kontribusi yang dapat ditulis:
-
-1. Merancang pipeline depth-aware image description berbasis model lokal.
-2. Mengintegrasikan Gemma dan Depth Anything V2 dalam satu sistem web.
-3. Mengubah depth map menjadi informasi linguistik seperti kategori jarak dan area terdekat.
-4. Menyusun rule-based fusion untuk menghasilkan final description Bahasa Indonesia.
-5. Menyediakan evaluasi perbandingan antara deskripsi tanpa depth dan deskripsi dengan depth.
-
-## 10. Alasan Pemilihan Model
-
-### 10.1 Alasan Pemilihan Gemma
-
-Gemma dipilih karena sesuai dengan kebutuhan prototype lokal. Gemma merupakan keluarga open model dari Google yang dapat digunakan untuk eksperimen vision-language secara lebih reproducible dibanding API tertutup. Dalam konteks proyek ini, Gemma dijalankan melalui LM Studio dengan endpoint OpenAI-compatible sehingga sistem tidak bergantung pada cloud API saat eksperimen lokal.
-
-Alasan teknis:
-
-1. Dapat dijalankan lokal melalui LM Studio.
-2. Mendukung prompt instruction untuk menghasilkan output Bahasa Indonesia.
-3. Dapat diarahkan menghasilkan JSON terstruktur.
-4. Lebih sesuai untuk skripsi implementatif karena konfigurasi, model ID, dan endpoint dapat dicatat.
-5. Mengurangi ketergantungan pada API komersial tertutup.
-
-Alasan tidak memilih model lain sebagai model utama:
-
-- GPT-4o/Gemini cloud dapat lebih kuat, tetapi bergantung pada layanan eksternal, biaya, kuota, dan perubahan API.
-- BLIP-2 relevan untuk captioning, tetapi kurang cocok untuk kebutuhan output instruksional Bahasa Indonesia terstruktur dalam pipeline lokal ini.
-- LLaVA/PaliGemma/Qwen-VL valid sebagai alternatif, tetapi proyek sudah memiliki Gemma berjalan di LM Studio sehingga lebih realistis untuk eksperimen skripsi yang dapat direplikasi di perangkat lokal.
-
-Klaim yang aman: Gemma bukan diklaim sebagai model terbaik secara mutlak, tetapi sebagai model vision-language lokal yang cocok untuk prototype dan evaluasi sistem ini.
-
-### 10.2 Alasan Pemilihan Depth Anything V2 Metric Indoor Small
-
-Depth Anything V2 Metric Indoor Small dipilih karena proyek membutuhkan estimasi kedalaman dari satu gambar RGB, tanpa sensor depth tambahan. Varian Metric Indoor Small sesuai dengan domain penelitian, yaitu citra indoor, dan ukurannya lebih ringan untuk eksekusi lokal.
-
-Alasan teknis:
-
-1. Dirancang untuk monocular depth estimation.
-2. Memiliki varian metric indoor yang relevan dengan citra ruangan.
-3. Tersedia dalam format ONNX dan sudah ditempatkan di `model_weights/`.
-4. Lebih ringan dibanding varian model besar, sehingga cocok untuk prototype web lokal.
-5. Output depth map dapat dianalisis menjadi region dan kategori jarak.
-
-Alasan tidak memilih model lain sebagai model utama:
-
-- MiDaS/DPT relevan tetapi lebih tua dan umumnya menghasilkan relative depth, bukan varian metric indoor khusus.
-- ZoeDepth kuat untuk metric depth, tetapi Depth Anything V2 lebih baru dan model indoor small tersedia langsung untuk integrasi lokal.
-- Sensor RGB-D memberi depth lebih kuat, tetapi membutuhkan perangkat tambahan dan mengubah ruang lingkup skripsi.
-
-Klaim yang aman: Depth Anything V2 digunakan sebagai estimasi kedalaman untuk memperkaya deskripsi, bukan sebagai sensor jarak presisi.
-
-## 11. Permasalahan Penelitian dan Gap
-
-Permasalahan yang diangkat adalah keterbatasan deskripsi gambar biasa dalam menyampaikan informasi spasial. Deskripsi seperti "terdapat meja dan kursi di ruangan" belum cukup jika pengguna membutuhkan informasi area mana yang dekat, objek mana yang mungkin menghalangi, atau bagian mana yang relatif lebih lapang.
-
-Penelitian terkait menunjukkan bahwa scene understanding untuk pengguna dengan gangguan penglihatan mencakup kebutuhan seperti scene description, object finding, object location, obstacle avoidance, dan text reading. Penelitian lain pada spatial reasoning VLM juga menunjukkan bahwa vision-language model masih memiliki tantangan dalam memahami relasi ruang 3D, jarak, dan ukuran objek.
-
-Gap yang diambil proyek:
-
-1. Banyak sistem caption fokus pada isi gambar, bukan konteks kedalaman.
-2. Banyak penelitian spatial VLM berfokus pada benchmark/model besar, bukan prototype lokal sederhana yang bisa dievaluasi dalam skripsi.
-3. Banyak solusi assistive vision memerlukan sensor tambahan atau perangkat khusus.
-4. Belum banyak implementasi lokal yang menggabungkan VLM, monocular depth estimation, dan output Bahasa Indonesia untuk deskripsi indoor.
-
-Maka posisi proyek adalah membangun prototype sederhana tetapi terukur untuk melihat kontribusi depth estimation pada deskripsi gambar indoor.
-
-## 12. Evaluasi dan Data Eksperimen
-
-Evaluasi proyek diarahkan untuk membandingkan mode:
-
-- `gemma_only`: Gemma Baseline, yaitu deskripsi visual dan relasi spasial kualitatif dari gambar saja tanpa metadata depth eksplisit.
-- `depth_only`: ringkasan informasi depth tanpa Gemma.
-- `gemma_depth`: fusion antara Gemma dan depth.
-
-Dataset lokal:
-
-- Gambar disimpan di `dataset/images/`.
-- Anotasi manual disimpan di `dataset/annotations.csv`.
-- Format anotasi mengikuti `docs/evaluation_protocol.md`.
-
-Metrik awal:
-
-1. Object mention accuracy.
-2. Position accuracy.
-3. Distance category accuracy.
-4. Obstacle warning accuracy.
-5. Object-position joint accuracy untuk menghindari pembacaan metrik parsial sebagai grounding objek.
-6. Precision, recall, F1 positif, dan confusion matrix untuk label obstacle.
-7. Average latency.
-
-Interpretasi hasil:
-
-- Distance category dan obstacle warning berlaku untuk mode yang menghasilkan metadata depth. Pada `gemma_only`, metrik depth ditulis sebagai N/A agar absence metadata tidak dibaca sebagai kegagalan Gemma.
-- Jika `gemma_depth` meningkat pada distance category atau obstacle warning, hasil hanya menunjukkan kecocokan metadata depth dengan label dataset; hasil itu tidak membuktikan peningkatan semantik objek atau kualitas teks universal.
-- Jika object accuracy tidak meningkat, hal itu wajar karena depth module tidak bertugas mengenali objek.
-- Jika latency meningkat, pembahasan dapat diarahkan pada trade-off antara kelengkapan informasi dan waktu pemrosesan.
-
-Dataset tidak boleh dimanipulasi untuk mengejar hasil bagus. Semua hasil eksperimen harus berdasarkan gambar aktual, anotasi aktual, dan output aktual dari pipeline.
-
-## 13. Rujukan Utama 2021-2026
-
-Rujukan berikut relevan untuk dasar teori, alasan model, gap penelitian, dan evaluasi. File rujukan sudah disimpan di `docs/pustaka/`.
-
-| Tahun | Rujukan | Relevansi | File Lokal |
-|---|---|---|---|
-| 2025 | Gemma Team. Gemma 3 Technical Report. | Dasar pemilihan Gemma sebagai model multimodal/open model. | `docs/pustaka/2025-gemma-3-technical-report.pdf` |
-| 2024 | Yang et al. Depth Anything V2. | Dasar pemilihan Depth Anything V2 untuk monocular depth estimation. | `docs/pustaka/2024-depth-anything-v2.pdf` |
-| 2024 | Depth Anything V2 Metric Indoor Small Model Card. | Dasar pemilihan varian metric indoor small yang digunakan proyek. | `docs/pustaka/2024-depth-anything-v2-metric-indoor-small-model-card.html` |
-| 2024 | Valipoor, de Antonio, Cabrera. Analysis and design framework for indoor scene understanding assistive solutions. Multimedia Systems. | Dasar masalah scene understanding indoor dan kebutuhan pengguna dengan visual impairment. | `docs/pustaka/2024-indoor-scene-understanding-assistive-valipoor.pdf` |
-| 2024 | Chen et al. SpatialVLM. CVPR. | Bukti bahwa VLM masih perlu ditingkatkan untuk spatial reasoning dan informasi 3D. | `docs/pustaka/2024-spatialvlm-cvpr.pdf` |
-| 2024 | Cheng et al. SpatialRGPT. | Rujukan integrasi depth/spatial information ke VLM. | `docs/pustaka/2024-spatialrgpt.pdf` |
-| 2024 | Zhang et al. Do Vision-Language Models Represent Space and How? | Rujukan keterbatasan dan evaluasi representasi ruang pada VLM. | `docs/pustaka/2024-vlm-represent-space-comfort.pdf` |
-| 2023 | Wang et al. Dense captioning and multidimensional evaluations for indoor robotic scenes. Frontiers in Neurorobotics. | Rujukan RGB-D captioning dan evaluasi deskripsi scene indoor. | `docs/pustaka/2023-rgbd2cap-frontiers.pdf` |
-| 2023 | Bhat et al. ZoeDepth. | Alternatif model metric depth dan pembanding alasan memilih Depth Anything V2. | `docs/pustaka/2023-zoedepth.pdf` |
-| 2023 | Kamath et al. What's Up with Vision-Language Models? | Rujukan keterbatasan VLM pada relasi spasial. | `docs/pustaka/2023-vlm-spatial-relations-emnlp.pdf` |
-| 2026 | WHO. Blindness and visual impairment fact sheet. | Data aktual konteks sosial gangguan penglihatan. | `docs/pustaka/2026-who-blindness-visual-impairment.html` |
-
-Catatan: rujukan WHO adalah sumber institusional untuk konteks sosial, bukan paper akademik. Untuk Bab 2, pisahkan antara "penelitian terdahulu" dan "data pendukung konteks".
-
-## 14. Penelitian Terdahulu dan Perbedaan Proyek
-
-Penelitian terdahulu yang relevan dapat dikelompokkan menjadi empat:
-
-1. Vision-language model dan image captioning.
-2. Monocular depth estimation.
-3. RGB-D/depth-aware captioning.
-4. Assistive indoor scene understanding.
-
-Perbedaan proyek ini:
-
-| Aspek | Penelitian Terdahulu | Proyek Ini |
-|---|---|---|
-| Model semantik | Banyak memakai captioning/VLM besar atau benchmark publik. | Memakai Gemma lokal via LM Studio. |
-| Depth | Beberapa memakai RGB-D sensor atau pendekatan depth khusus. | Memakai monocular depth dari satu gambar RGB dengan Depth Anything V2. |
-| Bahasa output | Umumnya Bahasa Inggris. | Output difokuskan ke Bahasa Indonesia. |
-| Fokus | Model training, benchmark, atau assistive framework. | Prototype implementatif dan evaluasi sederhana untuk skripsi. |
-| Fusion | Banyak pendekatan learned fusion atau benchmark-level. | Rule-based fusion agar transparan dan mudah dibahas. |
-| Klaim | Sebagian mengarah ke assistive solution luas. | Dibatasi sebagai prototype depth-aware description, bukan navigasi aman. |
-
-Novelty yang aman untuk skripsi:
-
-> Implementasi pipeline lokal yang menggabungkan Gemma, Depth Anything V2 Metric Indoor Small, analisis region depth, dan rule-based fusion untuk menghasilkan deskripsi gambar indoor Bahasa Indonesia yang lebih sadar ruang.
-
-## 15. Struktur Penulisan Skripsi yang Disarankan
-
-### Bab 1 - Pendahuluan
-
-Isi yang perlu ditekankan:
-
-- Deskripsi gambar biasa belum cukup untuk informasi spasial.
-- Lingkungan indoor membutuhkan informasi objek, posisi, jarak, dan potensi hambatan.
-- VLM dapat menjelaskan gambar, tetapi masih memiliki keterbatasan pada spatial reasoning.
-- Depth estimation dapat memberi informasi tambahan tentang kedalaman.
-- Penelitian ini membangun dan mengevaluasi pipeline Gemma + Depth Anything V2.
-
-### Bab 2 - Landasan Teori
-
-Topik teori:
-
-1. Computer vision.
-2. Image captioning dan vision-language model.
-3. Gemma sebagai model vision-language/open model.
-4. Monocular depth estimation.
-5. Depth Anything V2.
-6. Scene understanding indoor.
-7. Assistive technology untuk visual impairment sebagai konteks.
-8. Evaluasi deskripsi gambar dan evaluasi sistem.
-
-### Bab 3 - Metodologi
-
-Isi yang perlu dijelaskan:
-
-- Arsitektur sistem.
-- Dataset dan format anotasi.
-- Preprocessing gambar.
-- Prompt Gemma dan schema output JSON.
-- Inferensi Depth Anything.
-- Region depth analysis.
-- Rule-based fusion.
-- Skenario evaluasi `gemma_only` vs `gemma_depth`.
-- Metrik evaluasi.
-
-### Bab 4 - Implementasi dan Pengujian
-
-Isi yang perlu dijelaskan:
-
-- Implementasi backend.
-- Implementasi frontend.
-- Integrasi LM Studio.
-- Integrasi ONNX Depth Anything.
-- Hasil uji per gambar.
-- Hasil evaluasi CSV.
-- Analisis kualitas output dan latency.
-
-### Bab 5 - Penutup
-
-Isi yang perlu dijelaskan:
-
-- Kesimpulan apakah depth memberi kontribusi.
-- Keterbatasan sistem.
-- Saran pengembangan: dataset lebih besar, human evaluation, audio output, real-time camera, model pembanding, dan kalibrasi depth.
-
-## 16. Pernyataan Klaim yang Aman
-
-Klaim yang aman dipakai:
-
-- Sistem menghasilkan deskripsi gambar indoor dengan tambahan informasi kedalaman.
-- Depth estimation membantu menambahkan konteks jarak relatif dan area terdekat.
-- Evaluasi membandingkan deskripsi tanpa depth dan dengan depth.
-- Sistem merupakan prototype penelitian, bukan aplikasi navigasi production-ready.
-
-Klaim yang harus dihindari:
-
-- Sistem menjamin keselamatan pengguna.
-- Sistem mengukur jarak secara presisi.
-- Sistem sudah siap digunakan tunanetra untuk navigasi real-time.
-- Gemma atau Depth Anything V2 adalah model terbaik secara mutlak.
-- Hasil evaluasi berlaku umum tanpa dataset yang cukup.
-
-## 17. Checklist Kematangan Proyek Skripsi
-
-Checklist akademik:
-
-- [x] Masalah penelitian jelas.
-- [x] Ada gap antara caption biasa dan depth-aware description.
-- [x] Ada model utama dan alasan pemilihan model.
-- [x] Ada pipeline implementasi.
-- [x] Ada mode pembanding.
-- [x] Ada dataset dan format anotasi.
-- [x] Ada metrik evaluasi.
-- [x] Ada batasan masalah.
-- [x] Ada rujukan 5 tahun terakhir.
-- [ ] Dataset eksperimen final perlu diisi dengan gambar aktual.
-- [ ] Anotasi manual perlu dilengkapi.
-- [ ] Hasil evaluasi final perlu dijalankan setelah dataset siap.
-- [ ] Analisis Bab 4 perlu memakai output aktual, bukan contoh mock.
-
-## 18. Catatan Penting untuk Penulisan
-
-Gunakan istilah "estimasi kedalaman" atau "kategori jarak relatif" saat membahas output depth. Hindari menulis "jarak pasti" kecuali ada kalibrasi dan validasi metrik yang kuat.
-
-Saat membahas target pengguna, gunakan framing hati-hati:
-
-> Sistem ini berpotensi dikembangkan sebagai komponen awal assistive scene understanding, khususnya untuk memberikan deskripsi visual-spasial pada lingkungan indoor.
-
-Jangan menulis:
-
-> Sistem ini membantu tunanetra bernavigasi dengan aman.
-
-Untuk hasil eksperimen, pastikan semua tabel berasal dari:
-
-- `dataset/images/`
-- `dataset/annotations.csv`
-- `results/predictions.csv`
-- `results/evaluation.csv`
-
-Sebelum menjalankan inference final, jalankan preflight:
-
-```bash
-python scripts\run_batch_evaluation.py --preflight-only
+```text
+camera_sensor_offset_cm = 3.0
+sensor_face_ground_truth_cm = ground_truth_cm - camera_sensor_offset_cm
+camera_reference_from_raw_cm = sensor_raw_cm + camera_sensor_offset_cm
 ```
 
-Preflight digunakan untuk memastikan dataset, anotasi, konfigurasi mock, model depth, dan runtime Gemma siap sebelum hasil dipakai dalam Bab 4.
+`ground_truth_cm` diukur dari bidang referensi kamera. Karena itu, jarak aktual 50 cm dari kamera secara geometris setara dengan 47 cm dari muka sensor, dan bacaan mentah ideal HC-SR04 adalah sekitar 47 cm. Offset 3 cm adalah perbedaan titik nol fisik, bukan error intrinsik sensor; selisih tambahan tetap dianalisis sebagai error pengukuran.
 
-Jika hasil kurang bagus, tetap tulis apa adanya. Nilai skripsi tetap kuat jika analisisnya jujur, batasannya jelas, dan rekomendasi pengembangannya matang.
+Profil kalibrasi aktif dipasang terhadap `ground_truth_cm` beracuan kamera. Nilai `sensor_1_corrected_cm` dan `sensor_2_corrected_cm` sudah berada pada acuan kamera, sehingga offset 3 cm tidak boleh ditambahkan lagi setelah koreksi.
 
-## 19. Kontrak API dan Interface
+Untuk pasangan yang valid, segar, searah, dan konsisten:
 
-### 19.1 Endpoint Utama
+```text
+pair_disagreement_cm = abs(sensor_1_cm - sensor_2_cm)
+sensor_1_corrected_cm = intercept_1 + slope_1 * sensor_1_cm
+sensor_2_corrected_cm = intercept_2 + slope_2 * sensor_2_cm
+frontal_reference_cm = (sensor_1_corrected_cm + sensor_2_corrected_cm) / 2
+```
 
-Endpoint minimal yang menjadi permukaan sistem:
+Rata-rata tersebut adalah ringkasan dua cone frontal. Nilai mentah dan terkoreksi tiap sensor tetap menjadi sumber utama audit. `partial` tidak dirata-ratakan; `stale`, `pair_conflict`, `direction_mismatch`, dan `unavailable` ditahan dari kontribusi angka pada deskripsi.
 
-| Endpoint | Method | Fungsi |
-|---|---|---|
-| `/` | GET | Menampilkan web interface. |
-| `/health` | GET | Mengecek status backend, Gemma, dan depth model. |
-| `/analyze` | POST | Endpoint sinkron untuk kompatibilitas dan pengujian langsung. |
-| `/analysis-jobs` | POST | Menerima gambar, membuat job, dan mengembalikan HTTP 202. |
-| `/analysis-jobs/{job_id}` | GET | Mengembalikan status dan hasil job untuk polling UI. |
+Rentang evaluasi sensor ditetapkan pada 20–200 cm sebagai sintesis konservatif dari beberapa eksperimen indoor, bukan mean aritmetika batas jarak paper. Zona 20–120 cm menjadi bagian dengan dukungan paling kuat, sedangkan 120–200 cm merupakan perluasan operasional yang memerlukan target cukup besar, frontal, dan verifikasi lokal. Verifikasi koreksi menggunakan 40, 80, 125, dan 175 cm dengan 30 pembacaan berpasangan per titik. Titik verifikasi disimpan terpisah dan tidak mengubah profil kalibrasi. Klaim kinerja sampai 200 cm hanya dibuat jika seluruh titik verifikasi lengkap dan memenuhi kriteria evaluasi.
 
-Form data untuk `POST /analyze`:
+## 7. Arsitektur logis
 
-| Field | Type | Wajib | Keterangan |
-|---|---|---|---|
-| `image` | file | Ya | JPG, PNG, atau WebP. |
-| `mode` | string | Tidak | `gemma_depth`, `gemma_only`, atau `depth_only`. |
-| `save_result` | boolean | Tidak | Menentukan apakah hasil ditulis ke CSV. |
+```text
+Citra RGB -> validasi/preprocess -> Gemma -> deskripsi visual
+Capture metadata -----------------------> sinkronisasi
+HC-SR04 1 -> ESP32 -> sensor bridge ------^
+HC-SR04 2 -> ESP32 -> sensor bridge ------^
+                         |
+                         -> klasifikasi evidence
+                         -> kontribusi sensor deterministik
+Deskripsi visual + kontribusi sensor -> API/UI/log
+```
 
-Response utama harus berisi:
+Gemma tidak bertanggung jawab menghitung atau menebak jarak. Backend mempertahankan pemisahan sumber agar angka sensor tidak berubah menjadi klaim visual.
 
-- `success`
-- `filename`
-- `content_type`
-- `width`
-- `height`
-- `mode`
-- `description_gemma`
-- `gemma_structured`
-- `depth_summary`
-- `final_description`
-- `display`
-- `latency`
-- `depth_map_url`
-- `mock`
-- `error`
+## 8. Metode pengembangan
 
-### 19.2 Frontend Requirements
+Metode pengembangan dapat ditulis sebagai prototyping iteratif:
 
-UI web berfungsi sebagai alat demonstrasi dan pengujian, bukan produk komersial. Komponen minimal yang harus tetap tersedia:
+1. analisis kebutuhan dan batas klaim;
+2. perancangan pipeline visual dan sensor;
+3. implementasi antarmuka dan API;
+4. integrasi capture-sensor;
+5. pengujian unit, integrasi, dan black-box;
+6. pengukuran fisik serta evaluasi deskripsi;
+7. revisi berdasarkan temuan.
 
-1. Upload gambar.
-2. Preview gambar input.
-3. Pilihan mode analisis.
-4. Tombol analyze.
-5. Loading/error state.
-6. Panel final description.
-7. Panel structured Gemma output.
-8. Panel depth summary.
-9. Panel latency.
-10. Depth map preview jika tersedia.
-11. Debug JSON untuk membantu analisis Bab 4.
+Setiap iterasi harus mempertahankan raw log; kegagalan tidak boleh dibuang dari rekap.
 
-Desain harus tetap sederhana, responsif, dan fokus pada keterbacaan hasil eksperimen. Hindari dekorasi berlebihan, animasi tidak perlu, atau komponen yang membuat pembahasan skripsi melebar ke ranah desain produk.
+## 9. Metode penelitian dan evaluasi
 
-## 20. Failure Handling
+Evaluasi dibagi menjadi dua eksperimen.
 
-Skenario gagal harus ditangani secara eksplisit agar hasil eksperimen tidak tercampur dengan error teknis.
+### Eksperimen A — sensor
 
-Jika Gemma gagal:
+- target planar dengan ukuran dan material tetap;
+- jarak diukur dari bidang referensi kamera menggunakan alat ukur eksternal dan disimpan sebagai `ground_truth_cm`, sedangkan acuan muka sensor diturunkan sebagai `sensor_face_ground_truth_cm = ground_truth_cm - 3.0`;
+- posisi kamera/sensor, sudut target, dan kondisi ruangan dikendalikan;
+- alat ukur dipakai untuk menetapkan posisi target lalu dikeluarkan dari bidang pandang sebelum capture, tanpa mengubah zoom atau framing antar-titik;
+- tiap sensor dinilai sendiri menggunakan absolute error, MAE, bias, RMSE, dan valid-read rate;
+- pasangan dinilai berdasarkan disagreement dan proporsi status evidence;
+- kalibrasi, bila dilakukan, dibangun pada subset kalibrasi dan diuji pada subset berbeda.
 
-- Mode `gemma_only` dan `gemma_depth` dianggap gagal karena deskripsi visual tidak tersedia.
-- Response harus berisi error yang menjelaskan LM Studio/model belum siap.
-- Depth summary boleh tersedia untuk debugging, tetapi tidak boleh dipakai sebagai hasil final utama mode Gemma.
+### Eksperimen B — deskripsi
 
-Jika Depth Anything gagal:
+- dataset citra indoor dan kriteria inklusi ditetapkan sebelum penilaian;
+- output Gemma dinilai terhadap anotasi/rubrik visual tanpa memakai angka HC-SR04 sebagai label objek;
+- aspek minimum: kesesuaian objek, posisi relatif yang tampak, kejelasan Bahasa Indonesia, kelengkapan scene, dan klaim tidak didukung;
+- penilai, skala, serta aturan agregasi skor dilaporkan.
 
-- Mode `gemma_only` tetap dapat berjalan.
-- Mode `gemma_depth` dapat fallback ke deskripsi Gemma dengan catatan bahwa depth tidak tersedia.
-- Error depth harus dicatat agar tidak dianggap sebagai hasil depth valid.
+Hasil dua eksperimen tidak digabung menjadi satu skor “akurasi sistem”.
 
-Jika gambar tidak valid:
+## 10. Kontrak API
 
-- Request ditolak.
-- Error harus menyebut format/ukuran gambar yang diterima.
+Alur kamera menggunakan penyimpanan tertunda:
 
-Jika output model berupa mock:
+- sebelum capture kamera, operator memasukkan `ground_truth_cm` beracuan kamera pada rentang 20–200 cm;
+- `POST /captures` menyimpan citra, metadata capture, offset 3 cm, `sensor_face_ground_truth_cm`, `repeat_index` otomatis, dan sensor evidence ke folder lokal tanpa menjalankan Gemma;
+- `GET /captures` dan `GET /captures/count` dipakai backend serta penghitung UI;
+- `POST /captures/{capture_id}/analysis-jobs` membuat satu job untuk satu capture dan memakai snapshot sensor tersimpan;
+- runner backend menunggu job selesai sebelum mengirim capture berikutnya.
 
-- Field `mock` harus bernilai true.
-- Hasil mock tidak boleh dipakai sebagai hasil eksperimen final.
+`POST /analyze` tetap tersedia untuk analisis langsung satu file upload. Response sukses minimum memuat:
 
-## 21. Acceptance Criteria MVP
+- deskripsi Gemma;
+- deskripsi akhir;
+- `sensor_evidence` dengan sampel individual dan provenance;
+- `sensor_contribution` dengan status, alasan, dan `frontal_reference_cm` hanya bila paired;
+- latency dan identitas run untuk audit.
 
-MVP dianggap siap untuk demonstrasi skripsi jika memenuhi:
+`GET /sensor-status` menampilkan status bridge dan sampel terakhir. `GET /health` dan `GET /readiness` digunakan untuk pemeriksaan runtime.
 
-1. Web UI dapat dibuka dari browser.
-2. Pengguna dapat upload gambar.
-3. Backend menerima dan memvalidasi gambar.
-4. Gemma menghasilkan deskripsi visual aktual melalui LM Studio.
-5. Depth Anything menghasilkan depth map aktual melalui ONNX Runtime.
-6. Depth analysis menghasilkan nearest region, distance category, front area status, warning, dan safer direction.
-7. Fusion menghasilkan final description Bahasa Indonesia.
-8. UI menampilkan final description, Gemma output, depth summary, latency, dan depth map.
-9. Prediction log tersimpan ke `results/predictions.csv`.
-10. Batch evaluation script berjalan.
-11. Evaluation CSV dibuat.
-12. README dan project initialization menjelaskan setup, batasan, dan cara evaluasi.
-13. Tidak ada klaim navigasi aman atau jarak presisi.
+## 11. Kontrak UI
 
-## 22. Development Phases yang Sudah Menjadi Arah Proyek
+Pada tab kamera, UI hanya menyediakan capture dan jumlah capture tersimpan. UI tidak menampilkan daftar dataset atau tombol analisis semua; analisis capture tersimpan dijalankan dari backend. Tab upload tetap menyediakan analisis langsung satu file. Prioritas tampilan hasil analisis:
 
-Tahapan implementasi yang menjadi acuan:
+1. deskripsi gambar;
+2. status referensi sensor frontal;
+3. nilai sensor 1 dan sensor 2;
+4. rata-rata paired bila tersedia;
+5. detail provenance dan error.
 
-| Fase | Fokus | Status Saat Ini |
-|---|---|---|
-| Phase 1 | Project skeleton FastAPI + UI dasar | Selesai |
-| Phase 2 | Integrasi Gemma via LM Studio | Selesai secara teknis, perlu evaluasi dataset aktual |
-| Phase 3 | Integrasi Depth Anything V2 ONNX | Selesai secara teknis |
-| Phase 4 | Depth region analysis | Selesai secara teknis, perlu kalibrasi dataset |
-| Phase 5 | Rule-based fusion | Selesai secara teknis, perlu penilaian kualitas output |
-| Phase 6 | Logging dan evaluation scripts | Selesai secara teknis, dataset final belum lengkap |
-| Phase 7 | Dokumentasi dan batasan proyek | Berjalan dan perlu terus disinkronkan dengan hasil eksperimen |
+Tidak ada label yang mengaitkan angka sensor dengan objek bernama.
 
-## 23. Expected Final Deliverables
+## 12. Struktur skripsi
 
-Deliverables final yang harus tersedia untuk skripsi:
+### Bab I — Pendahuluan
 
-1. Source code prototype web + backend.
-2. Pipeline `gemma_only`.
-3. Pipeline `depth_only`.
-4. Pipeline `gemma_depth`.
-5. Dataset gambar indoor aktual.
-6. Annotation CSV yang diisi manual.
-7. Prediction CSV dari model aktual.
-8. Evaluation CSV dari eksperimen final.
-9. Depth map visualization.
-10. README penggunaan.
-11. Dokumentasi inisialisasi proyek.
-12. Dokumentasi protokol evaluasi.
-13. Analisis hasil untuk Bab 4.
+Memuat latar belakang, rumusan masalah, ruang lingkup, tujuan, dan sistematika penulisan. Kebutuhan sensor dijelaskan sebagai referensi frontal tambahan, bukan pengganti persepsi visual.
 
-## 24. Keputusan Konsolidasi Dokumen
+### Bab II — Tinjauan Pustaka
 
-Dokumen ini dipilih sebagai single source of truth karena lebih matang dibanding `.agents/instructions/global.md`. Alasan pemilihan:
+Memuat image description, VLM, Gemma, sensor ultrasonik, prinsip ToF, sinkronisasi data multimodal, evaluasi caption, dan penelitian terdahulu yang relevan. Hanya sumber yang benar-benar dipakai dalam argumen yang masuk daftar pustaka final.
 
-1. Memuat dasar akademik, gap penelitian, dan rujukan 2021-2026.
-2. Memuat batas klaim yang aman untuk skripsi.
-3. Memuat struktur penulisan Bab 1 sampai Bab 5.
-4. Memuat arsitektur dan modul berdasarkan implementasi yang sudah ada.
-5. Sudah menggabungkan bagian operasional yang masih berguna dari `global.md`, seperti kontrak API, frontend requirements, failure handling, acceptance criteria, dan deliverables.
+Untuk bagian HC-SR04, ikuti seleksi dan batas klaim pada `docs/pustaka/hcsr04_indoor_evidence_context.md`. Tuliskan secara eksplisit apakah setiap penelitian menguji satu objek, satu target bersama untuk beberapa sensor, atau beberapa sektor sensor. Jangan menyebut bukti multiobjek simultan jika paper hanya memakai banyak sensor atau menguji banyak objek secara bergantian.
 
-`.agents/instructions/global.md` dihapus agar tidak ada dua dokumen yang memberikan arahan mirip tetapi berbeda tingkat kematangan.
+### Bab III — Metode Penelitian
 
-## 25. Ringkasan Satu Kalimat
+Memuat perangkat, rancangan prototipe, preprocessing citra, prompt Gemma, akuisisi dua sensor, klasifikasi evidence, logging, ground truth eksternal, rubrik deskripsi, dan teknik analisis.
 
-Skripsi ini membahas implementasi dan evaluasi sistem deskripsi gambar indoor yang menggabungkan vision-language model dan estimasi kedalaman monokular untuk menghasilkan deskripsi Bahasa Indonesia yang lebih sadar ruang dibanding deskripsi visual biasa.
+### Bab IV — Hasil dan Pembahasan
+
+Urutan pembahasan mengikuti tujuan:
+
+1. hasil implementasi deskripsi;
+2. hasil integrasi dan status evidence sensor;
+3. hasil evaluasi sensor dan deskripsi pada subbagian terpisah.
+
+### Bab V — Penutup
+
+Kesimpulan menjawab rumusan masalah berdasarkan data. Saran berangkat dari keterbatasan yang ditemukan, bukan janji fitur di luar scope.
+
+## 13. Acceptance criteria
+
+1. Satu citra indoor menghasilkan satu deskripsi Bahasa Indonesia.
+2. Capture dapat dicocokkan dengan evidence sensor dan menyimpan provenance.
+3. Nilai kedua sensor tetap dapat diaudit secara individual.
+4. Rata-rata hanya muncul pada status paired yang memenuhi gate.
+5. Tidak ada angka sensor yang dilekatkan pada objek bernama.
+6. Status konflik, stale, mismatch, partial, dan unavailable ditangani eksplisit.
+7. UI, API, log, dan dokumentasi memakai istilah yang konsisten.
+8. Evaluasi sensor memakai `ground_truth_cm` eksternal; evaluasi deskripsi dilakukan terpisah.
+9. Hasil gagal dan missing data tetap dilaporkan.
+
+## 14. Ringkasan satu kalimat
+
+Bridge-Gap adalah prototipe deskripsi gambar indoor berbahasa Indonesia berbasis Gemma 4 E2B yang menyertakan referensi jarak frontal dari dua HC-SR04 tanpa mengaitkan angka sensor dengan objek bernama.

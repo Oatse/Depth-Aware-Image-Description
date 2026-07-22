@@ -1,6 +1,0 @@
-{
-  "image_name": "living_room_1p (213).jpg",
-  "condition": "baseline",
-  "content": "{\n  \"objek_terlihat\": [\n    \"sofa merah\",\n    \"meja kerja\",\n    \"kursi\",\n    \"monitor komputer\",\n    \"jendela\",\n    \"pintu\",\n    \"rak buku\",\n    \"buku\",\n    \"televisi\",\n    \"kabinet TV\",\n    \"meja kaca\",\n    \"vas kecil\",\n    \"karpet pola geometris\",\n    \"panel kayu\",\n    \"lampu plafon\",\n    \"tanaman hias\"\n  ],\n  \"deskripsi_visual\": \"Ruang indoor bergaya modern dengan sofa merah, area kerja, TV pada kabinet kayu, rak buku, panel kayu vertikal, karpet geometris, pencahayaan hangat, serta jendela bernuansa gelap.\"\n}",
-  "latency_ms": 5485
-}

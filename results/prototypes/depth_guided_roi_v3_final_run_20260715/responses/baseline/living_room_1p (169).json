@@ -1,6 +1,0 @@
-{
-  "image_name": "living_room_1p (169).jpg",
-  "condition": "baseline",
-  "content": "{\"objects\": [\"sofa\", \"meja kopi\", \"kursi berlengan\", \"lukisan dinding\", \"lampu meja\", \"tirai\"], \"description\": \"Ruangan interior bergaya hangat dengan dinding berwarna kuning mustard. Terdapat sofa besar berwarna cokelat kekuningan, di depannya terdapat meja kopi kayu besar. Di sampingnya ada kursi berlengan putih. Dinding dipenuhi oleh beberapa lukisan berbingkai yang menampilkan pemandangan alam atau abstrak. Pencahayaan alami masuk melalui jendela-jendela tinggi dengan tirai putih.\"}",
-  "latency_ms": 33324
-}

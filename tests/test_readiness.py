@@ -14,7 +14,7 @@ class PairedBridge:
         return {"status": "paired", "connected": True, "samples": {"sensor_1": {}, "sensor_2": {}}}
 
 
-def test_readiness_reports_each_gate_without_hiding_missing_calibration(monkeypatch, tmp_path) -> None:
+def test_readiness_requires_gemma_and_reports_sensor_as_capability(monkeypatch, tmp_path) -> None:
     monkeypatch.setattr(readiness_route, "gemma_client", ReadyGemma())
     monkeypatch.setattr(readiness_route.settings, "sensor_calibration_path", tmp_path / "missing.json")
     with TestClient(app) as client:
@@ -25,4 +25,4 @@ def test_readiness_reports_each_gate_without_hiding_missing_calibration(monkeypa
     assert payload["checks"]["gemma"] == "ready"
     assert payload["checks"]["sensor"] == "paired"
     assert payload["checks"]["calibration"]["status"] == "missing"
-    assert payload["ready"] is False
+    assert payload["ready"] is True

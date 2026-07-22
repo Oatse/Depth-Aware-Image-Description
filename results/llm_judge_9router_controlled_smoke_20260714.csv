@@ -1,2 +1,0 @@
-image_name,mode,judge_model,rubric_version,repeat_count,semantic_correctness_mean,spatial_accuracy_mean,groundedness_mean,clarity_mean,overall_mean,overall_stddev,visual_evidence_union,critical_error_union
-1 (1030).jpg,gemma_depth_constrained_controlled,cx/gpt-5.5,spatial-description-judge-v2-image-aware,1,5.0,5.0,5.0,5.0,5.0,0.0,Area bawah-kanan berisi mesin cuci jarak sedang. | Deretan mesin cuci di sisi kanan/dinding belakang. | Lantai ubin biru terlihat.,

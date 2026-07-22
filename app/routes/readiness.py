@@ -26,17 +26,10 @@ async def readiness(request: Request) -> dict[str, object]:
         "backend": "ready",
         "gemma": gemma_status,
         "gemma_model": settings.lm_studio_model,
-        "depth": settings.depth_model_status,
         "sensor": sensor.get("status", "unavailable"),
         "two_sensor_fresh": sensor.get("status") == "paired",
         "calibration": calibration,
         "secure_context": secure_context,
     }
-    ready_for_iot = (
-        gemma_status in {"ready", "mock"}
-        and settings.depth_model_status in {"ready", "mock"}
-        and sensor.get("status") == "paired"
-        and calibration["validated"] is True
-        and secure_context
-    )
-    return {"ready": ready_for_iot, "checks": checks}
+    ready_for_analysis = gemma_status in {"ready", "mock"} and secure_context
+    return {"ready": ready_for_analysis, "checks": checks}

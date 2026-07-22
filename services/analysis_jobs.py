@@ -1,3 +1,4 @@
+import logging
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -9,6 +10,9 @@ from anyio import WouldBlock
 from anyio.streams.memory import MemoryObjectReceiveStream, MemoryObjectSendStream
 
 from services.analysis_types import AnalysisMode
+
+
+logger = logging.getLogger(__name__)
 
 
 class AnalysisJobStatus(StrEnum):
@@ -35,6 +39,8 @@ class AnalysisJobRequest:
     capture_time_ms: int | None = None
     camera_facing_mode: str | None = None
     sensor_evidence: dict[str, object] | None = None
+    stored_capture_id: str | None = None
+    source_image: dict[str, str] | None = None
 
 
 @dataclass(slots=True)
@@ -69,11 +75,11 @@ class AnalysisJobService:
         self._retained_jobs = retained_jobs
         self._jobs: dict[str, AnalysisJobRecord] = {}
 
-    def enqueue(self, request: AnalysisJobRequest) -> AnalysisJobRecord:
+    def enqueue(self, request: AnalysisJobRequest, *, job_id: str | None = None) -> AnalysisJobRecord:
         self._trim_terminal_jobs()
         now = _utc_now()
         record = AnalysisJobRecord(
-            job_id=uuid4().hex,
+            job_id=job_id or uuid4().hex,
             request=request,
             status=AnalysisJobStatus.QUEUED,
             created_at=now,
@@ -110,6 +116,12 @@ class AnalysisJobService:
         except Exception as exc:
             record.error = str(exc)
             record.status = AnalysisJobStatus.FAILED
+            logger.exception(
+                "Analysis job failed: job_id=%s mode=%s error=%s",
+                record.job_id,
+                record.request.mode,
+                exc,
+            )
         record.updated_at = _utc_now()
 
     def _trim_terminal_jobs(self) -> None:

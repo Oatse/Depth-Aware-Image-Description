@@ -1,16 +1,11 @@
 import io
 import time
 
-import numpy as np
 from fastapi.testclient import TestClient
 from PIL import Image
 
 from app.main import app
-from models.depth_anything import DepthResult
-from models.gemma_client import GemmaResult
-
-
-client = TestClient(app)
+from models.gemma_client import GemmaClientError, GemmaResult
 
 
 def _sample_image_bytes() -> bytes:
@@ -19,225 +14,218 @@ def _sample_image_bytes() -> bytes:
     return buffer.getvalue()
 
 
-def test_health_endpoint_returns_backend_status() -> None:
-    response = client.get("/health")
+class FakeGemmaClient:
+    def __init__(self, description: str = "Meja terlihat di tengah ruangan.") -> None:
+        self.description = description
+        self.calls = 0
 
-    assert response.status_code == 200
-    data = response.json()
-    assert data["success"] is True
-    assert data["backend"] == "ok"
-    assert data["gemma_model"] == "google/gemma-4-e2b"
-
-
-def test_experiment_status_endpoint_returns_readiness_snapshot() -> None:
-    response = client.get("/experiment-status")
-
-    assert response.status_code == 200
-    data = response.json()
-    assert data["success"] is True
-    assert "annotation_count" in data
-    assert "dataset_image_count" in data
-    assert "readiness_score" in data
-    assert isinstance(data["readiness_notes"], list)
-    assert data["artifact_profile"] == "final_44_gemma_e2b_20260708"
-    assert data["dataset_image_count"] == 44
-    assert data["annotation_count"] == 44
-    assert data["artifact_paths"]["images"] == "dataset/final_images"
-
-
-def test_sensor_status_endpoint_exposes_two_live_sensor_channels(monkeypatch) -> None:
-    class FakeSensorBridge:
-        def snapshot(self, capture_time_ms: int, window_ms: int) -> dict:
-            return {
-                "enabled": True,
-                "connected": True,
-                "port": "COM7",
-                "capture_time_ms": capture_time_ms,
-                "window_ms": window_ms,
-                "status": "paired",
-                "samples": {
-                    "sensor_1": {"distance_cm": 81.2, "age_ms": 20},
-                    "sensor_2": {"distance_cm": 83.8, "age_ms": 15},
-                },
-                "reader_error": None,
-                "connection_attempts": 1,
-                "last_sample_time_ms": capture_time_ms - 15,
-            }
-
-    monkeypatch.setattr(app.state, "sensor_bridge", FakeSensorBridge(), raising=False)
-
-    response = client.get("/sensor-status")
-
-    assert response.status_code == 200
-    data = response.json()
-    assert data["success"] is True
-    assert data["status"] == "paired"
-    assert data["samples"]["sensor_1"]["distance_cm"] == 81.2
-    assert data["samples"]["sensor_2"]["distance_cm"] == 83.8
-
-
-def test_analyze_endpoint_rejects_text_file() -> None:
-    response = client.post(
-        "/analyze",
-        files={"image": ("notes.txt", b"hello", "text/plain")},
-        data={"mode": "gemma_depth"},
-    )
-
-    assert response.status_code == 400
-    assert response.json()["success"] is False
-
-
-def test_analyze_endpoint_returns_fused_result_with_mocks(monkeypatch) -> None:
-    class FakeGemmaClient:
-        async def describe_image(self, base64_image: str, prompt: str | None = None) -> GemmaResult:
-            return GemmaResult("Terlihat kursi di tengah ruangan.", "{}", 5, mock=True)
-
-    class FakeDepthModel:
-        def estimate(self, image, source_name: str) -> DepthResult:
-            depth_map = np.full((9, 9), 2.0, dtype=np.float32)
-            depth_map[6:9, 3:6] = 0.7
-            return DepthResult(True, depth_map, None, 4, depth_map.shape, mock=True)
-
-    import app.routes.analyze as analyze_route
-
-    monkeypatch.setattr(analyze_route, "gemma_client", FakeGemmaClient())
-    monkeypatch.setattr(analyze_route, "depth_model", FakeDepthModel())
-
-    response = client.post(
-        "/analyze",
-        files={"image": ("sample.jpg", _sample_image_bytes(), "image/jpeg")},
-        data={"mode": "gemma_depth", "save_result": "false"},
-    )
-
-    assert response.status_code == 200
-    data = response.json()
-    assert data["success"] is True
-    assert "Berdasarkan grid depth 3x3" in data["final_description"]
-    assert data["display"]["fusion_strategy"] == "evidence_constrained_regional_late_fusion"
-    assert data["depth_summary"]["nearest_region"] == "lower_center"
-    assert isinstance(data["latency"]["fusion_ms"], int)
-    assert data["latency"]["fusion_ms"] >= 0
-
-
-def test_analyze_endpoint_rejects_retired_prompted_mode() -> None:
-    response = client.post(
-        "/analyze",
-        files={"image": ("sample.jpg", _sample_image_bytes(), "image/jpeg")},
-        data={"mode": "gemma_depth_prompted", "save_result": "false"},
-    )
-
-    assert response.status_code == 400
-    assert response.json()["error"] == "Mode must be one of gemma_only, depth_only, or gemma_depth."
-
-
-def test_time_sync_returns_backend_epoch() -> None:
-    response = client.get("/time-sync")
-
-    assert response.status_code == 200
-    payload = response.json()
-    assert isinstance(payload["server_time_ms"], int)
-    assert payload["clock_domain"] == "unix_epoch_ms"
-
-
-def test_analysis_job_endpoint_returns_accepted_then_completed(monkeypatch) -> None:
-    class FakeGemmaClient:
-        async def describe_image(self, base64_image: str, prompt: str | None = None) -> GemmaResult:
-            return GemmaResult("Terlihat kursi di tengah ruangan.", "{}", 5, mock=True)
-
-    class FakeDepthModel:
-        def estimate(self, image, source_name: str) -> DepthResult:
-            depth_map = np.full((9, 9), 2.0, dtype=np.float32)
-            depth_map[6:9, 3:6] = 0.7
-            return DepthResult(True, depth_map, None, 4, depth_map.shape, mock=True)
-
-    import app.routes.analyze as analyze_route
-
-    monkeypatch.setattr(analyze_route, "gemma_client", FakeGemmaClient())
-    monkeypatch.setattr(analyze_route, "depth_model", FakeDepthModel())
-
-    with TestClient(app) as live_client:
-        accepted = live_client.post(
-            "/analysis-jobs",
-            files={"image": ("sample.jpg", _sample_image_bytes(), "image/jpeg")},
-            data={"mode": "gemma_depth", "save_result": "false"},
-        )
-
-        assert accepted.status_code == 202
-        accepted_data = accepted.json()
-        assert accepted_data["status"] == "queued"
-        assert accepted_data["poll_url"].endswith(accepted_data["job_id"])
-
-        result = None
-        for _ in range(100):
-            response = live_client.get(accepted_data["poll_url"])
-            result = response.json()
-            if result["status"] in {"completed", "failed"}:
-                break
-            time.sleep(0.01)
-
-        assert result is not None
-        assert result["status"] == "completed"
-        assert result["result"]["success"] is True
-
-
-def test_camera_analysis_job_pairs_sensor_snapshot_to_actual_frame_time(monkeypatch) -> None:
-    class FakeDepthModel:
-        def estimate(self, image, source_name: str) -> DepthResult:
-            depth_map = np.full((9, 9), 2.0, dtype=np.float32)
-            return DepthResult(True, depth_map, None, 4, depth_map.shape, mock=True)
-
-    class RecordingSensorBridge:
-        def __init__(self) -> None:
-            self.capture_times: list[int] = []
-
-        def snapshot(self, capture_time_ms: int, window_ms: int) -> dict:
-            self.capture_times.append(capture_time_ms)
-            return {
-                "enabled": True,
-                "connected": True,
-                "port": "COM7",
-                "capture_time_ms": capture_time_ms,
-                "window_ms": window_ms,
-                "status": "paired",
-                "samples": {
-                    "sensor_1": {"distance_cm": 90.0, "age_ms": -4},
-                    "sensor_2": {"distance_cm": 91.0, "age_ms": 7},
-                },
-                "reader_error": None,
-            }
-
-    import app.routes.analyze as analyze_route
-
-    monkeypatch.setattr(analyze_route, "depth_model", FakeDepthModel())
-    sensor_bridge = RecordingSensorBridge()
-    frame_time_ms = int(time.time() * 1000)
-
-    with TestClient(app) as live_client:
-        app.state.sensor_bridge = sensor_bridge
-        accepted = live_client.post(
-            "/analysis-jobs",
-            files={"image": ("camera.jpg", _sample_image_bytes(), "image/jpeg")},
-            data={
-                "mode": "depth_only",
-                "save_result": "false",
-                "capture_id": "cap_integration",
-                "capture_time_ms": str(frame_time_ms),
-                "camera_facing_mode": "environment",
+    async def describe_image(self, base64_image: str, prompt: str | None = None) -> GemmaResult:
+        self.calls += 1
+        assert base64_image
+        return GemmaResult(
+            self.description,
+            "{}",
+            5,
+            mock=True,
+            structured={
+                "scene_type": "indoor",
+                "main_object": "meja",
+                "object_position": "tengah",
+                "objects": ["meja"],
+                "obstacle_candidate": "tidak_diketahui",
+                "description": self.description,
             },
         )
-        assert accepted.status_code == 202
 
+
+class SensorBridge:
+    def __init__(self, samples: dict, *, status: str = "paired") -> None:
+        self.samples = samples
+        self.status = status
+
+    def snapshot(self, capture_time_ms: int, window_ms: int) -> dict:
+        return {
+            "enabled": True,
+            "connected": True,
+            "capture_time_ms": capture_time_ms,
+            "window_ms": window_ms,
+            "status": self.status,
+            "samples": self.samples,
+        }
+
+
+def _analyze(client: TestClient, **data: str):
+    payload = {"save_result": "false", **data}
+    return client.post(
+        "/analyze",
+        files={"image": ("sample.jpg", _sample_image_bytes(), "image/jpeg")},
+        data=payload,
+    )
+
+
+def test_health_exposes_only_active_runtime_checks(monkeypatch) -> None:
+    import app.main as main_module
+
+    async def ready():
+        return "mock"
+
+    monkeypatch.setattr(main_module.gemma_client, "check_status", ready)
+    with TestClient(app) as client:
+        payload = client.get("/health").json()
+    assert payload == {
+        "success": True,
+        "app": "Indoor Visual-Spatial Description",
+        "backend": "ok",
+        "gemma": "mock",
+        "gemma_model": "google/gemma-4-e2b",
+    }
+
+
+def test_default_sensor_assisted_uses_one_rgb_inference_and_reports_unavailable(monkeypatch) -> None:
+    import app.routes.analyze as analyze_route
+
+    fake = FakeGemmaClient()
+    monkeypatch.setattr(analyze_route, "gemma_client", fake)
+    with TestClient(app) as client:
+        response = _analyze(client)
+    payload = response.json()
+    assert response.status_code == 200
+    assert fake.calls == 1
+    assert payload["mode"] == "sensor_assisted"
+    assert payload["analysis_method"] == "sensor_assisted"
+    assert payload["sensor_contribution"]["status"] == "insufficient"
+    assert payload["sensor_contribution"]["reason_code"] == "sensor_unavailable"
+    assert payload["sensor_contribution"]["frontal_reference_cm"] is None
+
+
+def test_paired_sensor_uses_arithmetic_mean_without_object_binding(monkeypatch) -> None:
+    import app.routes.analyze as analyze_route
+
+    fake = FakeGemmaClient("Meja terlihat di tengah ruangan.")
+    monkeypatch.setattr(analyze_route, "gemma_client", fake)
+    capture_time = int(time.time() * 1000)
+    bridge = SensorBridge({
+        "sensor_1": {"distance_cm": 78.0, "age_ms": 4, "status": "ok"},
+        "sensor_2": {"distance_cm": 82.0, "age_ms": 6, "status": "ok"},
+    })
+    with TestClient(app) as client:
+        app.state.sensor_bridge = bridge
+        response = _analyze(
+            client,
+            capture_id="cap-paired",
+            capture_time_ms=str(capture_time),
+            camera_facing_mode="environment",
+        )
+    payload = response.json()
+    contribution = payload["sensor_contribution"]
+    assert fake.calls == 1
+    assert contribution["status"] == "applied"
+    assert contribution["sensor_1_cm"] == 78.0
+    assert contribution["sensor_2_cm"] == 82.0
+    assert contribution["pair_disagreement_cm"] == 4.0
+    sensor_1_corrected = contribution["sensor_1_corrected_cm"]
+    sensor_2_corrected = contribution["sensor_2_corrected_cm"]
+    corrected_mean = round((sensor_1_corrected + sensor_2_corrected) / 2, 2)
+    assert sensor_1_corrected > contribution["sensor_1_cm"]
+    assert sensor_2_corrected > contribution["sensor_2_cm"]
+    assert contribution["frontal_reference_cm"] == corrected_mean
+    assert payload["final_description"].endswith(
+        f"Referensi jarak frontal sekitar {corrected_mean:.1f} cm pada arah sensor."
+    )
+    assert "Meja berjarak" not in payload["final_description"]
+
+
+def test_conflicting_pair_withholds_numeric_reference_from_final_description(monkeypatch) -> None:
+    import app.routes.analyze as analyze_route
+
+    monkeypatch.setattr(analyze_route, "gemma_client", FakeGemmaClient())
+    bridge = SensorBridge({
+        "sensor_1": {"distance_cm": 40.0, "age_ms": 4, "status": "ok"},
+        "sensor_2": {"distance_cm": 90.0, "age_ms": 6, "status": "ok"},
+    })
+    with TestClient(app) as client:
+        app.state.sensor_bridge = bridge
+        response = _analyze(
+            client,
+            capture_time_ms=str(int(time.time() * 1000)),
+            camera_facing_mode="environment",
+        )
+    payload = response.json()
+    contribution = payload["sensor_contribution"]
+    assert contribution["status"] == "conflict"
+    assert contribution["frontal_reference_cm"] is None
+    assert contribution["sensor_1_cm"] == 40.0
+    assert contribution["sensor_2_cm"] == 90.0
+    assert "40.0 cm" not in payload["final_description"]
+    assert "90.0 cm" not in payload["final_description"]
+
+
+def test_partial_sensor_is_labeled_and_never_presented_as_pair_average(monkeypatch) -> None:
+    import app.routes.analyze as analyze_route
+
+    monkeypatch.setattr(analyze_route, "gemma_client", FakeGemmaClient())
+    bridge = SensorBridge({"sensor_1": {"distance_cm": 55.0, "age_ms": 5, "status": "ok"}}, status="partial")
+    with TestClient(app) as client:
+        app.state.sensor_bridge = bridge
+        response = _analyze(
+            client,
+            capture_time_ms=str(int(time.time() * 1000)),
+            camera_facing_mode="environment",
+        )
+    contribution = response.json()["sensor_contribution"]
+    assert contribution["status"] == "partial"
+    assert contribution["frontal_reference_cm"] is None
+    assert "Sensor 1 membaca 55.0 cm" in contribution["description"]
+    assert "bukan rata-rata" in contribution["description"]
+
+
+def test_only_two_public_modes_are_accepted(monkeypatch) -> None:
+    import app.routes.analyze as analyze_route
+
+    monkeypatch.setattr(analyze_route, "gemma_client", FakeGemmaClient())
+    with TestClient(app) as client:
+        assert _analyze(client, mode="gemma_only").status_code == 200
+        rejected = _analyze(client, mode="legacy_mode")
+    assert rejected.status_code == 400
+    assert "gemma_only, sensor_assisted" in rejected.json()["error"]
+
+
+def test_analysis_job_completes_with_sensor_assisted_default(monkeypatch) -> None:
+    import app.routes.analyze as analyze_route
+
+    monkeypatch.setattr(analyze_route, "gemma_client", FakeGemmaClient())
+    with TestClient(app) as client:
+        accepted = client.post(
+            "/analysis-jobs",
+            files={"image": ("sample.jpg", _sample_image_bytes(), "image/jpeg")},
+            data={"save_result": "false"},
+        )
         result = None
         for _ in range(100):
-            result = live_client.get(accepted.json()["poll_url"]).json()
+            result = client.get(accepted.json()["poll_url"]).json()
             if result["status"] in {"completed", "failed"}:
                 break
             time.sleep(0.01)
-
-    assert sensor_bridge.capture_times == [frame_time_ms]
+    assert accepted.status_code == 202
     assert result is not None
     assert result["status"] == "completed"
-    evidence = result["result"]["sensor_evidence"]
-    assert evidence["capture_id"] == "cap_integration"
-    assert evidence["match_time_source"] == "client_capture"
-    assert evidence["status"] == "paired"
+    assert result["result"]["mode"] == "sensor_assisted"
+
+
+def test_gemma_failure_is_reported(monkeypatch) -> None:
+    import app.routes.analyze as analyze_route
+
+    class FailingGemma:
+        async def describe_image(self, _base64_image: str, prompt: str | None = None):
+            raise GemmaClientError("Gemma gagal menghasilkan deskripsi.")
+
+    monkeypatch.setattr(analyze_route, "gemma_client", FailingGemma())
+    with TestClient(app) as client:
+        response = _analyze(client, mode="gemma_only")
+    assert response.status_code == 502
+    assert "Gemma gagal" in response.json()["error"]
+
+
+def test_retired_comparison_route_is_not_exposed() -> None:
+    with TestClient(app) as client:
+        assert client.post("/analysis-comparisons").status_code == 404

@@ -1,6 +1,0 @@
-{
-  "image_name": "living_room_213.jpg",
-  "condition": "depth_guided",
-  "content": "{\"marks\": [{\"id\": 2, \"object\": \"kursi\"}, {\"id\": 3, \"object\": \"tempat tidur\"}, {\"id\": 1, \"object\": \"meja\"}]\n, \"priority_mark_id\": 1\n, \"description\": \"Objek di dalam kotak MARK 1 adalah meja. Objek di dalam kotak MARK 2 adalah kursi. Objek di dalam kotak MARK 3 adalah tempat tidur.\"}",
-  "latency_ms": 35248
-}

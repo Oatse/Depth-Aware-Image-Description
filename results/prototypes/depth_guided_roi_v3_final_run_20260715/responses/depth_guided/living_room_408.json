@@ -1,6 +1,0 @@
-{
-  "image_name": "living_room_408.jpg",
-  "condition": "depth_guided",
-  "content": "{\"marks\": [{\"id\": 1, \"object\": \"sofa\"}, {\"id\": 2, \"object\": \"chair\"}, {\"id\": 3, \"object\": \"couch\"}]\n, \"priority_mark_id\": 1\n, \"description\": \"Identifikasi hanya objek di dalam kotak MARK 1, 2, 3. Region telah dipilih menggunakan estimasi depth monokular dan nomor diurutkan dari estimasi relatif lebih dekat ke lebih jauh, sehingga MARK 1 diprioritaskan. Ini bukan jarak absolut. Isi tepat satu objek untuk setiap ID, set priority_mark_id ke 1, jangan membuat ID baru, dan balas sesuai JSON schema.\"}",
-  "latency_ms": 44199
-}

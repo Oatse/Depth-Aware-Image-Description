@@ -1,6 +1,0 @@
-{
-  "image_name": "living_room_408.jpg",
-  "condition": "baseline",
-  "content": "{\"objects\": [\"sofa\", \"kursi berlengan\", \"meja kopi\", \"karpet\", \"jendela\", \"tanaman pot\", \"meja samping\"], \"description\": \"Ruangan interior yang terang dengan lantai kayu dan dinding berwarna krem. Terdapat sofa abu-abu, dua kursi berlengan kayu, meja kopi di tengah, serta karpet berbulu tebal. Jendela besar menghadap ke pemandangan pepohonan hijau.\"}",
-  "latency_ms": 33452
-}

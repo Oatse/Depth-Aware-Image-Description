@@ -12,18 +12,23 @@ PREDICTION_FIELDS = [
     "timestamp",
     "image_name",
     "mode",
+    "analysis_method",
     "description_gemma",
     "main_object",
     "object_position",
     "scene_type",
-    "nearest_region",
-    "distance_category",
-    "estimated_distance",
-    "safe_direction",
-    "fusion_policy",
+    "sensor_status",
+    "sensor_reason_code",
+    "sensor_1_cm",
+    "sensor_2_cm",
+    "sensor_1_corrected_cm",
+    "sensor_2_corrected_cm",
+    "sensor_pair_disagreement_cm",
+    "frontal_reference_cm",
+    "calibration_status",
     "final_description",
     "gemma_latency_ms",
-    "depth_latency_ms",
+    "sensor_latency_ms",
     "total_latency_ms",
     "error",
 ]
@@ -67,17 +72,37 @@ def log_analysis_run(
     sensor_evidence: dict[str, Any] | None,
     outputs: dict[str, Any],
     analysis_run_id: str | None = None,
+    source_image: dict[str, str] | None = None,
 ) -> str:
     run_id = analysis_run_id or uuid4().hex
     record = {
         "analysis_run_id": run_id,
         "capture_id": capture_id,
-        "image": {"filename": filename},
+        "image": {"filename": filename, **(source_image or {})},
         "sensor_evidence": sensor_evidence,
         "outputs": outputs,
         "logged_at": datetime.now(timezone.utc).isoformat(),
     }
     return RunRepository(results_dir / "analysis_runs.jsonl").append(record)
+
+
+def save_source_image(
+    results_dir: Path,
+    image_bytes: bytes,
+    filename: str,
+    analysis_run_id: str,
+) -> dict[str, str]:
+    extension = Path(filename).suffix.lower()
+    if extension not in {".jpg", ".jpeg", ".png", ".webp"}:
+        extension = ".jpg"
+    safe_run_id = "".join(character for character in analysis_run_id if character.isalnum() or character in "-_")
+    safe_run_id = safe_run_id or uuid4().hex
+    relative_path = Path("source_images") / f"{safe_run_id}{extension}"
+    output_path = results_dir / relative_path
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_bytes(image_bytes)
+    public_path = relative_path.as_posix()
+    return {"path": public_path, "url": f"/results/{public_path}"}
 
 
 def _ensure_prediction_file_schema(output_path: Path) -> None:

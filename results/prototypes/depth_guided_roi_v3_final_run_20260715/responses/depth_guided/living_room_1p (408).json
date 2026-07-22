@@ -1,6 +1,0 @@
-{
-  "image_name": "living_room_1p (408).jpg",
-  "condition": "depth_guided",
-  "content": "{\"marks\": [{\"id\": 2, \"object\": \"meja kopi\"}, {\"id\": 3, \"object\": \"pohon\"}]\n, \"priority_mark_id\": 2\n  , \"description\": \"Objek di dalam kotak MARK 1 tidak teridentifikasi.\"}",
-  "latency_ms": 18512
-}

@@ -1,319 +1,160 @@
-# Depth-Aware Image Description
+# Bridge-Gap
 
-Prototype penelitian untuk implementasi depth-aware image description pada citra lingkungan indoor. Sistem menggabungkan Gemma sebagai vision-language model dan Depth Anything V2 Metric Indoor Small sebagai model estimasi kedalaman, lalu menghasilkan deskripsi akhir Bahasa Indonesia melalui fusi regional berbatas bukti.
+Bridge-Gap adalah prototipe teknis untuk menghasilkan **deskripsi gambar indoor berbahasa Indonesia** menggunakan `google/gemma-4-e2b` yang dijalankan secara lokal melalui LM Studio. Dua HC-SR04 menyediakan referensi jarak frontal berbasis bidang cakupan (*cone*) sensor. Referensi tersebut adalah bukti tambahan yang terpisah dari isi citra, bukan jarak ke objek yang disebut Gemma.
 
-Proyek ini adalah proof-of-concept implementasi model, bukan aplikasi navigasi production-ready.
+## Scope kanonik
 
-## Scope
+- Input visual: satu citra RGB dari kamera belakang atau unggahan.
+- Model deskripsi: Gemma 4 E2B.
+- Sensor: dua HC-SR04 yang dipasang sejajar dan dibaca melalui ESP32-WROOM-32.
+- Output utama: satu deskripsi gambar indoor berbahasa Indonesia.
+- Output sensor: nilai tiap sensor, status bukti, dan—hanya untuk pasangan valid—rata-rata sebagai referensi jarak frontal.
+- Evaluasi: kualitas deskripsi dan akurasi sensor dinilai sebagai dua jalur terpisah.
 
-- Web interface sederhana berbasis HTML, CSS, dan JavaScript vanilla.
-- Backend Python FastAPI untuk upload gambar dan pipeline analisis.
-- Integrasi Gemma melalui endpoint lokal LM Studio yang kompatibel OpenAI.
-- Integrasi Depth Anything V2 Metric Indoor Small dari folder `model_weights/`.
-- Fusi regional berbasis aturan yang tidak mengikat estimasi depth suatu area ke objek tanpa bukti lokalisasi.
-- Logging hasil inferensi dan evaluasi berbasis CSV.
+Sistem tidak mengklaim bahwa angka sensor melekat pada objek bernama, tidak melakukan pemetaan ruang, serta tidak mengklaim keselamatan navigasi atau manfaat bagi pengguna tunanetra tanpa pengujian yang sesuai.
 
-## Non-Scope
-
-- Aplikasi mobile React Native atau Expo.
-- Voice trigger, speech recognition, dan text-to-speech sebagai fitur utama.
-- Login, database, dashboard kompleks, dan deployment production.
-- Klaim navigasi aman, real-time navigation system, atau pengukuran jarak presisi.
-
-## Arsitektur
+## Arsitektur ringkas
 
 ```text
-Web Interface
-  -> FastAPI Backend
-  -> Camera Frame Metadata + Reconnecting ESP32 Serial Bridge
-  -> Image Validation + Preprocessing
-  -> Bounded In-Process Analysis Queue (polling API)
-  -> Gemma Client
-  -> Depth Anything V2 Metric Indoor Small
-  -> 9-Region Depth Analysis (grid-p10)
-  -> Evidence-Constrained Regional Fusion
-  -> Prediction Log + Evaluation CSV
+Camera / Upload -> citra RGB -> Gemma 4 E2B -> deskripsi Bahasa Indonesia
+                         |
+                         +-> pencocokan waktu capture
+                                  ^
+2x HC-SR04 -> ESP32 -> pembacaan sensor -> klasifikasi evidence
+                                           -> referensi frontal (bila paired)
 ```
 
-## Struktur Folder
+Setelah gate pasangan terpenuhi, koreksi linear dari profil kalibrasi diterapkan terpisah pada kedua sensor sebelum rata-rata frontal dibuat:
 
 ```text
-app/                 FastAPI app, config, schema, routes
-models/              Gemma client, Depth Anything adapter, fusion rules
-services/            Validation, preprocessing, depth analysis, logging, evaluator
-static/              CSS dan JavaScript UI
-templates/           HTML template
-dataset/             Gambar dan annotation CSV
-model_weights/       Bobot Depth Anything lokal
-results/             Prediction, evaluation, depth maps
-tests/               Pytest suite
-scripts/             CLI tools dan smoke test
+sensor_1_corrected_cm = intercept_1 + slope_1 * sensor_1_cm
+sensor_2_corrected_cm = intercept_2 + slope_2 * sensor_2_cm
+frontal_reference_cm = (sensor_1_corrected_cm + sensor_2_corrected_cm) / 2
 ```
 
-## Setup Development
+Nilai tersebut ditulis sebagai “referensi jarak frontal sekitar X cm”, bukan “objek X berjarak X cm”. Status `partial`, `stale`, `pair_conflict`, `direction_mismatch`, atau `unavailable` tidak menghasilkan rata-rata pasangan.
 
-```bash
+## Struktur folder
+
+```text
+app/           FastAPI app, routes, konfigurasi, dan schema
+models/        klien Gemma dan logika kontribusi sensor
+services/      pipeline, sinkronisasi sensor, validasi, dan logging
+static/        JavaScript dan CSS UI
+templates/     template HTML
+scripts/       CLI, preflight, dan alat pengujian
+tests/         Pytest suite
+docs/          dokumentasi aktif dan pustaka penelitian
+instructions/  scope akademik dan kontrak implementasi
+results/       keluaran runtime dan pengujian
+```
+
+## Setup
+
+```powershell
 python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+Copy-Item .env.example .env
 ```
 
-Gunakan `requirements-lock.txt` jika perlu mereplikasi versi environment verifikasi 14 Juli 2026 secara lebih ketat.
+Konfigurasi minimum:
 
-Environment aktif saat verifikasi menggunakan Python 3.13.3 dan dependency berhasil terpasang, termasuk `onnxruntime`.
-
-## Konfigurasi
-
-Salin `.env.example` ke `.env` jika ingin mengubah konfigurasi:
-
-```bash
-copy .env.example .env
+```text
+LM_STUDIO_URL=http://localhost:1234
+LM_STUDIO_MODEL=google/gemma-4-e2b
+SENSOR_SERIAL_BAUD=115200
+SENSOR_MATCH_WINDOW_MS=250
+SENSOR_FRESHNESS_MAX_AGE_MS=1000
+SENSOR_PAIR_DISAGREEMENT_CM=15
+GEMMA_MOCK=false
 ```
 
-Variabel penting:
+Nilai konfigurasi aktual tetap mengikuti `app/config.py` dan `.env`; dokumentasi tidak boleh dipakai untuk menebak nilai runtime yang belum diverifikasi.
 
-- `LM_STUDIO_URL=http://localhost:1234`
-- `LM_STUDIO_MODEL=google/gemma-4-e2b`
-- `LM_STUDIO_HEALTH_TIMEOUT=2`
-- `DEPTH_MODEL_PATH=./model_weights/Depth-Anything-V2-Metric-Indoor-Small-hf`
-- `ANALYSIS_QUEUE_CAPACITY=8`
-- `ANALYSIS_RETAINED_JOBS=100`
-- `EXPERIMENT_ARTIFACT_PROFILE=final_44_gemma_e2b_20260708`
-- `EXPERIMENT_IMAGES_DIR=./dataset/final_images`
-- `EXPERIMENT_ANNOTATIONS_PATH=./dataset/final_annotations.csv`
-- `EXPERIMENT_PREDICTIONS_PATH=./results/final_predictions_active_20260714.csv`
-- `EXPERIMENT_EVALUATION_PATH=./results/final_evaluation_metrics_20260714.csv`
-- `GEMMA_MOCK=false`
-- `DEPTH_MOCK=false`
-- `SENSOR_SERIAL_PORT=COM7`
-- `SENSOR_SERIAL_BAUD=115200`
-- `SENSOR_MATCH_WINDOW_MS=250`
-- `SENSOR_MAX_CLOCK_SKEW_MS=5000`
-- `SENSOR_RECONNECT_INTERVAL_MS=1000`
-- `SENSOR_STATUS_WINDOW_MS=1000`
+## Menjalankan backend
 
-Mock hanya aktif jika eksplisit diset ke `true`. Jangan gunakan hasil mock sebagai hasil eksperimen final.
-
-### Menjalankan dari HP
-
-Kamera browser pada alamat LAN memerlukan secure context. Buat certificate lokal yang dipercaya HP di folder `certs/` (folder ini diabaikan Git), lalu jalankan:
+Pastikan Gemma sudah dimuat di LM Studio, kemudian jalankan:
 
 ```powershell
-.\scripts\start_mobile.ps1
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-Script bind ke `0.0.0.0`, menampilkan URL HTTPS LAN dan status rule firewall. Setelah server hidup, jalankan preflight berikut dari terminal lain:
-
-```powershell
-python .\scripts\preflight_runtime.py --url https://127.0.0.1:8000/readiness --allow-insecure
-```
-
-Status IoT baru `ready` jika model LM Studio yang dikonfigurasi loaded, depth model tersedia, dua sensor fresh/paired, profile kalibrasi tervalidasi, dan request memakai secure context. Gunakan `--allow-insecure` hanya untuk pemeriksaan certificate lokal dari PC, bukan sebagai pengganti trust certificate pada HP.
-
-Integrasi Gemma saat ini memakai endpoint OpenAI-compatible LM Studio:
-
-- `GET /v1/models` untuk health check ringan.
-- `POST /v1/chat/completions` untuk inferensi vision-language.
-
-Evaluasi IoT tidak memakai dataset statis sebagai ground truth sensor. Isi manifest capture nyata dengan jarak target terukur, status pairing, offset waktu, disagreement, latency, dan skor deskripsi kedua mode, lalu jalankan `python scripts/run_iot_capture_protocol.py dataset/iot_capture_manifest.csv`.
-
-LM Studio native v1 REST API di `/api/v1/*` tetap bisa dipertimbangkan nanti, tetapi prototype ini sengaja memakai OpenAI-compatible endpoint karena payload image chat-nya sesuai kebutuhan dan stabil untuk client lokal.
-
-## Menjalankan Backend
-
-```bash
-uvicorn app.main:app --reload
-```
-
-Buka:
+Permukaan pemeriksaan:
 
 - `http://127.0.0.1:8000/`
 - `http://127.0.0.1:8000/health`
+- `http://127.0.0.1:8000/readiness`
 - `http://127.0.0.1:8000/sensor-status`
 
-## Menggunakan UI
+Akses perangkat eksternal menggunakan `https://api.mbridgegap.my.id` melalui Cloudflare Tunnel yang meneruskan request ke `http://127.0.0.1:8000`. Origin lokal tetap HTTP dan bind ke loopback.
 
-1. Pilih gambar JPG, PNG, atau WebP.
-2. Pilih mode:
-   - `gemma_depth`
-   - `gemma_only`
-   - `depth_only`
-3. Klik `Analyze`.
-4. UI menampilkan final description, deskripsi Gemma, depth summary, latency, dan depth map jika tersedia.
+## Prinsip pengukuran HC-SR04
 
-Pada tab Kamera, panel Sensor IoT menampilkan koneksi serial dan bacaan dua kanal secara live. Saat frame diambil, browser mengirim `capture_id`, waktu frame, dan arah kamera. Backend memilih sampel valid terdekat dalam jendela `SENSOR_MATCH_WINDOW_MS`. Upload gambar tetap menjadi fallback utama dan tidak membutuhkan sensor.
+Sensor ultrasonik mengukur waktu tempuh pulang-pergi gelombang. Prinsip dasarnya:
 
-Sebelum mode `iot_assisted` dapat dipilih, buka **Kalibrasi jarak sensor** pada panel Kamera. Hadapkan kedua HC-SR04 ke bidang datar, ukur jarak fisiknya, lalu catat sedikitnya tiga jarak referensi berbeda. Backend mengambil dua bacaan sensor pada setiap titik, menyimpan provenance lokal, dan hanya memvalidasi profil bila residual maksimum tidak melebihi 10 cm. Kalibrasi ini mengkarakterisasi referensi jarak frontal; kalibrasi tidak mengikat jarak ke objek atau ROI gambar.
-
-## API
-
-### `GET /health`
-
-Mengembalikan status backend, Gemma, dan model depth.
-
-### `GET /experiment-status`
-
-Mengembalikan readiness snapshot beserta `artifact_profile` dan semua path sumber. Default menunjuk snapshot final 44 citra, bukan dataset development 30 citra. Path dapat dioverride melalui environment agar dashboard selalu menyatakan artefak yang sedang dibaca.
-
-### `GET /sensor-status`
-
-Mengembalikan status koneksi serial, jumlah percobaan reconnect, bacaan terbaru `sensor_1` dan `sensor_2`, serta umur masing-masing sampel. Reader akan mencoba tersambung kembali secara otomatis sehingga backend tidak perlu direstart ketika ESP32 baru dipasang.
-
-### `GET /sensor-calibration`
-
-Mengembalikan titik pengukuran lokal dan status profil kalibrasi jarak frontal.
-
-### `POST /sensor-calibration/captures`
-
-Menerima JSON `{"measured_cm": 60}`. Endpoint hanya menyimpan titik ketika dua sensor sedang `paired`, lalu menghitung rerata sensor dan residual terhadap jarak fisik yang dimasukkan.
-
-### `DELETE /sensor-calibration`
-
-Menghapus titik dan profil kalibrasi lokal agar pengukuran dapat diulang. Tindakan ini tersedia dari tombol **Reset kalibrasi** pada panel Kamera.
-
-### `POST /analyze`
-
-Form data:
-
-- `image`: file JPG, PNG, atau WebP.
-- `mode`: `gemma_only`, `depth_only`, atau `gemma_depth`.
-- `save_result`: `true` atau `false`.
-- `capture_id`: ID unik frame kamera (opsional untuk upload).
-- `capture_time_ms`: Unix time milidetik saat frame kamera diambil (opsional untuk upload).
-- `camera_facing_mode`: `environment` atau `user` (opsional untuk upload).
-
-Response utama berisi:
-
-- `success`
-- `final_description`
-- `gemma_description`
-- `depth_summary`
-- `latency`
-- `mode`
-- `depth_map_url`
-- `sensor_evidence` untuk capture kamera; evidence ini adalah referensi jarak frontal yang dipasangkan menurut waktu, bukan depth-map atau pengukuran objek terkalibrasi.
-
-Jika penyimpanan hasil aktif, capture kamera juga ditulis ke `results/sensor_captures.jsonl` agar pasangan timestamp, status, dan sampel dua sensor dapat diaudit ulang.
-- `mock`
-- `error`
-
-### `POST /analysis-jobs`
-
-Menerima form data yang sama dan mengembalikan HTTP 202 beserta `job_id` dan `poll_url`. UI memakai endpoint ini agar request browser tidak menunggu koneksi HTTP tunggal selama inferensi.
-
-### `GET /analysis-jobs/{job_id}`
-
-Mengembalikan status `queued`, `running`, `completed`, atau `failed`. Antrean ini bounded, hanya berlaku pada satu process, tidak persisten, dan kehilangan job saat server restart. Untuk deployment multi-worker/production, gunakan queue eksternal; implementasi saat ini sengaja dibatasi pada kebutuhan prototype lokal.
-
-## CLI
-
-Menjalankan satu gambar:
-
-```bash
-python scripts\run_single_image.py dataset\images\img_001.jpg --mode gemma_depth
+```text
+d = v * t / 2
 ```
 
-Membuat annotation template dari folder gambar:
+`d` adalah jarak ke permukaan pantul, `v` adalah cepat rambat suara, dan `t` adalah waktu tempuh echo pulang-pergi. Pembagian dua diperlukan karena gelombang bergerak dari sensor ke permukaan lalu kembali. Firmware mengirim `distance_cm`; backend menyimpan nilai, umur sampel, waktu penerimaan, status, dan identitas sensor untuk audit.
 
-```bash
-python scripts\generate_sample_annotations.py
-```
+Rumus ini tidak mengubah pembacaan cone menjadi identitas objek atau jarak pada piksel tertentu. Koreksi empiris hanya boleh diterapkan setelah kalibrasi terhadap `ground_truth_cm` eksternal pada setup yang ditetapkan dan harus dilaporkan bersama residualnya.
 
-Menjalankan evaluasi:
+## Alur UI
 
-```bash
-python scripts\run_evaluation.py --annotations dataset\annotations.csv --predictions results\predictions.csv --output results\evaluation.csv
-```
+Alur kamera dipisahkan dari analisis. Masukkan dahulu jarak aktual dari bidang kamera (20–200 cm), lalu tekan **Ambil dan simpan**. Backend langsung menyimpan gambar, timestamp, identitas batch, `ground_truth_cm`, acuan muka sensor setelah offset 3 cm, nomor pengulangan otomatis, serta snapshot sensor ke folder lokal `results/captures/`. Nilai jarak tetap terisi untuk pengulangan berikutnya. UI hanya menampilkan jumlah capture yang tersimpan pada sesi tersebut. Capture tidak memanggil Gemma.
 
-Memeriksa kesiapan eksperimen sebelum inference final:
-
-```bash
-python scripts\run_batch_evaluation.py --preflight-only
-```
-
-Menjalankan batch inference dan evaluasi perbandingan:
-
-```bash
-python scripts\run_batch_evaluation.py --images-dir dataset\images --annotations dataset\annotations.csv
-```
-
-Menjalankan LLM judge image-aware secara blinded dan tiga kali pengulangan melalui 9router lokal:
+Analisis capture tersimpan dijalankan dari backend sebagai satu job untuk satu capture. Runner menunggu job mencapai status terminal sebelum mengirim capture berikutnya:
 
 ```powershell
-$env:NINEROUTER_API_KEY="<secret>"
-python scripts\run_llm_judge.py `
-  --predictions results\final_predictions_active_20260714.csv `
-  --images-dir dataset\final_images `
-  --modes gemma_only depth_only gemma_depth `
-  --model cx/gpt-5.5 `
-  --base-url http://127.0.0.1:20128/v1 `
-  --api-key-env NINEROUTER_API_KEY `
-  --repeats 3
+python scripts/analyze_saved_captures.py
 ```
 
-Judge menerima citra sumber yang dinormalisasi ke JPEG dan dibatasi maksimal 768 piksel sebagai bukti utama, serta anotasi terstruktur sebagai pembanding sekunder. Perintah membutuhkan 9router lokal aktif serta `NINEROUTER_API_KEY`; script berhenti sebelum request bila variabel tersebut tidak tersedia. Jangan menyimpan API key di repo.
+Gunakan `--batch-id <batch_id>` hanya bila backend perlu membatasi analisis pada satu batch tertentu.
 
-Endpoint 9router berada di localhost, tetapi hal itu tidak membuktikan inferensi berlangsung lokal: citra dapat diteruskan ke provider upstream sesuai konfigurasi router. Jalankan hanya pada citra yang izin pemrosesannya mencakup provider tersebut. `cx/gpt-5.5` juga dicatat sebagai label rute/model yang dipakai saat run, bukan otomatis dianggap snapshot provider yang immutable.
+Tab Upload tetap mendukung analisis langsung untuk satu file melalui tombol **Analisis**.
 
-Gunakan `--allow-mock` hanya untuk dry run development. Hasil mock tidak boleh dipakai sebagai hasil eksperimen skripsi final.
+Panel kalibrasi memakai lima jarak (20, 60, 100, 150, dan 200 cm) dengan 30 pembacaan berpasangan per jarak. Setelah 150 pembacaan valid, profil koreksi dibekukan. Verifikasi dilakukan pada jarak baru 40, 80, 125, dan 175 cm dengan 30 pembacaan per jarak (120 pasangan) untuk mengevaluasi rentang 20–200 cm. Hasil verifikasi disimpan terpisah dan tidak membentuk ulang koefisien. Klaim kinerja sampai 200 cm hanya dibuat setelah seluruh titik verifikasi lengkap dan memenuhi kriteria evaluasi.
 
-Smoke test dengan server sementara dan mock eksplisit:
+Tidak ada pemilih metode, peta jarak visual, atau jarak yang dilekatkan pada objek bernama.
 
-```bash
-python scripts\smoke_test.py --start-server
-```
+## API utama
 
-## Testing
+- `POST /analyze`: menerima citra dan metadata capture; menghasilkan deskripsi dan evidence sensor bila tersedia.
+- `POST /captures`: menyimpan gambar, sensor evidence, dan metadata tanpa menjalankan Gemma.
+- `GET /captures` dan `GET /captures/count`: membaca capture tersimpan dari backend.
+- `POST /captures/{capture_id}/analysis-jobs`: membuat tepat satu job analisis untuk satu capture tersimpan.
+- `GET /sensor-status`: memeriksa koneksi serta sampel sensor terakhir.
+- `GET /sensor-calibration`: profil, jumlah sampel, dan model koreksi kalibrasi.
+- `POST /sensor-calibration/verification/captures`: menyimpan satu pasangan verifikasi tanpa mengubah kalibrasi.
+- `GET /sensor-calibration/verification`: ringkasan MAE/RMSE mentah dan terkoreksi.
+- `GET /health`: status proses backend.
+- `GET /readiness`: kesiapan dependensi runtime.
 
-```bash
+Field kompatibilitas lama pada response tidak boleh ditafsirkan sebagai fitur aktif. Kontrak aktif dijelaskan pada `docs/architecture.md`.
+
+## Pengujian
+
+```powershell
 python -m pytest -q
 ```
 
-Coverage test saat ini:
+Selain regression test, pengujian fisik wajib:
 
-- API health dan analyze dengan mock.
-- Validasi upload.
-- Preprocessing gambar.
-- Depth region analysis.
-- Fusion rule.
-- Evaluator CSV.
+- mengukur tiap HC-SR04 terhadap `ground_truth_cm` eksternal pada target planar terkendali;
+- menyimpan nilai mentah, kegagalan baca, status, waktu, dan kondisi setup;
+- menilai deskripsi Gemma dengan rubrik terpisah yang tidak memakai nilai sensor sebagai ground truth isi citra.
 
-## Evaluasi
+Template pencatatan tersedia di `docs/sensor_evaluation_template.csv` dan protokol lengkap di `docs/evaluation_protocol.md`.
 
-`dataset/annotations.csv` berisi label manual visual-relatif, bukan ground truth jarak fisik. `results/predictions.csv` berisi output pipeline. `scripts/run_evaluation.py` membandingkan keduanya dan menulis `results/evaluation.csv`.
+## Dokumentasi aktif
 
-Protokol detail tersedia di [docs/evaluation_protocol.md](docs/evaluation_protocol.md).
-Hash dan jumlah baris artefak aktif tersedia di [docs/evaluation_artifact_manifest_20260714.md](docs/evaluation_artifact_manifest_20260714.md).
-Dasar arsitektur, koreksi evaluator, kontrol pasangan, dan trade-off lengkap tersedia di [docs/evidence_constrained_fusion_upgrade_20260714.md](docs/evidence_constrained_fusion_upgrade_20260714.md).
-
-Metrik awal:
-
-- object mention accuracy;
-- position accuracy;
-- object-position joint accuracy;
-- distance category accuracy;
-- obstacle warning accuracy;
-- obstacle precision, recall, F1, dan TP/FP/TN/FN;
-- LLM judge berulang sebagai evaluasi tambahan, bukan ground truth tunggal;
-- average latency.
-
-Jika prediction belum cocok dengan `image_name` di annotation, skor dapat bernilai 0. Itu berarti dataset/prediction belum selaras, bukan hasil eksperimen final.
-
-## Troubleshooting
-
-- Gemma gagal: pastikan LM Studio berjalan, model vision-language sudah loaded, dan `LM_STUDIO_URL` benar.
-- Jika `/health` menampilkan `gemma=model_not_loaded`, buka LM Studio dan load model sesuai `LM_STUDIO_MODEL`.
-- Jika `/health` menampilkan `gemma=error`, LM Studio kemungkinan belum berjalan atau port `LM_STUDIO_URL` belum benar.
-- Depth gagal: pastikan `DEPTH_MODEL_PATH` mengarah ke folder yang berisi file `.onnx`.
-- Untuk demo tanpa model: set `GEMMA_MOCK=true` dan/atau `DEPTH_MOCK=true` secara eksplisit.
-- Jika port 8000 dipakai proses lain, jalankan Uvicorn di port berbeda dan sesuaikan URL smoke test.
-
-## Keterbatasan
-
-- Depth digunakan sebagai estimasi kategori, bukan pengukuran centimeter presisi.
-- Model checkpoint bertipe metric-indoor, sedangkan label evaluasi adalah visual-relative; keluaran tidak diperlakukan sebagai sensor terkalibrasi.
-- Post-processing depth sengaja dibatasi pada grid 3x3 dengan statistik p10; kandidat adaptive bands dihapus setelah eksperimen internal menurunkan obstacle recall dan F1 serta menambah parameter yang harus dipertanggungjawabkan.
-- Output fusion bersifat rule-based, membatasi klaim depth pada level area, dan belum mempunyai object box/mask untuk object-depth grounding.
-- Judge image-aware menambah biaya, latensi, risiko bias visual/rubric, serta risiko privasi bila router meneruskan citra ke provider eksternal.
-- Prototype belum divalidasi untuk penggunaan navigasi nyata.
-- Tidak ada database atau sistem multi-user.
+| Dokumen | Fungsi |
+|---|---|
+| `CONTEXT.md` | istilah dan batas klaim |
+| `instructions/PROJECT_INITIALIZATION.md` | scope akademik dan implementasi |
+| `docs/architecture.md` | arsitektur dan kontrak data |
+| `docs/evaluation_protocol.md` | protokol pengujian terpisah |
+| `docs/DESIGN.md` | aturan UI |
+| `docs/README.md` | indeks dokumen aktif dan historis |

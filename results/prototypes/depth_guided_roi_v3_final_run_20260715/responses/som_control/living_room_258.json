@@ -1,6 +1,0 @@
-{
-  "image_name": "living_room_258.jpg",
-  "condition": "som_control",
-  "content": "{\n  \"marks\": [\n    {\"id\": 1, \"object\": \"plant\"},\n    {\"id\": 2, \"object\": \"rug\"},\n    {\"id\": 3, \"object\": \"potted plant\"}\n  ]\n  ,\"priority_mark_id\": 3\n  ,\n  \"description\": \"Identifikasi objek di dalam kotak MARK 1, 2, dan 3.\"\n}",
-  "latency_ms": 29597
-}

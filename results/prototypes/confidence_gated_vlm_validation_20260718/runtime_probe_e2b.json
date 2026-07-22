@@ -1,9 +1,0 @@
-{
-  "model": "google/gemma-4-e2b",
-  "sample_index": 15,
-  "timeout_seconds": 90.0,
-  "status": "timeout_or_error",
-  "wall_seconds": 20.725786,
-  "error": "Gemma inference failed. Please ensure LM Studio is running and the model is loaded."
-}
-

@@ -1,4 +1,0 @@
-mode,image_count,repeat_count,judge_model,rubric_version,semantic_correctness_mean,spatial_accuracy_mean,groundedness_mean,clarity_mean,overall_mean,mean_within_item_overall_stddev,items_with_nonzero_stddev,items_with_visual_evidence,items_with_critical_errors,paired_overall_diff_vs_gemma_only,paired_bootstrap_95ci_low,paired_bootstrap_95ci_high
-gemma_only,44,3,cx/gpt-5.5,spatial-description-judge-v2-image-aware,3.8788,3.4318,4.0455,4.6667,3.8636,0.1607,15,44,31,0.0000,0.0000,0.0000
-depth_only,44,3,cx/gpt-5.5,spatial-description-judge-v2-image-aware,3.1818,3.1439,3.7652,4.0379,3.3561,0.1393,13,44,33,-0.5076,-0.8258,-0.1742
-gemma_depth,44,3,cx/gpt-5.5,spatial-description-judge-v2-image-aware,3.8561,3.1818,3.8182,4.2576,3.7348,0.1286,12,44,40,-0.1288,-0.3636,0.1212

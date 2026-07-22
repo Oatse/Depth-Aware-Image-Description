@@ -1,5 +1,0 @@
-{
-  "image": "living_room_1p (213).jpg",
-  "condition": "depth_guided",
-  "error": "3 validation errors for MarkedResponse\nmarks\n  Field required [type=missing, input_value={'priority_mark_id': 1, '... '3': 'drawer cabinet'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\ndescription\n  Field required [type=missing, input_value={'priority_mark_id': 1, '... '3': 'drawer cabinet'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/missing\nobjects\n  Extra inputs are not permitted [type=extra_forbidden, input_value={'1': 'coffee table', '2'..., '3': 'drawer cabinet'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
-}

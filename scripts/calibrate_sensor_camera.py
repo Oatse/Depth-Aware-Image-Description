@@ -2,7 +2,7 @@ import argparse
 import json
 from pathlib import Path
 
-from services.sensor_calibration import validate_calibration_measurements
+from services.sensor_calibration import build_calibration_profile
 
 
 def main() -> int:
@@ -11,7 +11,7 @@ def main() -> int:
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     measurements = json.loads(args.measurements.read_text(encoding="utf-8"))
-    result = validate_calibration_measurements(measurements)
+    result = build_calibration_profile(measurements)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(result))

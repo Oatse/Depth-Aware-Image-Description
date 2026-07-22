@@ -1,6 +1,0 @@
-{
-  "image_name": "living_room_131.jpg",
-  "condition": "depth_guided",
-  "content": "{\"priority_mark_id\":1,\"marks\":{\"1\":\"side table\",\"2\":\"armchair\",\"3\":\"vase\"}}",
-  "latency_ms": 2663
-}

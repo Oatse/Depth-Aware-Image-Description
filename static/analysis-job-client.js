@@ -17,15 +17,26 @@
     return submitAndPoll("/analysis-jobs", formData, options);
   }
 
-  async function compare(formData, options = {}) {
-    return submitAndPoll("/analysis-comparisons", formData, options);
+  async function fetchBackend(url, options, attempts = 1, retryDelayMs = 0) {
+    for (let attempt = 1; attempt <= attempts; attempt += 1) {
+      try {
+        return await global.fetch(url, options);
+      } catch (_error) {
+        if (attempt < attempts) {
+          await wait(retryDelayMs);
+        }
+      }
+    }
+    throw new Error(
+      "Tidak dapat menghubungi backend. Pastikan halaman dibuka dari URL server yang aktif dan koneksi Wi-Fi tetap tersambung.",
+    );
   }
 
   async function submitAndPoll(endpoint, formData, options = {}) {
     const pollIntervalMs = options.pollIntervalMs || 400;
     const timeoutMs = options.timeoutMs || 300000;
     const startedAt = Date.now();
-    const acceptedResponse = await fetch(endpoint, {
+    const acceptedResponse = await fetchBackend(endpoint, {
       method: "POST",
       body: formData,
     });
@@ -35,7 +46,7 @@
     }
 
     while (Date.now() - startedAt < timeoutMs) {
-      const statusResponse = await fetch(accepted.poll_url);
+      const statusResponse = await fetchBackend(accepted.poll_url, undefined, 3, pollIntervalMs);
       const status = await parseJson(statusResponse);
       if (!statusResponse.ok) {
         throw new Error(status.error || "Status analisis tidak dapat dibaca.");
@@ -51,5 +62,5 @@
     throw new Error("Analisis melewati batas tunggu lima menit.");
   }
 
-  global.AnalysisJobClient = Object.freeze({ analyze, compare });
+  global.AnalysisJobClient = Object.freeze({ analyze });
 })(window);

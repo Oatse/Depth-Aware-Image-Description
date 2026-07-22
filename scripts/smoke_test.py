@@ -5,6 +5,7 @@ import subprocess
 import sys
 import time
 from pathlib import Path
+from urllib.parse import urlsplit
 
 import requests
 from PIL import Image
@@ -18,13 +19,15 @@ def main() -> None:
 
     process = None
     if args.start_server:
+        parsed_url = urlsplit(args.base_url)
+        host = parsed_url.hostname or "127.0.0.1"
+        port = parsed_url.port or 8000
         env = {
             **os.environ,
             "GEMMA_MOCK": "true",
-            "DEPTH_MOCK": "true",
         }
         process = subprocess.Popen(
-            [sys.executable, "-m", "uvicorn", "app.main:app", "--host", "127.0.0.1", "--port", "8000"],
+            [sys.executable, "-m", "uvicorn", "app.main:app", "--host", host, "--port", str(port)],
             env=env,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
@@ -38,7 +41,7 @@ def main() -> None:
         analyze = requests.post(
             f"{args.base_url}/analyze",
             files={"image": ("sample.jpg", image_bytes, "image/jpeg")},
-            data={"mode": "gemma_depth", "save_result": "false"},
+            data={"mode": "sensor_assisted", "save_result": "false"},
             timeout=30,
         )
         analyze.raise_for_status()

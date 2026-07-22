@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import StrEnum
-from typing import Any
+from typing import Any, TypedDict
 
 
 class SensorEvidenceStatus(StrEnum):
@@ -16,9 +16,25 @@ class SensorEvidenceStatus(StrEnum):
 
 class SensorContributionStatus(StrEnum):
     APPLIED = "applied"
+    PARTIAL = "partial"
     CONFLICT = "conflict"
     INSUFFICIENT = "insufficient"
     NOT_APPLICABLE = "not_applicable"
+
+
+class SensorContribution(TypedDict):
+    status: SensorContributionStatus | str
+    reason_code: str | None
+    sensor_1_cm: float | None
+    sensor_2_cm: float | None
+    sensor_1_corrected_cm: float | None
+    sensor_2_corrected_cm: float | None
+    frontal_reference_cm: float | None
+    pair_disagreement_cm: float | None
+    calibration_status: str
+    calibration_version: str | None
+    description: str
+    warnings: list[str]
 
 
 @dataclass(frozen=True, slots=True)
@@ -36,8 +52,6 @@ class SensorSample:
             raise ValueError("distance_cm must be non-negative")
         if self.received_time_ms < 0:
             raise ValueError("received_time_ms must be non-negative")
-        if self.age_ms < 0:
-            raise ValueError("age_ms must be non-negative")
 
 
 @dataclass(frozen=True, slots=True)

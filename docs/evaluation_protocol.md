@@ -1,157 +1,187 @@
-# Evaluation Protocol
+# Protokol Pengujian Bridge-Gap
 
-Dokumen ini menjelaskan prosedur evaluasi prototype depth-aware image description untuk kebutuhan skripsi.
+Protokol ini memisahkan evaluasi deskripsi Gemma dari evaluasi HC-SR04. Pemisahan diperlukan karena cone sensor tidak mempunyai pengikatan spasial ke objek atau piksel dalam citra.
 
-## Tujuan Evaluasi
+## 1. Pertanyaan evaluasi
 
-Evaluasi bertujuan membandingkan tiga mode aktif:
+1. Apakah prototipe menghasilkan deskripsi indoor berbahasa Indonesia yang sesuai dan jelas?
+2. Berapa error pembacaan setiap HC-SR04 terhadap jarak fisik eksternal pada target planar terkendali?
+3. Apakah pipeline mempertahankan provenance serta menerapkan status evidence dan gate pasangan secara benar?
 
-1. `gemma_only`: Gemma Baseline, yaitu deskripsi visual dan relasi spasial kualitatif dari Gemma tanpa metadata depth eksplisit.
-2. `depth_only`: ringkasan depth tanpa pemahaman semantik Gemma.
-3. `gemma_depth`: deskripsi visual Gemma yang digabungkan dengan depth summary melalui fusi regional berbatas bukti.
+Tidak ada pertanyaan evaluasi tentang akurasi metrik objek yang disebut Gemma.
 
-Pertanyaan yang diuji: apakah informasi depth memberi metadata kedalaman relatif yang cocok dengan label lokal, dan apakah kebijakan fusi berbatas bukti mengurangi klaim visual yang tidak didukung dibanding kebijakan verbose lama. Evaluasi ini tidak mengasumsikan peningkatan dan tidak boleh dibaca sebagai pembuktian bahwa Gemma tidak mampu memahami gambar.
+## 2. Eksperimen sensor
 
-## Dataset
+### 2.1 Setup
 
-Dataset eksperimen final disimpan di `dataset/final_images/` dan anotasi final di `dataset/final_annotations.csv`. Dataset tersebut berisi 44 citra. Path `dataset/images/` dan `dataset/annotations.csv` tetap tersedia untuk baseline lama/development dan tidak boleh tertukar dengan artefak final ketika menulis Bab 4.
+- pasang dua HC-SR04 pada dudukan tetap dan sejajar;
+- gunakan pembagi tegangan atau level shifter pada pin ECHO ke ESP32;
+- picu sensor bergantian untuk mengurangi interferensi;
+- gunakan target planar dengan ukuran, material, dan orientasi yang dicatat;
+- ukur jarak referensi menggunakan meteran/alat ukur eksternal dari bidang referensi kamera ke bidang target;
+- simpan nilai tersebut sebagai `ground_truth_cm`;
+- tandai bidang referensi kamera dan muka akustik sensor pada dudukan;
+- catat offset tetap `camera_sensor_offset_cm = 3.0`, yaitu jarak antara bidang referensi kamera dan muka sensor akibat ketebalan kerangka prototipe serta dudukan/kerangka sensor;
+- jaga sudut target, tinggi, pencahayaan, dan posisi perangkat selama satu seri.
+- gunakan alat ukur untuk menetapkan jarak, lalu keluarkan alat ukur dari bidang pandang sebelum capture tanpa mengubah zoom atau framing.
 
-Endpoint `/experiment-status` memakai path `EXPERIMENT_*` dan mengembalikan `artifact_profile` serta `artifact_paths`. Verifikasi field tersebut sebelum menyalin readiness atau metrik ke laporan.
+`ground_truth_cm` dan bacaan mentah sensor mempunyai titik nol berbeda. Selaraskan keduanya dengan:
 
-Jumlah minimal untuk eksperimen awal:
+```text
+sensor_face_ground_truth_cm = ground_truth_cm - 3.0
+camera_reference_from_raw_cm = sensor_raw_cm + 3.0
+```
 
-- 30 gambar indoor untuk baseline.
-- 50-100 gambar untuk hasil yang lebih stabil.
+Contoh: target pada 50 cm dari bidang referensi kamera berada 47 cm dari muka sensor, sehingga pembacaan mentah ideal adalah sekitar 47 cm. Offset 3 cm merupakan transformasi geometri, bukan error intrinsik sensor. Pembacaan sensor lain tidak boleh dipakai sebagai ground truth.
 
-Skenario yang disarankan:
+Profil kalibrasi aktif dibentuk langsung terhadap `ground_truth_cm` beracuan kamera. Dengan demikian, nilai terkoreksi sudah berada pada acuan kamera dan **tidak boleh** ditambah 3 cm lagi. Jika pada masa depan profil dibentuk terhadap titik nol muka sensor, metadata profil wajib menyatakannya dan konversi ke acuan kamera dilakukan tepat satu kali.
 
-- Objek dekat di area depan.
-- Jalur tengah kosong.
-- Objek dominan di kiri.
-- Objek dominan di kanan.
-- Objek kecil di lantai.
-- Objek besar seperti kursi, meja, lemari, atau pintu.
-- Kondisi terang dan redup.
-- Variasi kedekatan visual relatif: objek sangat dominan di foreground, objek dekat di area depan, objek sedang, serta objek atau struktur jauh di latar.
+### 2.2 Titik dan ulangan
 
-## Format Anotasi
+Tetapkan titik jarak sebelum pengambilan data. Protokol aktif menggunakan:
 
-Kolom wajib:
+- kalibrasi pada 20, 60, 100, 150, dan 200 cm;
+- 30 pembacaan berpasangan pada setiap jarak kalibrasi (150 pasangan);
+- verifikasi pada 40, 80, 125, dan 175 cm sebagai titik baru dalam rentang evaluasi penelitian sampai 200 cm;
+- 30 pembacaan berpasangan pada setiap jarak verifikasi (120 pasangan).
+
+Data kalibrasi membentuk koreksi linear terpisah untuk Sensor 1 dan Sensor 2. Data verifikasi disimpan terpisah, memakai versi profil yang sudah dibekukan, dan tidak boleh mengubah koefisien koreksi.
+
+Titik kalibrasi 150 dan 200 cm tetap menjadi bagian pembentukan profil, sedangkan bukti generalisasi pada rentang atas diperoleh dari titik verifikasi baru 125 dan 175 cm. Klaim kinerja sampai 200 cm hanya dibuat jika keempat titik verifikasi lengkap dan memenuhi kriteria evaluasi.
+
+Jangan melaporkan residual pada data kalibrasi saja sebagai bukti generalisasi.
+
+### 2.3 Data yang dicatat
+
+- `capture_id`;
+- `target_id`, material, ukuran, dan sudut;
+- `ground_truth_cm` beracuan pada kamera;
+- `camera_sensor_offset_cm` dan `sensor_face_ground_truth_cm`;
+- `sensor_1_cm` dan `sensor_2_cm`;
+- nilai terkoreksi Sensor 1 dan Sensor 2 serta versi profil kalibrasi;
+- status tiap sampel;
+- received time, age, dan match time;
+- `pair_disagreement_cm`;
+- status evidence dan reason code;
+- `frontal_reference_cm` hanya bila paired;
+- suhu ruangan bila diukur;
+- error/kegagalan teknis.
+
+### 2.4 Metrik
+
+Untuk tiap sensor `s` dan observasi `i`, bedakan error mentah yang sudah disejajarkan titik nolnya dari error nilai terkoreksi:
+
+```text
+sensor_face_ground_truth_i = ground_truth_i - camera_sensor_offset_cm
+raw_error_i,s = sensor_i,s - sensor_face_ground_truth_i
+corrected_error_i,s = sensor_corrected_i,s - ground_truth_i
+raw_MAE_s = mean(abs(raw_error_i,s))
+raw_Bias_s = mean(raw_error_i,s)
+raw_RMSE_s = sqrt(mean(raw_error_i,s^2))
+corrected_MAE_s = mean(abs(corrected_error_i,s))
+corrected_Bias_s = mean(corrected_error_i,s)
+corrected_RMSE_s = sqrt(mean(corrected_error_i,s^2))
+```
+
+Hitung dan beri label metrik mentah menggunakan `raw_error_i,s`, lalu metrik terkoreksi menggunakan `corrected_error_i,s`. Perbandingan langsung `sensor_i,s - ground_truth_i` mencampurkan error sensor dengan offset geometri 3 cm dan hanya boleh dilaporkan sebagai selisih terhadap acuan kamera, bukan sebagai error intrinsik HC-SR04.
+
+Laporkan pula median absolute error, simpangan baku bila jumlah sampel memadai, valid-read rate, jumlah missing, serta hasil per titik jarak. Untuk pasangan, laporkan distribusi `pair_disagreement_cm` dan proporsi setiap status evidence.
+
+Metrik `frontal_reference_cm` boleh dilaporkan sebagai ringkasan pipeline paired, tetapi tidak menggantikan hasil individual dua sensor.
+
+### 2.5 Interpretasi
+
+- error mengukur perbedaan sensor terhadap target planar pada setup tersebut;
+- hasil tidak otomatis berlaku pada material, sudut, atau ukuran target lain;
+- rata-rata pasangan tidak dikaitkan dengan objek pada citra;
+- threshold disagreement adalah gate kualitas aplikasi, bukan hukum fisik universal;
+- koreksi hanya dipakai jika residual validasi menunjukkan perbaikan dan batas penggunaannya dicatat.
+
+## 3. Eksperimen deskripsi Gemma
+
+### 3.1 Unit uji
+
+Satu unit uji memuat citra sumber, prompt, respons mentah, deskripsi yang ditampilkan, latency, dan error. Dataset, kriteria inklusi/eksklusi, serta versi model dikunci sebelum penilaian utama.
+
+### 3.2 Rubrik
+
+| Aspek | Pertanyaan penilaian |
+|---|---|
+| Kesesuaian objek | Apakah objek yang disebut terlihat pada citra? |
+| Posisi relatif | Apakah hubungan kiri/kanan/depan/belakang yang disebut didukung citra? |
+| Kejelasan | Apakah kalimat mudah dipahami? |
+| Naturalness | Apakah Bahasa Indonesia terdengar wajar? |
+| Kelengkapan scene | Apakah unsur penting scene dijelaskan? |
+| Klaim tidak didukung | Apakah deskripsi menambahkan fakta yang tidak tampak? |
+
+Definisi setiap skala ditulis sebelum scoring. Jika memakai lebih dari satu penilai, laporkan prosedur penyelesaian perbedaan dan ukuran agreement yang sesuai. Jika tidak ada penilai manusia independen, nyatakan keterbatasan tersebut.
+
+### 3.3 Larangan pencampuran label
+
+- `ground_truth_cm` sensor tidak menjadi label metrik objek Gemma;
+- angka sensor tidak digunakan untuk menilai kesesuaian nama objek;
+- skor deskripsi tidak digabung dengan MAE sensor menjadi satu skor akurasi;
+- teks kontribusi sensor dinilai sebagai kepatuhan format/provenance, bukan pemahaman visual Gemma.
+
+## 4. Pengujian integrasi
+
+Skenario minimum:
+
+1. paired valid dan konsisten menghasilkan rata-rata serta kalimat referensi frontal;
+2. partial menyimpan satu nilai tanpa rata-rata pasangan;
+3. pair conflict menyimpan dua nilai dan menahan rata-rata;
+4. stale menahan kontribusi angka;
+5. kamera depan menghasilkan direction mismatch;
+6. sensor unavailable tidak menggagalkan deskripsi visual;
+7. Gemma gagal menghasilkan error eksplisit;
+8. capture ID, timestamp, status, dan reason code tersimpan pada log.
+
+Untuk base case paired, verifikasi:
+
+```text
+camera_sensor_offset_cm == 3.0
+sensor_face_ground_truth_cm == ground_truth_cm - camera_sensor_offset_cm
+sensor_1_corrected_cm = intercept_1 + slope_1 * sensor_1_cm
+sensor_2_corrected_cm = intercept_2 + slope_2 * sensor_2_cm
+frontal_reference_cm == round((sensor_1_corrected_cm + sensor_2_corrected_cm) / 2, presisi_aplikasi)
+pair_disagreement_cm == abs(sensor_1_cm - sensor_2_cm)
+```
+
+Jangan menerapkan `frontal_reference_cm + 3.0` karena profil aktif sudah menghasilkan nilai beracuan kamera.
+
+Keberhasilan koreksi dinilai pada data verifikasi: MAE koreksi harus lebih kecil daripada MAE mentah dan residual maksimum koreksi tidak melewati gate 10 cm. Nilai training pada data kalibrasi tidak boleh dilaporkan sebagai hasil verifikasi.
+
+## 5. Format pencatatan
+
+Gunakan `sensor_evaluation_template.csv` untuk eksperimen fisik. Untuk evaluasi deskripsi, kolom minimum:
 
 ```csv
-image_name,main_object,object_position,distance_annotation_basis,annotation_confidence,distance_category,has_obstacle,front_area_status,safer_direction,notes
+capture_id,image_name,prompt_version,model_id,raw_response,description,object_consistency,spatial_consistency,clarity,naturalness,scene_completeness,unsupported_claims,total_latency_ms,error
 ```
 
-`distance_annotation_basis` diisi `visual_relative` untuk menegaskan bahwa kategori jarak berasal dari anotasi visual relatif terhadap perspektif kamera. Kolom ini bukan hasil pengukuran fisik, bukan output sensor, dan bukan ground truth meter aktual.
+Nilai mentah tidak boleh diubah untuk memperbaiki tampilan hasil. Baris gagal tetap disimpan.
 
-`annotation_confidence` berisi `high`, `medium`, atau `low` sesuai tingkat keyakinan anotator. Nilai `low` digunakan ketika objek, area relatif lapang, atau potensi halangan sulit diputuskan dari citra.
+## 6. Analisis Bab IV
 
-Kategori jarak relatif:
+Urutan yang disarankan:
 
-- `sangat_dekat`: objek relevan sangat dominan pada foreground atau bagian bawah-depan citra dan tampak sangat dekat dari perspektif kamera.
-- `dekat`: objek relevan berada di area depan dan berpotensi menjadi halangan visual.
-- `sedang`: objek relevan terlihat jelas, tetapi tidak mendominasi foreground dan masih menyisakan ruang visual di sekitarnya.
-- `jauh`: objek atau struktur dominan berada di latar atau tidak menjadi potensi halangan dekat.
+1. hasil implementasi dan black-box alur utama;
+2. hasil deskripsi Gemma beserta contoh keberhasilan/kegagalan;
+3. hasil sensor 1 dan sensor 2 terhadap ground truth;
+4. hasil klasifikasi evidence dan sinkronisasi;
+5. keterbatasan cone sensor, setup, dataset, penilai, dan perangkat.
 
-## Prosedur Eksperimen
+Setiap tabel dijelaskan dengan jumlah sampel, missing data, satuan, dan batas interpretasi.
 
-1. Masukkan gambar ke `dataset/images/`.
-2. Buat atau lengkapi `dataset/annotations.csv`.
-3. Pastikan LM Studio berjalan dan model Gemma loaded.
-4. Pastikan `DEPTH_MODEL_PATH` mengarah ke folder ONNX Depth Anything.
-5. Jalankan preflight eksperimen:
+## 7. Kriteria kelengkapan
 
-```bash
-python scripts\run_batch_evaluation.py --preflight-only
-```
+Pengujian siap dilaporkan ketika:
 
-Preflight harus lulus sebelum hasil dipakai untuk Bab 4. Pemeriksaan ini memastikan:
-
-- folder gambar tidak kosong;
-- setiap gambar memiliki anotasi;
-- setiap baris anotasi memiliki file gambar yang sesuai;
-- kolom anotasi wajib tersedia;
-- mock runtime tidak aktif untuk eksperimen final;
-- model depth tersedia;
-- Gemma di LM Studio sudah siap jika mode memakai Gemma.
-
-Untuk dry run development, mock boleh dipakai hanya dengan flag eksplisit:
-
-```bash
-python scripts\run_batch_evaluation.py --preflight-only --allow-mock
-```
-
-Hasil dry run mock tidak boleh digunakan sebagai hasil eksperimen final.
-
-6. Jalankan batch evaluation:
-
-```bash
-python scripts\run_batch_evaluation.py --images-dir dataset\images --annotations dataset\annotations.csv
-```
-
-Untuk eksperimen final 44 citra, gunakan path eksplisit dan nama output baru agar artefak lama tidak tertimpa:
-
-```bash
-python scripts\run_batch_evaluation.py --images-dir dataset\final_images --annotations dataset\final_annotations.csv --predictions results\final_predictions_<tanggal>.csv --output results\final_evaluation_<tanggal>.csv
-```
-
-Secara default, batch evaluation menjalankan `gemma_only`, `depth_only`, dan `gemma_depth`. Untuk evaluasi parsial/resumable, gunakan:
-
-```bash
-python scripts\run_resumable_evaluation.py --limit-jobs 2
-```
-
-7. Baca output:
-
-- `results/predictions.csv`
-- `results/evaluation.csv`
-- `results/depth_maps/`
-
-## Metrik
-
-Metrik otomatis awal:
-
-- object accuracy dari field terstruktur `main_object` saja;
-- position accuracy dari field terstruktur `object_position` saja;
-- object-position joint accuracy, yang benar hanya bila objek dan posisinya sama-sama cocok;
-- distance category accuracy, hanya berlaku untuk mode yang menghasilkan metadata depth;
-- obstacle warning accuracy, hanya berlaku untuk mode yang menghasilkan metadata depth;
-- obstacle precision, recall, F1 positif, serta confusion matrix TP/FP/TN/FN untuk mode depth;
-- average latency.
-
-Pada `gemma_only`, distance category accuracy dan obstacle warning accuracy ditulis sebagai N/A karena mode tersebut tidak mengekstrak metadata depth eksplisit. Pada `depth_only`, object accuracy, position accuracy, dan object-position joint accuracy ditulis sebagai N/A karena mode tersebut tidak menghasilkan prediksi semantik objek. Teks bebas `final_description` tidak dipakai untuk mengoreksi field terstruktur; aturan lama itu menyebabkan kebocoran karena kata area yang ditambahkan fusion dapat dikreditkan sebagai posisi objek.
-
-F1 obstacle memakai kelas positif `has_obstacle=yes`. Accuracy tetap dilaporkan karena mudah dipahami, sedangkan precision, recall, dan F1 diperlukan agar ketidakseimbangan kelas dan trade-off false positive/false negative terlihat. Confusion matrix wajib ikut ditampilkan; F1 tunggal tanpa TP/FP/TN/FN mudah disalahartikan.
-
-Dataset final tidak memiliki `reference_description` independen. Karena itu, evaluasi leksikal berbasis reference caption tidak dilaporkan; kolom `notes` tidak boleh dialihfungsikan karena dibuat sebagai catatan anotasi, bukan deskripsi referensi dengan protokol konsisten.
-
-LLM-as-a-Judge dijalankan terpisah memakai `scripts/run_llm_judge.py`. Judge menerima citra sumber yang dinormalisasi ke JPEG dan dibatasi maksimal 768 piksel sebagai bukti visual utama, anotasi terstruktur sebagai pembanding sekunder, dan kandidat deskripsi. Nama mode dibutakan, output memakai JSON schema, model dan versi rubric dicatat, setiap kandidat dinilai tiga kali, simpangan baku dilaporkan, dan respons di-cache. `temperature=0` digunakan untuk mengurangi variasi, bukan menjamin hasil deterministik. Judge tetap bukan ground truth dan tidak menggantikan penilaian manusia.
-
-Tidak ada lagi skor kualitas deskripsi buatan 1-5. Tanpa reference caption atau penilai independen, skor tersebut hanya mengodekan preferensi panjang/format yang ditulis pengembang. Kualitas teks dievaluasi terpisah melalui image-aware judge dan, bila tersedia, penilaian manusia dengan rubric yang ditetapkan sebelum melihat keluaran mode.
-
-## Interpretasi
-
-Perbandingan `gemma_depth` dengan `gemma_only` harus memisahkan metadata depth, semantik objek, dan kualitas bahasa. Evaluator ketat tidak boleh menganggap region depth sebagai posisi objek. Hasil image-aware judge dan kontrol kebijakan fusion dilaporkan sebagai eksperimen tambahan; hasil tersebut tidak boleh ditulis sebagai peningkatan kualitas teks universal tanpa bukti berpasangan yang mendukungnya.
-
-Pada kontrol kebijakan 44 pasangan, fusi berbatas bukti memperoleh overall 3,9015 dibanding verbose lama 3,7045; groundedness 3,9621 dibanding 3,7803; dan clarity 4,4545 dibanding 4,2879. Interval bootstrap snapshot tidak memotong nol untuk tiga metrik tersebut. Hasil ini mendukung pemilihan kebijakan aktif pada dataset dan judge yang dilaporkan, tetapi tidak membuktikan generalisasi atau kesetaraan dengan human rating.
-
-Deskripsi akhir mode depth-aware menyebut area terdekat dan, hanya untuk kategori `dekat` atau `sangat_dekat`, potensi halangan visual pada area tersebut. Ia tidak menyatakan bahwa objek yang disebut Gemma berada pada kedalaman itu. Bahasa tetap guarded, misalnya "area tengah-kiri berpotensi menjadi halangan visual", bukan klaim pasti seperti "kursi itu berjarak dekat", "jalan terhalang", atau "area aman".
-
-Label area seperti `tengah-kiri` dan `bawah-tengah` dibaca dari grid 3x3 aplikasi. Depth model menghasilkan peta kedalaman kontinu; grid 3x3 adalah post-processing untuk membuat region lebih mudah dianalisis dan dibandingkan dengan anotasi.
-
-Post-processing aktif hanya memakai grid 3x3 dengan statistik persentil ke-10 (`grid_p10`). Kandidat adaptive bands tidak dipertahankan: pada pemeriksaan 44 citra, obstacle recall turun dari 0,8519 menjadi 0,6667 dan F1 dari 0,8679 menjadi 0,7826. Hasil tersebut hanya menjadi dasar keputusan penyederhanaan, bukan fitur atau klaim kontribusi penelitian.
-
-Jika mode depth-aware tidak meningkatkan object accuracy, itu wajar karena depth module tidak bertugas mengenali objek. Kontribusi utama depth seharusnya terlihat pada kategori kedalaman relatif, status area depan, area relatif lapang, dan kualitas deskripsi spasial.
-
-## Batasan
-
-- Depth map adalah estimasi monocular depth, bukan sensor jarak.
-- Kategori jarak relatif pada anotasi tidak merepresentasikan pengukuran meter aktual.
-- Threshold depth model perlu dikalibrasi terhadap kategori visual relatif pada dataset lokal.
-- Model yang dipakai adalah varian metric-indoor, tetapi label dataset merupakan kategori visual relatif dan bukan ground truth meter; evaluasi menguji transformasi output model menjadi kategori lokal, bukan akurasi kedalaman metrik.
-- Evaluasi otomatis pada label semantik memakai pencocokan field terstruktur yang ketat; ia tidak menggantikan penilaian manual dan tidak menangani sinonim tanpa kamus yang dipraregistrasikan.
-- LLM judge telah melihat citra, tetapi tetap bergantung pada provider/model eksternal dan dapat memiliki bias, salah membaca visual, serta variasi antar-pengulangan.
-- Endpoint router lokal tidak membuktikan inferensi lokal; citra dapat diteruskan ke provider upstream. Hak pemrosesan dan kebijakan privasi provider harus diverifikasi sebelum run.
-- Label rute `cx/gpt-5.5` tidak diperlakukan sebagai snapshot immutable tanpa bukti resolusi model dari provider; tanggal, konfigurasi router, dan label model harus disimpan bersama hasil.
-- Dataset final 44 citra adalah proof-of-concept lokal; tidak mendukung generalisasi populasi atau klaim lintas bangunan/perangkat.
-- Prototype tidak diklaim sebagai alat navigasi aman.
+1. protokol, titik jarak, target, dan alat ukur dicatat;
+2. setiap baris sensor mempunyai `ground_truth_cm` eksternal atau alasan missing;
+3. nilai kedua sensor tidak diganti oleh rata-rata saja;
+4. seluruh status evidence diuji;
+5. dataset serta rubrik deskripsi tersedia;
+6. raw response, error, dan kegagalan dipertahankan;
+7. hasil sensor dan hasil deskripsi disajikan terpisah;
+8. kesimpulan tidak melewati data yang tersedia.

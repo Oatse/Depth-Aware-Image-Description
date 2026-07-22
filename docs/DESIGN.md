@@ -1,155 +1,121 @@
-# Depth-Aware Image Description Design System
+# Design System Bridge-Gap
 
-## 1. Atmosphere & Identity
+## 1. Prinsip antarmuka
 
-Antarmuka ini memakai gaya experiment setup form yang bersih: satu halaman putih penuh, title ringkas di kiri atas, dropzone gambar besar sebagai fokus utama, lalu controls analisis di bawahnya. Initial state harus terasa seperti form upload riset yang jelas, bukan prompt text/chat input dan bukan card putih di dalam card lain.
+UI menyediakan satu alur capture/upload dan satu hasil deskripsi. Referensi sensor tampil sebagai evidence tambahan yang provenance-nya dapat diperiksa.
 
-UI ini bukan aplikasi navigasi. Semua copy harus membingkai keluaran sebagai experimental output, depth-based observation, nearest region detected, atau more open area indication.
+- deskripsi gambar menjadi elemen utama;
+- tidak ada pemilih metode atau hasil paralel;
+- angka sensor tidak dikaitkan dengan objek bernama;
+- status tidak tersedia atau konflik terlihat jelas;
+- detail teknis tidak mengganggu alur utama.
 
-## 2. Color
+## 2. Tata letak
 
-### Palette
+### Sebelum analisis
 
-| Role | Token | Value | Usage |
-|------|-------|-------|-------|
-| Canvas | --canvas | #fbfaf8 | Background halaman penuh |
-| Surface | --surface | #ffffff | Prompt box, cards, details |
-| Surface/soft | --surface-soft | #f4f2ef | Hover, technical tiles |
-| Dropzone | --dropzone | #fbfaf7 | Area upload berpola titik |
-| Ink | --ink | #18151f | Teks utama |
-| Ink/soft | --ink-soft | #595664 | Body sekunder |
-| Ink/muted | --ink-muted | #8a8793 | Helper dan metadata |
-| Line | --line | #e9e5df | Border halus |
-| Line/strong | --line-strong | #d8d3ca | Border dropzone |
-| Accent | --accent | #6f3cc3 | Action dan orb |
-| Accent/dark | --accent-dark | #4a238d | Label aktif |
-| Accent/soft | --accent-soft | #f1eafa | Icon chip |
-| Panel/dark | --panel | #191622 | Final description dan depth insight |
-| Error | --error | #a23a32 | Inline error |
-| Status/ready | --status-ready | #4f8b63 | Dot dan label system online |
-| Status/warning | --status-warning | #b9843a | Dot dan label system check |
+1. header ringkas;
+2. area kamera atau upload;
+3. preview citra;
+4. status backend, Gemma, dan sensor;
+5. tombol **Analisis Gambar**.
 
-### Rules
+### Setelah analisis
 
-- Initial state dominan putih/off-white, bukan ilustrasi besar, dashboard padat, atau nested container.
-- Accent ungu digunakan sangat sedikit: orb, tombol analyze, dan state aktif.
-- Area upload harus tampak seperti dropzone media: dotted pattern, ikon media/plus, instruksi peletakan gambar, dan format file.
-- Result boleh memakai panel gelap untuk hierarki, tetapi hanya setelah analisis berjalan.
-- Detail teknis, raw JSON, dan depth map tetap collapsed secara default.
+1. deskripsi gambar;
+2. citra sumber;
+3. kartu referensi sensor frontal;
+4. ringkasan latency;
+5. detail teknis dalam accordion.
 
-## 3. Typography
+## 3. Komponen
 
-### Scale
+### Capture/Upload
 
-| Level | Size | Weight | Line Height | Usage |
-|-------|------|--------|-------------|-------|
-| Display | clamp(1.35rem, 3vw, 2.2rem) | 760 | 1.14 | Judul initial state |
-| H2 | 1rem | 720 | 1.35 | Heading panel |
-| Body/lg | clamp(1rem, 2vw, 1.25rem) | 500 | 1.62 | Final description |
-| Body | 1rem | 450 | 1.62 | Text default |
-| Body/sm | 0.82rem-0.88rem | 450 | 1.5 | Helper, disclaimer |
-| Caption | 0.72rem | 760 | 1.4 | Label kecil, metric label |
-| Mono | 0.82rem-0.88rem | 650 | 1.45 | Latency, JSON, region code |
+- menerima JPG, PNG, atau WebP;
+- kamera belakang menjadi arah capture yang sesuai dengan sensor;
+- preview harus sama dengan frame yang dikirim;
+- loading mencegah request ganda.
 
-### Font Stack
+### System Status
 
-- Primary: "Plus Jakarta Sans", "Geist", "Segoe UI", system-ui, sans-serif.
-- Mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace.
+Menampilkan status Backend, Gemma, dan Sensor. Rincian koneksi dibuka melalui popover atau panel detail.
 
-## 4. Spacing & Layout
+### Deskripsi Gambar
 
-### Layout Tokens
+- menjadi panel utama setelah analisis;
+- menggunakan Bahasa Indonesia yang jelas;
+- menjelaskan objek dan konteks scene berdasarkan citra;
+- tidak menyisipkan angka sensor ke objek bernama.
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| --radius-lg | 14px | Result dan panel besar |
-| --radius-md | 10px | Cards dan accordion |
-| --radius-sm | 7px | Prompt, controls |
-| --shadow-soft | 0 18px 54px rgba(31, 28, 36, 0.07) | Result atau surface penting |
+### Referensi Sensor Frontal
 
-### Rules
+Base case `paired` menampilkan:
 
-- Page width: full white page, inner content max width 1168px.
-- Desktop initial state: title, dropzone image, controls, floating system status pill, disclaimer.
-- No sidebar. No large decorative background in the initial state.
-- No outer canvas/card wrapping the full page.
-- Mobile: full-width white canvas, single column, no horizontal scroll.
+- Sensor 1;
+- Sensor 2;
+- Referensi frontal berupa rata-rata kedua nilai;
+- status “Paired”.
 
-## 5. Components
+Keterangan wajib menggunakan bentuk “Referensi sensor frontal sekitar X cm”. Pada `partial`, tampilkan hanya sensor yang tersedia tanpa rata-rata. Pada `pair_conflict`, `stale`, `direction_mismatch`, atau `unavailable`, tampilkan status dan alasan tanpa angka rata-rata pada narasi hasil.
 
-### Minimal Header
-- **Structure**: small abstract mark + console label.
-- **Purpose**: identity only, not navigation.
-- **Rule**: no sidebar, no dense nav.
+### Detail Teknis
 
-- **Structure**: large dotted upload area, media/plus icon, browse copy, accepted image formats, mode select, camera button, analyze button, compare action.
-- **States**: empty, drag-over, image selected, invalid file, loading disabled, camera preview.
-- **Accessibility**: file input tied to label, visible focus, named buttons.
-- **Interaction**: click opens native file picker; drag-and-drop accepts the first JPG, PNG, or WebP file and shows the same selected preview state as manual upload.
-- **Rule**: must not read as a text input or chat prompt.
+Accordion tertutup secara default dapat menampilkan:
 
-### System Status Pill
-- **Structure**: small floating pill at top-right with a green or amber dot and short readiness summary.
-- **Interaction**: click opens a compact popover with Backend, Gemma, and Depth readiness; outside click closes it.
-- **Purpose**: keep operational checks available without adding visual noise inside the upload form.
-- **Surface**: white background, subtle border, soft shadow only for the floating layer.
+- `capture_id`;
+- nilai setiap sensor;
+- `received_time_ms` dan `age_ms`;
+- `pair_disagreement_cm`;
+- `match_time_source`;
+- arah kamera;
+- status dan `reason_code`;
+- latency serta respons mentah Gemma;
+- error teknis.
 
-### Final Description Card
-- **Structure**: label, concise final summary, small experimental caption.
-- **Priority**: most dominant element after result appears.
-- **Surface**: dark panel for contrast.
-- **Rule**: merangkum konten visual dan satu klaim depth regional dalam maksimal 3 kalimat; tidak mengikat region depth ke objek tertentu tanpa bukti lokalisasi dan tidak mengulang detail perbandingan.
+## 4. Visual tokens
 
-### Metric Card
-- **Structure**: label + help dot + mono value + helper sentence.
-- **Variants**: Mode, Depth Category, Area Terdekat, Latency.
-- **Default**: appears only after analysis.
-- **Helper rule**: helper sentence stays short and scannable; detailed explanation belongs in the help popover.
-- **Terminology rule**: visible UI uses "area"; technical/debug surfaces may use "region".
+| Role | Token | Value |
+|---|---|---|
+| Canvas | `--canvas` | `#fbfaf8` |
+| Surface | `--surface` | `#ffffff` |
+| Surface soft | `--surface-soft` | `#f4f2ef` |
+| Ink | `--ink` | `#18151f` |
+| Ink soft | `--ink-soft` | `#595664` |
+| Line | `--line` | `#e9e5df` |
+| Accent | `--accent` | `#6f3cc3` |
+| Accent dark | `--accent-dark` | `#4a238d` |
+| Result panel | `--panel` | `#191622` |
+| Ready | `--status-ready` | `#4f8b63` |
+| Warning | `--status-warning` | `#b9843a` |
+| Error | `--error` | `#a23a32` |
 
-### Depth Insight Panel
-- **Structure**: technical facts list, area-relative-open note, obstacle interpretation.
-- **Purpose**: explains how depth contributes to the result.
-- **Rule**: UI-facing labels say "area"; raw region code appears only as technical evidence.
+## 5. Tipografi dan spacing
 
-### Depth Map Grid Overlay
-- **Structure**: depth map preview with a 3x3 overlay and highlighted nearest area.
-- **Purpose**: makes area labels such as tengah-kiri and bawah-tengah inspectable by users.
-- **Rule**: grid is explained as application post-processing over a continuous depth map, not the native output format of Depth Anything.
+- font utama: Plus Jakarta Sans, Geist, Segoe UI, atau system sans-serif;
+- font angka/metadata: JetBrains Mono, Consolas, atau monospace;
+- lebar konten maksimum: 1168 px;
+- radius panel utama: 14 px;
+- mobile satu kolom tanpa horizontal scroll.
 
-### Mode Comparison Table
-- **Structure**: Aspek, Gemma Baseline, Depth-only, Fusi Regional Berbatas Bukti, Kontribusi.
-- **Purpose**: makes depth contribution analyzable for Bab 4 without implying Gemma is weak when depth metadata is not extracted.
-- **Rule**: compare visual-spatial baseline, metadata depth availability, strategy, kategori kedalaman relatif, potensi halangan visual, area relatif lapang, and latency. Copy harus menegaskan bahwa depth berlaku untuk area grid, bukan otomatis untuk objek yang disebut Gemma.
-- **Copy rule**: for Gemma Baseline depth-specific fields, say "tidak diekstrak sebagai metadata depth" instead of generic "tidak tersedia".
+## 6. Interaksi dan aksesibilitas
 
-### Help Popover
-- **Structure**: small `?` button opens a compact contextual popover with a short title and one concise explanation.
-- **Interaction**: visible on hover/focus and toggleable by click/tap; `Escape` or outside click closes it.
-- **Purpose**: explain metric meaning without adding permanent text to the result cards.
-- **Rule**: tooltip copy stays short and contextual; broader interpretation belongs in the result-reading guide.
+- animasi memakai opacity dan transform;
+- loading menjelaskan tahap upload, analisis Gemma, dan pencocokan sensor;
+- `prefers-reduced-motion` mematikan animasi dekoratif;
+- tombol mempunyai nama, focus state, dan status disabled yang jelas;
+- error muncul dekat tindakan yang gagal;
+- status tidak dibedakan hanya dengan warna.
 
-### Result Reading Guide
-- **Structure**: collapsed accordion titled "Cara membaca hasil ini" inside the result section.
-- **Purpose**: explains each section by function, how the value is determined, and interpretation limits.
-- **Rule**: closed by default; Technical Details and Raw JSON remain advanced/debug information.
+## 7. Copy kanonik
 
-### Accordion Detail
-- **Items**: View Depth Map, Technical Details, Raw JSON.
-- **Default**: collapsed.
+- **Analisis Gambar**
+- **Citra Sumber**
+- **Deskripsi Gambar**
+- **Referensi Sensor Frontal**
+- **Sensor 1**
+- **Sensor 2**
+- **Status Evidence**
+- **Detail Teknis**
 
-## 6. Motion & Interaction
-
-| Type | Duration | Easing | Usage |
-|------|----------|--------|-------|
-| Micro | 180ms | cubic-bezier(0.16, 1, 0.3, 1) | Button hover/press |
-| Entry | 520-560ms | cubic-bezier(0.16, 1, 0.3, 1) | Hero/prompt/result reveal |
-
-Rules:
-- Animasi hanya menggunakan transform dan opacity.
-- Loading state memakai progress line dan step text.
-- Reduced motion mematikan animasi dekoratif.
-
-## 7. Depth & Surface
-
-Depth visual tidak ditampilkan sebagai dekorasi besar di initial state. Konsep depth muncul di hasil, metric, depth insight, dan accordion depth map setelah analisis. Ini menjaga layar awal tetap bersih dan mencegah kesan aplikasi navigasi nyata.
+Copy yang dilarang: “objek terdekat X cm”, “aman dilalui”, atau klaim lain yang mengikat cone sensor ke isi citra.

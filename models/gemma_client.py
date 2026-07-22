@@ -11,14 +11,14 @@ from app.config import Settings
 
 
 DEFAULT_GEMMA_PROMPT = (
-    "Anda adalah sistem image description berbahasa Indonesia. "
-    "Analisis gambar lingkungan indoor secara ringkas, jelas, dan praktis sebagai baseline Gemma tanpa metadata depth. "
-    "Fokus pada objek utama, posisi objek, area depan, potensi hambatan yang tampak, dan relasi spasial visual yang dapat dibaca langsung dari gambar. "
-    "Boleh gunakan indikasi kualitatif seperti tampak dekat, tampak jauh, sisi kiri, sisi kanan, tengah, atau area depan jika terlihat jelas. "
-    "Jangan mengklaim pengukuran jarak, peta kedalaman, region depth, atau area aman karena mode ini tidak menerima metadata depth eksplisit. "
-    "Jangan mengarang detail yang tidak terlihat. "
-    "Gunakan bahasa hati-hati seperti 'terlihat', 'tampak', atau 'kemungkinan' jika tidak yakin. "
-    "Balas hanya JSON valid tanpa markdown dengan skema: "
+    "Anda adalah sistem deskripsi gambar berbahasa Indonesia. "
+    "Analisis satu gambar lingkungan indoor secara ringkas, jelas, dan praktis. "
+    "Fokus pada objek utama, posisi objek, area depan, potensi hambatan yang benar-benar tampak, "
+    "dan relasi spasial visual yang dapat dibaca langsung dari gambar. "
+    "Boleh gunakan indikasi kualitatif seperti tampak dekat, tampak jauh, sisi kiri, sisi kanan, "
+    "tengah, atau area depan jika terlihat jelas. Jangan mengklaim pengukuran jarak atau area aman. "
+    "Jangan mengarang detail yang tidak terlihat. Gunakan bahasa hati-hati seperti 'terlihat', "
+    "'tampak', atau 'kemungkinan' jika tidak yakin. Balas hanya JSON valid tanpa markdown dengan skema: "
     "{\"scene_type\":\"indoor|non_indoor|tidak_diketahui\","
     "\"main_object\":\"string\","
     "\"object_position\":\"kiri|kanan|tengah|depan|bawah|tidak_diketahui\","
@@ -48,8 +48,7 @@ class GemmaClient:
     async def check_status(self) -> str:
         if self.settings.gemma_mock:
             return "mock"
-
-        endpoint = self.settings.lm_studio_openai_base_url + "/models"
+        endpoint = self.settings.lm_studio_url.rstrip("/") + "/api/v1/models"
         try:
             async with httpx.AsyncClient(timeout=self.settings.lm_studio_health_timeout) as client:
                 response = await client.get(endpoint)
@@ -58,10 +57,12 @@ class GemmaClient:
         except (httpx.HTTPError, ValueError):
             return "error"
 
-        model_ids = _extract_model_ids(data)
-        if not model_ids:
-            return "ready"
-        return "ready" if self.settings.lm_studio_model in model_ids else "model_not_loaded"
+        for model in data.get("models", []):
+            if not isinstance(model, dict) or model.get("key") != self.settings.lm_studio_model:
+                continue
+            loaded_instances = model.get("loaded_instances")
+            return "ready" if isinstance(loaded_instances, list) and loaded_instances else "model_not_loaded"
+        return "model_not_loaded"
 
     async def describe_image(self, base64_image: str, prompt: str | None = None) -> GemmaResult:
         started_at = time.perf_counter()
@@ -69,11 +70,11 @@ class GemmaClient:
         if self.settings.gemma_mock:
             description = (
                 "Terlihat area dalam ruangan dengan beberapa objek di sekitar ruangan. "
-                "Objek dan area depan dijelaskan sebagai indikasi visual tanpa metadata depth eksplisit."
+                "Posisi objek dijelaskan hanya berdasarkan bukti visual pada gambar."
             )
             return GemmaResult(
                 description=description,
-                raw_response='{"mock": true}',
+                raw_response='{\"mock\":true}',
                 latency_ms=_elapsed_ms(started_at),
                 mock=True,
                 structured={
@@ -86,24 +87,22 @@ class GemmaClient:
                 },
             )
 
+        content = [
+            {"type": "text", "text": prompt_text},
+            {
+                "type": "image_url",
+                "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"},
+            },
+        ]
+        return await self._complete(content, started_at)
+
+    async def _complete(self, content: list[dict[str, Any]], started_at: float) -> GemmaResult:
         payload = {
             "model": self.settings.lm_studio_model,
-            "messages": [
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": prompt_text},
-                        {
-                            "type": "image_url",
-                            "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"},
-                        },
-                    ],
-                }
-            ],
+            "messages": [{"role": "user", "content": content}],
             "temperature": 0.1,
             "max_tokens": self.settings.lm_studio_max_tokens,
         }
-
         endpoint = self.settings.lm_studio_openai_base_url + "/chat/completions"
         try:
             with anyio.fail_after(self.settings.lm_studio_timeout):
@@ -121,15 +120,21 @@ class GemmaClient:
             raise GemmaClientError("Gemma response was not valid JSON.") from exc
 
         try:
-            raw_text = data["choices"][0]["message"]["content"]
+            choice = data["choices"][0]
+            raw_text = choice["message"]["content"]
         except (KeyError, IndexError, TypeError) as exc:
             raise GemmaClientError("Gemma response did not contain a description.") from exc
-
-        structured = _parse_structured_response(str(raw_text))
-        description = _description_from_structured(structured) if structured else _sanitize_description(str(raw_text))
-        if not description:
+        if choice.get("finish_reason") == "length":
+            raise GemmaClientError(
+                f"Gemma menghabiskan batas {self.settings.lm_studio_max_tokens} token sebelum menghasilkan deskripsi."
+            )
+        if not isinstance(raw_text, str) or not raw_text.strip():
             raise GemmaClientError("Gemma returned an empty description.")
 
+        structured = _parse_structured_response(raw_text)
+        description = _description_from_structured(structured) if structured else _sanitize_description(raw_text)
+        if not description:
+            raise GemmaClientError("Gemma returned an empty description.")
         return GemmaResult(
             description=description,
             raw_response=str(data),
@@ -151,11 +156,9 @@ def _parse_structured_response(text: str) -> dict[str, Any] | None:
     if candidate.startswith("```"):
         candidate = re.sub(r"^```(?:json)?\s*", "", candidate)
         candidate = re.sub(r"\s*```$", "", candidate)
-
     json_match = re.search(r"\{.*\}", candidate, flags=re.DOTALL)
     if json_match:
         candidate = json_match.group(0)
-
     try:
         parsed = json.loads(candidate)
     except json.JSONDecodeError:
@@ -164,12 +167,8 @@ def _parse_structured_response(text: str) -> dict[str, Any] | None:
         return None
 
     objects = parsed.get("objects")
-    if not isinstance(objects, list):
-        parsed["objects"] = []
-    else:
-        parsed["objects"] = [str(item) for item in objects[:8]]
-
-    for key in ["scene_type", "main_object", "object_position", "obstacle_candidate", "description"]:
+    parsed["objects"] = [str(item) for item in objects[:8]] if isinstance(objects, list) else []
+    for key in ("scene_type", "main_object", "object_position", "obstacle_candidate", "description"):
         value = parsed.get(key)
         parsed[key] = str(value).strip() if value else "tidak_diketahui"
     allowed_positions = {"kiri", "kanan", "tengah", "depan", "bawah", "tidak_diketahui"}
@@ -184,21 +183,11 @@ def _description_from_structured(structured: dict[str, Any] | None) -> str:
     description = _sanitize_description(str(structured.get("description", "")))
     if description and description != "tidak_diketahui":
         return description
-
     main_object = structured.get("main_object", "tidak_diketahui")
     position = structured.get("object_position", "tidak_diketahui")
     if main_object != "tidak_diketahui":
         return f"Terlihat {main_object} di area {position}."
     return "Deskripsi visual tidak tersedia secara memadai."
-
-
-def _extract_model_ids(data: dict) -> set[str]:
-    raw_models = data.get("data", [])
-    model_ids: set[str] = set()
-    for model in raw_models:
-        if isinstance(model, dict) and isinstance(model.get("id"), str):
-            model_ids.add(model["id"])
-    return model_ids
 
 
 def _elapsed_ms(started_at: float) -> int:

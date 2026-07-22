@@ -6,9 +6,9 @@
     <title>{{ app_name }}</title>
     <meta
       name="description"
-      content="Console eksperimen deskripsi gambar sadar kedalaman untuk inspeksi hasil Gemma, Depth Anything V2, dan fusi Gemma + Kedalaman pada citra dalam ruangan."
+      content="Console eksperimen deskripsi visual-spasial indoor dengan verifikasi jarak dari dua sensor frontal HC-SR04."
     />
-    <link rel="stylesheet" href="/static/style.css?v=20260721-calibration" />
+    <link rel="stylesheet" href="/static/style.css?v=20260722-clean-mode" />
   </head>
   <body>
     <a class="skip-link" href="#analysis-composer">Lewati ke input analisis</a>
@@ -20,7 +20,7 @@
           <span></span>
           <span></span>
         </div>
-        <p class="console-label">Depth-Aware Experiment Console</p>
+        <p class="console-label">Visual-Spatial Experiment Console</p>
       </header>
 
       <div class="system-status-widget">
@@ -50,8 +50,8 @@
               <dd id="gemma-status-output">Memeriksa</dd>
             </div>
             <div>
-              <dt><span class="status-dot" aria-hidden="true"></span>Kedalaman</dt>
-              <dd id="depth-runtime-status-output">Memeriksa</dd>
+              <dt><span class="status-dot" aria-hidden="true"></span>Sensor frontal</dt>
+              <dd id="sensor-runtime-status-output">Memeriksa</dd>
             </div>
           </dl>
           <p class="system-status-note">
@@ -64,24 +64,13 @@
         <div class="hero-copy">
           <h1 id="page-title">{{ app_name }}</h1>
           <p class="lede">
-            Unggah gambar dalam ruangan untuk memeriksa deskripsi visual dan interpretasi sadar kedalaman dari alur inferensi.
+            Unggah gambar dalam ruangan untuk memeriksa deskripsi visual Gemma dan referensi jarak frontal dari dua HC-SR04.
           </p>
         </div>
 
         <form id="analyze-form" class="composer-shell" aria-label="Form analisis gambar">
           <div id="analysis-composer" class="analysis-composer">
             <div class="composer-prompt">
-              <div class="workflow-status" aria-live="polite">
-                <span id="workflow-state-label">Memeriksa runtime</span>
-                <ol id="workflow-state" aria-label="Tahapan analisis">
-                  <li data-workflow-state="runtime">Runtime</li>
-                  <li data-workflow-state="camera">Kamera</li>
-                  <li data-workflow-state="sensor">Sensor</li>
-                  <li data-workflow-state="captured">Frame</li>
-                  <li data-workflow-state="analyzing">Analisis</li>
-                  <li data-workflow-state="result">Hasil</li>
-                </ol>
-              </div>
               <div class="source-switcher" role="tablist" aria-label="Pilih sumber gambar">
                 <button
                   id="source-upload-tab"
@@ -130,8 +119,15 @@
                   <video id="camera-preview" class="camera-preview hidden" autoplay playsinline></video>
                 </div>
                 <div id="camera-error" class="camera-error hidden" role="alert"></div>
+                <label class="capture-distance-control" for="capture-ground-truth-cm">
+                  <span>Jarak aktual dari kamera</span>
+                  <span class="sensor-calibration-input">
+                    <input id="capture-ground-truth-cm" type="number" min="20" max="200" step="0.1" inputmode="decimal" placeholder="30" required />
+                    <span>cm</span>
+                  </span>
+                </label>
                 <div id="camera-actions" class="camera-actions hidden">
-                  <button id="capture-image" type="button" class="secondary-button" disabled>Ambil frame</button>
+                  <button id="capture-image" type="button" class="secondary-button" disabled>Ambil dan simpan</button>
                   <button id="switch-camera" type="button" class="secondary-button" disabled>Ganti ke kamera depan</button>
                 </div>
                 <section id="sensor-live-panel" class="sensor-live-panel" aria-labelledby="sensor-live-title" aria-live="polite">
@@ -153,10 +149,10 @@
                     </div>
                   </div>
                   <p id="sensor-connection-meta" class="sensor-connection-meta">Menghubungkan pembaca serial...</p>
-                  <p id="sensor-capture-status" class="sensor-capture-status">Belum ada frame yang dianalisis bersama evidence sensor.</p>
+                  <p id="sensor-capture-status" class="sensor-capture-status">Capture tersimpan pada sesi ini: <strong id="capture-count">0</strong></p>
                   <details class="sensor-calibration-panel">
                     <summary>Kalibrasi jarak sensor</summary>
-                    <p>Hadapkan kedua sensor ke bidang datar, ukur jaraknya secara fisik, lalu catat tiga jarak berbeda.</p>
+                    <p>Kalibrasi memakai lima jarak berbeda dengan 30 pembacaan berpasangan per jarak. Profil dibekukan otomatis setelah 150 pembacaan valid.</p>
                     <div class="sensor-calibration-controls">
                       <label for="calibration-measured-cm">
                         <span>Jarak referensi</span>
@@ -170,6 +166,23 @@
                     <div class="sensor-calibration-footer">
                       <output id="calibration-status" aria-live="polite">Belum ada titik kalibrasi.</output>
                       <button id="calibration-reset" type="button" class="text-button">Reset kalibrasi</button>
+                    </div>
+                    <div class="sensor-verification-capture">
+                      <p>Verifikasi memakai 40, 80, 125, dan 175 cm, masing-masing 30 pembacaan. Keempatnya merupakan jarak baru dalam rentang evaluasi penelitian sampai 200 cm.</p>
+                      <div class="sensor-calibration-controls">
+                        <label for="verification-measured-cm">
+                          <span>Jarak verifikasi</span>
+                          <span class="sensor-calibration-input">
+                            <input id="verification-measured-cm" type="number" min="5.1" max="200" step="0.1" inputmode="decimal" />
+                            <span>cm</span>
+                          </span>
+                        </label>
+                        <button id="verification-capture" type="button" class="secondary-button" disabled>Catat verifikasi</button>
+                      </div>
+                      <div class="sensor-calibration-footer">
+                        <output id="verification-status" aria-live="polite">Menunggu kalibrasi lengkap.</output>
+                        <button id="verification-reset" type="button" class="text-button">Reset verifikasi</button>
+                      </div>
                     </div>
                   </details>
                 </section>
@@ -185,29 +198,20 @@
               <button id="remove-image" type="button" class="text-button">Hapus</button>
             </div>
 
-            <div class="control-panel" aria-label="Kontrol analisis">
+            <div id="analysis-control-panel" class="control-panel" aria-label="Kontrol analisis">
               <div class="control-grid">
                 <label class="mode-control" for="mode-select">
                   <span>Mode analisis</span>
                   <select id="mode-select" name="mode">
-                    <option value="gemma_depth">Fusi Regional Berbatas Bukti</option>
-                    <option id="iot-mode-option" value="iot_assisted" disabled>IoT-Assisted</option>
-                    <option value="gemma_only">Gemma Baseline</option>
-                    <option value="depth_only">Kedalaman Saja</option>
+                    <option value="sensor_assisted" selected>Sensor Assisted</option>
+                    <option value="gemma_only">Gemma Only</option>
                   </select>
                 </label>
-                <p id="iot-mode-reason" class="iot-mode-reason">IoT-assisted menunggu readiness sensor, kalibrasi, dan kamera belakang.</p>
                 <button id="analyze-button" type="submit" class="send-button" disabled aria-label="Analisis gambar">
                   <span aria-hidden="true">Analisis</span>
                 </button>
               </div>
 
-              <div class="compare-row">
-                <p>Bandingkan Gemma Baseline, Gemma + Depth, dan IoT-assisted dari evidence backend yang sama.</p>
-                <button id="compare-button" type="button" class="secondary-button" disabled>
-                  Bandingkan mode
-                </button>
-              </div>
             </div>
 
             <canvas id="capture-canvas" class="hidden"></canvas>
@@ -226,8 +230,8 @@
           </div>
           <ol class="loading-steps">
             <li class="is-active">Menganalisis adegan visual...</li>
-            <li>Mengestimasi struktur kedalaman...</li>
-            <li>Membuat output eksperimen...</li>
+            <li>Memeriksa pasangan sensor frontal...</li>
+            <li>Menyusun deskripsi akhir...</li>
             <li>Menyiapkan hasil...</li>
           </ol>
         </section>
@@ -254,7 +258,7 @@
                 aria-haspopup="dialog"
                 aria-expanded="false"
                 data-help-title="Mode"
-                data-help-text="Mode inferensi yang sedang digunakan. Gemma Baseline membaca visual tanpa metadata depth, Kedalaman membaca struktur kedalaman relatif, dan fusi berbatas bukti menambahkan klaim depth hanya pada level area tanpa mengikatnya ke objek tertentu."
+                data-help-text="Gemma Only memakai citra RGB saja. Sensor Assisted menambahkan referensi jarak frontal setelah deskripsi visual dibuat, tanpa mengikat nilai sensor ke objek tertentu."
               >?</button>
             </div>
             <strong id="mode-output">-</strong>
@@ -262,37 +266,37 @@
           </article>
           <article class="metric-card">
             <div>
-              <span>Kategori Kedalaman</span>
+              <span>Status Sensor</span>
               <button
-                id="distance-category-help"
+                id="sensor-status-help"
                 class="help-dot"
                 type="button"
-                aria-label="Kategori kedalaman"
+                aria-label="Status kontribusi sensor"
                 aria-haspopup="dialog"
                 aria-expanded="false"
-                data-help-title="Kategori Kedalaman"
-                data-help-text="Nilai ini berasal dari estimasi peta kedalaman. Kategori seperti dekat, sedang, atau jauh membaca kedalaman relatif area pada gambar."
+                data-help-title="Status Sensor"
+                data-help-text="Status menunjukkan apakah dua HC-SR04 valid dan cukup konsisten untuk membentuk referensi jarak frontal."
               >?</button>
             </div>
-            <strong id="distance-category-output">-</strong>
-            <small id="distance-category-helper" class="metric-helper">Kategori akan dihitung dari estimasi peta kedalaman.</small>
+            <strong id="sensor-status-output">-</strong>
+            <small id="sensor-status-helper" class="metric-helper">Rata-rata ditahan saat pasangan sensor tidak memenuhi gate.</small>
           </article>
           <article class="metric-card">
             <div>
-              <span>Area Terdekat</span>
+              <span>Rata-rata Frontal</span>
               <button
-                id="nearest-region-help"
+                id="frontal-reference-help"
                 class="help-dot"
                 type="button"
-                aria-label="Area terdekat"
+                aria-label="Rata-rata jarak frontal"
                 aria-haspopup="dialog"
                 aria-expanded="false"
-                data-help-title="Area Terdekat"
-                data-help-text="Area tampilan yang diperkirakan paling dekat. Istilah teknis region tetap tersedia pada bagian detail dan JSON mentah."
+                data-help-title="Rata-rata Frontal"
+                data-help-text="Koreksi linear diterapkan pada Sensor 1 dan Sensor 2 secara terpisah, lalu kedua nilai terkoreksi dirata-ratakan ketika pasangan valid. Nilai ini merupakan referensi arah sensor, bukan jarak objek yang disebut Gemma."
               >?</button>
             </div>
-            <strong id="nearest-region-output">-</strong>
-            <small id="nearest-region-helper" class="metric-helper">Area dengan skor depth terdekat.</small>
+            <strong id="frontal-reference-output">-</strong>
+            <small id="frontal-reference-helper" class="metric-helper">Tidak ditampilkan ketika pasangan partial, stale, konflik, atau beda arah.</small>
           </article>
           <article class="metric-card">
             <div>
@@ -325,12 +329,22 @@
           </section>
 
           <section class="analysis-panel dark-panel">
-            <p class="label">Insight Kedalaman</p>
-            <div id="depth-status-output" class="text-output">-</div>
-            <p id="safe-direction-output" class="guidance-output">-</p>
-            <div id="depth-contribution" class="insight-box">
-              Kontribusi kedalaman belum tersedia.
+            <div class="sensor-verification-heading">
+              <p class="label">Verifikasi sensor frontal</p>
+              <span id="contribution-status" class="mini-status">-</span>
             </div>
+            <dl class="compact-list sensor-verification-list">
+              <div><dt>Sensor 1 (mentah → koreksi)</dt><dd id="result-sensor-1-output">-</dd></div>
+              <div><dt>Sensor 2 (mentah → koreksi)</dt><dd id="result-sensor-2-output">-</dd></div>
+              <div><dt>Selisih pasangan</dt><dd id="pair-disagreement-output">-</dd></div>
+              <div><dt>Rata-rata frontal</dt><dd id="result-frontal-reference-output">-</dd></div>
+              <div><dt>Usia Sensor 1</dt><dd id="sensor-1-age-output">-</dd></div>
+              <div><dt>Usia Sensor 2</dt><dd id="sensor-2-age-output">-</dd></div>
+              <div><dt>Waktu pencocokan</dt><dd id="match-time-output">-</dd></div>
+              <div><dt>Kalibrasi</dt><dd id="result-calibration-output">-</dd></div>
+            </dl>
+            <p id="sensor-explanation" class="guidance-output">Referensi sensor belum tersedia.</p>
+            <div id="sensor-reason" class="insight-box">Menunggu hasil analisis.</div>
           </section>
         </div>
 
@@ -342,20 +356,20 @@
             <div>
               <strong>Deskripsi Akhir</strong>
               <p><b>Fungsi:</b> output utama eksperimen sesuai mode yang dipilih.</p>
-              <p><b>Penentuan:</b> Gemma Baseline memakai deskripsi visual-spasial dari gambar saja, sedangkan late fusion menambahkan ringkasan depth setelah deskripsi.</p>
+              <p><b>Penentuan:</b> Gemma Only memakai deskripsi citra. Sensor Assisted menerapkan koreksi per sensor lalu menambahkan rata-rata frontal ketika dua sensor memenuhi gate.</p>
               <p><b>Batasan:</b> ini deskripsi visual-spasial dari gambar 2D, bukan instruksi navigasi atau ukuran jarak presisi.</p>
             </div>
             <div>
-              <strong>Kategori Kedalaman</strong>
-              <p><b>Fungsi:</b> memberi konteks apakah area terdekat terbaca sebagai sangat dekat, dekat, sedang, atau jauh.</p>
-              <p><b>Input & metode:</b> sistem memakai peta kedalaman, membaginya ke region, lalu memberi kategori dari skor kedalaman region terdekat memakai threshold internal.</p>
-              <p><b>Batasan:</b> kategori bersifat relatif dan eksperimental; belum dikalibrasi sebagai meter absolut.</p>
+              <strong>Verifikasi Sensor Frontal</strong>
+              <p><b>Fungsi:</b> menunjukkan pembacaan masing-masing HC-SR04, selisih pasangan, dan rata-rata yang dipakai.</p>
+              <p><b>Input & metode:</b> nilai mentah Sensor 1 dan Sensor 2 dikoreksi secara terpisah, lalu dirata-ratakan ketika valid, segar, searah kamera, dan konsisten.</p>
+              <p><b>Batasan:</b> cone sensor tidak memberi identitas objek dan tidak membuktikan jarak objek yang disebut Gemma.</p>
             </div>
             <div>
-              <strong>Area Terdekat</strong>
-              <p><b>Fungsi:</b> menunjukkan area gambar yang paling memengaruhi informasi kedekatan pada hasil sadar kedalaman.</p>
-              <p><b>Input & metode:</b> peta kedalaman dibaca sebagai grid 3x3: atas, tengah, bawah dikombinasikan dengan kiri, tengah, kanan. Region teknis dengan skor kedalaman terdekat diterjemahkan menjadi label area untuk UI.</p>
-              <p><b>Batasan:</b> area terdekat tidak otomatis membuktikan nama objek; identitas objek tetap bergantung pada deskripsi visual.</p>
+              <strong>Rata-rata Frontal</strong>
+              <p><b>Fungsi:</b> memberi satu referensi jarak pada arah dua sensor.</p>
+              <p><b>Input & metode:</b> sistem menghitung (Sensor 1 terkoreksi + Sensor 2 terkoreksi) / 2 setelah seluruh gate pasangan lulus.</p>
+              <p><b>Batasan:</b> partial, stale, konflik, atau beda arah membuat rata-rata ditahan.</p>
             </div>
             <div>
               <strong>Ringkasan Adegan</strong>
@@ -364,21 +378,9 @@
               <p><b>Batasan:</b> model dapat keliru membaca objek kecil, objek tertutup, atau konteks adegan yang ambigu.</p>
             </div>
             <div>
-              <strong>Insight Kedalaman</strong>
-              <p><b>Fungsi:</b> menjelaskan bukti teknis dari peta kedalaman terhadap potensi halangan dan area relatif lapang.</p>
-              <p><b>Input & metode:</b> sistem membandingkan skor region depan/kiri/kanan/tengah, lalu menampilkan area terdekat, region teknis, kategori jarak relatif, dan area dengan objek dekat lebih sedikit.</p>
-              <p><b>Batasan:</b> “relatif lapang” bukan “jalur aman”; hasil hanya indikasi visual dari estimasi kedalaman monocular.</p>
-            </div>
-            <div>
-              <strong>Perbandingan Mode</strong>
-              <p><b>Fungsi:</b> membandingkan Gemma Baseline, depth-only, dan late fusion pada gambar yang sama.</p>
-              <p><b>Penentuan:</b> tabel membaca deskripsi visual, metadata depth, strategi fusi, potensi halangan visual, area relatif lapang, dan latensi.</p>
-              <p><b>Batasan:</b> nilai kosong pada Gemma Baseline berarti metadata depth tidak diekstrak pada mode itu, bukan bukti bahwa Gemma tidak mampu memahami visual.</p>
-            </div>
-            <div>
               <strong>Detail Teknis</strong>
               <p><b>Fungsi:</b> membaca biaya komputasi tiap tahap inference.</p>
-              <p><b>Penentuan:</b> waktu Gemma, Kedalaman, Fusi, dan Total dicatat saat alur model berjalan.</p>
+              <p><b>Penentuan:</b> waktu Gemma, pemrosesan sensor, dan total dicatat saat alur analisis berjalan.</p>
               <p><b>Batasan:</b> latensi tidak menunjukkan kualitas deskripsi; angka dapat berubah karena perangkat, model, atau kondisi runtime.</p>
             </div>
             <div>
@@ -390,69 +392,24 @@
           </div>
         </details>
 
-        <section class="comparison-panel" aria-label="Perbandingan mode analisis">
-          <div class="subsection-heading">
-            <div>
-              <p class="label">Perbandingan Mode</p>
-              <h2>Kontribusi kedalaman pada gambar yang sama</h2>
-            </div>
-            <span id="comparison-status" class="mini-status">Belum dijalankan</span>
-          </div>
-          <div id="comparison-output" class="comparison-output">
-              Jalankan perbandingan untuk memeriksa perbedaan antara Gemma Baseline, depth-only, dan late fusion kontrol pada gambar yang dipilih.
-          </div>
-        </section>
-
         <div class="accordion-stack">
           <details class="detail-panel">
             <summary>
-              <span>Lihat Peta Kedalaman</span>
-              <button
-                class="help-dot"
-                type="button"
-                aria-label="Peta kedalaman"
-                aria-haspopup="dialog"
-                aria-expanded="false"
-                data-help-title="Peta Kedalaman"
-                data-help-text="Visualisasi peta kedalaman dari gambar input. Overlay 3x3 menunjukkan area UI yang dipakai sistem: atas/tengah/bawah dan kiri/tengah/kanan."
-              >?</button>
-            </summary>
-            <div class="depth-map-frame">
-              <div id="depth-map-grid-wrap" class="depth-map-grid-wrap hidden">
-                <img id="depth-map-preview" alt="Visualisasi peta kedalaman dengan pembagian area 3x3" />
-                <div id="depth-region-grid" class="depth-region-grid" aria-hidden="true">
-                  <span data-region="upper_left">atas-kiri</span>
-                  <span data-region="upper_center">atas-tengah</span>
-                  <span data-region="upper_right">atas-kanan</span>
-                  <span data-region="middle_left">tengah-kiri</span>
-                  <span data-region="middle_center">tengah</span>
-                  <span data-region="middle_right">tengah-kanan</span>
-                  <span data-region="lower_left">bawah-kiri</span>
-                  <span data-region="lower_center">bawah-tengah</span>
-                  <span data-region="lower_right">bawah-kanan</span>
-                </div>
-              </div>
-              <p>Overlay 3x3 adalah skema analisis aplikasi: model menghasilkan peta kedalaman kontinu, lalu sistem membaginya menjadi sembilan area untuk ringkasan region.</p>
-            </div>
-          </details>
-
-          <details class="detail-panel">
-            <summary>
-              <span>Detail Teknis</span>
+              <span>Durasi proses</span>
               <button
                 class="help-dot"
                 type="button"
                 aria-label="Detail teknis"
                 aria-haspopup="dialog"
                 aria-expanded="false"
-                data-help-title="Detail Teknis"
-                data-help-text="Rincian durasi Gemma, Kedalaman, dan Fusi. Bagian ini untuk pelacakan teknis dan evaluasi performa, bukan indikator kualitas deskripsi."
+                data-help-title="Durasi proses"
+                data-help-text="Rincian durasi Gemma, pemrosesan sensor, dan total. Waktu proses bukan indikator kualitas deskripsi."
               >?</button>
             </summary>
             <div class="runtime-grid">
               <div><span>Gemma</span><strong id="gemma-latency-output">-</strong></div>
-              <div><span>Kedalaman</span><strong id="depth-latency-output">-</strong></div>
-              <div><span>Fusi</span><strong id="fusion-latency-output">-</strong></div>
+              <div><span>Sensor</span><strong id="sensor-latency-output">-</strong></div>
+              <div><span>Total</span><strong id="total-process-latency-output">-</strong></div>
             </div>
             <p id="latency-output" class="technical-note">-</p>
           </details>
@@ -467,16 +424,16 @@
                 aria-haspopup="dialog"
                 aria-expanded="false"
                 data-help-title="JSON Mentah"
-                data-help-text="Data mentah dari alur model untuk audit teknis. Gunakan saat perlu mengecek kolom kedalaman, latensi, atau struktur respons."
+                data-help-text="Data mentah dari alur analisis untuk audit teknis. Gunakan saat perlu mengecek provenance sensor dan durasi proses."
               >?</button>
             </summary>
-            <pre id="depth-summary">{}</pre>
+            <pre id="raw-payload-output">{}</pre>
           </details>
         </div>
       </section>
     </main>
 
-    <script src="/static/analysis-job-client.js?v=20260721-calibration"></script>
-    <script src="/static/app.js?v=20260721-calibration"></script>
+    <script src="/static/analysis-job-client.js?v=20260722-clean-mode"></script>
+    <script src="/static/app.js?v=20260723-clean-capture-v2-paired-persistent"></script>
   </body>
 </html>

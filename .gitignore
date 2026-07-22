@@ -14,11 +14,13 @@ venv/
 # Runtime output
 *.log
 .uvicorn.*.log
-results/depth_maps/*.png
 results/sensor_captures.jsonl
 results/analysis_runs.jsonl
+results/captures/
 config/sensor_camera_calibration.json
 config/sensor_camera_calibration_measurements.json
+config/sensor_camera_verification.json
+config/sensor_camera_verification_measurements.json
 certs/
 
 # Large local model files

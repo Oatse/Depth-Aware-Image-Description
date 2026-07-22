@@ -1,6 +1,0 @@
-{
-  "image_name": "living_room_1p (97).jpg",
-  "condition": "depth_guided",
-  "content": "{\n  \"marks\": [\n    {\"id\": 1, \"object\": \"table\"},\n    {\"id\": 2, \"object\": \"sofa\"},\n    {\"id\": 3, \"object\": \"plant\"}\n  ]\n  ,\"priority_mark_id\": 1\n  ,\"description\": \"Identifikasi objek di dalam kotak MARK 1, 2, dan 3. Prioritas diberikan pada MARK 1.\"\n}",
-  "latency_ms": 32923
-}

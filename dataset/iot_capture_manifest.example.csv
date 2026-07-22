@@ -1,2 +1,0 @@
-capture_id,status,ground_truth_cm,sensor_1_cm,sensor_2_cm,timestamp_offset_ms,mode,total_latency_ms,gemma_depth_latency_ms,sensor_depth_consistent,iot_description_score,gemma_depth_description_score
-example-001,paired,80,81,82,12,iot_assisted,2200,2050,yes,,
