@@ -70,6 +70,12 @@ def test_ui_uses_camera_as_the_only_image_source() -> None:
     assert "startCamera();" in javascript
 
 
+def test_ui_copy_describes_camera_capture_workflow() -> None:
+    html = (ROOT / "templates" / "index.html").read_text(encoding="utf-8")
+    assert "Tangkap gambar dalam ruangan" in html
+    assert "Unggah gambar" not in html
+
+
 def test_ui_hides_workflow_strip_and_omits_redundant_sensor_helper() -> None:
     html = (ROOT / "templates" / "index.html").read_text(encoding="utf-8")
     css = (ROOT / "static" / "style.css").read_text(encoding="utf-8")
