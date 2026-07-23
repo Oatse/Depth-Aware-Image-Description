@@ -7,7 +7,6 @@ const elements = {
   gemmaStatus: document.querySelector("#gemma-status-output"),
   sensorRuntimeStatus: document.querySelector("#sensor-runtime-status-output"),
   form: document.querySelector("#analyze-form"),
-  mode: document.querySelector("#mode-select"),
   cameraPanel: document.querySelector("#camera-panel"),
   cameraEmptyState: document.querySelector("#camera-empty-state"),
   cameraRetry: document.querySelector("#camera-retry"),

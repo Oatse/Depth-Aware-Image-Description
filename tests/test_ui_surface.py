@@ -4,11 +4,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_ui_defaults_to_sensor_assisted_and_exposes_two_modes() -> None:
+def test_ui_does_not_expose_inference_mode_as_a_camera_control() -> None:
     html = (ROOT / "templates" / "index.html").read_text(encoding="utf-8")
-    assert '<option value="sensor_assisted" selected>Sensor Assisted</option>' in html
-    assert '<option value="gemma_only">Gemma Only</option>' in html
-    assert html.count("<option value=") == 2
+    assert 'id="mode-select"' not in html
+    assert 'class="mode-control"' not in html
 
 
 def test_ui_shows_full_sensor_provenance_without_object_binding() -> None:
