@@ -147,9 +147,21 @@ def fuse_sensor_reference(
     }
 
 
-def append_sensor_section(base_description: str | None, contribution: SensorContribution) -> str:
+def append_sensor_section(
+    base_description: str | None,
+    contribution: SensorContribution,
+    structured: dict | None = None,
+) -> str:
     base = (base_description or "Deskripsi visual-spasial tidak tersedia.").strip()
-    return f"{base} {contribution['description']}"
+    if (
+        contribution
+        and contribution["status"] == "applied"
+        and float(contribution.get("pair_disagreement_cm") or 999.0) <= 2.0
+    ):
+        closest = str((structured or {}).get("closest_object") or "").strip()
+        if closest and closest.lower() not in {"tidak_diketahui", "tidak ada", "unknown", "none"}:
+            return f"{base} {closest} tampak sebagai objek paling dekat di depan kamera, dengan estimasi jarak sekitar {contribution['frontal_reference_cm']:.1f} cm."
+    return f"{base} {contribution['description']}" if contribution else base
 
 
 def _insufficient(

@@ -17,12 +17,14 @@ DEFAULT_GEMMA_PROMPT = (
     "Analisis satu gambar lingkungan indoor secara ringkas, jelas, dan praktis. "
     "Fokus pada objek utama, posisi objek, area depan, potensi hambatan yang benar-benar tampak, "
     "dan relasi spasial visual yang dapat dibaca langsung dari gambar. "
+    "Tentukan juga satu closest_object jika ada objek konkret yang tampak paling dekat di depan kamera; jika tidak jelas, gunakan tidak_diketahui. "
     "Boleh gunakan indikasi kualitatif seperti tampak dekat, tampak jauh, sisi kiri, sisi kanan, "
     "tengah, atau area depan jika terlihat jelas. Jangan mengklaim pengukuran jarak atau area aman. "
     "Jangan mengarang detail yang tidak terlihat. Gunakan bahasa hati-hati seperti 'terlihat', "
     "'tampak', atau 'kemungkinan' jika tidak yakin. Balas hanya JSON valid tanpa markdown dengan skema: "
     "{\"scene_type\":\"indoor|non_indoor|tidak_diketahui\","
     "\"main_object\":\"string\","
+    "\"closest_object\":\"string\","
     "\"object_position\":\"kiri|kanan|tengah|depan|bawah|tidak_diketahui\","
     "\"objects\":[\"string\"],"
     "\"obstacle_candidate\":\"string\","
@@ -84,6 +86,7 @@ class GemmaClient:
                 structured={
                     "scene_type": "indoor",
                     "main_object": "tidak_diketahui",
+                    "closest_object": "tidak_diketahui",
                     "object_position": "tengah",
                     "objects": [],
                     "obstacle_candidate": "tidak_diketahui",
@@ -193,7 +196,7 @@ def _parse_structured_response(text: str) -> dict[str, Any] | None:
 
     objects = parsed.get("objects")
     parsed["objects"] = [str(item) for item in objects[:8]] if isinstance(objects, list) else []
-    for key in ("scene_type", "main_object", "object_position", "obstacle_candidate", "description"):
+    for key in ("scene_type", "main_object", "closest_object", "object_position", "obstacle_candidate", "description"):
         value = parsed.get(key)
         parsed[key] = str(value).strip() if value else "tidak_diketahui"
     allowed_positions = {"kiri", "kanan", "tengah", "depan", "bawah", "tidak_diketahui"}

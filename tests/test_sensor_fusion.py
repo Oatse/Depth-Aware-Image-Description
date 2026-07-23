@@ -51,7 +51,27 @@ def test_reference_is_not_bound_to_named_object() -> None:
     output = append_sensor_section("Terlihat kursi di depan meja.", _fuse(_paired(), calibrated=True)).lower()
     assert "kursi berjarak" not in output
     assert "jarak kursi" not in output
-    assert "referensi jarak frontal" in output
+
+
+def test_closest_object_is_bound_only_when_pair_is_tightly_consistent() -> None:
+    output = append_sensor_section(
+        "Sebuah koper hitam terlihat di tengah ruangan.",
+        _fuse(_paired(80, 81), disagreement=15.0),
+        {"closest_object": "koper hitam"},
+    )
+    assert "koper hitam tampak sebagai objek paling dekat" in output
+    assert "80.5 cm" in output
+
+
+def test_closest_object_binding_is_withheld_above_two_centimeters() -> None:
+    output = append_sensor_section(
+        "Sebuah koper hitam terlihat di tengah ruangan.",
+        _fuse(_paired(80, 83), disagreement=15.0),
+        {"closest_object": "koper hitam"},
+    )
+    assert "objek paling dekat" not in output
+    assert "Referensi jarak frontal" in output
+    assert "Referensi jarak frontal" in output
 
 
 def test_paired_sensor_applies_each_calibration_before_averaging() -> None:

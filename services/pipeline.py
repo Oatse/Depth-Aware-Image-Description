@@ -52,7 +52,7 @@ async def analyze_image_bytes(
             max_pair_disagreement_cm=settings.sensor_pair_disagreement_cm,
             max_age_ms=settings.sensor_freshness_max_age_ms,
         )
-        final_description = append_sensor_section(final_description, contribution)
+    final_description = append_sensor_section(final_description, contribution, gemma_result.structured)
     sensor_latency_ms = int((time.perf_counter() - sensor_started_at) * 1000)
 
     provenance = [{"source": "gemma", "text": gemma_result.description}]
