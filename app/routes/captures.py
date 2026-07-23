@@ -18,11 +18,14 @@ from services.analysis_jobs import (
 )
 from services.analysis_types import AnalysisMode, normalize_analysis_mode
 from services.capture_repository import (
+    CAPTURE_CANDIDATE_BATCH_ID,
+    CAPTURE_CANDIDATE_IMAGE_PREFIX,
     CaptureAlreadyExistsError,
     CaptureNotFoundError,
     CaptureRepository,
     CaptureRepositoryError,
     CaptureStateError,
+    incoming_capture_root,
 )
 from services.image_preprocess import ImagePreprocessError, preprocess_image
 from services.sensor_evidence import collect_sensor_evidence
@@ -33,7 +36,7 @@ router = APIRouter()
 
 
 def _repository() -> CaptureRepository:
-    return CaptureRepository(analyze_route.settings.results_dir / "captures")
+    return CaptureRepository(incoming_capture_root(analyze_route.settings.results_dir))
 
 
 @router.post(
@@ -45,16 +48,21 @@ async def create_capture(
     request: Request,
     image: UploadFile = File(...),
     capture_id: str | None = Form(default=None),
-    batch_id: str = Form(default="default"),
     capture_time_ms: int = Form(..., ge=0),
     camera_facing_mode: str | None = Form(default=None),
     mode: str = Form(default=AnalysisMode.SENSOR_ASSISTED.value),
     clock_offset_ms: int | None = Form(default=None),
     clock_rtt_ms: int | None = Form(default=None),
     ground_truth_cm: float = Form(..., ge=20, le=200),
-    target_id: str | None = Form(default=None),
+    target_id: str = Form(..., min_length=1, max_length=100),
     repeat_index: int | None = Form(default=None, ge=1),
 ) -> CaptureCreatedResponse | JSONResponse:
+    normalized_target_id = target_id.strip()
+    if not normalized_target_id:
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={"error": "target_id wajib berisi identitas target atau scene."},
+        )
     try:
         normalized_mode = normalize_analysis_mode(mode)
     except ValueError as exc:
@@ -93,12 +101,26 @@ async def create_capture(
         )
         canonical_capture_id = str(sensor_evidence.get("capture_id") or canonical_capture_id)
 
+    evidence = sensor_evidence or {}
+    samples = evidence.get("samples") or {}
+    sensor_1 = samples.get("sensor_1") or {}
+    sensor_2 = samples.get("sensor_2") or {}
+    if (
+        evidence.get("status") != "paired"
+        or sensor_1.get("status") != "ok"
+        or sensor_2.get("status") != "ok"
+    ):
+        return JSONResponse(
+            status_code=status.HTTP_409_CONFLICT,
+            content={"error": "Capture kandidat memerlukan dua sensor paired dan berstatus ok."},
+        )
+
     offset = analyze_route.settings.camera_sensor_offset_cm
     metadata = {
         "camera_sensor_offset_cm": offset,
         "ground_truth_cm": ground_truth_cm,
         "sensor_face_ground_truth_cm": ground_truth_cm - offset,
-        "target_id": target_id,
+        "target_id": normalized_target_id,
         "repeat_index": repeat_index,
     }
     repository = _repository()
@@ -110,12 +132,13 @@ async def create_capture(
             width=processed.width,
             height=processed.height,
             capture_id=canonical_capture_id,
-            batch_id=batch_id,
+            batch_id=CAPTURE_CANDIDATE_BATCH_ID,
             capture_time_ms=capture_time_ms,
             camera_facing_mode=camera_facing_mode,
             mode=normalized_mode.value,
             sensor_evidence=sensor_evidence,
             metadata=metadata,
+            image_path_prefix=CAPTURE_CANDIDATE_IMAGE_PREFIX,
         )
     except CaptureAlreadyExistsError as exc:
         return JSONResponse(status_code=status.HTTP_409_CONFLICT, content={"error": str(exc)})
@@ -157,6 +180,7 @@ async def create_capture_analysis_job(
     request: Request,
     capture_id: str,
     mode: str | None = Form(default=None),
+    reanalyze: bool = Query(default=False),
 ) -> AnalysisJobAcceptedResponse | JSONResponse:
     repository = _repository()
     try:
@@ -187,7 +211,7 @@ async def create_capture_analysis_job(
     image = capture["image"]
     job_id = uuid4().hex
     try:
-        repository.mark_queued(capture_id, job_id=job_id, mode=normalized_mode.value)
+        repository.mark_queued(capture_id, job_id=job_id, mode=normalized_mode.value, allow_completed=reanalyze)
         job = service.enqueue(
             AnalysisJobRequest(
                 image_bytes=image_bytes,

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "locked_at": "2026-07-23T16:34:04.848373+00:00",
+  "evaluator_role": "auditor evaluasi dataset multimodal independen",
+  "evaluation_design": "single_evaluator_blind_to_mode_distance_capture_and_run",
+  "item_count": 36,
+  "unique_score_item_ids": 36,
+  "source_template_sha256": "36b798b5c16d990db922a2333ea90fe07f380c20b333e9d797dc0a4e586b231d",
+  "scored_template_sha256": "331db69765c21cd4c7282378d2a412f4cbc036374de29ba8b447dc9b5e97534f",
+  "rubric_scale": {
+    "object_consistency": "1-5",
+    "spatial_consistency": "1-5",
+    "clarity": "1-5",
+    "naturalness": "1-5",
+    "scene_completeness": "1-5",
+    "unsupported_claims": "count"
+  },
+  "key_opened_during_scoring": false,
+  "limitations": [
+    "Satu evaluator tidak menyediakan estimasi inter-rater agreement.",
+    "Evaluator memahami tujuan umum penelitian meski identitas mode dan jarak disembunyikan.",
+    "Skor visual adalah audit teknis, bukan UAT atau bukti manfaat pengguna."
+  ]
+}

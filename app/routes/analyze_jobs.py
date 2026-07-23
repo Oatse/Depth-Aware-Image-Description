@@ -7,7 +7,11 @@ import app.routes.analyze as analyze_route
 from app.schemas import AnalysisJobAcceptedResponse, AnalysisJobStatusResponse, AnalyzeResponse
 from services.analysis_jobs import AnalysisJobRequest, AnalysisJobService, AnalysisQueueFullError
 from services.analysis_types import AnalysisMode, normalize_analysis_mode
-from services.capture_repository import CaptureRepository, CaptureRepositoryError
+from services.capture_repository import (
+    CaptureRepository,
+    CaptureRepositoryError,
+    incoming_capture_root,
+)
 from services.image_preprocess import ImagePreprocessError, preprocess_image
 from services.result_logger import log_analysis_run, log_prediction, log_sensor_evidence, save_source_image
 from services.sensor_evidence import collect_sensor_evidence
@@ -116,7 +120,9 @@ async def get_analysis_job(request: Request, job_id: str) -> JSONResponse:
 async def run_analysis_job(job: AnalysisJobRequest) -> dict[str, object]:
     capture_repository = None
     if job.stored_capture_id is not None:
-        capture_repository = CaptureRepository(analyze_route.settings.results_dir / "captures")
+        capture_repository = CaptureRepository(
+            incoming_capture_root(analyze_route.settings.results_dir)
+        )
     try:
         if capture_repository is not None:
             capture_repository.mark_running(job.stored_capture_id)

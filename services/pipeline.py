@@ -2,7 +2,7 @@ import time
 from dataclasses import dataclass
 
 from app.config import Settings
-from models.gemma_client import GemmaClient, GemmaClientError
+from models.gemma_client import DEFAULT_GEMMA_PROMPT, GemmaClient, GemmaClientError
 from models.sensor_fusion import append_sensor_section, fuse_sensor_reference
 from services.analysis_types import AnalysisMode
 from services.image_preprocess import preprocess_image
@@ -37,23 +37,17 @@ async def analyze_image_bytes(
     started_at = time.perf_counter()
     processed = preprocess_image(image_bytes, settings.image_max_dimension)
     client = gemma_client or GemmaClient(settings)
+    contribution = None
+    if mode is AnalysisMode.SENSOR_ASSISTED:
+        contribution = fuse_sensor_reference(sensor_evidence, calibration_profile=_calibration_profile(settings), max_pair_disagreement_cm=settings.sensor_pair_disagreement_cm, max_age_ms=settings.sensor_freshness_max_age_ms)
+    prompt = _sensor_conditioned_prompt(contribution)
     try:
-        gemma_result = await client.describe_image(processed.base64_image)
+        gemma_result = await client.describe_image(processed.base64_image, prompt=prompt)
     except GemmaClientError as exc:
         return _failed_result(filename, mode, started_at, str(exc))
 
-    sensor_started_at = time.perf_counter()
-    contribution = None
     final_description = gemma_result.description
-    if mode is AnalysisMode.SENSOR_ASSISTED:
-        contribution = fuse_sensor_reference(
-            sensor_evidence,
-            calibration_profile=_calibration_profile(settings),
-            max_pair_disagreement_cm=settings.sensor_pair_disagreement_cm,
-            max_age_ms=settings.sensor_freshness_max_age_ms,
-        )
     final_description = append_sensor_section(final_description, contribution, gemma_result.structured)
-    sensor_latency_ms = int((time.perf_counter() - sensor_started_at) * 1000)
 
     provenance = [{"source": "gemma", "text": gemma_result.description}]
     if contribution is not None:
@@ -64,8 +58,9 @@ async def analyze_image_bytes(
         "sensor_contribution": contribution,
         "provenance_segments": provenance,
         "system_note": (
-            "Deskripsi visual berasal dari satu citra RGB. Referensi sensor frontal disajikan terpisah "
-            "dan tidak diikat ke nama objek."
+            "Gemma menerima konteks jarak frontal sensor yang sudah divalidasi; backend tetap memeriksa provenance dan aturan pengaitan."
+            if prompt is not None
+            else "Gemma menggunakan prompt visual default tanpa konteks sensor."
         ),
     }
     return PipelineResult(
@@ -77,7 +72,7 @@ async def analyze_image_bytes(
         final_description=final_description,
         latency={
             "gemma_ms": gemma_result.latency_ms,
-            "sensor_ms": sensor_latency_ms,
+            "sensor_ms": 0,
             "total_ms": int((time.perf_counter() - started_at) * 1000),
         },
         mock={"gemma": gemma_result.mock},
@@ -86,6 +81,21 @@ async def analyze_image_bytes(
         sensor_contribution=contribution,
         analysis_method=mode.value,
         gemma_provenance=gemma_result.provenance,
+    )
+
+
+def _sensor_conditioned_prompt(contribution: dict | None) -> str | None:
+    if not contribution or contribution.get("status") != "applied":
+        return None
+    reference = contribution.get("frontal_reference_cm")
+    if not isinstance(reference, (int, float)):
+        return None
+    return (
+        "Konteks sensor terverifikasi: dua HC-SR04 yang telah dikalibrasi membaca "
+        f"jarak frontal sekitar {reference:.1f} cm. Gunakan angka ini hanya sebagai "
+        "referensi frontal; jangan menganggapnya sebagai identitas atau koordinat objek. "
+        "Jika menyebut objek paling dekat, pastikan objek tersebut benar-benar tampak pada gambar.\n\n"
+        + DEFAULT_GEMMA_PROMPT
     )
 
 

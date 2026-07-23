@@ -1,0 +1,23 @@
+{
+  "valid": true,
+  "dataset_id": "hcsr04-indoor-distance-v2-clean-latest-50cm-20260723",
+  "total_captures": 18,
+  "repeat_counts_by_distance": {
+    "30": 3,
+    "50": 3,
+    "75": 3,
+    "100": 3,
+    "150": 3,
+    "200": 3
+  },
+  "unique_capture_ids": 18,
+  "unique_images": 18,
+  "unique_image_checksums": 18,
+  "sensor_statuses": {
+    "paired": 18,
+    "sensor_1_ok": 18,
+    "sensor_2_ok": 18
+  },
+  "checksums_verified": 18,
+  "manifest_path": "results/captures/dataset_manifest_v2.json"
+}

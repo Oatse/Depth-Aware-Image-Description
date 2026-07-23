@@ -17,6 +17,21 @@
     return submitAndPoll("/analysis-jobs", formData, options);
   }
 
+  async function capture(formData) {
+    const response = await fetchBackend("/captures", { method: "POST", body: formData });
+    const payload = await parseJson(response);
+    if (response.status !== 201) {
+      throw new Error(payload.error || "Capture dataset gagal disimpan.");
+    }
+    return payload;
+  }
+
+  async function analyzeStoredCapture(captureId, mode, options = {}) {
+    const form = new FormData();
+    if (mode) form.append("mode", mode);
+    return submitAndPoll(`/captures/${encodeURIComponent(captureId)}/analysis-jobs`, form, options);
+  }
+
   async function fetchBackend(url, options, attempts = 1, retryDelayMs = 0) {
     for (let attempt = 1; attempt <= attempts; attempt += 1) {
       try {
@@ -62,5 +77,5 @@
     throw new Error("Analisis melewati batas tunggu lima menit.");
   }
 
-  global.AnalysisJobClient = Object.freeze({ analyze });
+  global.AnalysisJobClient = Object.freeze({ analyze, capture, analyzeStoredCapture });
 })(window);

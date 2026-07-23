@@ -11,6 +11,9 @@ Dokumen berikut menentukan scope dan implementasi saat ini:
 5. [`DESIGN.md`](DESIGN.md) — aturan UI satu alur.
 6. [`sensor_evaluation_template.csv`](sensor_evaluation_template.csv) — template data pengujian fisik HC-SR04.
 7. [`../README.md`](../README.md) — setup dan penggunaan workspace.
+8. [`dataset_v2_final_evaluation_20260723.md`](dataset_v2_final_evaluation_20260723.md) — keputusan hasil evaluasi final.
+9. [`project_maturity_report_20260724.md`](project_maturity_report_20260724.md) — status penyelesaian terbaru.
+10. [`diverse_capture_decision_20260724.md`](diverse_capture_decision_20260724.md) — dampak dan gate dataset ekstensi beragam.
 
 Urutan acuan jika terjadi konflik mengikuti `../CONTEXT.md`.
 
@@ -18,12 +21,14 @@ Urutan acuan jika terjadi konflik mengikuti `../CONTEXT.md`.
 
 Folder [`pustaka/`](pustaka/) menyimpan salinan sumber dan indeks sitasi. Keberadaan file di folder tersebut tidak otomatis menjadikannya komponen sistem, variabel penelitian, atau sumber yang harus masuk daftar pustaka final. Hanya sumber yang dipakai dan diverifikasi yang boleh disitasi.
 
-## Dokumen historis
+## Artefak hasil
 
-Dokumen di folder `archive/`, laporan eksperimen lama, log, dan artefak hasil sebelumnya adalah bukti historis. Mereka tidak menentukan scope runtime aktif. Jangan menghapus atau menulis ulang bukti historis untuk menyamakan istilah baru; beri label tanggal dan status bila dirujuk.
-
-Dokumen aktif tidak boleh mengambil klaim runtime hanya dari nama file historis atau hasil tes lama. Perilaku saat ini harus diverifikasi dari kode, konfigurasi, dan pengujian yang berjalan.
+Hanya paket evaluasi final dataset v2 di `../results/captures/` yang menjadi hasil
+aktif. Log runtime, eksperimen depth lama, perbandingan model yang dihentikan, dan
+hasil evaluasi sebelum reanalisis tidak menjadi bagian baseline penelitian. Riwayat
+perubahan tetap tersedia melalui Git; workspace aktif tidak menyimpan duplikat
+artefak lama.
 
 ## Scope saat ini
 
-Bridge-Gap menggunakan Gemma 4 E2B untuk deskripsi gambar indoor berbahasa Indonesia. Dua HC-SR04 menyediakan referensi jarak frontal berbasis cone. Rata-rata hanya dibentuk untuk pasangan valid, segar, searah, dan konsisten; nilai tidak diikat pada objek bernama. Evaluasi sensor memakai `ground_truth_cm` eksternal, sedangkan kualitas deskripsi dinilai pada jalur terpisah.
+Bridge-Gap menggunakan Gemma 4 E2B untuk deskripsi gambar indoor berbahasa Indonesia. Dua HC-SR04 menyediakan referensi jarak frontal berbasis cone. Rata-rata hanya dibentuk untuk pasangan valid, segar, searah, dan konsisten; nilai tidak diikat pada objek bernama. Contribution `applied` dapat mengondisikan prompt, sedangkan backend tetap menambahkan bagian sensor berprovenance. Evaluasi mengamati pengaruh konteks tanpa mengasumsikan peningkatan kualitas; metrik sensor tetap dilaporkan terpisah.

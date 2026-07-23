@@ -1,13 +1,13 @@
 import argparse
 import hashlib
 import json
+import shutil
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 
 EXPECTED_DISTANCES_CM = (30.0, 50.0, 75.0, 100.0, 150.0, 200.0)
-EXPECTED_REPEATS = (1, 2, 3)
 MANIFEST_SCHEMA_VERSION = 2
 
 
@@ -31,7 +31,6 @@ def _immutable_input(record: dict[str, Any]) -> dict[str, Any]:
         "batch_id": record.get("batch_id"),
         "capture_time_ms": record.get("capture_time_ms"),
         "camera_facing_mode": record.get("camera_facing_mode"),
-        "mode": record.get("mode"),
         "image": record.get("image"),
         "sensor_evidence": record.get("sensor_evidence"),
         "metadata": record.get("metadata"),
@@ -44,6 +43,8 @@ def build_manifest(
     dataset_id: str,
     batch_id: str | None = None,
     image_path_prefix: str | None = None,
+    capture_ids: set[str] | None = None,
+    image_output_prefix: str | None = None,
 ) -> dict[str, Any]:
     records_dir = captures_root / "records"
     rows: list[dict[str, Any]] = []
@@ -59,6 +60,8 @@ def build_manifest(
         if image_path_prefix is not None and not image_relative_path.startswith(image_path_prefix):
             continue
         capture_id = str(record["capture_id"])
+        if capture_ids is not None and capture_id not in capture_ids:
+            continue
         if capture_id in seen_capture_ids:
             raise ValueError(f"Capture ID duplikat: {capture_id}")
         seen_capture_ids.add(capture_id)
@@ -75,8 +78,8 @@ def build_manifest(
         repeat_index = int(repeat_index)
         if ground_truth_cm not in EXPECTED_DISTANCES_CM:
             raise ValueError(f"Jarak tidak termasuk protokol: {capture_id} = {ground_truth_cm:g} cm")
-        if repeat_index not in EXPECTED_REPEATS:
-            raise ValueError(f"Repeat tidak valid: {capture_id} = {repeat_index}")
+        if repeat_index < 1:
+            raise ValueError(f"Repeat harus lebih besar dari nol: {capture_id} = {repeat_index}")
         if abs(sensor_face_ground_truth_cm - (ground_truth_cm - 3.0)) > 1e-9:
             raise ValueError(f"Offset kamera-sensor tidak konsisten: {capture_id}")
 
@@ -99,9 +102,20 @@ def build_manifest(
             if not isinstance(sample.get("distance_cm"), (int, float)):
                 raise ValueError(f"Nilai {sensor_name} tidak valid: {capture_id}")
 
-        image_path = captures_root / image_relative_path
+        source_image_path = captures_root / image_relative_path
+        image_path = source_image_path
+        if image_output_prefix is not None:
+            output_prefix = _safe_image_prefix(image_output_prefix)
+            image_path = captures_root / output_prefix / source_image_path.name
+            image_path.parent.mkdir(parents=True, exist_ok=True)
+            if image_path.exists() and image_path.read_bytes() != source_image_path.read_bytes():
+                raise ValueError(f"File clean sudah berbeda: {image_path}")
+            if not image_path.exists():
+                shutil.copyfile(source_image_path, image_path)
         if not image_path.is_file():
             raise ValueError(f"Gambar tidak ditemukan: {capture_id} -> {image_relative_path}")
+
+        manifest_image_path = image_path.relative_to(captures_root).as_posix()
 
         rows.append(
             {
@@ -113,7 +127,7 @@ def build_manifest(
                 "sensor_face_ground_truth_cm": sensor_face_ground_truth_cm,
                 "repeat_index": repeat_index,
                 "image_name": Path(image_relative_path).name,
-                "image_path": image_relative_path,
+                "image_path": manifest_image_path,
                 "image_size_bytes": image_path.stat().st_size,
                 "image_sha256": _sha256_bytes(image_path.read_bytes()),
                 "input_sha256": _canonical_sha256(_immutable_input(record)),
@@ -126,35 +140,55 @@ def build_manifest(
             }
         )
 
-    expected_pairs = {
-        (distance, repeat)
-        for distance in EXPECTED_DISTANCES_CM
-        for repeat in EXPECTED_REPEATS
-    }
-    if seen_distance_repeats != expected_pairs:
-        missing = sorted(expected_pairs - seen_distance_repeats)
-        extra = sorted(seen_distance_repeats - expected_pairs)
-        raise ValueError(f"Distribusi dataset tidak lengkap. missing={missing}, extra={extra}")
+    seen_distances = {distance for distance, _ in seen_distance_repeats}
+    missing_distances = sorted(set(EXPECTED_DISTANCES_CM) - seen_distances)
+    if missing_distances:
+        raise ValueError(f"Distribusi dataset tidak lengkap. Jarak yang hilang={missing_distances}")
 
     rows.sort(key=lambda row: (row["ground_truth_cm"], row["repeat_index"]))
+    repeat_counts = {
+        f"{distance:g}": sum(row["ground_truth_cm"] == distance for row in rows)
+        for distance in EXPECTED_DISTANCES_CM
+    }
     return {
         "schema_version": MANIFEST_SCHEMA_VERSION,
         "dataset_id": dataset_id,
         "batch_id": batch_id,
-        "image_path_prefix": image_path_prefix,
+        "image_path_prefix": image_output_prefix or image_path_prefix,
         "frozen_at": datetime.now(timezone.utc).isoformat(),
         "total_captures": len(rows),
         "expected_distances_cm": list(EXPECTED_DISTANCES_CM),
-        "expected_repeats_per_distance": len(EXPECTED_REPEATS),
+        "expected_repeats_per_distance": None,
+        "repeat_counts_by_distance": repeat_counts,
         "captures": rows,
     }
+
+
+def _safe_image_prefix(prefix: str) -> Path:
+    relative = Path(prefix.strip().replace("\\", "/"))
+    if relative.is_absolute() or ".." in relative.parts or not relative.parts:
+        raise ValueError("image_output_prefix tidak valid.")
+    if relative.parts[0] != "images" or any(not part.replace("_", "a").replace("-", "a").isalnum() for part in relative.parts):
+        raise ValueError("image_output_prefix harus berada di bawah images/.")
+    return relative
+
+
+def _read_capture_ids(path: Path) -> set[str]:
+    text = path.read_text(encoding="utf-8")
+    try:
+        parsed = json.loads(text)
+    except json.JSONDecodeError:
+        return {line.strip() for line in text.splitlines() if line.strip()}
+    if isinstance(parsed, list) and all(isinstance(item, str) for item in parsed):
+        return {item for item in parsed if item}
+    raise ValueError("File capture IDs harus berupa array JSON atau satu ID per baris.")
 
 
 def validate_manifest(captures_root: Path, manifest: dict[str, Any]) -> dict[str, Any]:
     captures = manifest.get("captures")
     if not isinstance(captures, list):
         raise ValueError("Daftar captures tidak tersedia pada manifest.")
-    if manifest.get("total_captures") != len(captures) or len(captures) != 18:
+    if manifest.get("total_captures") != len(captures) or not captures:
         raise ValueError(f"Jumlah capture manifest tidak valid: {len(captures)}")
 
     capture_ids: set[str] = set()
@@ -168,6 +202,10 @@ def validate_manifest(captures_root: Path, manifest: dict[str, Any]) -> dict[str
         capture_ids.add(capture_id)
 
         pair = (float(row["ground_truth_cm"]), int(row["repeat_index"]))
+        if pair[0] not in EXPECTED_DISTANCES_CM:
+            raise ValueError(f"Jarak tidak termasuk protokol: {pair[0]:g} cm")
+        if pair[1] < 1:
+            raise ValueError(f"Repeat harus lebih besar dari nol: {pair}")
         if pair in distance_repeats:
             raise ValueError(f"Kombinasi jarak/repeat duplikat: {pair}")
         distance_repeats.add(pair)
@@ -224,17 +262,18 @@ def validate_manifest(captures_root: Path, manifest: dict[str, Any]) -> dict[str
         ):
             raise ValueError(f"Status sensor tidak sesuai: {capture_id}")
 
-    expected_pairs = {
-        (distance, repeat)
+    seen_distances = {distance for distance, _ in distance_repeats}
+    if seen_distances != set(EXPECTED_DISTANCES_CM):
+        raise ValueError("Distribusi jarak manifest tidak lengkap.")
+    repeat_counts = {
+        f"{distance:g}": sum(row["ground_truth_cm"] == distance for row in captures)
         for distance in EXPECTED_DISTANCES_CM
-        for repeat in EXPECTED_REPEATS
     }
-    if distance_repeats != expected_pairs:
-        raise ValueError("Distribusi jarak/repeat manifest tidak lengkap.")
     return {
         "valid": True,
         "dataset_id": manifest.get("dataset_id"),
         "total_captures": len(captures),
+        "repeat_counts_by_distance": repeat_counts,
         "unique_capture_ids": len(capture_ids),
         "unique_images": len(image_paths),
         "unique_image_checksums": len(image_hashes),
@@ -262,6 +301,8 @@ def main() -> None:
     parser.add_argument("--dataset-id", default="hcsr04-indoor-distance-v2-clean")
     parser.add_argument("--batch-id")
     parser.add_argument("--image-path-prefix")
+    parser.add_argument("--capture-ids-file", type=Path)
+    parser.add_argument("--image-output-prefix")
     args = parser.parse_args()
 
     if args.output.exists():
@@ -271,6 +312,8 @@ def main() -> None:
         dataset_id=args.dataset_id,
         batch_id=args.batch_id,
         image_path_prefix=args.image_path_prefix,
+        capture_ids=_read_capture_ids(args.capture_ids_file) if args.capture_ids_file else None,
+        image_output_prefix=args.image_output_prefix,
     )
     validation = validate_manifest(args.captures_root, manifest)
     args.output.parent.mkdir(parents=True, exist_ok=True)

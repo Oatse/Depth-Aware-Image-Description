@@ -162,8 +162,8 @@ def append_sensor_section(
         if closest and closest.lower() not in {"tidak_diketahui", "tidak ada", "unknown", "none"}:
             distance_text = f"dengan estimasi jarak sekitar {contribution['frontal_reference_cm']:.1f} cm."
             if closest.lower() in base.lower():
-                return f"{base.rstrip('.')} yang tampak sebagai objek paling dekat di depan kamera, {distance_text}"
-            return f"{base} {closest} tampak sebagai objek paling dekat di depan kamera, {distance_text}"
+                return f"{base.rstrip('.')} yang tampak sebagai objek terdekat dari kamera, {distance_text}"
+            return f"{base} {closest} tampak sebagai objek terdekat dari kamera, {distance_text}"
     return f"{base} {contribution['description']}" if contribution else base
 
 

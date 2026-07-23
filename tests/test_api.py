@@ -190,6 +190,20 @@ def test_only_two_public_modes_are_accepted(monkeypatch) -> None:
     assert "gemma_only, sensor_assisted" in rejected.json()["error"]
 
 
+def test_gemma_only_system_note_matches_default_visual_prompt(monkeypatch) -> None:
+    import app.routes.analyze as analyze_route
+
+    monkeypatch.setattr(analyze_route, "gemma_client", FakeGemmaClient())
+    with TestClient(app) as client:
+        response = _analyze(client, mode="gemma_only")
+
+    payload = response.json()
+    assert payload["display"]["sensor_contribution"] is None
+    assert payload["display"]["system_note"] == (
+        "Gemma menggunakan prompt visual default tanpa konteks sensor."
+    )
+
+
 def test_analysis_job_completes_with_sensor_assisted_default(monkeypatch) -> None:
     import app.routes.analyze as analyze_route
 

@@ -14,7 +14,9 @@ const elements = {
   cameraPreview: document.querySelector("#camera-preview"),
   cameraActions: document.querySelector("#camera-actions"),
   cameraCapture: document.querySelector("#capture-image"),
+  captureTarget: document.querySelector("#capture-target-id"),
   captureMeasured: document.querySelector("#capture-ground-truth-cm"),
+  captureSaveStatus: document.querySelector("#capture-save-status"),
   cameraSwitch: document.querySelector("#switch-camera"),
   canvas: document.querySelector("#capture-canvas"),
   sensorLivePanel: document.querySelector("#sensor-live-panel"),
@@ -66,8 +68,6 @@ const elements = {
   rawPayload: document.querySelector("#raw-payload-output"),
 };
 
-const CAPTURE_BATCH_STORAGE_KEY = "bridge-gap-clean-capture-batch-id-v2";
-
 let cameraStream = null;
 let cameraFacingMode = "environment";
 let captureClock = null;
@@ -77,7 +77,6 @@ let loadingIndex = 0;
 let latestSensorPaired = false;
 let calibrationFrozen = false;
 let captureSaving = false;
-const captureBatchId = getOrCreateCaptureBatchId();
 
 elements.systemStatusToggle?.addEventListener("click", () => {
   const expanded = elements.systemStatusToggle.getAttribute("aria-expanded") === "true";
@@ -88,6 +87,7 @@ elements.systemStatusToggle?.addEventListener("click", () => {
 
 elements.cameraRetry?.addEventListener("click", startCamera);
 elements.cameraCapture?.addEventListener("click", captureFrame);
+elements.captureTarget?.addEventListener("input", updateCameraCaptureAvailability);
 elements.captureMeasured?.addEventListener("input", updateCameraCaptureAvailability);
 elements.cameraSwitch?.addEventListener("click", async () => {
   cameraFacingMode = cameraFacingMode === "environment" ? "user" : "environment";
@@ -173,22 +173,23 @@ async function captureFrame() {
     const file = new File([blob], "camera-" + capturedAt + ".jpg", { type: "image/jpeg" });
     const form = new FormData();
     form.append("image", file, file.name);
-    form.append("capture_id", createClientId("demo", capturedAt));
+    form.append("capture_id", createClientId("capture", capturedAt));
     form.append("capture_time_ms", String(capturedAt));
     form.append("camera_facing_mode", cameraFacingMode);
     form.append("mode", elements.mode?.value || "sensor_assisted");
     form.append("clock_offset_ms", String(captureClock.offset_ms));
     form.append("clock_rtt_ms", String(captureClock.rtt_ms));
-    if (!window.AnalysisJobClient) {
-      throw new Error("Klien antrean analisis tidak tersedia.");
+    form.append("ground_truth_cm", String(Number(elements.captureMeasured.value)));
+    form.append("target_id", elements.captureTarget.value.trim());
+    if (typeof window.AnalysisJobClient?.capture !== "function") {
+      throw new Error("Klien capture belum diperbarui. Muat ulang halaman.");
     }
-    setLoading(true);
-    const payload = await window.AnalysisJobClient.analyze(form);
-    renderResult(payload);
+    const capture = await window.AnalysisJobClient.capture(form);
+    elements.captureSaveStatus.textContent = `Capture tersimpan: ${capture.capture.capture_id}. Siap mengambil capture berikutnya.`;
+    hideCameraError();
   } catch (error) {
-    showCameraError(error.message || "Analisis kamera gagal.");
+    showCameraError(error.message || "Capture kamera gagal disimpan.");
   } finally {
-    setLoading(false);
     captureSaving = false;
     updateCameraCaptureAvailability();
   }
@@ -209,13 +210,17 @@ function renderResult(data) {
   const disagreement = contribution.pair_disagreement_cm ?? evidence.pair_disagreement_cm;
 
   renderFinalDescription(data.final_description || "Deskripsi tidak tersedia.");
-  elements.finalSystemNote.textContent = data.mode === "gemma_only"
-    ? "Deskripsi berasal dari satu citra RGB tanpa kontribusi sensor."
-    : "Referensi frontal ditambahkan setelah deskripsi visual dan tidak diikat ke objek bernama.";
+  elements.finalSystemNote.textContent = data.display?.system_note || (
+    data.mode === "gemma_only"
+      ? "Gemma menggunakan prompt visual default tanpa konteks sensor."
+      : "Backend mempertahankan provenance visual dan sensor secara terpisah."
+  );
   elements.modeOutput.textContent = labelMode(data.mode);
   elements.modeHelper.textContent = data.mode === "gemma_only"
-    ? "Gemma membaca satu citra RGB."
-    : "Gemma membaca citra; sensor diverifikasi secara deterministik.";
+    ? "Gemma membaca satu citra RGB dengan prompt visual default."
+    : status === "applied"
+      ? "Gemma membaca citra dengan konteks frontal terverifikasi."
+      : "Gemma membaca citra dengan prompt visual default karena konteks sensor ditahan.";
   elements.sensorStatusOutput.textContent = labelContributionStatus(status);
   elements.sensorStatusHelper.textContent = contribution.reason_code
     ? "Gate: " + formatToken(contribution.reason_code)
@@ -506,20 +511,9 @@ function updateCameraCaptureAvailability() {
   const sensorRequired = (elements.mode?.value || "sensor_assisted") === "sensor_assisted";
   const groundTruthCm = Number(elements.captureMeasured?.value);
   const validDistance = Number.isFinite(groundTruthCm) && groundTruthCm >= 20 && groundTruthCm <= 200;
-  elements.cameraCapture.disabled = !cameraStream || captureSaving || !validDistance
+  const validTarget = Boolean(elements.captureTarget?.value.trim());
+  elements.cameraCapture.disabled = !cameraStream || captureSaving || !validDistance || !validTarget
     || (sensorRequired && !latestSensorPaired);
-}
-
-function getOrCreateCaptureBatchId() {
-  try {
-    const existing = window.localStorage.getItem(CAPTURE_BATCH_STORAGE_KEY);
-    if (existing) return existing;
-    const created = createClientId("batch", Date.now());
-    window.localStorage.setItem(CAPTURE_BATCH_STORAGE_KEY, created);
-    return created;
-  } catch (_error) {
-    return createClientId("batch", Date.now());
-  }
 }
 
 function createClientId(prefix, timestamp) {

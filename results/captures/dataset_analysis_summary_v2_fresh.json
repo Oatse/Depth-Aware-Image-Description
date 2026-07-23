@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "dataset_id": "hcsr04-indoor-distance-v2-clean-latest-50cm-20260723",
+  "generated_at": "2026-07-23T16:31:35.541346+00:00",
+  "evaluation_type": "technical_dual_mode_output_audit",
+  "definition": "Audit teknis netral atas kelengkapan output, latency, provenance, perbedaan teks antarmode, dan error referensi sensor.",
+  "total_images": 18,
+  "total_runs": 36,
+  "modes": {
+    "gemma_only": {
+      "mode": "gemma_only",
+      "completed": 18,
+      "failed": 0,
+      "main_object_nonempty_count": 18,
+      "description_nonempty_count": 18,
+      "mean_total_latency_ms": 34475.06,
+      "by_distance": [
+        {
+          "ground_truth_cm": 30.0,
+          "n": 3,
+          "main_object_nonempty_count": 3,
+          "description_nonempty_count": 3,
+          "mean_total_latency_ms": 42487.33
+        },
+        {
+          "ground_truth_cm": 50.0,
+          "n": 3,
+          "main_object_nonempty_count": 3,
+          "description_nonempty_count": 3,
+          "mean_total_latency_ms": 39326.67
+        },
+        {
+          "ground_truth_cm": 75.0,
+          "n": 3,
+          "main_object_nonempty_count": 3,
+          "description_nonempty_count": 3,
+          "mean_total_latency_ms": 32663.0
+        },
+        {
+          "ground_truth_cm": 100.0,
+          "n": 3,
+          "main_object_nonempty_count": 3,
+          "description_nonempty_count": 3,
+          "mean_total_latency_ms": 31491.0
+        },
+        {
+          "ground_truth_cm": 150.0,
+          "n": 3,
+          "main_object_nonempty_count": 3,
+          "description_nonempty_count": 3,
+          "mean_total_latency_ms": 30550.0
+        },
+        {
+          "ground_truth_cm": 200.0,
+          "n": 3,
+          "main_object_nonempty_count": 3,
+          "description_nonempty_count": 3,
+          "mean_total_latency_ms": 30332.33
+        }
+      ]
+    },
+    "sensor_assisted": {
+      "mode": "sensor_assisted",
+      "completed": 18,
+      "failed": 0,
+      "main_object_nonempty_count": 18,
+      "description_nonempty_count": 18,
+      "mean_total_latency_ms": 43581.17,
+      "by_distance": [
+        {
+          "ground_truth_cm": 30.0,
+          "n": 3,
+          "main_object_nonempty_count": 3,
+          "description_nonempty_count": 3,
+          "mean_total_latency_ms": 47124.33
+        },
+        {
+          "ground_truth_cm": 50.0,
+          "n": 3,
+          "main_object_nonempty_count": 3,
+          "description_nonempty_count": 3,
+          "mean_total_latency_ms": 42260.67
+        },
+        {
+          "ground_truth_cm": 75.0,
+          "n": 3,
+          "main_object_nonempty_count": 3,
+          "description_nonempty_count": 3,
+          "mean_total_latency_ms": 39799.33
+        },
+        {
+          "ground_truth_cm": 100.0,
+          "n": 3,
+          "main_object_nonempty_count": 3,
+          "description_nonempty_count": 3,
+          "mean_total_latency_ms": 44163.0
+        },
+        {
+          "ground_truth_cm": 150.0,
+          "n": 3,
+          "main_object_nonempty_count": 3,
+          "description_nonempty_count": 3,
+          "mean_total_latency_ms": 43570.67
+        },
+        {
+          "ground_truth_cm": 200.0,
+          "n": 3,
+          "main_object_nonempty_count": 3,
+          "description_nonempty_count": 3,
+          "mean_total_latency_ms": 44569.0
+        }
+      ]
+    }
+  },
+  "sensor_metrics": {
+    "reference_definition": {
+      "raw_sensor_error": "sensor_raw_cm - (ground_truth_cm - 3.0)",
+      "corrected_frontal_error": "frontal_reference_cm - ground_truth_cm"
+    },
+    "sensor_1_raw": {
+      "n": 18,
+      "bias_cm": -0.8528,
+      "mae_cm": 0.8783,
+      "rmse_cm": 0.9618,
+      "max_abs_error_cm": 1.6
+    },
+    "sensor_2_raw": {
+      "n": 18,
+      "bias_cm": -0.5533,
+      "mae_cm": 0.6089,
+      "rmse_cm": 0.6931,
+      "max_abs_error_cm": 1.17
+    },
+    "corrected_frontal_reference": {
+      "n": 18,
+      "bias_cm": -0.2289,
+      "mae_cm": 0.8622,
+      "rmse_cm": 0.9827,
+      "max_abs_error_cm": 1.83
+    },
+    "pair_disagreement_cm": {
+      "mean": 0.355,
+      "max": 1.24
+    }
+  },
+  "mode_comparison": {
+    "main_object_text_changed_count": 12,
+    "description_text_changed_count": 18,
+    "interpretation": "Perbedaan teks menunjukkan output antarmode berubah, bukan bukti bahwa salah satu mode lebih benar."
+  },
+  "limitations": [
+    "Kelengkapan field dan perbedaan teks tidak membuktikan kebenaran semantik.",
+    "Kualitas visual dinilai blind terhadap mode, jarak, capture ID, dan run ID sebelum kunci dibuka.",
+    "Skor visual berasal dari satu evaluator teknis sehingga inter-rater agreement belum tersedia.",
+    "Evaluasi visual bukan UAT dan tidak membuktikan manfaat bagi pengguna.",
+    "Inferensi tidak memakai seed sehingga hasil byte-for-byte tidak dijamin berulang."
+  ]
+}

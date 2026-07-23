@@ -35,6 +35,22 @@ test("network failure is reported as a backend connection problem", async () => 
   );
 });
 
+test("capture saves through the capture endpoint without creating an analysis job", async () => {
+  const requests = [];
+  const client = loadClient(async (url, options) => {
+    requests.push({ url, method: options.method });
+    return response(201, {
+      capture: { capture_id: "capture-1", status: "captured" },
+      capture_count: 1,
+    });
+  });
+
+  const result = await client.capture({});
+
+  assert.equal(result.capture.status, "captured");
+  assert.deepEqual(requests, [{ url: "/captures", method: "POST" }]);
+});
+
 test("temporary polling failure does not discard a running analysis", async () => {
   let requestCount = 0;
   const client = loadClient(async () => {

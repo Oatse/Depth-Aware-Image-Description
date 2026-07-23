@@ -1,0 +1,134 @@
+{
+  "mode": "sensor_assisted",
+  "submitted": 18,
+  "completed": 18,
+  "failed": 0,
+  "runs": [
+    {
+      "capture_id": "6aaea61a-1cbc-4763-a824-c1d5b77fcd9a",
+      "job_id": "97f6c53e801c47219207aeef19e50b31",
+      "status": "completed",
+      "analysis_run_id": "5dd503ab7a004e24a80eed60586d2b0d",
+      "error": null
+    },
+    {
+      "capture_id": "f9aa8e50-d140-4133-b521-23a12ec4ac97",
+      "job_id": "97886a616aef49c38f28d8b00527d0ed",
+      "status": "completed",
+      "analysis_run_id": "299383f7877f445ab5d0e5f8f9d42793",
+      "error": null
+    },
+    {
+      "capture_id": "b6aa1f8d-e899-4126-a2f4-05a167708f7d",
+      "job_id": "ddcb566a59b24ed88e4058967e68ba6a",
+      "status": "completed",
+      "analysis_run_id": "c4a98cad33494c7f8948b5e302ba6914",
+      "error": null
+    },
+    {
+      "capture_id": "d4b30eef-025e-4b67-a926-2bdead833292",
+      "job_id": "a7e2f28bca344b83a107b4ba30518075",
+      "status": "completed",
+      "analysis_run_id": "46cab3a2e93042b69caba825d6cb7789",
+      "error": null
+    },
+    {
+      "capture_id": "827a0275-b84b-4487-81aa-93fc8859788c",
+      "job_id": "bd1323d24b8a42bcb87d21a3a5d099eb",
+      "status": "completed",
+      "analysis_run_id": "dc2452819c704b14867df44599cd8369",
+      "error": null
+    },
+    {
+      "capture_id": "584d90bd-bff0-4795-9bf5-1b3e32b13ce1",
+      "job_id": "00538ddf12034a22b53b943451595592",
+      "status": "completed",
+      "analysis_run_id": "3c4074ba9d594d16b8149ce778b6953d",
+      "error": null
+    },
+    {
+      "capture_id": "2dff46c3-2d49-4fd9-a166-bc0b26a3c8d8",
+      "job_id": "66ac713695004550b7a37604f7a705f4",
+      "status": "completed",
+      "analysis_run_id": "9dde2bb36fa04279b73e1b18bc594940",
+      "error": null
+    },
+    {
+      "capture_id": "6cba3a3c-f522-4e76-acc6-6897fef41724",
+      "job_id": "c466506a11c043d7b793c9b74b0ac358",
+      "status": "completed",
+      "analysis_run_id": "6c5467a51c524fdabb7cfb37ed66ccac",
+      "error": null
+    },
+    {
+      "capture_id": "dbd84319-ebc3-483d-882a-48f0b22eca11",
+      "job_id": "535932efad014bdba3fe8572d098a58f",
+      "status": "completed",
+      "analysis_run_id": "afb6030ae4fe49e0b4bdd42ba8e8125c",
+      "error": null
+    },
+    {
+      "capture_id": "131c0f0f-3c1a-4b17-aaa9-18b0ecc9ad12",
+      "job_id": "5695142532664b3d803b977b34c398b5",
+      "status": "completed",
+      "analysis_run_id": "be0c7e5f31cd4379b9e6564e60d60b56",
+      "error": null
+    },
+    {
+      "capture_id": "81adb4ed-b5a7-4712-9aae-9426a12d520c",
+      "job_id": "a428f217ae6a43d7a304448b4116e054",
+      "status": "completed",
+      "analysis_run_id": "1637f8282e524bfd9af0712f2c6dc339",
+      "error": null
+    },
+    {
+      "capture_id": "91a63be4-e5c3-4109-8463-7398572db8bf",
+      "job_id": "131e573e805546bbb1b1563e25732854",
+      "status": "completed",
+      "analysis_run_id": "9d43904b17c64374bbea93014b01f03d",
+      "error": null
+    },
+    {
+      "capture_id": "b9953395-f6ea-4a66-84c8-9f23695a13ab",
+      "job_id": "2331659e1dcb473ab0ab0541444e7e38",
+      "status": "completed",
+      "analysis_run_id": "37e222ed136c428eb82e97a944cee836",
+      "error": null
+    },
+    {
+      "capture_id": "16fac600-2de1-4026-8925-63060e19e153",
+      "job_id": "df15ed715d66458886ff2f2f9605aa09",
+      "status": "completed",
+      "analysis_run_id": "80d122c4313a42b0afc1d1882085f88c",
+      "error": null
+    },
+    {
+      "capture_id": "c0aea9f6-0ef3-47ec-9564-572e93fdcdcf",
+      "job_id": "3918b4bdd9674af28ef9bbd44f43db9c",
+      "status": "completed",
+      "analysis_run_id": "c1348a0111c84a34aac2778a298027ac",
+      "error": null
+    },
+    {
+      "capture_id": "ea20341d-ae41-4891-ac30-ae5b89c8d3f5",
+      "job_id": "28118ec45d5d460a9a40817d615c78d4",
+      "status": "completed",
+      "analysis_run_id": "247c521f932b41a996b215d01fc2205c",
+      "error": null
+    },
+    {
+      "capture_id": "560e1c4e-7e28-4f7a-b4dd-16a0f924eaa2",
+      "job_id": "d54517264d5a48bfb31704936ec06d23",
+      "status": "completed",
+      "analysis_run_id": "faee0f11c7494682a9fce59cee1d95aa",
+      "error": null
+    },
+    {
+      "capture_id": "2a6c0c81-5047-4788-abae-60b1f78f948b",
+      "job_id": "c8a1e50a42d24e238616ab1927d7c82f",
+      "status": "completed",
+      "analysis_run_id": "68273c28d5004cfaa37cba292383a921",
+      "error": null
+    }
+  ]
+}

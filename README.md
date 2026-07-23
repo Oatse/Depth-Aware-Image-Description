@@ -10,19 +10,22 @@ Bridge-Gap adalah prototipe teknis untuk menghasilkan **deskripsi gambar indoor 
 - Output utama: satu deskripsi gambar indoor berbahasa Indonesia.
 - Output sensor: nilai tiap sensor, status bukti, dan—hanya untuk pasangan valid—rata-rata sebagai referensi jarak frontal.
 - Evaluasi: kualitas deskripsi dan akurasi sensor dinilai sebagai dua jalur terpisah.
+- Sensor conditioning: hanya referensi `applied` yang masuk ke prompt; backend tetap menambahkan bagian sensor dan provenance secara terpisah.
 
 Sistem tidak mengklaim bahwa angka sensor melekat pada objek bernama, tidak melakukan pemetaan ruang, serta tidak mengklaim keselamatan navigasi atau manfaat bagi pengguna tunanetra tanpa pengujian yang sesuai.
 
 ## Arsitektur ringkas
 
 ```text
-Camera / Upload -> citra RGB -> Gemma 4 E2B -> deskripsi Bahasa Indonesia
-                         |
-                         +-> pencocokan waktu capture
-                                  ^
-2x HC-SR04 -> ESP32 -> pembacaan sensor -> klasifikasi evidence
-                                           -> referensi frontal (bila paired)
+Camera -> capture + snapshot sensor -> results/captures/incoming
+                                      -> validasi/kalibrasi evidence
+citra RGB + konteks frontal bila applied -> Gemma 4 E2B
+deskripsi Gemma + bagian sensor berprovenance -> API/UI/log
 ```
+
+Tujuan perbandingan `gemma_only` dan `sensor_assisted` adalah mengamati pengaruh
+konteks sensor terhadap keluaran dan latency, bukan membuktikan bahwa sensor membuat
+deskripsi lebih baik.
 
 Setelah gate pasangan terpenuhi, koreksi linear dari profil kalibrasi diterapkan terpisah pada kedua sensor sebelum rata-rata frontal dibuat:
 
@@ -46,7 +49,7 @@ scripts/       CLI, preflight, dan alat pengujian
 tests/         Pytest suite
 docs/          dokumentasi aktif dan pustaka penelitian
 instructions/  scope akademik dan kontrak implementasi
-results/       keluaran runtime dan pengujian
+results/       paket evaluasi final dan keluaran runtime terpisah
 ```
 
 ## Setup
@@ -103,7 +106,11 @@ Rumus ini tidak mengubah pembacaan cone menjadi identitas objek atau jarak pada 
 
 ## Alur UI
 
-Alur kamera dipisahkan dari analisis. Masukkan dahulu jarak aktual dari bidang kamera (20–200 cm), lalu tekan **Ambil dan simpan**. Backend langsung menyimpan gambar, timestamp, identitas batch, `ground_truth_cm`, acuan muka sensor setelah offset 3 cm, nomor pengulangan otomatis, serta snapshot sensor ke folder lokal `results/captures/`. Nilai jarak tetap terisi untuk pengulangan berikutnya. UI hanya menampilkan jumlah capture yang tersimpan pada sesi tersebut. Capture tidak memanggil Gemma.
+Alur kamera dipisahkan dari analisis. Masukkan identitas target/scene dan jarak aktual dari bidang kamera (20–200 cm), lalu tekan **Ambil dan simpan**. Backend langsung menyimpan gambar, timestamp, batch runtime, `ground_truth_cm`, acuan muka sensor setelah offset 3 cm, nomor pengulangan otomatis, serta snapshot sensor ke `results/captures/incoming/`. Nilai jarak tetap terisi untuk pengulangan berikutnya. Capture tidak memanggil Gemma.
+
+Dataset v2 final tetap berada di `results/captures/images/dataset_v2_clean/`
+beserta manifest dan artefak evaluasinya. Endpoint runtime tidak menulis ke paket
+tersebut.
 
 Analisis capture tersimpan dijalankan dari backend sebagai satu job untuk satu capture. Runner menunggu job mencapai status terminal sebelum mengirim capture berikutnya:
 
@@ -112,8 +119,6 @@ python scripts/analyze_saved_captures.py
 ```
 
 Gunakan `--batch-id <batch_id>` hanya bila backend perlu membatasi analisis pada satu batch tertentu.
-
-Tab Upload tetap mendukung analisis langsung untuk satu file melalui tombol **Analisis**.
 
 Panel kalibrasi memakai lima jarak (20, 60, 100, 150, dan 200 cm) dengan 30 pembacaan berpasangan per jarak. Setelah 150 pembacaan valid, profil koreksi dibekukan. Verifikasi dilakukan pada jarak baru 40, 80, 125, dan 175 cm dengan 30 pembacaan per jarak (120 pasangan) untuk mengevaluasi rentang 20–200 cm. Hasil verifikasi disimpan terpisah dan tidak membentuk ulang koefisien. Klaim kinerja sampai 200 cm hanya dibuat setelah seluruh titik verifikasi lengkap dan memenuhi kriteria evaluasi.
 

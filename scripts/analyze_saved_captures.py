@@ -18,12 +18,18 @@ def analyze_saved_captures(
     include_failed: bool,
     poll_interval_seconds: float,
     timeout_seconds: float,
+    include_completed: bool = False,
+    reanalyze: bool = False,
     capture_ids: list[str] | None = None,
 ) -> list[dict[str, Any]]:
     params = {"batch_id": batch_id} if batch_id else {}
     response = client.get("/captures", params=params)
     response.raise_for_status()
-    allowed_statuses = {"captured", "failed"} if include_failed else {"captured"}
+    allowed_statuses = {"captured"}
+    if include_failed:
+        allowed_statuses.add("failed")
+    if include_completed:
+        allowed_statuses.add("completed")
     captures_by_id = {
         str(capture["capture_id"]): capture
         for capture in response.json().get("captures", [])
@@ -42,7 +48,11 @@ def analyze_saved_captures(
         capture_id = str(capture["capture_id"])
         form = {"mode": mode} if mode else None
         try:
-            accepted = client.post(f"/captures/{capture_id}/analysis-jobs", data=form)
+            accepted = client.post(
+                f"/captures/{capture_id}/analysis-jobs",
+                params={"reanalyze": "true"} if reanalyze else None,
+                data=form,
+            )
             accepted.raise_for_status()
             poll_url = str(accepted.json()["poll_url"])
             deadline = time.monotonic() + timeout_seconds
@@ -71,9 +81,12 @@ def main() -> None:
     parser.add_argument("--batch-id")
     parser.add_argument("--mode", choices=("sensor_assisted", "gemma_only"))
     parser.add_argument("--include-failed", action="store_true")
+    parser.add_argument("--include-completed", action="store_true", help="Analisis ulang capture yang sudah pernah selesai.")
+    parser.add_argument("--reanalyze", action="store_true", help="Buka kembali capture completed untuk dianalisis ulang.")
     parser.add_argument("--poll-interval", type=float, default=0.5)
     parser.add_argument("--timeout", type=float, default=300.0)
     parser.add_argument("--manifest", type=Path)
+    parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     if args.poll_interval < 0:
         parser.error("--poll-interval tidak boleh negatif")
@@ -91,6 +104,8 @@ def main() -> None:
             batch_id=args.batch_id,
             mode=args.mode,
             include_failed=args.include_failed,
+            include_completed=args.include_completed,
+            reanalyze=args.reanalyze,
             poll_interval_seconds=args.poll_interval,
             timeout_seconds=args.timeout,
             capture_ids=capture_ids,
@@ -106,11 +121,18 @@ def main() -> None:
         for item in results
     ]
     summary = {
+        "mode": args.mode,
         "submitted": len(results),
         "completed": sum(item.get("status") == "completed" for item in results),
         "failed": sum(item.get("status") == "failed" for item in results),
-        "results": compact_results,
+        "runs": compact_results,
     }
+    if args.output is not None:
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(
+            json.dumps(summary, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
     print(json.dumps(summary, ensure_ascii=False, indent=2))
     if summary["failed"]:
         raise SystemExit(1)

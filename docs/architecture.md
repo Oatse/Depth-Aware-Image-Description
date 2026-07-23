@@ -21,10 +21,10 @@ Setiap `analysis_run` menyimpan provenance Gemma per run: versi aplikasi, provid
 ```mermaid
 flowchart TD
     A["Camera belakang"] --> B["Simpan gambar dan metadata capture"]
-    B --> C["Folder lokal results/captures"]
+    B --> C["Folder runtime results/captures/incoming"]
     C --> D["Satu capture = satu analysis job"]
     O["Upload langsung"] --> D
-    D --> P["Validasi dan preprocessing"]
+    D --> P["Validasi dan preprocessing citra"]
     P --> Q["Gemma 4 E2B"]
     Q --> E["Deskripsi visual Bahasa Indonesia"]
 
@@ -32,29 +32,42 @@ flowchart TD
     G["HC-SR04 2"] --> H
     H --> I["Sensor bridge"]
     I --> J["Pencocokan saat capture"]
-    J --> K["Klasifikasi evidence"]
+    J --> K["Klasifikasi, freshness, dan kalibrasi evidence"]
     K --> B
-    C --> L["Kontribusi sensor deterministik dari snapshot tersimpan"]
+    K --> R{"Contribution applied?"}
+    R -->|Ya| S["Konteks frontal mengondisikan prompt Gemma"]
+    S --> Q
+    R -->|Tidak| T["Prompt visual default"]
+    T --> Q
+    C --> L["Bagian sensor deterministik dari snapshot tersimpan"]
 
     E --> M["Deskripsi akhir"]
     L --> M
     M --> N["API, UI, dan log"]
 ```
 
-Kedua jalur hanya bertemu pada penyajian hasil. Sensor tidak menjadi input yang mengubah interpretasi objek oleh Gemma, dan Gemma tidak menghitung angka jarak.
+Referensi sensor terverifikasi dapat memengaruhi keluaran melalui prompt
+sensor-conditioned, tetapi tidak menjadi identitas objek atau ground truth visual.
+Gemma tidak menghitung angka jarak. Backend tetap menjadi sumber perhitungan
+referensi frontal dan menambahkan bagian sensor deterministik dengan provenance
+terpisah.
 
 ## Urutan proses
 
-1. Klien membuat `capture_id`, `batch_id`, dan timestamp capture.
+1. Klien membuat `capture_id` dan timestamp capture; backend menetapkan batch runtime.
 2. `POST /captures` memvalidasi citra, mencocokkan sensor pada waktu capture, lalu menyimpan gambar dan metadata secara lokal tanpa menjalankan Gemma.
 3. UI memperbarui jumlah capture tersimpan.
 4. Backend memilih satu capture dan membuat satu job melalui `POST /captures/{capture_id}/analysis-jobs`.
 5. Job membaca citra dan sensor evidence yang sudah tersimpan; sensor tidak dicocokkan ulang.
-6. Gemma menghasilkan deskripsi visual dari citra RGB.
-7. Backend memeriksa status evidence tersimpan dan, bila `paired`, menerapkan koreksi sesuai profil pada setiap sensor.
-8. Backend menghitung rata-rata dua nilai terkoreksi dan menambahkan referensi frontal tanpa menyebut objek tertentu.
-9. Status capture berubah `captured → queued → running → completed/failed`.
-10. Runner backend menunggu satu job selesai sebelum mengirim capture berikutnya.
+6. Backend memeriksa status evidence tersimpan dan, bila seluruh gate terpenuhi,
+   menerapkan koreksi sesuai profil pada setiap sensor.
+7. Backend menghitung referensi frontal; hanya contribution `applied` yang membentuk
+   konteks prompt sensor-conditioned.
+8. Gemma menghasilkan deskripsi dari citra RGB dan prompt yang sesuai mode.
+9. Backend menambahkan bagian referensi sensor deterministik tanpa menyebut objek
+   tertentu dan menyimpan provenance kedua segmen.
+10. Status capture berubah `captured → queued → running → completed/failed`.
+11. Runner backend menunggu satu job selesai sebelum mengirim capture berikutnya.
 
 Jika backend restart ketika record masih `queued` atau `running`, endpoint mendeteksi bahwa job in-memory sebelumnya sudah tidak ada, menandai percobaan tersebut `failed`, lalu mengizinkan retry sebagai job baru. Gambar dan sensor evidence asli tetap digunakan.
 
@@ -98,12 +111,18 @@ Nilai sensor individual, timestamp, age, dan status tidak boleh dibuang setelah 
 
 ## Kontrak request
 
-`POST /captures` menerima multipart form berisi citra, `capture_id`, `batch_id`, `capture_time_ms`, `camera_facing_mode`, metadata clock, serta metadata eksperimen opsional. Hasilnya disimpan pada:
+`POST /captures` menerima multipart form berisi citra, `capture_id`,
+`capture_time_ms`, `camera_facing_mode`, metadata clock, `ground_truth_cm`, dan
+`target_id`. Backend menetapkan batch `capture-candidates` dan menyimpan hasil pada:
 
 ```text
-results/captures/images/<capture_id>.<ext>
-results/captures/records/<capture_id>.json
+results/captures/incoming/images/capture_candidates/<capture_id>.<ext>
+results/captures/incoming/records/<capture_id>.json
 ```
+
+`results/captures/images/dataset_v2_clean/`, record final yang dirujuk manifest,
+dan seluruh artefak evaluasi v2 berada di luar repository runtime tersebut. Endpoint
+capture tidak dapat menambah atau menimpa paket evaluasi yang sudah dibekukan.
 
 `POST /captures/{capture_id}/analysis-jobs` tidak menerima ulang gambar atau sensor. Endpoint membaca snapshot tersimpan dan membuat satu job independen.
 

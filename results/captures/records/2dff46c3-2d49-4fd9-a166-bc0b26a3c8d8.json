@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "capture_id": "2dff46c3-2d49-4fd9-a166-bc0b26a3c8d8",
+  "batch_id": "default",
+  "status": "completed",
+  "capture_time_ms": 1784793217431,
+  "camera_facing_mode": "environment",
+  "mode": "sensor_assisted",
+  "image": {
+    "original_filename": "camera-1784793217431.jpg",
+    "content_type": "image/jpeg",
+    "width": 480,
+    "height": 640,
+    "path": "images/dataset_v2_clean/2dff46c3-2d49-4fd9-a166-bc0b26a3c8d8.jpg"
+  },
+  "sensor_evidence": {
+    "enabled": true,
+    "port": "COM7",
+    "capture_time_ms": 1784793215142,
+    "window_ms": 250,
+    "status": "paired",
+    "samples": {
+      "sensor_1": {
+        "distance_cm": 70.98,
+        "received_time_ms": 1784793214985,
+        "age_ms": 157,
+        "device_timestamp_ms": 363017,
+        "seq": 5168,
+        "status": "ok"
+      },
+      "sensor_2": {
+        "distance_cm": 71.38,
+        "received_time_ms": 1784793214911,
+        "age_ms": 231,
+        "device_timestamp_ms": 362947,
+        "seq": 5167,
+        "status": "ok"
+      }
+    },
+    "reader_error": null,
+    "connected": true,
+    "connection_attempts": 1,
+    "last_sample_time_ms": 1784793214985,
+    "pair_disagreement_cm": 0.4,
+    "capture_id": "2dff46c3-2d49-4fd9-a166-bc0b26a3c8d8",
+    "client_capture_time_ms": 1784793217431,
+    "host_receive_time_ms": 1784793214985,
+    "capture_transport_delay_ms": -2446,
+    "match_time_ms": 1784793215142,
+    "match_time_source": "normalized_client_capture",
+    "normalized_capture_time_ms": 1784793215142,
+    "clock_offset_ms": -2289,
+    "clock_rtt_ms": 544,
+    "clock_reason_code": null,
+    "clock_skew_exceeded": false,
+    "camera_facing_mode": "environment"
+  },
+  "metadata": {
+    "camera_sensor_offset_cm": 3.0,
+    "ground_truth_cm": 75.0,
+    "sensor_face_ground_truth_cm": 72.0,
+    "target_id": null,
+    "repeat_index": 1
+  },
+  "analysis_attempts": 5,
+  "analysis_job_id": "66ac713695004550b7a37604f7a705f4",
+  "analysis_run_id": "9dde2bb36fa04279b73e1b18bc594940",
+  "analysis_error": null,
+  "created_at": "2026-07-23T07:53:34.985935+00:00",
+  "updated_at": "2026-07-23T16:23:12.919620+00:00"
+}

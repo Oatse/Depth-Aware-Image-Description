@@ -1,0 +1,17 @@
+{
+  "valid": true,
+  "evaluation_id": "dataset-v2-reanalysis-blind-scored-20260723",
+  "dataset_id": "hcsr04-indoor-distance-v2-clean-latest-50cm-20260723",
+  "input_captures_verified": 18,
+  "selected_runs_verified": 36,
+  "unique_selected_run_ids": 36,
+  "raw_provider_responses_preserved": 36,
+  "prompt_checksums_verified": 36,
+  "visual_items_scored": 36,
+  "independent_images": 18,
+  "paired_mode_copies_per_image": 2,
+  "score_lock_verified": true,
+  "artifact_checksums_verified": 34,
+  "artifact_count": 34,
+  "known_display_note_mismatches": 18
+}

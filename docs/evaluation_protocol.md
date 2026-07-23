@@ -7,8 +7,11 @@ Protokol ini memisahkan evaluasi deskripsi Gemma dari evaluasi HC-SR04. Pemisaha
 1. Apakah prototipe menghasilkan deskripsi indoor berbahasa Indonesia yang sesuai dan jelas?
 2. Berapa error pembacaan setiap HC-SR04 terhadap jarak fisik eksternal pada target planar terkendali?
 3. Apakah pipeline mempertahankan provenance serta menerapkan status evidence dan gate pasangan secara benar?
+4. Bagaimana konteks frontal terverifikasi memengaruhi keluaran dan latency
+   dibandingkan prompt visual default?
 
 Tidak ada pertanyaan evaluasi tentang akurasi metrik objek yang disebut Gemma.
+Pertanyaan keempat tidak mengasumsikan bahwa `sensor_assisted` harus lebih baik.
 
 ## 2. Eksperimen sensor
 
@@ -103,6 +106,16 @@ Metrik `frontal_reference_cm` boleh dilaporkan sebagai ringkasan pipeline paired
 
 Satu unit uji memuat citra sumber, prompt, respons mentah, deskripsi yang ditampilkan, latency, dan error. Dataset, kriteria inklusi/eksklusi, serta versi model dikunci sebelum penilaian utama.
 
+Setiap citra membentuk satu pasangan:
+
+- `gemma_only`: prompt visual default tanpa konteks sensor;
+- `sensor_assisted`: prompt yang menerima referensi frontal hanya jika contribution
+  sensor berstatus `applied`.
+
+Backend tetap menambahkan bagian sensor deterministik dan provenance setelah
+respons Gemma. Unit statistik perbandingan adalah pasangan citra, bukan jumlah
+salinan mode.
+
 ### 3.2 Rubrik
 
 | Aspek | Pertanyaan penilaian |
@@ -116,7 +129,19 @@ Satu unit uji memuat citra sumber, prompt, respons mentah, deskripsi yang ditamp
 
 Definisi setiap skala ditulis sebelum scoring. Jika memakai lebih dari satu penilai, laporkan prosedur penyelesaian perbedaan dan ukuran agreement yang sesuai. Jika tidak ada penilai manusia independen, nyatakan keterbatasan tersebut.
 
-### 3.3 Larangan pencampuran label
+### 3.3 Kontrol bias perbandingan mode
+
+- sembunyikan mode, jarak, capture ID, run ID, model, dan prompt dari evaluator;
+- gunakan nama citra netral serta urutan pseudorandom yang dapat direproduksi;
+- kunci skor dengan checksum sebelum key mode dibuka;
+- simpan raw response, prompt penuh, prompt hash, model ID, dan timestamp per run;
+- hitung ringkasan dan bootstrap pada tingkat pasangan citra;
+- pertahankan output gagal atau missing dalam denominator.
+
+Kontrol tersebut mengurangi bias prosedural, tetapi satu evaluator tidak memberikan
+inter-rater agreement dan harus dinyatakan sebagai keterbatasan.
+
+### 3.4 Larangan pencampuran label
 
 - `ground_truth_cm` sensor tidak menjadi label metrik objek Gemma;
 - angka sensor tidak digunakan untuk menilai kesesuaian nama objek;
@@ -185,3 +210,6 @@ Pengujian siap dilaporkan ketika:
 6. raw response, error, dan kegagalan dipertahankan;
 7. hasil sensor dan hasil deskripsi disajikan terpisah;
 8. kesimpulan tidak melewati data yang tersedia.
+9. paket dataset final memiliki manifest dan checksum;
+10. capture baru tersimpan di `results/captures/incoming/` dan tidak mengubah
+    dataset evaluasi yang telah dibekukan.

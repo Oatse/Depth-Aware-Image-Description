@@ -82,6 +82,17 @@
                   <video id="camera-preview" class="camera-preview hidden" autoplay playsinline></video>
                 </div>
                 <div id="camera-error" class="camera-error hidden" role="alert"></div>
+                <label class="capture-distance-control" for="capture-target-id">
+                  <span>Identitas target atau scene</span>
+            <input
+              id="capture-target-id"
+              type="text"
+              maxlength="100"
+              placeholder="contoh: scene-meja-01"
+              autocomplete="off"
+              required
+            />
+                </label>
                 <label class="capture-distance-control" for="capture-ground-truth-cm">
                   <span>Jarak aktual dari kamera</span>
                   <span class="sensor-calibration-input">
@@ -93,6 +104,7 @@
                   <button id="capture-image" type="button" class="secondary-button" disabled>Ambil dan simpan</button>
                   <button id="switch-camera" type="button" class="secondary-button" disabled>Ganti ke kamera depan</button>
                 </div>
+                <p id="capture-save-status" class="sensor-connection-meta" aria-live="polite"></p>
                 <section id="sensor-live-panel" class="sensor-live-panel" aria-labelledby="sensor-live-title" aria-live="polite">
                   <div class="sensor-live-heading">
                     <div>
@@ -366,7 +378,7 @@
       </section>
     </main>
 
-    <script src="/static/analysis-job-client.js?v=20260722-clean-mode"></script>
-    <script src="/static/app.js?v=20260723-ui-clean"></script>
+    <script src="/static/analysis-job-client.js?v=20260724-frozen-dataset-1"></script>
+    <script src="/static/app.js?v=20260724-frozen-dataset-1"></script>
   </body>
 </html>

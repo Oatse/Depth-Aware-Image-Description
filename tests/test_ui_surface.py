@@ -107,7 +107,7 @@ def test_ui_exposes_separate_verification_capture_without_replacing_layout() -> 
     assert 'required_reference_distances_cm?.length || 4' in javascript
 
 
-def test_camera_capture_is_saved_without_exposing_dataset_or_batch_analysis_controls() -> None:
+def test_camera_capture_saves_candidate_metadata_without_dataset_controls() -> None:
     html = (ROOT / "templates" / "index.html").read_text(encoding="utf-8")
     javascript = (ROOT / "static" / "app.js").read_text(encoding="utf-8")
 
@@ -115,9 +115,16 @@ def test_camera_capture_is_saved_without_exposing_dataset_or_batch_analysis_cont
     assert 'class="capture-distance-control"' in html
     assert 'id="capture-ground-truth-cm" type="number" min="20" max="200"' in html
     assert 'elements.captureMeasured' in javascript
-    assert "Capture tersimpan pada sesi ini" not in html
-    assert 'window.AnalysisJobClient.analyze(form)' in javascript
-    assert 'form.append("ground_truth_cm", String(groundTruthCm))' not in javascript
+    assert 'id="capture-batch-id"' not in html
+    assert 'id="capture-target-id"' in html
+    assert 'placeholder="contoh: scene-meja-01"' in html
+    assert "required" in html
+    assert 'id="capture-save-status"' in html
+    assert 'window.AnalysisJobClient.capture(form)' in javascript
+    assert 'window.AnalysisJobClient.analyzeStoredCapture' not in javascript
+    assert 'Capture tersimpan:' in javascript
+    assert 'form.append("ground_truth_cm", String(Number(elements.captureMeasured.value)))' in javascript
+    assert 'form.append("target_id", elements.captureTarget.value.trim())' in javascript
     assert 'form.append("capture_time_ms", String(capturedAt))' in javascript
     assert 'fetch("/captures/count?batch_id="' not in javascript
     assert "Lihat Dataset" not in html
@@ -125,15 +132,17 @@ def test_camera_capture_is_saved_without_exposing_dataset_or_batch_analysis_cont
     assert "stopCamera();\n    setActionAvailability(true);" not in javascript
 
 
-def test_clean_capture_v2_uses_a_new_session_batch_and_cache_busted_script() -> None:
+def test_capture_ui_cannot_target_frozen_dataset_or_choose_batch() -> None:
     html = (ROOT / "templates" / "index.html").read_text(encoding="utf-8")
     javascript = (ROOT / "static" / "app.js").read_text(encoding="utf-8")
 
-    assert 'const CAPTURE_BATCH_STORAGE_KEY = "bridge-gap-clean-capture-batch-id-v2";' in javascript
-    assert '/static/app.js?v=20260723-ui-clean' in html
-    assert 'form.append("ground_truth_cm", String(groundTruthCm))' not in javascript
-    assert 'window.AnalysisJobClient.analyze(form)' in javascript
+    assert "CAPTURE_BATCH_STORAGE_KEY" not in javascript
+    assert 'form.append("batch_id"' not in javascript
+    assert '/static/app.js?v=20260724-frozen-dataset-1' in html
+    assert '/static/analysis-job-client.js?v=20260724-frozen-dataset-1' in html
+    assert "dataset_v2_clean" not in javascript
+    assert 'form.append("image_path_prefix"' not in javascript
+    assert 'window.AnalysisJobClient.capture(form)' in javascript
+    assert 'typeof window.AnalysisJobClient?.capture !== "function"' in javascript
     assert "sensorRequired = (elements.mode?.value || \"sensor_assisted\") === \"sensor_assisted\"" in javascript
     assert "latestSensorPaired = status === \"paired\";" in javascript
-    assert "window.localStorage.getItem(CAPTURE_BATCH_STORAGE_KEY)" in javascript
-    assert "window.localStorage.setItem(CAPTURE_BATCH_STORAGE_KEY, created)" in javascript

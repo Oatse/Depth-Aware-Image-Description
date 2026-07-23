@@ -8,13 +8,14 @@ Judul final harus disetujui dosen pembimbing. Frasa “referensi jarak frontal�
 
 ## 2. Posisi penelitian
 
-Penelitian ini berbentuk perancangan dan evaluasi prototipe teknis. Sistem menerima satu citra indoor, menghasilkan deskripsi Bahasa Indonesia melalui Gemma 4 E2B, dan menyertakan referensi sensor frontal yang dikumpulkan dekat dengan waktu capture. Jalur visual dan jalur sensor dievaluasi secara terpisah karena tidak tersedia pengikatan spasial yang membuktikan bahwa echo sensor berasal dari objek yang dinamai Gemma.
+Penelitian ini berbentuk perancangan dan evaluasi prototipe teknis. Sistem menerima satu citra indoor, menghasilkan deskripsi Bahasa Indonesia melalui Gemma 4 E2B, dan menyertakan referensi sensor frontal yang dikumpulkan dekat dengan waktu capture. Referensi terverifikasi dapat mengondisikan prompt Gemma, kemudian backend tetap menambahkan bagian sensor deterministik dengan provenance terpisah. Jalur visual dan jalur sensor dievaluasi secara terpisah karena tidak tersedia pengikatan spasial yang membuktikan bahwa echo sensor berasal dari objek yang dinamai Gemma.
 
 Kontribusi yang realistis:
 
 1. implementasi lokal deskripsi citra indoor berbahasa Indonesia;
 2. pencocokan waktu capture dengan dua sensor frontal serta status evidence yang dapat diaudit;
-3. evaluasi teknis terpisah untuk kualitas deskripsi dan akurasi sensor pada setup terkendali.
+3. evaluasi pengaruh konteks sensor terverifikasi terhadap keluaran dan latency tanpa menjadikan peningkatan kualitas sebagai asumsi keberhasilan;
+4. evaluasi teknis terpisah untuk kualitas deskripsi dan akurasi sensor pada setup terkendali.
 
 Kontribusi tidak diposisikan sebagai metode fusion baru, sistem navigasi, atau pembuktian manfaat pengguna.
 
@@ -22,13 +23,14 @@ Kontribusi tidak diposisikan sebagai metode fusion baru, sistem navigasi, atau p
 
 1. Bagaimana merancang prototipe yang menghasilkan deskripsi gambar indoor berbahasa Indonesia menggunakan Gemma 4 E2B?
 2. Bagaimana mengintegrasikan dua HC-SR04 sebagai referensi jarak frontal dengan mempertahankan nilai, waktu, identitas sensor, arah kamera, dan status evidence?
-3. Bagaimana mengevaluasi kualitas deskripsi Gemma dan akurasi pembacaan HC-SR04 secara terpisah pada skenario pengujian yang terkendali?
+3. Bagaimana konteks sensor terverifikasi memengaruhi keluaran dan latency dibandingkan prompt visual default, serta bagaimana kualitas deskripsi dan akurasi HC-SR04 dilaporkan secara terpisah?
 
 ## 4. Tujuan penelitian
 
 1. Mengimplementasikan pipeline deskripsi satu citra indoor menggunakan Gemma 4 E2B.
 2. Mengimplementasikan akuisisi dan klasifikasi evidence dari dua HC-SR04 yang sinkron dengan capture.
-3. Mengukur kualitas deskripsi dengan rubrik yang ditetapkan serta error tiap sensor pada target planar setelah titik nol sensor diselaraskan dengan `ground_truth_cm` eksternal beracuan kamera.
+3. Mengamati perubahan keluaran dan latency ketika prompt menerima konteks sensor frontal yang lolos validasi, tanpa mengasumsikan bahwa perubahan tersebut meningkatkan kualitas.
+4. Mengukur kualitas deskripsi dengan rubrik yang ditetapkan serta error tiap sensor pada target planar setelah titik nol sensor diselaraskan dengan `ground_truth_cm` eksternal beracuan kamera.
 
 Tujuan tidak mencakup estimasi metrik objek dari citra, navigasi, deteksi rintangan keselamatan, atau UAT pengguna tunanetra.
 
@@ -44,6 +46,8 @@ Tujuan tidak mencakup estimasi metrik objek dari citra, navigasi, deteksi rintan
 - pencocokan waktu capture-sensor;
 - klasifikasi `paired`, `partial`, `pair_conflict`, `stale`, `direction_mismatch`, dan `unavailable`;
 - pencatatan nilai sensor individual, age/timestamp, disagreement, status, dan alasan status;
+- sensor conditioning hanya untuk kontribusi `applied` yang terkalibrasi dan segar;
+- bagian sensor deterministik dan provenance tetap dibentuk backend setelah keluaran Gemma;
 - rata-rata aritmetika dua sensor hanya pada base case `paired`;
 - evaluasi black-box, integrasi, performa, dan pengukuran fisik terkendali.
 
@@ -95,17 +99,16 @@ Rentang evaluasi sensor ditetapkan pada 20–200 cm sebagai sintesis konservatif
 ## 7. Arsitektur logis
 
 ```text
-Citra RGB -> validasi/preprocess -> Gemma -> deskripsi visual
-Capture metadata -----------------------> sinkronisasi
-HC-SR04 1 -> ESP32 -> sensor bridge ------^
-HC-SR04 2 -> ESP32 -> sensor bridge ------^
-                         |
-                         -> klasifikasi evidence
-                         -> kontribusi sensor deterministik
-Deskripsi visual + kontribusi sensor -> API/UI/log
+Citra RGB -----------------------------> validasi/preprocess -----> Gemma
+HC-SR04 1 -> ESP32 -> sensor bridge -> snapshot -> validasi/kalibrasi
+HC-SR04 2 -> ESP32 -> sensor bridge -> snapshot -> validasi/kalibrasi
+                                                    |
+                                                    +-> konteks prompt bila applied
+Gemma -> deskripsi visual
+Deskripsi visual + bagian sensor deterministik -> API/UI/log
 ```
 
-Gemma tidak bertanggung jawab menghitung atau menebak jarak. Backend mempertahankan pemisahan sumber agar angka sensor tidak berubah menjadi klaim visual.
+Gemma tidak bertanggung jawab menghitung atau menebak jarak. Backend menghitung referensi frontal, membatasi pemakaiannya di prompt, menambahkan bagian sensor deterministik, dan mempertahankan pemisahan sumber agar angka sensor tidak berubah menjadi klaim visual.
 
 ## 8. Metode pengembangan
 
@@ -138,21 +141,27 @@ Evaluasi dibagi menjadi dua eksperimen.
 ### Eksperimen B — deskripsi
 
 - dataset citra indoor dan kriteria inklusi ditetapkan sebelum penilaian;
+- setiap citra dianalisis sebagai pasangan `gemma_only` dan `sensor_assisted`;
+- `gemma_only` memakai prompt visual default, sedangkan `sensor_assisted` hanya menerima konteks frontal dari contribution berstatus `applied`;
 - output Gemma dinilai terhadap anotasi/rubrik visual tanpa memakai angka HC-SR04 sebagai label objek;
 - aspek minimum: kesesuaian objek, posisi relatif yang tampak, kejelasan Bahasa Indonesia, kelengkapan scene, dan klaim tidak didukung;
 - penilai, skala, serta aturan agregasi skor dilaporkan.
 
-Hasil dua eksperimen tidak digabung menjadi satu skor “akurasi sistem”.
+Tujuan pasangan mode adalah mengamati pengaruh konteks, bukan membuktikan bahwa `sensor_assisted` lebih baik. Hasil dua eksperimen tidak digabung menjadi satu skor “akurasi sistem”.
 
 ## 10. Kontrak API
 
 Alur kamera menggunakan penyimpanan tertunda:
 
 - sebelum capture kamera, operator memasukkan `ground_truth_cm` beracuan kamera pada rentang 20–200 cm;
-- `POST /captures` menyimpan citra, metadata capture, offset 3 cm, `sensor_face_ground_truth_cm`, `repeat_index` otomatis, dan sensor evidence ke folder lokal tanpa menjalankan Gemma;
+- `POST /captures` menyimpan citra, metadata capture, offset 3 cm, `sensor_face_ground_truth_cm`, `repeat_index` otomatis, dan sensor evidence ke `results/captures/incoming/` tanpa menjalankan Gemma;
 - `GET /captures` dan `GET /captures/count` dipakai backend serta penghitung UI;
 - `POST /captures/{capture_id}/analysis-jobs` membuat satu job untuk satu capture dan memakai snapshot sensor tersimpan;
 - runner backend menunggu job selesai sebelum mengirim capture berikutnya.
+
+Dataset v2 final, record sumber, citra `dataset_v2_clean`, output blind, dan
+manifest evaluasinya tidak menjadi target tulis endpoint runtime. Capture baru
+selalu berada di area `incoming` sampai protokol dataset berikutnya dibekukan.
 
 `POST /analyze` tetap tersedia untuk analisis langsung satu file upload. Response sukses minimum memuat:
 
@@ -215,6 +224,9 @@ Kesimpulan menjawab rumusan masalah berdasarkan data. Saran berangkat dari keter
 7. UI, API, log, dan dokumentasi memakai istilah yang konsisten.
 8. Evaluasi sensor memakai `ground_truth_cm` eksternal; evaluasi deskripsi dilakukan terpisah.
 9. Hasil gagal dan missing data tetap dilaporkan.
+10. Hanya contribution `applied` yang dapat mengondisikan prompt.
+11. Backend tetap menambahkan bagian sensor dengan provenance terpisah.
+12. Capture baru tidak mengubah paket dataset v2 yang telah dibekukan.
 
 ## 14. Ringkasan satu kalimat
 

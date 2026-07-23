@@ -10,8 +10,14 @@ from uuid import uuid4
 
 
 CAPTURE_SCHEMA_VERSION = 1
+CAPTURE_CANDIDATE_BATCH_ID = "capture-candidates"
+CAPTURE_CANDIDATE_IMAGE_PREFIX = "images/capture_candidates"
 _SAFE_TOKEN = re.compile(r"^[A-Za-z0-9_-]{1,100}$")
 _ACTIVE_ANALYSIS_STATES = {"queued", "running"}
+
+
+def incoming_capture_root(results_dir: Path) -> Path:
+    return results_dir / "captures" / "incoming"
 
 
 class CaptureRepositoryError(RuntimeError):
@@ -53,11 +59,12 @@ class CaptureRepository:
         mode: str,
         sensor_evidence: dict[str, Any] | None,
         metadata: dict[str, Any] | None = None,
+        image_path_prefix: str | None = None,
     ) -> dict[str, Any]:
         canonical_capture_id = self._validate_token(capture_id or uuid4().hex, "capture_id")
         canonical_batch_id = self._validate_token(batch_id, "batch_id")
         extension = self._safe_extension(original_filename, content_type)
-        image_relative_path = Path("images") / f"{canonical_capture_id}{extension}"
+        image_relative_path = self._image_path(image_path_prefix, canonical_capture_id, extension)
         image_path = self.root / image_relative_path
         record_path = self._record_path(canonical_capture_id)
         now = self._utc_now()
@@ -96,7 +103,7 @@ class CaptureRepository:
                     ground_truth_cm=float(ground_truth_cm),
                     target_id=record_metadata.get("target_id"),
                 )
-            self.images_dir.mkdir(parents=True, exist_ok=True)
+            image_path.parent.mkdir(parents=True, exist_ok=True)
             self.records_dir.mkdir(parents=True, exist_ok=True)
             temporary_image = image_path.with_name(f".{image_path.name}.{uuid4().hex}.tmp")
             try:
@@ -162,14 +169,14 @@ class CaptureRepository:
             raise CaptureRepositoryError("File gambar capture tidak ditemukan.")
         return image_path.read_bytes()
 
-    def mark_queued(self, capture_id: str, *, job_id: str, mode: str) -> dict[str, Any]:
+    def mark_queued(self, capture_id: str, *, job_id: str, mode: str, allow_completed: bool = False) -> dict[str, Any]:
         def mutate(record: dict[str, Any]) -> None:
             current = str(record.get("status", "captured"))
             if current in _ACTIVE_ANALYSIS_STATES:
                 raise CaptureStateError(
                     f"Capture {capture_id} sedang dianalisis oleh job {record.get('analysis_job_id')}."
                 )
-            if current == "completed":
+            if current == "completed" and not allow_completed:
                 raise CaptureStateError(f"Capture {capture_id} sudah selesai dianalisis.")
             record["status"] = "queued"
             record["mode"] = mode
@@ -304,6 +311,19 @@ class CaptureRepository:
 
     def _record_path(self, capture_id: str) -> Path:
         return self.records_dir / f"{capture_id}.json"
+
+    @classmethod
+    def _image_path(cls, prefix: str | None, capture_id: str, extension: str) -> Path:
+        if prefix is None or not prefix.strip():
+            return Path("images") / f"{capture_id}{extension}"
+        relative = Path(prefix.strip().replace("\\", "/"))
+        if relative.is_absolute() or ".." in relative.parts or not relative.parts:
+            raise CaptureRepositoryError("image_path_prefix tidak valid.")
+        if relative.parts[0] != "images" or any(not _SAFE_TOKEN.fullmatch(part) for part in relative.parts):
+            raise CaptureRepositoryError(
+                "image_path_prefix harus berada di bawah images/ dan memakai token aman."
+            )
+        return relative / f"{capture_id}{extension}"
 
     @staticmethod
     def _validate_token(value: str, field_name: str) -> str:

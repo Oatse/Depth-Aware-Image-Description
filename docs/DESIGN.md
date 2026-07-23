@@ -2,11 +2,13 @@
 
 ## 1. Prinsip antarmuka
 
-UI menyediakan satu alur capture/upload dan satu hasil deskripsi. Referensi sensor tampil sebagai evidence tambahan yang provenance-nya dapat diperiksa.
+UI menyediakan satu alur capture kandidat dan satu hasil deskripsi. Referensi sensor tampil sebagai evidence tambahan yang provenance-nya dapat diperiksa.
 
 - deskripsi gambar menjadi elemen utama;
 - tidak ada pemilih metode atau hasil paralel;
 - angka sensor tidak dikaitkan dengan objek bernama;
+- hanya evidence `applied` yang dapat mengondisikan prompt;
+- capture baru tidak ditulis ke dataset evaluasi v2 yang telah dibekukan;
 - status tidak tersedia atau konflik terlihat jelas;
 - detail teknis tidak mengganggu alur utama.
 
@@ -36,6 +38,9 @@ UI menyediakan satu alur capture/upload dan satu hasil deskripsi. Referensi sens
 - kamera belakang menjadi arah capture yang sesuai dengan sensor;
 - preview harus sama dengan frame yang dikirim;
 - loading mencegah request ganda.
+- operator mengisi `target_id` dan `ground_truth_cm`;
+- backend menyimpan capture ke `results/captures/incoming/`;
+- UI tidak menawarkan path atau batch yang dapat menunjuk ke dataset v2 final.
 
 ### System Status
 
@@ -46,6 +51,7 @@ Menampilkan status Backend, Gemma, dan Sensor. Rincian koneksi dibuka melalui po
 - menjadi panel utama setelah analisis;
 - menggunakan Bahasa Indonesia yang jelas;
 - menjelaskan objek dan konteks scene berdasarkan citra;
+- dapat dipengaruhi konteks frontal terverifikasi pada mode sensor-assisted;
 - tidak menyisipkan angka sensor ke objek bernama.
 
 ### Referensi Sensor Frontal

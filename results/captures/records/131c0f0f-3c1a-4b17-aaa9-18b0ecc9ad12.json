@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "capture_id": "131c0f0f-3c1a-4b17-aaa9-18b0ecc9ad12",
+  "batch_id": "0c9d8d8e-a646-4302-9e1c-696423ebf689",
+  "status": "completed",
+  "capture_time_ms": 1784755830389,
+  "camera_facing_mode": "environment",
+  "mode": "sensor_assisted",
+  "image": {
+    "original_filename": "camera-1784755830389.jpg",
+    "content_type": "image/jpeg",
+    "width": 480,
+    "height": 640,
+    "path": "images/dataset_v2_clean/131c0f0f-3c1a-4b17-aaa9-18b0ecc9ad12.jpg"
+  },
+  "sensor_evidence": {
+    "enabled": true,
+    "port": "COM7",
+    "capture_time_ms": 1784755828955,
+    "window_ms": 250,
+    "status": "paired",
+    "samples": {
+      "sensor_1": {
+        "distance_cm": 96.07,
+        "received_time_ms": 1784755828949,
+        "age_ms": 6,
+        "device_timestamp_ms": 496718,
+        "seq": 7078,
+        "status": "ok"
+      },
+      "sensor_2": {
+        "distance_cm": 96.04,
+        "received_time_ms": 1784755829019,
+        "age_ms": -64,
+        "device_timestamp_ms": 496788,
+        "seq": 7079,
+        "status": "ok"
+      }
+    },
+    "reader_error": null,
+    "connected": true,
+    "connection_attempts": 852,
+    "last_sample_time_ms": 1784755829019,
+    "pair_disagreement_cm": 0.03,
+    "capture_id": "131c0f0f-3c1a-4b17-aaa9-18b0ecc9ad12",
+    "client_capture_time_ms": 1784755830389,
+    "host_receive_time_ms": 1784755829083,
+    "capture_transport_delay_ms": -1306,
+    "match_time_ms": 1784755828955,
+    "match_time_source": "normalized_client_capture",
+    "normalized_capture_time_ms": 1784755828955,
+    "clock_offset_ms": -1434,
+    "clock_rtt_ms": 178,
+    "clock_reason_code": null,
+    "clock_skew_exceeded": false,
+    "camera_facing_mode": "environment"
+  },
+  "metadata": {
+    "camera_sensor_offset_cm": 3.0,
+    "ground_truth_cm": 100.0,
+    "sensor_face_ground_truth_cm": 97.0,
+    "target_id": null,
+    "repeat_index": 1
+  },
+  "analysis_attempts": 6,
+  "analysis_job_id": "5695142532664b3d803b977b34c398b5",
+  "analysis_run_id": "be0c7e5f31cd4379b9e6564e60d60b56",
+  "analysis_error": null,
+  "created_at": "2026-07-22T21:30:29.084292+00:00",
+  "updated_at": "2026-07-23T16:25:17.511388+00:00"
+}

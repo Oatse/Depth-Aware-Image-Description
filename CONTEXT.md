@@ -8,8 +8,15 @@ Bridge-Gap menghasilkan satu deskripsi gambar indoor berbahasa Indonesia dari ci
 
 - citra menjadi sumber deskripsi visual;
 - sensor menjadi sumber pembacaan jarak frontal;
-- teks sensor ditambahkan sebagai bagian terpisah dari deskripsi visual;
+- hanya referensi sensor berstatus `applied`, terkalibrasi, dan segar yang boleh mengondisikan prompt Gemma;
+- backend tetap menambahkan bagian sensor deterministik serta provenance-nya setelah keluaran Gemma;
 - pembacaan sensor tidak dilekatkan pada objek yang dinamai Gemma.
+
+Sensor conditioning tidak ditujukan untuk membuktikan bahwa deskripsi menjadi lebih
+benar atau lebih baik. Eksperimen membandingkan `gemma_only` dan
+`sensor_assisted` untuk mengamati pengaruh konteks frontal terverifikasi terhadap
+keluaran, latency, dan kepatuhan provenance. Skor kualitas dipakai sebagai pengaman
+non-degradasi dan tetap dilaporkan apa adanya.
 
 ## Istilah kanonik
 
@@ -136,7 +143,13 @@ Nilai nol pada contoh adalah placeholder bentuk data, bukan hasil pengujian. Log
 
 ## Kontrak capture tertunda
 
-Capture kamera dan analisis Gemma adalah dua tahap terpisah. Sebelum capture kamera, operator wajib mengisi `ground_truth_cm`, yaitu jarak aktual dari bidang referensi kamera ke target. Saat tombol capture ditekan, backend langsung menyimpan gambar, `capture_id`, `batch_id`, waktu capture, arah kamera, offset kamera–sensor, `ground_truth_cm`, `sensor_face_ground_truth_cm = ground_truth_cm - 3.0`, nomor pengulangan, serta snapshot evidence sensor ke folder lokal `results/captures/`. Tahap ini tidak menjalankan Gemma. Nilai jarak pada UI dipertahankan agar beberapa pengulangan pada jarak yang sama dapat dilakukan tanpa mengetik ulang; backend menaikkan `repeat_index` secara otomatis untuk kombinasi batch, jarak, dan target yang sama.
+Capture kamera dan analisis Gemma adalah dua tahap terpisah. Sebelum capture kamera, operator wajib mengisi `ground_truth_cm`, yaitu jarak aktual dari bidang referensi kamera ke target. Saat tombol capture ditekan, backend langsung menyimpan gambar, `capture_id`, batch runtime, waktu capture, arah kamera, offset kamera–sensor, `ground_truth_cm`, `sensor_face_ground_truth_cm = ground_truth_cm - 3.0`, nomor pengulangan, serta snapshot evidence sensor ke folder lokal `results/captures/incoming/`. Tahap ini tidak menjalankan Gemma. Nilai jarak pada UI dipertahankan agar beberapa pengulangan pada jarak yang sama dapat dilakukan tanpa mengetik ulang; backend menaikkan `repeat_index` secara otomatis untuk kombinasi batch, jarak, dan target yang sama.
+
+Paket evaluasi final dataset v2 berada di `results/captures/` dan dibekukan oleh
+manifest beserta checksum. Endpoint runtime tidak menulis ke
+`images/dataset_v2_clean`, `records/` final, atau artefak evaluasi v2. Seluruh
+capture setelah pembekuan masuk ke `results/captures/incoming/` dan baru dapat
+menjadi dataset penelitian berikutnya setelah protokol serta manifest baru dibuat.
 
 Untuk seri capture terkendali, alat ukur digunakan menetapkan jarak lalu dikeluarkan dari bidang pandang kamera sebelum gambar disimpan. Kontrol ini mencegah alat ukur menjadi objek visual tambahan, tetapi **bukan** perubahan tujuan penelitian menjadi uji konsistensi identitas objek pada berbagai jarak. Citra tetap dinilai sebagai deskripsi visual-spasial atas apa yang terlihat, sedangkan jarak fisik tetap menjadi ground truth eksperimen sensor. Jangan mengubah zoom atau framing per titik hanya untuk memaksa target selalu terlihat utuh.
 
@@ -152,7 +165,18 @@ Prompt Gemma harus:
 4. tidak meminta Gemma menebak angka jarak;
 5. tidak mengaitkan angka sensor dengan objek yang dinamai model.
 
-Kontribusi sensor dibentuk deterministik oleh backend sesudah deskripsi Gemma. Status paired menghasilkan referensi frontal; status conflict, stale, direction mismatch, dan unavailable menghasilkan penjelasan status tanpa angka rata-rata.
+Pada mode `gemma_only`, Gemma menerima prompt visual default tanpa konteks sensor.
+Pada mode `sensor_assisted`, backend terlebih dahulu memvalidasi snapshot sensor,
+menerapkan profil kalibrasi, dan membentuk `frontal_reference_cm`. Hanya kontribusi
+berstatus `applied` yang dimasukkan ke prompt sebagai konteks frontal dengan larangan
+pengikatan objek. Setelah Gemma menjawab, backend tetap menambahkan bagian referensi
+sensor deterministik dan mencatat segmen provenance visual serta sensor secara
+terpisah.
+
+Status conflict, stale, direction mismatch, partial, dan unavailable tidak
+mengondisikan prompt dan tidak menghasilkan angka rata-rata pada deskripsi akhir.
+Perbedaan keluaran antarmode tidak boleh langsung ditafsirkan sebagai peningkatan
+kualitas atau sebagai hubungan sebab-akibat tunggal dari teks prompt.
 
 ## Kontrak UI
 
@@ -196,6 +220,8 @@ Yang tidak boleh diklaim dari evidence ini:
 - sistem aman untuk navigasi;
 - deskripsi meningkatkan keselamatan atau kemandirian pengguna tertentu;
 - prototipe terbukti unggul tanpa baseline dan desain evaluasi yang sesuai.
+- sensor conditioning terbukti meningkatkan kualitas hanya karena teks keluaran
+  berubah.
 
 ## Hirarki dokumen aktif
 

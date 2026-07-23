@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "evaluation_design": "paired_blind_single_evaluator",
+  "independent_images": 18,
+  "scored_items": 36,
+  "items_per_image": 2,
+  "score_lock_sha256": "3e645795de31e16cb2b6ce1379c0eca48d99e9fff48ebf1af90d9ff619c5fa5c",
+  "scored_template_sha256": "331db69765c21cd4c7282378d2a412f4cbc036374de29ba8b447dc9b5e97534f",
+  "mode_summary": {
+    "gemma_only": {
+      "n_images": 18,
+      "mean_object_consistency": 4.7778,
+      "mean_spatial_consistency": 4.4444,
+      "mean_clarity": 4.6667,
+      "mean_naturalness": 4.6667,
+      "mean_scene_completeness": 3.7778,
+      "mean_overall": 4.4667,
+      "unsupported_claims_total": 0
+    },
+    "sensor_assisted": {
+      "n_images": 18,
+      "mean_object_consistency": 4.6667,
+      "mean_spatial_consistency": 4.3333,
+      "mean_clarity": 4.6667,
+      "mean_naturalness": 4.6111,
+      "mean_scene_completeness": 3.6667,
+      "mean_overall": 4.3889,
+      "unsupported_claims_total": 0
+    }
+  },
+  "paired_comparison": {
+    "object_consistency": {
+      "mean_delta_sensor_assisted_minus_gemma_only": -0.1111,
+      "bootstrap_95_ci": [
+        -0.3333,
+        0.0
+      ]
+    },
+    "spatial_consistency": {
+      "mean_delta_sensor_assisted_minus_gemma_only": -0.1111,
+      "bootstrap_95_ci": [
+        -0.5,
+        0.2778
+      ]
+    },
+    "clarity": {
+      "mean_delta_sensor_assisted_minus_gemma_only": 0.0,
+      "bootstrap_95_ci": [
+        -0.1667,
+        0.1667
+      ]
+    },
+    "naturalness": {
+      "mean_delta_sensor_assisted_minus_gemma_only": -0.0556,
+      "bootstrap_95_ci": [
+        -0.2222,
+        0.1111
+      ]
+    },
+    "scene_completeness": {
+      "mean_delta_sensor_assisted_minus_gemma_only": -0.1111,
+      "bootstrap_95_ci": [
+        -0.2778,
+        0.0
+      ]
+    },
+    "overall_mean": {
+      "mean_delta_sensor_assisted_minus_gemma_only": -0.0778,
+      "bootstrap_95_ci": [
+        -0.2222,
+        0.0556
+      ]
+    }
+  },
+  "overall_pair_outcomes": {
+    "sensor_assisted_higher": 5,
+    "tie": 7,
+    "gemma_only_higher": 6
+  },
+  "bootstrap": {
+    "unit": "capture_pair",
+    "iterations": 10000,
+    "seed_base": 20260723
+  },
+  "limitations": [
+    "Satu evaluator tidak menyediakan estimasi inter-rater agreement.",
+    "Evaluator memahami tujuan umum penelitian meski identitas mode dan jarak disembunyikan.",
+    "Skor visual adalah audit teknis, bukan UAT atau bukti manfaat pengguna.",
+    "Interval bootstrap mengukur ketidakpastian pada 18 pasangan dalam satu setup, bukan generalisasi populasi.",
+    "Dataset hanya memuat satu objek utama dan satu lingkungan indoor terkendali."
+  ]
+}

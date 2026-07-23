@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "dataset_id": "hcsr04-indoor-distance-v2-clean-latest-50cm-20260723",
+  "item_count": 36,
+  "images": [
+    {
+      "evaluation_item_id": "VE-001",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-001.jpg",
+      "size_bytes": 70134,
+      "sha256": "84604461602be4d829147c9a7036b642409a1c6becc86947eff2462825d7ea58"
+    },
+    {
+      "evaluation_item_id": "VE-002",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-002.jpg",
+      "size_bytes": 48040,
+      "sha256": "549a4a5cb7a08866e680c15986343186ea52cdd05f407f98d32092b98cd399c2"
+    },
+    {
+      "evaluation_item_id": "VE-003",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-003.jpg",
+      "size_bytes": 38914,
+      "sha256": "231f97c9d54c4f47de55a9c275880317810f14e9a4698d8cc88dde878af8a542"
+    },
+    {
+      "evaluation_item_id": "VE-004",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-004.jpg",
+      "size_bytes": 38914,
+      "sha256": "231f97c9d54c4f47de55a9c275880317810f14e9a4698d8cc88dde878af8a542"
+    },
+    {
+      "evaluation_item_id": "VE-005",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-005.jpg",
+      "size_bytes": 39144,
+      "sha256": "1a121b4cb78e26c5bc395ef5af558c5daa4cc9d22dcfd20ec84f1a90005d451b"
+    },
+    {
+      "evaluation_item_id": "VE-006",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-006.jpg",
+      "size_bytes": 50012,
+      "sha256": "01ca0b3b1f760e7b1f936f545301357f0bc472820d84eccb9f1c99ed641814c3"
+    },
+    {
+      "evaluation_item_id": "VE-007",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-007.jpg",
+      "size_bytes": 48040,
+      "sha256": "549a4a5cb7a08866e680c15986343186ea52cdd05f407f98d32092b98cd399c2"
+    },
+    {
+      "evaluation_item_id": "VE-008",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-008.jpg",
+      "size_bytes": 36209,
+      "sha256": "7723c265d24854cc76c12a3d8176b565711f68779cee2924241c3f7a11f4ccea"
+    },
+    {
+      "evaluation_item_id": "VE-009",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-009.jpg",
+      "size_bytes": 35613,
+      "sha256": "78b948322b61a4e0a741e9a3ff651e637d551a4f22408a0d85408056b04ed14e"
+    },
+    {
+      "evaluation_item_id": "VE-010",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-010.jpg",
+      "size_bytes": 35613,
+      "sha256": "78b948322b61a4e0a741e9a3ff651e637d551a4f22408a0d85408056b04ed14e"
+    },
+    {
+      "evaluation_item_id": "VE-011",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-011.jpg",
+      "size_bytes": 39144,
+      "sha256": "1a121b4cb78e26c5bc395ef5af558c5daa4cc9d22dcfd20ec84f1a90005d451b"
+    },
+    {
+      "evaluation_item_id": "VE-012",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-012.jpg",
+      "size_bytes": 36023,
+      "sha256": "f02fdbae372166eb0a2464fc240931301bf80928a15b8d12135798746f99eb5a"
+    },
+    {
+      "evaluation_item_id": "VE-013",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-013.jpg",
+      "size_bytes": 36286,
+      "sha256": "9b888fd6786d98d1b995c0ddb480bd13133dbb21d3e3c06b712ca7744b4244e4"
+    },
+    {
+      "evaluation_item_id": "VE-014",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-014.jpg",
+      "size_bytes": 35878,
+      "sha256": "ea35ab2026a943056f0e36491d4b159c9670fa13fe943f11bdf9abfa623b00ca"
+    },
+    {
+      "evaluation_item_id": "VE-015",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-015.jpg",
+      "size_bytes": 38734,
+      "sha256": "541d7eba87c58124e691a94ccf47f22c925fbfdd3119bb284abea31d05ad6d2a"
+    },
+    {
+      "evaluation_item_id": "VE-016",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-016.jpg",
+      "size_bytes": 72738,
+      "sha256": "56d2fc83ee3899db0c3a59884eb15bd1846d09a8b67d72070cc3d2e1a594950c"
+    },
+    {
+      "evaluation_item_id": "VE-017",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-017.jpg",
+      "size_bytes": 51367,
+      "sha256": "c8c390ff40b0786062665483cbdb7e13c774775199a8aaef1374f9b52e589754"
+    },
+    {
+      "evaluation_item_id": "VE-018",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-018.jpg",
+      "size_bytes": 50012,
+      "sha256": "01ca0b3b1f760e7b1f936f545301357f0bc472820d84eccb9f1c99ed641814c3"
+    },
+    {
+      "evaluation_item_id": "VE-019",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-019.jpg",
+      "size_bytes": 36023,
+      "sha256": "f02fdbae372166eb0a2464fc240931301bf80928a15b8d12135798746f99eb5a"
+    },
+    {
+      "evaluation_item_id": "VE-020",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-020.jpg",
+      "size_bytes": 36016,
+      "sha256": "3d229133faf35cd226ac588a816ac8feec8248d9e5fdeceb0717e883c6f52c3c"
+    },
+    {
+      "evaluation_item_id": "VE-021",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-021.jpg",
+      "size_bytes": 36286,
+      "sha256": "9b888fd6786d98d1b995c0ddb480bd13133dbb21d3e3c06b712ca7744b4244e4"
+    },
+    {
+      "evaluation_item_id": "VE-022",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-022.jpg",
+      "size_bytes": 36178,
+      "sha256": "313b5771b8af95a479d03af2edab9dab10c84aa2e6ec1591d2e84807ef928475"
+    },
+    {
+      "evaluation_item_id": "VE-023",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-023.jpg",
+      "size_bytes": 51367,
+      "sha256": "c8c390ff40b0786062665483cbdb7e13c774775199a8aaef1374f9b52e589754"
+    },
+    {
+      "evaluation_item_id": "VE-024",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-024.jpg",
+      "size_bytes": 70436,
+      "sha256": "c25c414d2345719fe1c42f8f00260967fb9d7a5f8b6f99d64fe4740117c36e92"
+    },
+    {
+      "evaluation_item_id": "VE-025",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-025.jpg",
+      "size_bytes": 36209,
+      "sha256": "7723c265d24854cc76c12a3d8176b565711f68779cee2924241c3f7a11f4ccea"
+    },
+    {
+      "evaluation_item_id": "VE-026",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-026.jpg",
+      "size_bytes": 36016,
+      "sha256": "3d229133faf35cd226ac588a816ac8feec8248d9e5fdeceb0717e883c6f52c3c"
+    },
+    {
+      "evaluation_item_id": "VE-027",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-027.jpg",
+      "size_bytes": 35687,
+      "sha256": "5344ffe685b0f2fa768981de010c20868bd930cff81280a03317a9672af0edf7"
+    },
+    {
+      "evaluation_item_id": "VE-028",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-028.jpg",
+      "size_bytes": 36498,
+      "sha256": "c4e8bfaaa445876e2e0fe25fd896ddbe542c743b931b8d7ab1cae43ad3c342b4"
+    },
+    {
+      "evaluation_item_id": "VE-029",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-029.jpg",
+      "size_bytes": 35878,
+      "sha256": "ea35ab2026a943056f0e36491d4b159c9670fa13fe943f11bdf9abfa623b00ca"
+    },
+    {
+      "evaluation_item_id": "VE-030",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-030.jpg",
+      "size_bytes": 72738,
+      "sha256": "56d2fc83ee3899db0c3a59884eb15bd1846d09a8b67d72070cc3d2e1a594950c"
+    },
+    {
+      "evaluation_item_id": "VE-031",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-031.jpg",
+      "size_bytes": 36498,
+      "sha256": "c4e8bfaaa445876e2e0fe25fd896ddbe542c743b931b8d7ab1cae43ad3c342b4"
+    },
+    {
+      "evaluation_item_id": "VE-032",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-032.jpg",
+      "size_bytes": 38734,
+      "sha256": "541d7eba87c58124e691a94ccf47f22c925fbfdd3119bb284abea31d05ad6d2a"
+    },
+    {
+      "evaluation_item_id": "VE-033",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-033.jpg",
+      "size_bytes": 70134,
+      "sha256": "84604461602be4d829147c9a7036b642409a1c6becc86947eff2462825d7ea58"
+    },
+    {
+      "evaluation_item_id": "VE-034",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-034.jpg",
+      "size_bytes": 70436,
+      "sha256": "c25c414d2345719fe1c42f8f00260967fb9d7a5f8b6f99d64fe4740117c36e92"
+    },
+    {
+      "evaluation_item_id": "VE-035",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-035.jpg",
+      "size_bytes": 35687,
+      "sha256": "5344ffe685b0f2fa768981de010c20868bd930cff81280a03317a9672af0edf7"
+    },
+    {
+      "evaluation_item_id": "VE-036",
+      "blind_image_path": "images/visual_evaluation_blind_v2/VE-036.jpg",
+      "size_bytes": 36178,
+      "sha256": "313b5771b8af95a479d03af2edab9dab10c84aa2e6ec1591d2e84807ef928475"
+    }
+  ]
+}

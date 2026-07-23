@@ -16,7 +16,10 @@ venv/
 .uvicorn.*.log
 results/sensor_captures.jsonl
 results/analysis_runs.jsonl
-results/captures/
+results/predictions.csv
+results/source_images/
+results/.trash/
+results/captures/incoming/
 config/sensor_camera_calibration.json
 config/sensor_camera_calibration_measurements.json
 config/sensor_camera_verification.json
