@@ -97,11 +97,12 @@ def test_camera_capture_is_saved_without_exposing_dataset_or_batch_analysis_cont
     javascript = (ROOT / "static" / "app.js").read_text(encoding="utf-8")
 
     assert 'id="capture-count"' not in html
-    assert 'class="capture-distance-control hidden"' in html
-    assert 'id="capture-ground-truth-cm" type="number" min="20" max="200"' in html
+    assert 'capture-ground-truth-cm' not in html
+    assert 'capture-ground-truth-cm' not in javascript
     assert "Capture tersimpan pada sesi ini" not in html
-    assert 'fetch("/captures", { method: "POST", body: form })' in javascript
-    assert 'form.append("ground_truth_cm", String(groundTruthCm))' in javascript
+    assert 'window.AnalysisJobClient.analyze(form)' in javascript
+    assert 'form.append("ground_truth_cm", String(groundTruthCm))' not in javascript
+    assert 'form.append("capture_time_ms", String(capturedAt))' in javascript
     assert 'fetch("/captures/count?batch_id="' not in javascript
     assert "Lihat Dataset" not in html
     assert "Analisis Semua" not in html
@@ -114,8 +115,9 @@ def test_clean_capture_v2_uses_a_new_session_batch_and_cache_busted_script() -> 
 
     assert 'const CAPTURE_BATCH_STORAGE_KEY = "bridge-gap-clean-capture-batch-id-v2";' in javascript
     assert '/static/app.js?v=20260723-ui-clean' in html
-    assert 'form.append("ground_truth_cm", String(groundTruthCm))' in javascript
-    assert "!validDistance || !latestSensorPaired" in javascript
+    assert 'form.append("ground_truth_cm", String(groundTruthCm))' not in javascript
+    assert 'window.AnalysisJobClient.analyze(form)' in javascript
+    assert "sensorRequired = (elements.mode?.value || \"sensor_assisted\") === \"sensor_assisted\"" in javascript
     assert "latestSensorPaired = status === \"paired\";" in javascript
     assert "window.localStorage.getItem(CAPTURE_BATCH_STORAGE_KEY)" in javascript
     assert "window.localStorage.setItem(CAPTURE_BATCH_STORAGE_KEY, created)" in javascript

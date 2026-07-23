@@ -26,7 +26,6 @@ const elements = {
   cameraPreview: document.querySelector("#camera-preview"),
   cameraActions: document.querySelector("#camera-actions"),
   cameraCapture: document.querySelector("#capture-image"),
-  captureMeasured: document.querySelector("#capture-ground-truth-cm"),
   cameraSwitch: document.querySelector("#switch-camera"),
   canvas: document.querySelector("#capture-canvas"),
   sensorLivePanel: document.querySelector("#sensor-live-panel"),
@@ -129,7 +128,6 @@ elements.uploadDropzone?.addEventListener("drop", (event) => {
 elements.removeImage?.addEventListener("click", clearSelectedImage);
 elements.cameraRetry?.addEventListener("click", startCamera);
 elements.cameraCapture?.addEventListener("click", captureFrame);
-elements.captureMeasured?.addEventListener("input", updateCameraCaptureAvailability);
 elements.cameraSwitch?.addEventListener("click", async () => {
   cameraFacingMode = cameraFacingMode === "environment" ? "user" : "environment";
   await startCamera();
@@ -227,12 +225,6 @@ async function captureFrame() {
     showCameraError("Frame kamera belum siap.");
     return;
   }
-  const groundTruthCm = Number(elements.captureMeasured?.value);
-  if (!Number.isFinite(groundTruthCm) || groundTruthCm < 20 || groundTruthCm > 200) {
-    showCameraError("Masukkan jarak aktual kamera antara 20 dan 200 cm sebelum capture.");
-    elements.captureMeasured?.focus();
-    return;
-  }
   captureSaving = true;
   updateCameraCaptureAvailability();
   hideCameraError();
@@ -249,20 +241,23 @@ async function captureFrame() {
     const file = new File([blob], "camera-" + capturedAt + ".jpg", { type: "image/jpeg" });
     const form = new FormData();
     form.append("image", file, file.name);
-    form.append("capture_id", createClientId("capture", capturedAt));
-    form.append("batch_id", captureBatchId);
+    form.append("capture_id", createClientId("demo", capturedAt));
     form.append("capture_time_ms", String(capturedAt));
     form.append("camera_facing_mode", cameraFacingMode);
     form.append("mode", elements.mode?.value || "sensor_assisted");
-    form.append("ground_truth_cm", String(groundTruthCm));
     form.append("clock_offset_ms", String(captureClock.offset_ms));
     form.append("clock_rtt_ms", String(captureClock.rtt_ms));
-    const response = await fetch("/captures", { method: "POST", body: form });
-    const payload = await response.json();
-    if (!response.ok) throw new Error(payload.error || "Capture gagal disimpan.");
+    if (!window.AnalysisJobClient) {
+      throw new Error("Klien antrean analisis tidak tersedia.");
+    }
+    setSelectedImage(file);
+    setLoading(true);
+    const payload = await window.AnalysisJobClient.analyze(form);
+    renderResult(payload);
   } catch (error) {
-    showCameraError(error.message || "Capture gagal disimpan.");
+    showCameraError(error.message || "Analisis kamera gagal.");
   } finally {
+    setLoading(false);
     captureSaving = false;
     updateCameraCaptureAvailability();
   }
@@ -637,9 +632,8 @@ function setActionAvailability(available) {
 }
 
 function updateCameraCaptureAvailability() {
-  const groundTruthCm = Number(elements.captureMeasured?.value);
-  const validDistance = Number.isFinite(groundTruthCm) && groundTruthCm >= 20 && groundTruthCm <= 200;
-  elements.cameraCapture.disabled = !cameraStream || captureSaving || !validDistance || !latestSensorPaired;
+  const sensorRequired = (elements.mode?.value || "sensor_assisted") === "sensor_assisted";
+  elements.cameraCapture.disabled = !cameraStream || captureSaving || (sensorRequired && !latestSensorPaired);
 }
 
 function getOrCreateCaptureBatchId() {
