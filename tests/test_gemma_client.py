@@ -18,6 +18,10 @@ async def test_mock_description_returns_structured_visual_evidence() -> None:
     assert result.structured is not None
     assert result.structured["scene_type"] == "indoor"
     assert "bukti visual" in result.description
+    assert result.provenance is not None
+    assert result.provenance["model_id"] == "google/gemma-4-e2b"
+    assert result.provenance["raw_response"] == '{"mock":true}'
+    assert len(result.provenance["prompt_sha256"]) == 64
 
 
 @pytest.mark.anyio

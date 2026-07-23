@@ -8,6 +8,7 @@ from typing import Any
 
 EXPECTED_DISTANCES_CM = (30.0, 50.0, 75.0, 100.0, 150.0, 200.0)
 EXPECTED_REPEATS = (1, 2, 3)
+MANIFEST_SCHEMA_VERSION = 2
 
 
 def _sha256_bytes(data: bytes) -> str:
@@ -24,7 +25,26 @@ def _canonical_sha256(value: Any) -> str:
     return _sha256_bytes(encoded)
 
 
-def build_manifest(captures_root: Path, *, dataset_id: str) -> dict[str, Any]:
+def _immutable_input(record: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "capture_id": record.get("capture_id"),
+        "batch_id": record.get("batch_id"),
+        "capture_time_ms": record.get("capture_time_ms"),
+        "camera_facing_mode": record.get("camera_facing_mode"),
+        "mode": record.get("mode"),
+        "image": record.get("image"),
+        "sensor_evidence": record.get("sensor_evidence"),
+        "metadata": record.get("metadata"),
+    }
+
+
+def build_manifest(
+    captures_root: Path,
+    *,
+    dataset_id: str,
+    batch_id: str | None = None,
+    image_path_prefix: str | None = None,
+) -> dict[str, Any]:
     records_dir = captures_root / "records"
     rows: list[dict[str, Any]] = []
     seen_capture_ids: set[str] = set()
@@ -32,6 +52,12 @@ def build_manifest(captures_root: Path, *, dataset_id: str) -> dict[str, Any]:
 
     for record_path in sorted(records_dir.glob("*.json")):
         record = json.loads(record_path.read_text(encoding="utf-8"))
+        image = record.get("image") or {}
+        image_relative_path = str(image.get("path") or "")
+        if batch_id is not None and record.get("batch_id") != batch_id:
+            continue
+        if image_path_prefix is not None and not image_relative_path.startswith(image_path_prefix):
+            continue
         capture_id = str(record["capture_id"])
         if capture_id in seen_capture_ids:
             raise ValueError(f"Capture ID duplikat: {capture_id}")
@@ -64,37 +90,38 @@ def build_manifest(captures_root: Path, *, dataset_id: str) -> dict[str, Any]:
         sensor_evidence = record.get("sensor_evidence") or {}
         if sensor_evidence.get("status") != "paired":
             raise ValueError(f"Status sensor bukan paired: {capture_id}")
+        samples = sensor_evidence.get("samples") or {}
+        sensor_1 = samples.get("sensor_1") or {}
+        sensor_2 = samples.get("sensor_2") or {}
+        for sensor_name, sample in (("sensor_1", sensor_1), ("sensor_2", sensor_2)):
+            if sample.get("status") != "ok":
+                raise ValueError(f"Status {sensor_name} bukan ok: {capture_id}")
+            if not isinstance(sample.get("distance_cm"), (int, float)):
+                raise ValueError(f"Nilai {sensor_name} tidak valid: {capture_id}")
 
-        image = record.get("image") or {}
-        image_relative_path = str(image["path"])
         image_path = captures_root / image_relative_path
         if not image_path.is_file():
             raise ValueError(f"Gambar tidak ditemukan: {capture_id} -> {image_relative_path}")
 
-        immutable_input = {
-            "capture_id": capture_id,
-            "batch_id": record.get("batch_id"),
-            "capture_time_ms": record.get("capture_time_ms"),
-            "camera_facing_mode": record.get("camera_facing_mode"),
-            "mode": record.get("mode"),
-            "image": image,
-            "sensor_evidence": sensor_evidence,
-            "metadata": metadata,
-        }
-        samples = sensor_evidence.get("samples") or {}
         rows.append(
             {
                 "capture_id": capture_id,
+                "batch_id": record.get("batch_id"),
+                "capture_time_ms": record.get("capture_time_ms"),
+                "capture_status": record.get("status"),
                 "ground_truth_cm": ground_truth_cm,
                 "sensor_face_ground_truth_cm": sensor_face_ground_truth_cm,
                 "repeat_index": repeat_index,
+                "image_name": Path(image_relative_path).name,
                 "image_path": image_relative_path,
                 "image_size_bytes": image_path.stat().st_size,
                 "image_sha256": _sha256_bytes(image_path.read_bytes()),
-                "input_sha256": _canonical_sha256(immutable_input),
+                "input_sha256": _canonical_sha256(_immutable_input(record)),
                 "sensor_status": sensor_evidence["status"],
-                "sensor_1_cm": (samples.get("sensor_1") or {}).get("distance_cm"),
-                "sensor_2_cm": (samples.get("sensor_2") or {}).get("distance_cm"),
+                "sensor_1_cm": sensor_1["distance_cm"],
+                "sensor_1_status": sensor_1["status"],
+                "sensor_2_cm": sensor_2["distance_cm"],
+                "sensor_2_status": sensor_2["status"],
                 "pair_disagreement_cm": sensor_evidence.get("pair_disagreement_cm"),
             }
         )
@@ -111,13 +138,112 @@ def build_manifest(captures_root: Path, *, dataset_id: str) -> dict[str, Any]:
 
     rows.sort(key=lambda row: (row["ground_truth_cm"], row["repeat_index"]))
     return {
-        "schema_version": 1,
+        "schema_version": MANIFEST_SCHEMA_VERSION,
         "dataset_id": dataset_id,
+        "batch_id": batch_id,
+        "image_path_prefix": image_path_prefix,
         "frozen_at": datetime.now(timezone.utc).isoformat(),
         "total_captures": len(rows),
         "expected_distances_cm": list(EXPECTED_DISTANCES_CM),
         "expected_repeats_per_distance": len(EXPECTED_REPEATS),
         "captures": rows,
+    }
+
+
+def validate_manifest(captures_root: Path, manifest: dict[str, Any]) -> dict[str, Any]:
+    captures = manifest.get("captures")
+    if not isinstance(captures, list):
+        raise ValueError("Daftar captures tidak tersedia pada manifest.")
+    if manifest.get("total_captures") != len(captures) or len(captures) != 18:
+        raise ValueError(f"Jumlah capture manifest tidak valid: {len(captures)}")
+
+    capture_ids: set[str] = set()
+    image_paths: set[str] = set()
+    image_hashes: set[str] = set()
+    distance_repeats: set[tuple[float, int]] = set()
+    for row in captures:
+        capture_id = str(row.get("capture_id") or "")
+        if not capture_id or capture_id in capture_ids:
+            raise ValueError(f"Capture ID kosong/duplikat: {capture_id}")
+        capture_ids.add(capture_id)
+
+        pair = (float(row["ground_truth_cm"]), int(row["repeat_index"]))
+        if pair in distance_repeats:
+            raise ValueError(f"Kombinasi jarak/repeat duplikat: {pair}")
+        distance_repeats.add(pair)
+
+        image_relative_path = str(row.get("image_path") or "")
+        if not image_relative_path or image_relative_path in image_paths:
+            raise ValueError(f"Path gambar kosong/duplikat: {image_relative_path}")
+        image_paths.add(image_relative_path)
+        image_path = captures_root / image_relative_path
+        if not image_path.is_file():
+            raise ValueError(f"Gambar tidak ditemukan: {capture_id} -> {image_relative_path}")
+        actual_image_hash = _sha256_bytes(image_path.read_bytes())
+        if actual_image_hash != row.get("image_sha256"):
+            raise ValueError(f"Checksum gambar tidak cocok: {capture_id}")
+        if actual_image_hash in image_hashes:
+            raise ValueError(f"Konten gambar duplikat: {capture_id}")
+        image_hashes.add(actual_image_hash)
+        if image_path.stat().st_size != row.get("image_size_bytes"):
+            raise ValueError(f"Ukuran gambar tidak cocok: {capture_id}")
+        if row.get("image_name") != image_path.name:
+            raise ValueError(f"Nama gambar tidak cocok: {capture_id}")
+
+        record_path = captures_root / "records" / f"{capture_id}.json"
+        if not record_path.is_file():
+            raise ValueError(f"Metadata capture tidak ditemukan: {capture_id}")
+        record = json.loads(record_path.read_text(encoding="utf-8"))
+        if _canonical_sha256(_immutable_input(record)) != row.get("input_sha256"):
+            raise ValueError(f"Checksum metadata tidak cocok: {capture_id}")
+        metadata = record.get("metadata") or {}
+        evidence = record.get("sensor_evidence") or {}
+        samples = evidence.get("samples") or {}
+        sensor_1 = samples.get("sensor_1") or {}
+        sensor_2 = samples.get("sensor_2") or {}
+        expected_values = {
+            "batch_id": record.get("batch_id"),
+            "capture_time_ms": record.get("capture_time_ms"),
+            "ground_truth_cm": float(metadata["ground_truth_cm"]),
+            "sensor_face_ground_truth_cm": float(metadata["sensor_face_ground_truth_cm"]),
+            "repeat_index": int(metadata["repeat_index"]),
+            "sensor_status": evidence.get("status"),
+            "sensor_1_cm": sensor_1.get("distance_cm"),
+            "sensor_1_status": sensor_1.get("status"),
+            "sensor_2_cm": sensor_2.get("distance_cm"),
+            "sensor_2_status": sensor_2.get("status"),
+            "pair_disagreement_cm": evidence.get("pair_disagreement_cm"),
+        }
+        for field, expected in expected_values.items():
+            if row.get(field) != expected:
+                raise ValueError(f"Nilai {field} tidak cocok: {capture_id}")
+        if (
+            evidence.get("status") != "paired"
+            or sensor_1.get("status") != "ok"
+            or sensor_2.get("status") != "ok"
+        ):
+            raise ValueError(f"Status sensor tidak sesuai: {capture_id}")
+
+    expected_pairs = {
+        (distance, repeat)
+        for distance in EXPECTED_DISTANCES_CM
+        for repeat in EXPECTED_REPEATS
+    }
+    if distance_repeats != expected_pairs:
+        raise ValueError("Distribusi jarak/repeat manifest tidak lengkap.")
+    return {
+        "valid": True,
+        "dataset_id": manifest.get("dataset_id"),
+        "total_captures": len(captures),
+        "unique_capture_ids": len(capture_ids),
+        "unique_images": len(image_paths),
+        "unique_image_checksums": len(image_hashes),
+        "sensor_statuses": {
+            "paired": len(captures),
+            "sensor_1_ok": len(captures),
+            "sensor_2_ok": len(captures),
+        },
+        "checksums_verified": len(captures),
     }
 
 
@@ -131,14 +257,22 @@ def main() -> None:
     parser.add_argument(
         "--output",
         type=Path,
-        default=Path("results/captures/dataset_manifest_v1.json"),
+        default=Path("results/captures/dataset_manifest_v2.json"),
     )
-    parser.add_argument("--dataset-id", default="hcsr04-indoor-distance-v1")
+    parser.add_argument("--dataset-id", default="hcsr04-indoor-distance-v2-clean")
+    parser.add_argument("--batch-id")
+    parser.add_argument("--image-path-prefix")
     args = parser.parse_args()
 
     if args.output.exists():
         parser.error(f"Manifest sudah ada dan tidak akan ditimpa: {args.output}")
-    manifest = build_manifest(args.captures_root, dataset_id=args.dataset_id)
+    manifest = build_manifest(
+        args.captures_root,
+        dataset_id=args.dataset_id,
+        batch_id=args.batch_id,
+        image_path_prefix=args.image_path_prefix,
+    )
+    validation = validate_manifest(args.captures_root, manifest)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
@@ -147,6 +281,7 @@ def main() -> None:
     print(json.dumps({
         "dataset_id": manifest["dataset_id"],
         "total_captures": manifest["total_captures"],
+        "validation": validation,
         "output": str(args.output),
     }, ensure_ascii=False, indent=2))
 

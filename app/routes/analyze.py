@@ -88,6 +88,7 @@ async def analyze_image(
         sensor_evidence=sensor_evidence,
         sensor_contribution=pipeline_result.sensor_contribution,
         analysis_method=pipeline_result.analysis_method,
+        gemma_provenance=pipeline_result.gemma_provenance,
     )
     if save_result and settings.save_results:
         log_analysis_run(

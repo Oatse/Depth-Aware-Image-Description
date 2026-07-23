@@ -69,6 +69,7 @@ class AnalyzeResponse(BaseModel):
     sensor_evidence: SensorEvidenceModel | dict[str, Any] | None = None
     sensor_contribution: SensorContributionModel | None = None
     analysis_method: str | None = None
+    gemma_provenance: dict[str, Any] | None = None
 
     @model_validator(mode="after")
     def require_sensor_contribution(self) -> "AnalyzeResponse":

@@ -158,6 +158,7 @@ async def run_analysis_job(job: AnalysisJobRequest) -> dict[str, object]:
             sensor_evidence=job.sensor_evidence,
             sensor_contribution=pipeline_result.sensor_contribution,
             analysis_method=pipeline_result.analysis_method,
+            gemma_provenance=pipeline_result.gemma_provenance,
         )
         if job.save_result and analyze_route.settings.save_results:
             log_analysis_run(

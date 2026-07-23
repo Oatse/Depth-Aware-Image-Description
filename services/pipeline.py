@@ -23,6 +23,7 @@ class PipelineResult:
     display: dict | None
     sensor_contribution: dict | None
     analysis_method: str
+    gemma_provenance: dict | None
 
 
 async def analyze_image_bytes(
@@ -84,6 +85,7 @@ async def analyze_image_bytes(
         display=display,
         sensor_contribution=contribution,
         analysis_method=mode.value,
+        gemma_provenance=gemma_result.provenance,
     )
 
 
@@ -144,4 +146,5 @@ def _failed_result(
         display=None,
         sensor_contribution=None,
         analysis_method=mode.value,
+        gemma_provenance=None,
     )

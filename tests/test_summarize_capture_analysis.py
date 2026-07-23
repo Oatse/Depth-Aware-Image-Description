@@ -23,6 +23,7 @@ def test_build_summary_uses_sensor_face_for_raw_and_camera_for_corrected_error(
     manifest_path = tmp_path / "manifest.json"
     manifest_path.write_text(
         json.dumps({
+            "schema_version": 2,
             "dataset_id": "test-v1",
             "captures": [{
                 "capture_id": capture_id,
@@ -30,6 +31,8 @@ def test_build_summary_uses_sensor_face_for_raw_and_camera_for_corrected_error(
                 "sensor_face_ground_truth_cm": 47.0,
                 "repeat_index": 1,
                 "sensor_status": "paired",
+                "sensor_1_cm": 46.5,
+                "sensor_2_cm": 47.5,
                 "image_sha256": "image-hash",
                 "input_sha256": "input-hash",
             }],
@@ -41,6 +44,7 @@ def test_build_summary_uses_sensor_face_for_raw_and_camera_for_corrected_error(
         json.dumps({
             "analysis_run_id": run_id,
             "capture_id": capture_id,
+            "sensor_evidence": {"capture_id": capture_id},
             "outputs": {
                 "sensor_assisted": {
                     "success": True,

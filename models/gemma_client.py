@@ -1,6 +1,8 @@
 import json
+import hashlib
 import re
 import time
+from datetime import datetime, timezone
 from dataclasses import dataclass
 from typing import Any
 
@@ -35,6 +37,7 @@ class GemmaResult:
     latency_ms: int
     mock: bool = False
     structured: dict[str, Any] | None = None
+    provenance: dict[str, Any] | None = None
 
 
 class GemmaClientError(RuntimeError):
@@ -67,6 +70,7 @@ class GemmaClient:
     async def describe_image(self, base64_image: str, prompt: str | None = None) -> GemmaResult:
         started_at = time.perf_counter()
         prompt_text = prompt or DEFAULT_GEMMA_PROMPT
+        request_started_at = datetime.now(timezone.utc).isoformat()
         if self.settings.gemma_mock:
             description = (
                 "Terlihat area dalam ruangan dengan beberapa objek di sekitar ruangan. "
@@ -85,6 +89,13 @@ class GemmaClient:
                     "obstacle_candidate": "tidak_diketahui",
                     "description": description,
                 },
+                provenance=_provenance(
+                    settings=self.settings,
+                    prompt=prompt_text,
+                    raw_response='{"mock":true}',
+                    request_started_at=request_started_at,
+                    mock=True,
+                ),
             )
 
         content = [
@@ -96,7 +107,14 @@ class GemmaClient:
         ]
         return await self._complete(content, started_at)
 
-    async def _complete(self, content: list[dict[str, Any]], started_at: float) -> GemmaResult:
+    async def _complete(
+        self,
+        content: list[dict[str, Any]],
+        started_at: float,
+        prompt: str | None = None,
+        request_started_at: str | None = None,
+    ) -> GemmaResult:
+        prompt = prompt or str(content[0].get("text", DEFAULT_GEMMA_PROMPT))
         payload = {
             "model": self.settings.lm_studio_model,
             "messages": [{"role": "user", "content": content}],
@@ -140,6 +158,13 @@ class GemmaClient:
             raw_response=str(data),
             latency_ms=_elapsed_ms(started_at),
             structured=structured,
+            provenance=_provenance(
+                settings=self.settings,
+                prompt=prompt,
+                raw_response=str(data),
+                request_started_at=request_started_at or datetime.now(timezone.utc).isoformat(),
+                mock=False,
+            ),
         )
 
 
@@ -192,3 +217,25 @@ def _description_from_structured(structured: dict[str, Any] | None) -> str:
 
 def _elapsed_ms(started_at: float) -> int:
     return int((time.perf_counter() - started_at) * 1000)
+
+
+def _provenance(
+    *,
+    settings: Settings,
+    prompt: str,
+    raw_response: str,
+    request_started_at: str,
+    mock: bool,
+) -> dict[str, Any]:
+    return {
+        "app_version": "0.1.0",
+        "provider": "mock" if mock else "lm_studio",
+        "model_id": settings.lm_studio_model,
+        "prompt": prompt,
+        "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
+        "temperature": 0.1,
+        "max_tokens": settings.lm_studio_max_tokens,
+        "request_started_at": request_started_at,
+        "raw_response": raw_response,
+        "mock": mock,
+    }

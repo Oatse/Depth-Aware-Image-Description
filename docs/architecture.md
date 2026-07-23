@@ -12,6 +12,10 @@ flowchart LR
 
 Cloudflare menangani HTTPS publik. Origin FastAPI tetap HTTP dan bind ke `127.0.0.1:8000`.
 
+## Provenance analisis
+
+Setiap `analysis_run` menyimpan provenance Gemma per run: versi aplikasi, provider, model ID, prompt penuh, hash SHA-256 prompt, temperature, batas token, waktu mulai request, status mock, dan raw response provider. Provenance ini tidak boleh diturunkan kembali dari source atau konfigurasi ketika artefak evaluasi dibekukan.
+
 ## Alur sistem
 
 ```mermaid

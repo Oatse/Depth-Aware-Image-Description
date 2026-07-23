@@ -52,6 +52,10 @@ def build_summary(
         run = runs[analysis_run_id]
         if run.get("capture_id") != capture_id:
             raise ValueError(f"Capture ID pada run tidak cocok: {capture_id}")
+        if manifest.get("schema_version", 1) >= 2:
+            run_evidence = run.get("sensor_evidence") or {}
+            if run_evidence.get("capture_id") != capture_id:
+                raise ValueError(f"Snapshot sensor pada run tercampur: {capture_id}")
         output = (run.get("outputs") or {}).get("sensor_assisted") or {}
         if not output.get("success"):
             raise ValueError(f"Output sensor_assisted gagal: {capture_id}")
@@ -63,6 +67,11 @@ def build_summary(
         sensor_face_ground_truth = float(manifest_entry["sensor_face_ground_truth_cm"])
         sensor_1_raw = float(contribution["sensor_1_cm"])
         sensor_2_raw = float(contribution["sensor_2_cm"])
+        if manifest.get("schema_version", 1) >= 2:
+            if sensor_1_raw != float(manifest_entry["sensor_1_cm"]):
+                raise ValueError(f"Nilai Sensor 1 tidak berasal dari snapshot capture: {capture_id}")
+            if sensor_2_raw != float(manifest_entry["sensor_2_cm"]):
+                raise ValueError(f"Nilai Sensor 2 tidak berasal dari snapshot capture: {capture_id}")
         sensor_1_corrected = float(contribution["sensor_1_corrected_cm"])
         sensor_2_corrected = float(contribution["sensor_2_corrected_cm"])
         frontal_reference = float(contribution["frontal_reference_cm"])
