@@ -116,15 +116,13 @@ def test_camera_capture_saves_candidate_metadata_without_dataset_controls() -> N
     assert 'id="capture-ground-truth-cm" type="number" min="20" max="200"' in html
     assert 'elements.captureMeasured' in javascript
     assert 'id="capture-batch-id"' not in html
-    assert 'id="capture-target-id"' in html
-    assert 'placeholder="contoh: scene-meja-01"' in html
-    assert "required" in html
+    assert 'id="capture-target-id"' not in html
     assert 'id="capture-save-status"' in html
     assert 'window.AnalysisJobClient.capture(form)' in javascript
     assert 'window.AnalysisJobClient.analyzeStoredCapture' not in javascript
     assert 'Capture tersimpan:' in javascript
     assert 'form.append("ground_truth_cm", String(Number(elements.captureMeasured.value)))' in javascript
-    assert 'form.append("target_id", elements.captureTarget.value.trim())' in javascript
+    assert 'form.append("target_id"' not in javascript
     assert 'form.append("capture_time_ms", String(capturedAt))' in javascript
     assert 'fetch("/captures/count?batch_id="' not in javascript
     assert "Lihat Dataset" not in html

@@ -38,7 +38,7 @@ UI menyediakan satu alur capture kandidat dan satu hasil deskripsi. Referensi se
 - kamera belakang menjadi arah capture yang sesuai dengan sensor;
 - preview harus sama dengan frame yang dikirim;
 - loading mencegah request ganda.
-- operator mengisi `target_id` dan `ground_truth_cm`;
+- operator hanya mengisi `ground_truth_cm`; identitas capture dibuat otomatis;
 - backend menyimpan capture ke `results/captures/incoming/`;
 - UI tidak menawarkan path atau batch yang dapat menunjuk ke dataset v2 final.
 

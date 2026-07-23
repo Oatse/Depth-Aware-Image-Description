@@ -54,15 +54,8 @@ async def create_capture(
     clock_offset_ms: int | None = Form(default=None),
     clock_rtt_ms: int | None = Form(default=None),
     ground_truth_cm: float = Form(..., ge=20, le=200),
-    target_id: str = Form(..., min_length=1, max_length=100),
     repeat_index: int | None = Form(default=None, ge=1),
 ) -> CaptureCreatedResponse | JSONResponse:
-    normalized_target_id = target_id.strip()
-    if not normalized_target_id:
-        return JSONResponse(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            content={"error": "target_id wajib berisi identitas target atau scene."},
-        )
     try:
         normalized_mode = normalize_analysis_mode(mode)
     except ValueError as exc:
@@ -120,7 +113,6 @@ async def create_capture(
         "camera_sensor_offset_cm": offset,
         "ground_truth_cm": ground_truth_cm,
         "sensor_face_ground_truth_cm": ground_truth_cm - offset,
-        "target_id": normalized_target_id,
         "repeat_index": repeat_index,
     }
     repository = _repository()

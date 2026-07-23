@@ -82,7 +82,6 @@ def _create_capture(client: TestClient, capture_id: str = "cap-001"):
             "camera_facing_mode": "environment",
             "mode": "sensor_assisted",
             "ground_truth_cm": "50",
-            "target_id": "target-planar",
             "repeat_index": "1",
             "image_path_prefix": "images/dataset_v2_clean",
         },
@@ -104,28 +103,6 @@ def test_capture_rejects_missing_ground_truth(monkeypatch, tmp_path) -> None:
                 "capture_time_ms": str(int(time.time() * 1000)),
                 "camera_facing_mode": "environment",
                 "mode": "sensor_assisted",
-            },
-        )
-
-    assert response.status_code == 422
-    assert not (incoming_capture_root(tmp_path) / "records").exists()
-
-
-def test_capture_rejects_missing_target_id(monkeypatch, tmp_path) -> None:
-    import app.routes.analyze as analyze_route
-
-    monkeypatch.setattr(analyze_route.settings, "results_dir", tmp_path)
-    with TestClient(app) as client:
-        app.state.sensor_bridge = RecordingSensorBridge()
-        response = client.post(
-            "/captures",
-            files={"image": ("camera.jpg", _sample_image_bytes(), "image/jpeg")},
-            data={
-                "capture_id": "cap-without-target",
-                "capture_time_ms": str(int(time.time() * 1000)),
-                "camera_facing_mode": "environment",
-                "mode": "sensor_assisted",
-                "ground_truth_cm": "50",
             },
         )
 
@@ -182,7 +159,6 @@ def test_candidate_capture_rejects_unpaired_sensor_snapshot(monkeypatch, tmp_pat
                 "camera_facing_mode": "environment",
                 "mode": "sensor_assisted",
                 "ground_truth_cm": "50",
-                "target_id": "target-planar",
             },
         )
 

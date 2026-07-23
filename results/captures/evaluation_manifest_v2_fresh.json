@@ -2,7 +2,7 @@
   "schema_version": 2,
   "evaluation_id": "dataset-v2-reanalysis-blind-scored-20260723",
   "dataset_id": "hcsr04-indoor-distance-v2-clean-latest-50cm-20260723",
-  "generated_at": "2026-07-23T23:04:27.082487+00:00",
+  "generated_at": "2026-07-23T23:22:34.636204+00:00",
   "input_manifest_sha256": "f4414bf02631e4a5bc1371992586f9b2cf12d9d9c43c2d6d60f607c7163e6214",
   "input_validation": {
     "valid": true,
@@ -479,8 +479,8 @@
     },
     {
       "path": "docs/architecture.md",
-      "size_bytes": 8001,
-      "sha256": "f9f31afd08260304120471587462cd5cbd84c1dfa5285559f7ce11b13331b0b1"
+      "size_bytes": 7988,
+      "sha256": "efbc3edd6512c18afcf3974b4a51c6e352b6d480e01de498c7ac6a4cf004dbd3"
     },
     {
       "path": "docs/evaluation_protocol.md",

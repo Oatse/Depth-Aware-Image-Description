@@ -14,7 +14,6 @@ const elements = {
   cameraPreview: document.querySelector("#camera-preview"),
   cameraActions: document.querySelector("#camera-actions"),
   cameraCapture: document.querySelector("#capture-image"),
-  captureTarget: document.querySelector("#capture-target-id"),
   captureMeasured: document.querySelector("#capture-ground-truth-cm"),
   captureSaveStatus: document.querySelector("#capture-save-status"),
   cameraSwitch: document.querySelector("#switch-camera"),
@@ -87,7 +86,6 @@ elements.systemStatusToggle?.addEventListener("click", () => {
 
 elements.cameraRetry?.addEventListener("click", startCamera);
 elements.cameraCapture?.addEventListener("click", captureFrame);
-elements.captureTarget?.addEventListener("input", updateCameraCaptureAvailability);
 elements.captureMeasured?.addEventListener("input", updateCameraCaptureAvailability);
 elements.cameraSwitch?.addEventListener("click", async () => {
   cameraFacingMode = cameraFacingMode === "environment" ? "user" : "environment";
@@ -180,7 +178,6 @@ async function captureFrame() {
     form.append("clock_offset_ms", String(captureClock.offset_ms));
     form.append("clock_rtt_ms", String(captureClock.rtt_ms));
     form.append("ground_truth_cm", String(Number(elements.captureMeasured.value)));
-    form.append("target_id", elements.captureTarget.value.trim());
     if (typeof window.AnalysisJobClient?.capture !== "function") {
       throw new Error("Klien capture belum diperbarui. Muat ulang halaman.");
     }
@@ -511,8 +508,7 @@ function updateCameraCaptureAvailability() {
   const sensorRequired = (elements.mode?.value || "sensor_assisted") === "sensor_assisted";
   const groundTruthCm = Number(elements.captureMeasured?.value);
   const validDistance = Number.isFinite(groundTruthCm) && groundTruthCm >= 20 && groundTruthCm <= 200;
-  const validTarget = Boolean(elements.captureTarget?.value.trim());
-  elements.cameraCapture.disabled = !cameraStream || captureSaving || !validDistance || !validTarget
+  elements.cameraCapture.disabled = !cameraStream || captureSaving || !validDistance
     || (sensorRequired && !latestSensorPaired);
 }
 

@@ -112,8 +112,8 @@ Nilai sensor individual, timestamp, age, dan status tidak boleh dibuang setelah 
 ## Kontrak request
 
 `POST /captures` menerima multipart form berisi citra, `capture_id`,
-`capture_time_ms`, `camera_facing_mode`, metadata clock, `ground_truth_cm`, dan
-`target_id`. Backend menetapkan batch `capture-candidates` dan menyimpan hasil pada:
+`capture_time_ms`, `camera_facing_mode`, metadata clock, dan `ground_truth_cm`.
+Backend menetapkan batch `capture-candidates` dan menyimpan hasil pada:
 
 ```text
 results/captures/incoming/images/capture_candidates/<capture_id>.<ext>
