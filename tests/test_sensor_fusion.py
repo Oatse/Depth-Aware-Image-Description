@@ -59,7 +59,7 @@ def test_closest_object_is_bound_only_when_pair_is_tightly_consistent() -> None:
         _fuse(_paired(80, 81), disagreement=15.0),
         {"closest_object": "koper hitam"},
     )
-    assert "koper hitam tampak sebagai objek paling dekat" in output
+    assert "koper hitam terlihat di tengah ruangan yang tampak sebagai objek paling dekat" in output
     assert "80.5 cm" in output
 
 
