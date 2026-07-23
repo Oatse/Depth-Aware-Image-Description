@@ -5,7 +5,7 @@
   --canvas: #fbfaf8;
   --surface: #ffffff;
   --surface-soft: #f4f2ef;
-  --dropzone: #fbfaf7;
+  --camera-stage: #fbfaf7;
   --ink: #211f24;
   --ink-soft: #625e67;
   --ink-muted: #96919c;
@@ -334,54 +334,6 @@ p {
   display: block;
 }
 
-.source-switcher {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 4px;
-  width: min(320px, 100%);
-  margin-bottom: 14px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: var(--surface-soft);
-  padding: 4px;
-}
-
-.source-tab {
-  min-height: 38px;
-  border-radius: calc(var(--radius-sm) - 3px);
-  color: var(--ink-muted);
-  font-size: 0.78rem;
-  font-weight: 760;
-  transition:
-    transform 180ms var(--motion),
-    background 180ms var(--motion),
-    color 180ms var(--motion),
-    box-shadow 180ms var(--motion);
-}
-
-.source-tab:hover {
-  color: var(--ink);
-}
-
-.source-tab.is-active {
-  background: var(--surface);
-  color: var(--accent-dark);
-  box-shadow: 0 3px 10px rgba(31, 28, 36, 0.06);
-}
-
-.source-tab:active {
-  transform: scale(0.98);
-}
-
-.source-tab:focus-visible {
-  outline: 3px solid var(--accent-soft);
-  outline-offset: 2px;
-}
-
-.source-panel[hidden] {
-  display: none;
-}
-
 .camera-panel {
   display: grid;
   gap: 12px;
@@ -394,7 +346,7 @@ p {
   overflow: hidden;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-lg);
-  background: var(--dropzone);
+  background: var(--camera-stage);
 }
 
 .camera-preview {
@@ -648,130 +600,10 @@ p {
   font-weight: 740;
 }
 
-#image-input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-}
-
-.upload-dropzone {
-  display: grid;
-  min-height: 294px;
-  place-items: center;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-lg);
-  background-color: var(--dropzone);
-  background-image: radial-gradient(rgba(33, 31, 36, 0.12) 1px, transparent 1px);
-  background-size: 12px 12px;
-  padding: 44px 24px;
-  color: var(--ink);
-  text-align: center;
-  transition:
-    transform 180ms var(--motion),
-    border-color 180ms var(--motion),
-    background-color 180ms var(--motion),
-    box-shadow 180ms var(--motion);
-}
-
-.upload-dropzone:hover,
-.upload-dropzone:focus-within,
-.upload-dropzone.is-focused,
-.upload-dropzone.is-dragging {
-  border-color: var(--accent);
-  background-color: var(--surface);
-  transform: translateY(-1px);
-}
-
-.upload-dropzone:focus-within,
-.upload-dropzone.is-focused,
-.upload-dropzone.is-dragging {
-  box-shadow: 0 0 0 4px var(--accent-soft);
-}
-
-.upload-dropzone.is-dragging .upload-icon {
-  background: var(--accent);
-  color: #ffffff;
-  transform: scale(1.04);
-}
-
-.upload-dropzone.has-image {
-  border-color: var(--line-strong);
-}
-
-.upload-copy {
-  display: grid;
-  gap: 8px;
-  justify-items: center;
-}
-
-.upload-dropzone strong {
-  color: var(--ink);
-  font-size: clamp(1.45rem, 3vw, 2rem);
-  font-weight: 780;
-  letter-spacing: 0;
-  line-height: 1.12;
-}
-
-.upload-dropzone small {
-  color: var(--ink-muted);
-  font-size: 0.92rem;
-}
-
-.upload-dropzone em {
-  color: #c5c0ba;
-  font-size: 0.78rem;
-  font-style: normal;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.upload-icon,
 .send-button,
 .icon-button {
   display: inline-grid;
   place-items: center;
-}
-
-.upload-icon {
-  width: 52px;
-  height: 52px;
-  margin: 0 auto 16px;
-  border-radius: 14px;
-  background: var(--ink);
-  color: #ffffff;
-  position: relative;
-  transition:
-    transform 180ms var(--motion),
-    background-color 180ms var(--motion);
-}
-
-.upload-icon::before {
-  content: "";
-  width: 24px;
-  height: 18px;
-  border: 2px solid currentColor;
-  border-radius: 5px;
-  transform: translateY(2px);
-}
-
-.upload-icon::after {
-  content: "+";
-  position: absolute;
-  right: 10px;
-  top: 8px;
-  width: 16px;
-  height: 16px;
-  display: grid;
-  place-items: center;
-  border-radius: 999px;
-  background: var(--surface);
-  color: var(--ink);
-  font-size: 0.88rem;
-  font-weight: 760;
-  line-height: 1;
 }
 
 .control-panel {
@@ -1642,10 +1474,6 @@ pre {
     margin-top: 28px;
   }
 
-  .upload-dropzone {
-    min-height: 240px;
-  }
-
   .control-grid,
   .analysis-grid {
     grid-template-columns: 1fr;
@@ -1708,19 +1536,6 @@ pre {
     font-size: clamp(1.55rem, 8vw, 2.1rem);
   }
 
-  .upload-dropzone {
-    min-height: 220px;
-    padding: 30px 16px;
-  }
-
-  .upload-icon {
-    width: 46px;
-    height: 46px;
-  }
-
- .upload-dropzone strong {
-  font-size: 1.45rem;
- }
  .camera-stage {
   min-height: 220px;
  }

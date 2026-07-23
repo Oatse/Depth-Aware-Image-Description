@@ -7,13 +7,7 @@ const elements = {
   gemmaStatus: document.querySelector("#gemma-status-output"),
   sensorRuntimeStatus: document.querySelector("#sensor-runtime-status-output"),
   form: document.querySelector("#analyze-form"),
-  selectedPreview: document.querySelector("#selected-preview"),
-  imagePreview: document.querySelector("#image-preview"),
-  selectedFileName: document.querySelector("#selected-file-name"),
-  removeImage: document.querySelector("#remove-image"),
   mode: document.querySelector("#mode-select"),
-  analyze: document.querySelector("#analyze-button"),
-  analysisControlPanel: document.querySelector("#analysis-control-panel"),
   cameraPanel: document.querySelector("#camera-panel"),
   cameraEmptyState: document.querySelector("#camera-empty-state"),
   cameraRetry: document.querySelector("#camera-retry"),
@@ -73,20 +67,16 @@ const elements = {
   rawPayload: document.querySelector("#raw-payload-output"),
 };
 
-const ACCEPTED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 const CAPTURE_BATCH_STORAGE_KEY = "bridge-gap-clean-capture-batch-id-v2";
 
-let selectedBlob = null;
 let cameraStream = null;
 let cameraFacingMode = "environment";
-let activeSource = "camera";
 let captureClock = null;
 let sensorStatusTimer = null;
 let loadingTimer = null;
 let loadingIndex = 0;
 let latestSensorPaired = false;
 let calibrationFrozen = false;
-let previewUrl = null;
 let captureSaving = false;
 const captureBatchId = getOrCreateCaptureBatchId();
 
@@ -97,17 +87,12 @@ elements.systemStatusToggle?.addEventListener("click", () => {
 });
 
 
-elements.removeImage?.addEventListener("click", clearSelectedImage);
 elements.cameraRetry?.addEventListener("click", startCamera);
 elements.cameraCapture?.addEventListener("click", captureFrame);
 elements.captureMeasured?.addEventListener("input", updateCameraCaptureAvailability);
 elements.cameraSwitch?.addEventListener("click", async () => {
   cameraFacingMode = cameraFacingMode === "environment" ? "user" : "environment";
   await startCamera();
-});
-elements.form?.addEventListener("submit", (event) => {
-  event.preventDefault();
-  submitAnalysis();
 });
 elements.calibrationCapture?.addEventListener("click", captureCalibrationPoint);
 elements.calibrationReset?.addEventListener("click", resetCalibration);
@@ -198,7 +183,6 @@ async function captureFrame() {
     if (!window.AnalysisJobClient) {
       throw new Error("Klien antrean analisis tidak tersedia.");
     }
-    setSelectedImage(file);
     setLoading(true);
     const payload = await window.AnalysisJobClient.analyze(form);
     renderResult(payload);
@@ -208,56 +192,6 @@ async function captureFrame() {
     setLoading(false);
     captureSaving = false;
     updateCameraCaptureAvailability();
-  }
-}
-
-function setSelectedImage(file) {
-  if (!ACCEPTED_IMAGE_TYPES.has(file.type)) {
-    showError("Format file belum didukung. Gunakan JPG, PNG, atau WebP.");
-    return;
-  }
-  selectedBlob = file;
-  showPreview(file);
-  setActionAvailability(true);
-  hideError();
-}
-
-function showPreview(file) {
-  if (previewUrl) URL.revokeObjectURL(previewUrl);
-  previewUrl = URL.createObjectURL(file);
-  elements.imagePreview.src = previewUrl;
-  elements.selectedFileName.textContent = file.name || "Gambar hasil kamera";
-  elements.selectedPreview?.classList.remove("hidden");
-}
-
-function clearSelectedImage() {
-  selectedBlob = null;
-  if (previewUrl) URL.revokeObjectURL(previewUrl);
-  previewUrl = null;
-  elements.imagePreview.removeAttribute("src");
-  elements.selectedFileName.textContent = "Gambar terpilih";
-  elements.selectedPreview?.classList.add("hidden");
-  setActionAvailability(false);
-}
-
-async function submitAnalysis() {
-  if (!selectedBlob) return;
-  setLoading(true);
-  hideError();
-  try {
-    const form = new FormData();
-    form.append("image", selectedBlob, selectedBlob.name || "gambar.jpg");
-    form.append("mode", elements.mode?.value || "sensor_assisted");
-    form.append("save_result", "true");
-    if (!window.AnalysisJobClient) {
-      throw new Error("Klien antrean analisis tidak tersedia.");
-    }
-    const result = await window.AnalysisJobClient.analyze(form);
-    renderResult(result);
-  } catch (error) {
-    showError(error.message || "Analisis gagal.");
-  } finally {
-    setLoading(false);
   }
 }
 
@@ -552,7 +486,6 @@ function stopSensorStatusPolling() {
 
 function setLoading(isLoading) {
   elements.loading?.classList.toggle("hidden", !isLoading);
-  elements.analyze.disabled = isLoading || !selectedBlob;
   if (isLoading) {
     loadingIndex = 0;
     markLoadingStep();
@@ -568,10 +501,6 @@ function setLoading(isLoading) {
 
 function markLoadingStep() {
   elements.loadingSteps.forEach((step, index) => step.classList.toggle("is-active", index === loadingIndex));
-}
-
-function setActionAvailability(available) {
-  elements.analyze.disabled = !available || activeSource === "camera";
 }
 
 function updateCameraCaptureAvailability() {

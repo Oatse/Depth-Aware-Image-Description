@@ -45,7 +45,6 @@ def test_ui_preserves_console_layout_and_replaces_only_result_sections() -> None
         'class="minimal-header"',
         'class="composer-shell"',
         'id="camera-panel"',
-        'id="selected-preview"',
         'id="result-shell"',
         'class="metric-grid"',
         'class="analysis-grid"',
