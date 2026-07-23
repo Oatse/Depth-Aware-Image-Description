@@ -44,7 +44,7 @@ def test_ui_preserves_console_layout_and_replaces_only_result_sections() -> None
     for original_surface in (
         'class="minimal-header"',
         'class="composer-shell"',
-        'class="source-switcher"',
+        'id="camera-panel"',
         'id="selected-preview"',
         'id="result-shell"',
         'class="metric-grid"',
@@ -58,6 +58,17 @@ def test_ui_preserves_console_layout_and_replaces_only_result_sections() -> None
     assert 'id="result-sensor-1-output"' in html
     assert 'id="result-sensor-2-output"' in html
     assert 'id="result-frontal-reference-output"' in html
+
+
+def test_ui_uses_camera_as_the_only_image_source() -> None:
+    html = (ROOT / "templates" / "index.html").read_text(encoding="utf-8")
+    javascript = (ROOT / "static" / "app.js").read_text(encoding="utf-8")
+
+    for retired_upload_surface in ("source-upload-tab", "upload-panel", "image-input", "upload-dropzone"):
+        assert retired_upload_surface not in html
+        assert retired_upload_surface not in javascript
+    assert 'id="camera-panel" class="source-panel camera-panel"' in html
+    assert "startCamera();" in javascript
 
 
 def test_ui_hides_workflow_strip_and_omits_redundant_sensor_helper() -> None:

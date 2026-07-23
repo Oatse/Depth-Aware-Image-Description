@@ -7,9 +7,6 @@ const elements = {
   gemmaStatus: document.querySelector("#gemma-status-output"),
   sensorRuntimeStatus: document.querySelector("#sensor-runtime-status-output"),
   form: document.querySelector("#analyze-form"),
-  uploadDropzone: document.querySelector("#upload-dropzone"),
-  imageInput: document.querySelector("#image-input"),
-  uploadLabel: document.querySelector("#upload-label"),
   selectedPreview: document.querySelector("#selected-preview"),
   imagePreview: document.querySelector("#image-preview"),
   selectedFileName: document.querySelector("#selected-file-name"),
@@ -17,8 +14,6 @@ const elements = {
   mode: document.querySelector("#mode-select"),
   analyze: document.querySelector("#analyze-button"),
   analysisControlPanel: document.querySelector("#analysis-control-panel"),
-  sourceTabs: Array.from(document.querySelectorAll(".source-tab")),
-  uploadPanel: document.querySelector("#upload-panel"),
   cameraPanel: document.querySelector("#camera-panel"),
   cameraEmptyState: document.querySelector("#camera-empty-state"),
   cameraRetry: document.querySelector("#camera-retry"),
@@ -84,7 +79,7 @@ const CAPTURE_BATCH_STORAGE_KEY = "bridge-gap-clean-capture-batch-id-v2";
 let selectedBlob = null;
 let cameraStream = null;
 let cameraFacingMode = "environment";
-let activeSource = "upload";
+let activeSource = "camera";
 let captureClock = null;
 let sensorStatusTimer = null;
 let loadingTimer = null;
@@ -101,30 +96,6 @@ elements.systemStatusToggle?.addEventListener("click", () => {
   elements.systemStatusPanel?.classList.toggle("hidden", expanded);
 });
 
-elements.sourceTabs.forEach((tab) => {
-  tab.addEventListener("click", () => setSourceTab(tab.id === "source-camera-tab" ? "camera" : "upload"));
-});
-
-elements.imageInput?.addEventListener("change", () => {
-  const [file] = elements.imageInput.files || [];
-  if (file) setSelectedImage(file);
-});
-
-elements.uploadDropzone?.addEventListener("dragover", (event) => {
-  event.preventDefault();
-  elements.uploadDropzone.classList.add("is-dragging");
-});
-
-elements.uploadDropzone?.addEventListener("dragleave", () => {
-  elements.uploadDropzone.classList.remove("is-dragging");
-});
-
-elements.uploadDropzone?.addEventListener("drop", (event) => {
-  event.preventDefault();
-  elements.uploadDropzone.classList.remove("is-dragging");
-  const [file] = event.dataTransfer?.files || [];
-  if (file) setSelectedImage(file);
-});
 
 elements.removeImage?.addEventListener("click", clearSelectedImage);
 elements.cameraRetry?.addEventListener("click", startCamera);
@@ -157,34 +128,9 @@ document.querySelectorAll(".help-dot").forEach((button) => {
 document.addEventListener("click", hideHelpPopover);
 window.addEventListener("resize", hideHelpPopover);
 
-function setSourceTab(source) {
-  activeSource = source;
-  const cameraActive = source === "camera";
-  elements.sourceTabs.forEach((tab) => {
-    const active = tab.id === (cameraActive ? "source-camera-tab" : "source-upload-tab");
-    tab.classList.toggle("is-active", active);
-    tab.setAttribute("aria-selected", String(active));
-    tab.tabIndex = active ? 0 : -1;
-  });
-  elements.uploadPanel?.classList.toggle("hidden", cameraActive);
-  elements.uploadPanel?.toggleAttribute("hidden", cameraActive);
-  elements.cameraPanel?.classList.toggle("hidden", !cameraActive);
-  elements.cameraPanel?.toggleAttribute("hidden", !cameraActive);
-  elements.analysisControlPanel?.classList.toggle("hidden", cameraActive);
-  elements.analysisControlPanel?.toggleAttribute("hidden", cameraActive);
-  elements.selectedPreview?.classList.toggle("hidden", cameraActive || !selectedBlob);
-  if (cameraActive) {
-    startCamera();
-    startSensorStatusPolling();
-  } else {
-    stopCamera();
-    stopSensorStatusPolling();
-  }
-}
-
 async function startCamera() {
   if (!navigator.mediaDevices?.getUserMedia) {
-    showCameraError("Peramban tidak mendukung akses kamera. Gunakan tab Upload sebagai alternatif.");
+    showCameraError("Peramban tidak mendukung akses kamera.");
     return;
   }
   stopCamera();
@@ -205,7 +151,7 @@ async function startCamera() {
       : "Ganti ke kamera belakang";
     if (!captureClock) syncCaptureClock().catch(() => {});
   } catch (error) {
-    showCameraError("Kamera tidak dapat diakses. Periksa izin kamera atau gunakan tab Upload.");
+    showCameraError("Kamera tidak dapat diakses. Periksa izin kamera.");
   }
 }
 
@@ -281,8 +227,6 @@ function showPreview(file) {
   previewUrl = URL.createObjectURL(file);
   elements.imagePreview.src = previewUrl;
   elements.selectedFileName.textContent = file.name || "Gambar hasil kamera";
-  elements.uploadLabel.textContent = "Ganti gambar";
-  elements.uploadDropzone?.classList.add("has-image");
   elements.selectedPreview?.classList.remove("hidden");
 }
 
@@ -290,11 +234,8 @@ function clearSelectedImage() {
   selectedBlob = null;
   if (previewUrl) URL.revokeObjectURL(previewUrl);
   previewUrl = null;
-  elements.imageInput.value = "";
   elements.imagePreview.removeAttribute("src");
   elements.selectedFileName.textContent = "Gambar terpilih";
-  elements.uploadLabel.textContent = "Letakkan gambar dalam ruangan di sini";
-  elements.uploadDropzone?.classList.remove("has-image", "is-dragging");
   elements.selectedPreview?.classList.add("hidden");
   setActionAvailability(false);
 }
@@ -767,4 +708,6 @@ function labelSensorStatus(status) {
 refreshRuntimeStatus();
 refreshCalibrationStatus();
 refreshVerificationStatus();
+startCamera();
+startSensorStatusPolling();
 window.setInterval(refreshRuntimeStatus, 10000);

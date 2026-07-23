@@ -71,44 +71,7 @@
         <form id="analyze-form" class="composer-shell" aria-label="Form analisis gambar">
           <div id="analysis-composer" class="analysis-composer">
             <div class="composer-prompt">
-              <div class="source-switcher" role="tablist" aria-label="Pilih sumber gambar">
-                <button
-                  id="source-upload-tab"
-                  class="source-tab is-active"
-                  type="button"
-                  role="tab"
-                  aria-selected="true"
-                  aria-controls="upload-panel"
-                  tabindex="0"
-                >
-                  Upload
-                </button>
-                <button
-                  id="source-camera-tab"
-                  class="source-tab"
-                  type="button"
-                  role="tab"
-                  aria-selected="false"
-                  aria-controls="camera-panel"
-                  tabindex="-1"
-                >
-                  Kamera
-                </button>
-              </div>
-
-              <div id="upload-panel" class="source-panel" role="tabpanel" aria-labelledby="source-upload-tab">
-                <label for="image-input" class="upload-dropzone" id="upload-dropzone">
-                  <span class="upload-icon" aria-hidden="true"></span>
-                  <span class="upload-copy">
-                    <strong id="upload-label">Letakkan gambar dalam ruangan di sini</strong>
-                    <small>atau pilih file dari komputer</small>
-                    <em>JPG · PNG · WebP</em>
-                  </span>
-                </label>
-                <input id="image-input" name="image" type="file" accept="image/jpeg,image/png,image/webp" />
-              </div>
-
-              <div id="camera-panel" class="source-panel camera-panel hidden" role="tabpanel" aria-labelledby="source-camera-tab" hidden>
+              <div id="camera-panel" class="source-panel camera-panel">
                 <div class="camera-stage">
                   <div id="camera-empty-state" class="camera-empty-state">
                     <span class="camera-empty-icon" aria-hidden="true"></span>
