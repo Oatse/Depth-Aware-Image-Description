@@ -76,7 +76,6 @@ const elements = {
   latencyNote: document.querySelector("#latency-output"),
   rawPayload: document.querySelector("#raw-payload-output"),
 };
-const pageMode = document.body?.dataset.pageMode || "demo";
 
 const ACCEPTED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 const CAPTURE_BATCH_STORAGE_KEY = "bridge-gap-clean-capture-batch-id-v2";

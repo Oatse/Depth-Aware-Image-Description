@@ -66,27 +66,13 @@ app.include_router(readiness_router)
 gemma_client = GemmaClient(settings)
 
 
-async def _render_console(request: Request, page_mode: str) -> HTMLResponse:
+@app.get("/", response_class=HTMLResponse)
+async def index(request: Request) -> HTMLResponse:
     return templates.TemplateResponse(
         request=request,
         name="index.html",
-        context={"app_name": settings.app_name, "page_mode": page_mode},
+        context={"app_name": settings.app_name},
     )
-
-
-@app.get("/", response_class=HTMLResponse)
-async def index(request: Request) -> HTMLResponse:
-    return await _render_console(request, "demo")
-
-
-@app.get("/demo", response_class=HTMLResponse)
-async def demo(request: Request) -> HTMLResponse:
-    return await _render_console(request, "demo")
-
-
-@app.get("/evaluation", response_class=HTMLResponse)
-async def evaluation(request: Request) -> HTMLResponse:
-    return await _render_console(request, "evaluation")
 
 
 @app.get("/health", response_model=HealthResponse)
