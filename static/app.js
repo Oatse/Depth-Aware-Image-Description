@@ -26,6 +26,7 @@ const elements = {
   cameraPreview: document.querySelector("#camera-preview"),
   cameraActions: document.querySelector("#camera-actions"),
   cameraCapture: document.querySelector("#capture-image"),
+  captureMeasured: document.querySelector("#capture-ground-truth-cm"),
   cameraSwitch: document.querySelector("#switch-camera"),
   canvas: document.querySelector("#capture-canvas"),
   sensorLivePanel: document.querySelector("#sensor-live-panel"),
@@ -128,6 +129,7 @@ elements.uploadDropzone?.addEventListener("drop", (event) => {
 elements.removeImage?.addEventListener("click", clearSelectedImage);
 elements.cameraRetry?.addEventListener("click", startCamera);
 elements.cameraCapture?.addEventListener("click", captureFrame);
+elements.captureMeasured?.addEventListener("input", updateCameraCaptureAvailability);
 elements.cameraSwitch?.addEventListener("click", async () => {
   cameraFacingMode = cameraFacingMode === "environment" ? "user" : "environment";
   await startCamera();
@@ -633,7 +635,10 @@ function setActionAvailability(available) {
 
 function updateCameraCaptureAvailability() {
   const sensorRequired = (elements.mode?.value || "sensor_assisted") === "sensor_assisted";
-  elements.cameraCapture.disabled = !cameraStream || captureSaving || (sensorRequired && !latestSensorPaired);
+  const groundTruthCm = Number(elements.captureMeasured?.value);
+  const validDistance = Number.isFinite(groundTruthCm) && groundTruthCm >= 20 && groundTruthCm <= 200;
+  elements.cameraCapture.disabled = !cameraStream || captureSaving || !validDistance
+    || (sensorRequired && !latestSensorPaired);
 }
 
 function getOrCreateCaptureBatchId() {

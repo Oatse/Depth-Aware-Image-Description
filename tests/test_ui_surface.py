@@ -97,8 +97,9 @@ def test_camera_capture_is_saved_without_exposing_dataset_or_batch_analysis_cont
     javascript = (ROOT / "static" / "app.js").read_text(encoding="utf-8")
 
     assert 'id="capture-count"' not in html
-    assert 'capture-ground-truth-cm' not in html
-    assert 'capture-ground-truth-cm' not in javascript
+    assert 'class="capture-distance-control"' in html
+    assert 'id="capture-ground-truth-cm" type="number" min="20" max="200"' in html
+    assert 'elements.captureMeasured' in javascript
     assert "Capture tersimpan pada sesi ini" not in html
     assert 'window.AnalysisJobClient.analyze(form)' in javascript
     assert 'form.append("ground_truth_cm", String(groundTruthCm))' not in javascript
