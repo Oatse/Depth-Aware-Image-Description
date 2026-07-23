@@ -34,8 +34,6 @@ const elements = {
   liveSensor1: document.querySelector("#sensor-1-output"),
   liveSensor2: document.querySelector("#sensor-2-output"),
   sensorConnectionMeta: document.querySelector("#sensor-connection-meta"),
-  sensorCaptureStatus: document.querySelector("#sensor-capture-status"),
-  captureCount: document.querySelector("#capture-count"),
   calibrationMeasured: document.querySelector("#calibration-measured-cm"),
   calibrationCapture: document.querySelector("#calibration-capture"),
   calibrationReset: document.querySelector("#calibration-reset"),
@@ -262,7 +260,6 @@ async function captureFrame() {
     const response = await fetch("/captures", { method: "POST", body: form });
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error || "Capture gagal disimpan.");
-    renderCaptureCount(payload.capture_count);
   } catch (error) {
     showCameraError(error.message || "Capture gagal disimpan.");
   } finally {
@@ -661,23 +658,6 @@ function createClientId(prefix, timestamp) {
   return crypto.randomUUID?.() || prefix + "-" + timestamp + "-" + Math.random().toString(16).slice(2);
 }
 
-async function refreshCaptureCount() {
-  try {
-    const response = await fetch("/captures/count?batch_id=" + encodeURIComponent(captureBatchId), {
-      cache: "no-store",
-    });
-    const payload = await response.json();
-    if (!response.ok) throw new Error(payload.error || "Jumlah capture tidak tersedia.");
-    renderCaptureCount(payload.count);
-  } catch (_error) {
-    elements.captureCount.textContent = "-";
-  }
-}
-
-function renderCaptureCount(value) {
-  elements.captureCount.textContent = String(Number(value) || 0);
-}
-
 function showError(message) {
   elements.error.textContent = message;
   elements.error.classList.remove("hidden");
@@ -788,5 +768,4 @@ function labelSensorStatus(status) {
 refreshRuntimeStatus();
 refreshCalibrationStatus();
 refreshVerificationStatus();
-refreshCaptureCount();
 window.setInterval(refreshRuntimeStatus, 10000);

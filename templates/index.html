@@ -8,7 +8,7 @@
       name="description"
       content="Console eksperimen deskripsi visual-spasial indoor dengan verifikasi jarak dari dua sensor frontal HC-SR04."
     />
-    <link rel="stylesheet" href="/static/style.css?v=20260722-clean-mode" />
+    <link rel="stylesheet" href="/static/style.css?v=20260723-ui-clean" />
   </head>
   <body>
     <a class="skip-link" href="#analysis-composer">Lewati ke input analisis</a>
@@ -119,10 +119,10 @@
                   <video id="camera-preview" class="camera-preview hidden" autoplay playsinline></video>
                 </div>
                 <div id="camera-error" class="camera-error hidden" role="alert"></div>
-                <label class="capture-distance-control" for="capture-ground-truth-cm">
+                <label class="capture-distance-control hidden" for="capture-ground-truth-cm">
                   <span>Jarak aktual dari kamera</span>
                   <span class="sensor-calibration-input">
-                    <input id="capture-ground-truth-cm" type="number" min="20" max="200" step="0.1" inputmode="decimal" placeholder="30" required />
+                    <input id="capture-ground-truth-cm" type="number" min="20" max="200" step="0.1" inputmode="decimal" value="30" aria-hidden="true" tabindex="-1" />
                     <span>cm</span>
                   </span>
                 </label>
@@ -149,7 +149,6 @@
                     </div>
                   </div>
                   <p id="sensor-connection-meta" class="sensor-connection-meta">Menghubungkan pembaca serial...</p>
-                  <p id="sensor-capture-status" class="sensor-capture-status">Capture tersimpan pada sesi ini: <strong id="capture-count">0</strong></p>
                   <details class="sensor-calibration-panel">
                     <summary>Kalibrasi jarak sensor</summary>
                     <p>Kalibrasi memakai lima jarak berbeda dengan 30 pembacaan berpasangan per jarak. Profil dibekukan otomatis setelah 150 pembacaan valid.</p>
@@ -217,10 +216,6 @@
             <canvas id="capture-canvas" class="hidden"></canvas>
           </div>
         </form>
-
-        <p class="safety-note">
-          Output ini hanya untuk eksperimen. Jangan gunakan hasil ini sebagai panduan navigasi nyata.
-        </p>
 
         <div id="error-message" class="error-message hidden" role="alert"></div>
 
@@ -434,6 +429,6 @@
     </main>
 
     <script src="/static/analysis-job-client.js?v=20260722-clean-mode"></script>
-    <script src="/static/app.js?v=20260723-clean-capture-v2-paired-persistent"></script>
+    <script src="/static/app.js?v=20260723-ui-clean"></script>
   </body>
 </html>

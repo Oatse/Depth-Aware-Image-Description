@@ -96,12 +96,13 @@ def test_camera_capture_is_saved_without_exposing_dataset_or_batch_analysis_cont
     html = (ROOT / "templates" / "index.html").read_text(encoding="utf-8")
     javascript = (ROOT / "static" / "app.js").read_text(encoding="utf-8")
 
-    assert 'id="capture-count"' in html
+    assert 'id="capture-count"' not in html
+    assert 'class="capture-distance-control hidden"' in html
     assert 'id="capture-ground-truth-cm" type="number" min="20" max="200"' in html
-    assert "Capture tersimpan pada sesi ini" in html
+    assert "Capture tersimpan pada sesi ini" not in html
     assert 'fetch("/captures", { method: "POST", body: form })' in javascript
     assert 'form.append("ground_truth_cm", String(groundTruthCm))' in javascript
-    assert 'fetch("/captures/count?batch_id="' in javascript
+    assert 'fetch("/captures/count?batch_id="' not in javascript
     assert "Lihat Dataset" not in html
     assert "Analisis Semua" not in html
     assert "stopCamera();\n    setActionAvailability(true);" not in javascript
@@ -112,7 +113,7 @@ def test_clean_capture_v2_uses_a_new_session_batch_and_cache_busted_script() -> 
     javascript = (ROOT / "static" / "app.js").read_text(encoding="utf-8")
 
     assert 'const CAPTURE_BATCH_STORAGE_KEY = "bridge-gap-clean-capture-batch-id-v2";' in javascript
-    assert '/static/app.js?v=20260723-clean-capture-v2-paired-persistent' in html
+    assert '/static/app.js?v=20260723-ui-clean' in html
     assert 'form.append("ground_truth_cm", String(groundTruthCm))' in javascript
     assert "!validDistance || !latestSensorPaired" in javascript
     assert "latestSensorPaired = status === \"paired\";" in javascript
