@@ -1,5 +1,9 @@
 # Laporan Maturitas dan Penyelesaian Proyek Bridge-Gap
 
+> **SUPERSEDED:** Audit ulang menemukan konflik implementasi dan metodologi yang
+> tidak tercakup dalam laporan ini. Jangan gunakan dokumen ini sebagai dasar
+> penulisan. Gunakan `project_maturity_reaudit_20260724.md`.
+
 Tanggal audit: 24 Juli 2026
 Lokasi audit: `D:\Tugas\SKRIPSI\Bride-Gap\Program`
 Branch: `feat/complete-iot-assisted-analysis`

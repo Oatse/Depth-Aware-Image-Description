@@ -12,8 +12,9 @@ Dokumen berikut menentukan scope dan implementasi saat ini:
 6. [`sensor_evaluation_template.csv`](sensor_evaluation_template.csv) — template data pengujian fisik HC-SR04.
 7. [`../README.md`](../README.md) — setup dan penggunaan workspace.
 8. [`dataset_v2_final_evaluation_20260723.md`](dataset_v2_final_evaluation_20260723.md) — keputusan hasil evaluasi final.
-9. [`project_maturity_report_20260724.md`](project_maturity_report_20260724.md) — status penyelesaian terbaru.
-10. [`diverse_capture_decision_20260724.md`](diverse_capture_decision_20260724.md) — dampak dan gate dataset ekstensi beragam.
+9. [`project_maturity_reaudit_20260724.md`](project_maturity_reaudit_20260724.md) — audit ulang kanonik, blocker, dan keputusan kesiapan penulisan.
+10. [`project_maturity_report_20260724.md`](project_maturity_report_20260724.md) — laporan lama yang sudah digantikan; dipertahankan untuk jejak audit.
+11. [`diverse_capture_decision_20260724.md`](diverse_capture_decision_20260724.md) — dampak dan gate dataset ekstensi beragam.
 
 Urutan acuan jika terjadi konflik mengikuti `../CONTEXT.md`.
 
